@@ -21,15 +21,17 @@ Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
 | Pandan custard bread, cheese butter bread, shiopan, sandwich | Small |
 | Pasta, coffee, wine | Medium |
 | Shrimp fried rice lunch box | Big |
+| Golden retriever | Biggest |
 
 **Buffs** (power-ups)
 
 | Item | Effect |
 | --- | --- |
 | Oyster | Double points for a few seconds |
-| Delivery car | Short upward dash |
-| Helicopter | Strong upward dash |
-| Briefcase | Shield: blocks the next debuff |
+| Lawyer suit | Shield: blocks the next debuff |
+| Handkerchief | Clears stun and disorientation |
+| Rolling pin | Stronger flaps for a few seconds |
+| Helicopter | Upward dash |
 
 **Debuffs** (dodge these)
 
@@ -37,8 +39,7 @@ Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
 | --- | --- |
 | Objection hammer | Stuns you for about 1 s |
 | Cilantro bread, fish sauce bread | Disoriented: left and right are swapped |
-| Burnt bread | Lose points |
-| Rain cloud | Slows your climb |
+| Planner | Huge point loss |
 | Car crash | Big debuff: knocks you down, stuns you and costs points |
 
 ## Run it locally

@@ -21,16 +21,18 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Pasta | `pasta` | +20 | 4 | Savory dish |
 | Coffee | `coffee` | +20 | 4 | Drink |
 | Wine | `wine` | +30 | 2 | Drink; premium |
-| Shrimp Fried Rice Lunch Box | `shrimpFriedRiceBox` | +100 | 2 | Rare; the jackpot item |
+| Shrimp Fried Rice Lunch Box | `shrimpFriedRiceBox` | +100 | 2 | Rare |
+| Golden Retriever | `goldenRetriever` | +150 | 1 | Rarest and highest; the jackpot item |
 
 ## Buffs
 
 | Item | id | Effect | Value | Weight | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Oyster | `oyster` | Double points | Item points x2 for 5 s | 3 | Only doubles gains, never penalties. Effect is a placeholder; change as you like |
-| Delivery car | `deliveryCar` | Upward dash | 2 s at 500 px/s | 2 | Milder dash |
-| Helicopter | `helicopter` | Upward dash | 3 s at 700 px/s | 2 | Stronger dash; the big climb |
-| Briefcase | `briefcase` | Shield | Blocks the next debuff | 3 | The lawyer's briefcase |
+| Oyster | `oyster` | Double points | Item points x2 for 5 s | 3 | Only doubles gains, never penalties |
+| Lawyer Suit | `lawyerSuit` | Shield | Blocks the next debuff | 3 | Replaces the briefcase |
+| Handkerchief | `handkerchief` | Cleanse | Instantly clears stun and disorient | 3 | |
+| Rolling Pin | `rollingPin` | Strong flap | Flaps at 150% strength for 5 s | 3 | Bakery tool |
+| Helicopter | `helicopter` | Upward dash | 3 s at 700 px/s | 2 | The big climb |
 
 ## Debuffs
 
@@ -39,23 +41,23 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Objection hammer | `hammer` | Stun | 1 s, taps ignored | 6 | The courtroom gavel |
 | Cilantro Bread | `cilantroBread` | Disoriented | 3 s, left/right swapped | 4 | No points |
 | Fish Sauce Bread | `fishSauceBread` | Disoriented | 4 s, left/right swapped | 3 | No points; the smellier one lasts longer |
-| Burnt bread | `burntBread` | Lose points | -10 | 5 | Small annoyance |
-| Rain cloud | `rainCloud` | Slows the climb | 3 s, flaps at 60% strength | 4 | |
-| **Car crash** | `carCrash` | **Big debuff** | Stun 1.8 s, knocked down 500 px/s, -50 points, cancels any active dash | 2 | Nod to how the leads met (their cars bumped). Rare but costly |
+| Planner | `planner` | Huge point loss | -150 | 2 | Only docks points, no movement effect |
+| **Car crash** | `carCrash` | **Big debuff** | Stun 1.8 s, knocked down 500 px/s, -50 points, cancels any active dash | 2 | Nod to how the leads met (their cars bumped) |
 
 ## Rules that apply to every item
 
-- **Shield:** the briefcase blocks the next debuff of any kind, including the car crash, and is used up when it does. A blocked item does not appear on the receipt.
-- **Dashes** (delivery car, helicopter) override gravity and flapping for their duration. Picking up a second dash replaces the first. A car crash cancels a dash.
+- **Shield:** the lawyer suit blocks the next debuff of any kind, including the car crash, and is used up when it does. A blocked item does not appear on the receipt.
+- **Dash** (helicopter) overrides gravity and flapping for its duration. A car crash cancels it.
 - **Stun** ignores taps; gravity keeps pulling the dog down.
 - **Disoriented** swaps what left and right do: tapping the left half drifts the dog right, and the other way round. It still flaps up.
-- **Score** is metres climbed plus item points, never below 0. Items with no points (dash, shield, stun, disorient, rain cloud, oyster) show as a line with no points on the receipt.
+- **Score** is metres climbed plus item points, never below 0. Items with no points (dash, shield, cleanse, strong flap, stun, disorient, oyster) show as a line with no points on the receipt.
 
 ## Open questions
 
 - Oyster is double points for 5 s. Is that the buff you want?
-- Delivery car and helicopter are both upward dashes, differing only in strength. Should the car do something different (for example a sideways dash)?
-- Should the car crash be blocked by the shield, or break through it as the one unblockable debuff?
+- Lawyer suit, handkerchief and rolling pin effects are my guesses (shield, cleanse, stronger flaps). Tell me what each should really do.
+- More debuff ideas? Current movement debuffs are stun, disorient and the car crash. Candidates: heavy (falls faster), wind gust (pushed sideways), slippery (drift doesn't stop), fog (screen dims).
+- Should the shield block the car crash and planner, or should one of them be unblockable?
 - Should coffee and wine have effects of their own, or stay plain points?
 - Are the point tiers right (breads 10, pasta and coffee 20, wine 30, lunch box 100)?
 - Thai names (and baht prices) for each item, for the menu-style item guide.

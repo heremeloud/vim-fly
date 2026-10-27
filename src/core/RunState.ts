@@ -26,7 +26,8 @@ export class RunState {
   /** Downward speed (px/s) the scene should apply once, then reset to 0. Set by a car crash. */
   pendingKnockback = 0;
   stunMs = 0;
-  slowMs = 0;
+  strongFlapMs = 0;
+  strongFlapFactor = 1;
   disorientMs = 0;
   doublePointsMs = 0;
   elapsedMs = 0;
@@ -54,7 +55,7 @@ export class RunState {
     this.elapsedMs += dtMs;
     this.dashMs = Math.max(0, this.dashMs - dtMs);
     this.stunMs = Math.max(0, this.stunMs - dtMs);
-    this.slowMs = Math.max(0, this.slowMs - dtMs);
+    this.strongFlapMs = Math.max(0, this.strongFlapMs - dtMs);
     this.disorientMs = Math.max(0, this.disorientMs - dtMs);
     this.doublePointsMs = Math.max(0, this.doublePointsMs - dtMs);
   }
@@ -88,8 +89,13 @@ export class RunState {
       case 'stun':
         this.stunMs = e.durationMs;
         break;
-      case 'slowClimb':
-        this.slowMs = e.durationMs;
+      case 'cleanse':
+        this.stunMs = 0;
+        this.disorientMs = 0;
+        break;
+      case 'strongFlap':
+        this.strongFlapMs = e.durationMs;
+        this.strongFlapFactor = e.factor;
         break;
       case 'crash':
         this.stunMs = e.stunMs;

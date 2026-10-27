@@ -70,8 +70,8 @@ export class GameScene extends Phaser.Scene {
 
   private flap(dir: -1 | 1): void {
     if (this.ended || this.run.isStunned) return;
-    const slow = this.run.slowMs > 0 ? PHYSICS.slowFactor : 1;
-    this.vy = PHYSICS.flapVelocity * slow;
+    const power = this.run.strongFlapMs > 0 ? this.run.strongFlapFactor : 1;
+    this.vy = PHYSICS.flapVelocity * power;
     const steer = this.run.isDisoriented ? -dir : dir; // disoriented: left/right swapped
     this.vx = steer * PHYSICS.driftVelocity;
   }
@@ -161,7 +161,7 @@ export class GameScene extends Phaser.Scene {
     if (this.run.shield) bits.push('SHIELD');
     if (this.run.dashMs > 0) bits.push('DASH');
     if (this.run.isStunned) bits.push('STUNNED');
-    if (this.run.slowMs > 0) bits.push('SLOW');
+    if (this.run.strongFlapMs > 0) bits.push('POWER');
     if (this.run.isDisoriented) bits.push('DIZZY');
     if (this.run.doublePointsMs > 0) bits.push('x2');
     this.status.setText(bits.join('  '));

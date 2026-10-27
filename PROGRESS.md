@@ -16,6 +16,7 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Item catalog doc (`src/items/ITEMS.md`); helicopter is now an upward dash; added the car crash big debuff
 - [x] Food items replaced with the series' dishes (breads, sandwich, pasta, coffee, wine, shrimp fried rice lunch box)
 - [x] Items split into three kinds (points, buffs, debuffs); cilantro and fish sauce bread are disorient debuffs; oyster added as a double-points buff
+- [x] Item rework: removed delivery car, briefcase, rain cloud, burnt bread; added lawyer suit (shield), handkerchief (cleanse), rolling pin (strong flap), planner (-150), golden retriever (+150)
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
@@ -32,8 +33,9 @@ Last updated: 2026-10-27 (core loop session)
 ## Decisions waiting on me
 
 - Show name and logo, brand colors, air date, hashtag and social/YouTube links (needed for the promo features and menu styling).
+- Confirm effects for lawyer suit, handkerchief, rolling pin, oyster. More debuff ideas? (see `src/items/ITEMS.md`)
 - Is oyster = double points the buff you want? Do wine and coffee get effects? Thai names for each dish? (see `src/items/ITEMS.md`)
-- Item questions in `src/items/ITEMS.md` (should the delivery car differ from the helicopter? does the shield block the car crash?).
+- Item questions in `src/items/ITEMS.md` (does the shield block the car crash and planner?).
 - Menu language: Thai, English or both.
 - Hosting choice: Vercel, Netlify or Cloudflare Pages.
 - Phaser 4 was installed (latest). Switch to Phaser 3 if its smaller tutorial ecosystem matters more.

@@ -10,7 +10,6 @@ export const PHYSICS = {
   horizontalDrag: 0.92, // per-frame (at 60 fps) damping of horizontal speed
   maxFallSpeed: 700,
   pixelsPerMeter: 10, // converts climbed pixels to the height score
-  slowFactor: 0.6, // rain cloud scales flap strength by this
 } as const;
 
 // Item spawning and fall speed. Spawn gets faster and items fall faster with height.
