@@ -7,9 +7,11 @@ Every screen. The menus are styled as a bakery food-ordering app, using the seri
 | Scene | File | State |
 | --- | --- | --- |
 | Boot | `BootScene.ts` | Generates a placeholder backdrop texture per height zone, then opens Home |
-| Home | `HomeScene.ts` | Title and "Order now" button (placeholder) |
+| Home | `HomeScene.ts` | Storefront: banner (placeholder key art), shop info, episode countdown, popular menu, "Order now" |
+| Menu | `MenuScene.ts` | Item guide: scrollable menu with Points / Buffs / Debuffs filter, descriptions and "prices" read from `ITEMS` |
+| ComingSoon | `ComingSoonScene.ts` | Placeholder for the Orders and Promos tabs |
 | Game | `GameScene.ts` | Playable loop: camera climb, falling items, height-zone backdrops and banners, HUD (placeholder rectangles) |
-| Receipt | `ReceiptScene.ts` | Line items per collected item, height and total, "Order again" |
+| Receipt | `ReceiptScene.ts` | Zone reached, height, line items per collected item, total, "Order again" and "Back to store" |
 
 Scenes are registered in `src/main.ts`. Scene keys live in `SCENES` in `src/core/constants.ts`.
 
@@ -19,7 +21,7 @@ The story is set in Thailand and follows a bakery shop owner and a lawyer. The p
 
 Thai text needs a font with Thai glyphs; decide Thai, English or both for menu labels (see `src/assets/README.md`).
 
-## Planned mapping: ordering-app screen to game function
+## Ordering-app screen to game function (built = Home, Menu)
 
 | App screen | Game function |
 | --- | --- |
@@ -34,4 +36,5 @@ Thai text needs a font with Thai glyphs; decide Thai, English or both for menu l
 ## Conventions
 
 - Scenes pass data through `scene.start(key, data)`; the Receipt receives `{ result }` (a `RunResult` from `src/core/RunState.ts`).
+- Menu screens use the shared widgets in `src/ui` (see its README).
 - Keep game rules out of scenes where possible; put reusable logic in `core` or `items`.

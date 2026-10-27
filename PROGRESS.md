@@ -19,12 +19,13 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Item rework: removed delivery car, briefcase, rain cloud, burnt bread; added lawyer suit (shield), handkerchief (cleanse), rolling pin (strong flap), planner (-150), golden retriever (+150)
 - [x] Single difficulty curve (0-1 over 1000 m) driving spawn rate, double spawns, fall speed, swerving debuffs, camera speed and item mix
 - [x] Height zones: backdrop and banner change at 250, 500 and 800 m; receipt shows the zone reached (courthouse and clouds backdrops not yet seen in the browser)
+- [x] Ordering-app menus, first part: shared UI (`src/ui`), home storefront, scrollable item guide with Points/Buffs/Debuffs filter, bottom tab bar, "coming soon" placeholders for Orders and Promos, promo config with countdown
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
 
 1. **Play it by hand and tune the feel.** Edit `PHYSICS` and `ITEM_RULES` in `src/core/constants.ts`. Not yet judged by a human; a bot climbs ~150 m in 5 s, so check pacing against 30-90 s runs.
-2. **Ordering-app menus.** Home storefront, item guide (menu with prices), order history, promotions tab. LINE MAN-inspired layout, original branding.
+2. **Rest of the ordering-app menus.** Order history (best runs, needs local save) and the promotions tab (series links). Then real branding and Thai text once decided.
 3. **Real art, animation and sound.** Dog-in-bee-costume character, Kenney packs for items; log licenses in `src/assets/README.md`.
 4. **Local best runs** (order history) using localStorage.
 5. **Leaderboard.** Supabase project, server functions with run tokens, name entry, top-scores screen.
@@ -37,7 +38,7 @@ Last updated: 2026-10-27 (core loop session)
 - Confirm effects for lawyer suit, handkerchief, rolling pin, oyster. More debuff ideas? (see `src/items/ITEMS.md`)
 - Is oyster = double points the buff you want? Do wine and coffee get effects? Thai names for each dish? (see `src/items/ITEMS.md`)
 - Item questions in `src/items/ITEMS.md` (does the shield block the car crash and planner?).
-- Menu language: Thai, English or both.
+- Menu language (the menus are English only so far): Thai, English or both.
 - Hosting choice: Vercel, Netlify or Cloudflare Pages.
 - Phaser 4 was installed (latest). Switch to Phaser 3 if its smaller tutorial ecosystem matters more.
 

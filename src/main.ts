@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT } from './core/constants';
 import { BootScene } from './scenes/BootScene';
 import { HomeScene } from './scenes/HomeScene';
+import { MenuScene } from './scenes/MenuScene';
+import { ComingSoonScene } from './scenes/ComingSoonScene';
 import { GameScene } from './scenes/GameScene';
 import { ReceiptScene } from './scenes/ReceiptScene';
 
@@ -15,5 +17,5 @@ new Phaser.Game({
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [BootScene, HomeScene, GameScene, ReceiptScene],
+  scene: [BootScene, HomeScene, MenuScene, ComingSoonScene, GameScene, ReceiptScene],
 });

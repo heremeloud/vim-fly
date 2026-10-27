@@ -28,6 +28,11 @@ The item guide screen ("menu list with prices") should read from `ITEMS` so it n
 - Collision is a box overlap with the player. `RunState.collect` applies the effect; a shield consumes itself instead of a debuff.
 - Each `ItemDef` has a placeholder `color`; points items get a gold outline, buffs green, debuffs red.
 
+## Helpers for the menu
+
+- `describeEffect(item)` builds the plain-English description from the item's effect, so the Menu screen never disagrees with the game.
+- `priceLabel(item)` gives the menu "price": `฿<points>` for points items and penalties (for example `-฿150` for the planner), or "Buff"/"Debuff" for the rest.
+
 ## Still to build
 
 Sprites, pickup effects and sounds, and a Thai/English label pair per item.

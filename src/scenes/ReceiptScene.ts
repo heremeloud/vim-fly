@@ -39,5 +39,11 @@ export class ReceiptScene extends Phaser.Scene {
       .text(GAME_WIDTH / 2, GAME_HEIGHT - 120, 'Order again', { fontSize: '28px', color: '#ffffff' })
       .setOrigin(0.5);
     btn.on('pointerdown', () => this.scene.start(SCENES.game));
+
+    const back = this.add
+      .text(GAME_WIDTH / 2, GAME_HEIGHT - 50, 'Back to store', { fontSize: '20px', color: '#8d6e63' })
+      .setOrigin(0.5)
+      .setInteractive({ useHandCursor: true });
+    back.on('pointerdown', () => this.scene.start(SCENES.home));
   }
 }

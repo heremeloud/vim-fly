@@ -75,3 +75,36 @@ export function pickItem(heightMeters: number, rand: () => number = Math.random)
   }
   return ITEMS[0];
 }
+
+/** Plain-English description of what an item does, built from its effect so it never drifts from the game. */
+export function describeEffect(item: ItemDef): string {
+  const e = item.effect;
+  const secs = (ms: number) => `${ms / 1000}s`;
+  switch (e.type) {
+    case 'points':
+      return e.amount >= 0 ? `Adds ${e.amount} points` : `Costs you ${-e.amount} points`;
+    case 'dash':
+      return `Dashes you upward for ${secs(e.durationMs)}`;
+    case 'shield':
+      return 'Blocks the next debuff';
+    case 'cleanse':
+      return 'Clears stun and dizziness';
+    case 'strongFlap':
+      return `Flaps ${Math.round((e.factor - 1) * 100)}% stronger for ${secs(e.durationMs)}`;
+    case 'doublePoints':
+      return `Double points for ${secs(e.durationMs)}`;
+    case 'stun':
+      return `Stuns you for ${secs(e.durationMs)}`;
+    case 'disorient':
+      return `Left and right swapped for ${secs(e.durationMs)}`;
+    case 'crash':
+      return `Knocks you down, stuns ${secs(e.stunMs)}, costs ${-e.points} points`;
+  }
+}
+
+/** The menu "price": the point value for points items and penalties, otherwise the kind of item. */
+export function priceLabel(item: ItemDef): string {
+  const e = item.effect;
+  if (e.type === 'points') return e.amount >= 0 ? `฿${e.amount}` : `-฿${-e.amount}`;
+  return item.kind === 'buff' ? 'Buff' : 'Debuff';
+}

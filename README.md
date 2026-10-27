@@ -72,7 +72,8 @@ Each folder under `src/` is one domain and has its own `README.md` explaining ho
 | --- | --- |
 | `src/core` | Physics values, input, the main game loop |
 | `src/items` | Item definitions, spawning and effects |
-| `src/scenes` | Screens: home, game, receipt, and the ordering-app menus |
+| `src/scenes` | Screens: home storefront, item guide menu, game, receipt |
+| `src/ui` | Shared look and widgets for the ordering-app menus |
 | `src/leaderboard` | Score submission and top-scores |
 | `src/promo` | Series links, countdown, share card |
 | `src/assets` | Art and audio, with license tracking |

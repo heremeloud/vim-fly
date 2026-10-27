@@ -1,13 +1,17 @@
 # promo
 
-The hooks that tie the game to the series. Empty for now; nothing is built here yet.
+The hooks that tie the game to the series.
+
+## Built
+
+- `config.ts`: the show's title, air date and hashtag in one place (placeholders for now), plus `countdownText()` used by the home screen. Set `SHOW.airDate` (ISO date with timezone) and the countdown starts working.
 
 ## Planned features
 
 - **Promotions tab:** links to the leads' socials, the series' socials and its YouTube channel.
 - **Receipt button:** "Watch the latest clip", linking to the newest YouTube video.
 - **Shareable score card:** the show's title, air date and hashtag, generated from the player's score.
-- **Episode countdown** on the home screen.
+- **Episode countdown** on the home screen (built, shows "coming soon" until `airDate` is set).
 
 ## Suggested structure
 

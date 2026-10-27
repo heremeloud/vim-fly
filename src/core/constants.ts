@@ -45,6 +45,8 @@ export const ITEM_RULES = {
 export const SCENES = {
   boot: 'Boot',
   home: 'Home',
+  menu: 'Menu',
+  comingSoon: 'ComingSoon',
   game: 'Game',
   receipt: 'Receipt',
 } as const;
