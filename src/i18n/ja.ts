@@ -113,7 +113,6 @@ export const ja: Record<StringKey, string> = {
   'promos.role.noey': '弁護士ノイ役',
   'promos.vimmy.role': 'とってもいい子な蜂犬。あなたの操作キャラ',
   'promos.soon': '準備中',
-  'receipt.watchPilot': '▶ パイロット版を観る',
   'hud.slow': 'スロー',
   'effect.slow': '{s}秒間、飛ぶ速度が{p}%ダウン',
   'effect.stunPenalty': '{s}秒間スタンし、{n}ポイント失う',

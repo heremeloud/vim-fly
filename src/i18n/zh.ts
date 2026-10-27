@@ -114,7 +114,6 @@ export const zh: Record<StringKey, string> = {
   'promos.role.noey': '饰演诺伊，律师',
   'promos.vimmy.role': '超乖的蜜蜂狗狗，也是你操控的角色',
   'promos.soon': '即将开放',
-  'receipt.watchPilot': '▶ 观看试播集',
   'hud.slow': '减速',
   'effect.slow': '{s} 秒内飞行速度降低 {p}%',
   'effect.stunPenalty': '眩晕 {s} 秒并扣 {n} 分',

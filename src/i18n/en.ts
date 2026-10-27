@@ -114,7 +114,6 @@ export const en = {
   'promos.role.noey': 'Plays Noey, the lawyer',
   'promos.vimmy.role': 'The very good bee dog, and your player',
   'promos.soon': 'soon',
-  'receipt.watchPilot': '▶ Watch the pilot',
   'hud.slow': 'SLOW',
   'effect.slow': 'Flying {p}% slower for {s}s',
   'effect.stunPenalty': 'Stuns you for {s}s and costs {n} points',

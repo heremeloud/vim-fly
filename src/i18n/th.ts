@@ -113,7 +113,6 @@ export const th: Record<StringKey, string> = {
   'promos.role.noey': 'รับบทเนย ทนายความ',
   'promos.vimmy.role': 'น้องหมาผึ้งแสนดี และตัวละครที่คุณเล่น',
   'promos.soon': 'เร็วๆ นี้',
-  'receipt.watchPilot': '▶ ดูตอนนำร่อง',
   'hud.slow': 'ช้า',
   'effect.slow': 'บินช้าลง {p}% นาน {s} วินาที',
   'effect.stunPenalty': 'ทำให้ช็อกนาน {s} วินาที และเสีย {n} คะแนน',

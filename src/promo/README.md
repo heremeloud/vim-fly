@@ -5,7 +5,9 @@ The hooks that tie the game to the series.
 ## Built
 
 - **Promos tab (the Bake Love Feeling page)** and the links config in `config.ts`:
-  - the **pilot** (YouTube, https://www.youtube.com/watch?v=NFFWV0X4i_c), shown as a big button on the Promos tab, a "Watch the pilot" strip on the home screen, and a button on the receipt;
+  - the **pilot** (YouTube, https://www.youtube.com/watch?v=NFFWV0X4i_c), played inside the game in two ways (`src/promo/pilot.ts`, `src/ui/videoPlayer.ts`):
+    - **on the receipt**, the pilot window is built into the screen and starts by itself, muted (browsers only allow sound after a tap; viewers unmute with the player's own button). It disappears when you leave the receipt. To show the poster with a play button instead, set `autoplay: false` in `embedPilot`;
+    - **in a pop-up window** from the Promos tab's big button and the Express tile on the home screen (with a Close button, and an "Open on YouTube" link in case embedding is ever turned off). The home "Watch the pilot now" strip opens the Promos page;
   - the **official account** (X only), the **two main leads** and **Vimmy** (the playable dog); the leads and Vimmy each have X, Instagram and TikTok buttons.
 
 - `config.ts`: the show's title ("Bake Love Feeling", spelling to confirm), air date and hashtag in one place, plus `countdownText()` used by the home screen (translated). Set `SHOW.airDate` (ISO date with timezone) and the countdown starts working.
@@ -15,7 +17,7 @@ The hooks that tie the game to the series.
 - **The Promos tab is the Bake Love Feeling page:** the series, its stars, where to watch, and the links below.
 
 - **Promotions tab:** links to the leads' socials, the series' socials and its YouTube channel.
-- **Receipt button:** "Watch the latest clip", linking to the newest YouTube video.
+- **Receipt:** the pilot plays right on the receipt (built). Later this could become "the latest clip".
 - **Shareable score card:** the show's title, air date and hashtag, generated from the player's score.
 - **Episode countdown** on the home screen (built, shows "coming soon" until `airDate` is set).
 

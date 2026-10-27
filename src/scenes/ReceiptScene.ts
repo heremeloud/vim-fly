@@ -4,7 +4,7 @@ import type { RunResult } from '../core/RunState';
 import { ZONES, zoneLabel } from '../core/zones';
 import { itemName, t } from '../i18n';
 import { runStore } from '../leaderboard/runStore';
-import { watchPilot } from '../promo/pilot';
+import { embedPilot } from '../promo/pilot';
 import { ScrollList } from '../ui/ScrollList';
 import { COLORS } from '../ui/theme';
 import { button, hitArea, label } from '../ui/widgets';
@@ -12,10 +12,12 @@ import { button, hitArea, label } from '../ui/widgets';
 // The receipt has three zones, so it can never overlap itself however many items there are:
 //   fixed header  (title, height, location)      y 0 .. LIST_TOP
 //   scrolling item lines                          y LIST_TOP .. FOOTER_TOP
-//   fixed footer  (total, new best, thanks, buttons)  y FOOTER_TOP .. bottom
+//   fixed footer  (total, new best, the pilot player, thanks, buttons)  y FOOTER_TOP .. bottom
 const X = 50;
-const LIST_TOP = 160;
-const FOOTER_TOP = 452;
+const LIST_TOP = 130;
+const FOOTER_TOP = 262;
+/** The pilot player: 16:9, centered, under the total. */
+const VIDEO = { x: 50, y: 358, w: 380, h: 214 };
 const ROW_MIN = 32;
 
 /** Game-over receipt: collected items as line items, total = score. Also saves the run to the order history. */
@@ -63,8 +65,8 @@ export class ReceiptScene extends Phaser.Scene {
 
     // Fixed header.
     this.add.rectangle(0, 0, GAME_WIDTH, LIST_TOP, COLORS.background).setOrigin(0);
-    this.add.text(GAME_WIDTH / 2, 50, t('receipt.title'), { ...mono, fontSize: '32px' }).setOrigin(0.5);
-    let hy = 90;
+    this.add.text(GAME_WIDTH / 2, 34, t('receipt.title'), { ...mono, fontSize: '28px' }).setOrigin(0.5);
+    let hy = 62;
     hy += addRow(hy, t('receipt.height'), `${r.heightMeters} m`);
     const zone = ZONES.find((z) => z.id === r.zone);
     if (zone) addRow(hy, t('receipt.reached'), zoneLabel(zone));
@@ -76,10 +78,9 @@ export class ReceiptScene extends Phaser.Scene {
     if (isBest) {
       label(this, GAME_WIDTH / 2, FOOTER_TOP + 58, `★ ${t('receipt.newBest')}`, { size: 22, bold: true, color: COLORS.accent }).setOrigin(0.5, 0);
     }
-    label(this, GAME_WIDTH / 2, GAME_HEIGHT - 250, t('receipt.thanks'), { size: 16, color: COLORS.muted }).setOrigin(0.5);
-
-    // Hype: play the pilot in a window right where players feel good about their score.
-    button(this, GAME_WIDTH / 2, GAME_HEIGHT - 195, 420, 52, t('receipt.watchPilot'), () => watchPilot(), 'secondary');
+    // The pilot, playing right here (muted so it can start by itself; the viewer can unmute it).
+    embedPilot(this, VIDEO);
+    label(this, GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 22, t('receipt.thanks'), { size: 16, color: COLORS.muted }).setOrigin(0.5);
 
     // Two buttons side by side: play again, or go back to the menu (item guide).
     const by = GAME_HEIGHT - 110;
