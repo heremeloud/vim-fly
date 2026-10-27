@@ -3,6 +3,7 @@ import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { t } from '../i18n';
 import { displayName, getItem, priceLabel } from '../items/itemDefs';
 import { SHOW, countdownText } from '../promo/config';
+import { watchPilot } from '../promo/pilot';
 import { APP, SERVICES } from '../ui/brand';
 import { COLORS } from '../ui/theme';
 import { TAB_BAR_HEIGHT, button, hitArea, label, languageButton, roundedBox, tabBar } from '../ui/widgets';
@@ -43,7 +44,7 @@ export class HomeScene extends Phaser.Scene {
     label(this, GAME_WIDTH / 2, 162, t('app.tagline'), { size: 16, color: COLORS.onPrimary }).setOrigin(0.5);
   }
 
-  /** Super-app style grid of services under the banner. Only the first leads anywhere real. */
+  /** Super-app style grid of shortcuts under the banner (Food, Mart, Express, Ride). */
   private drawServices(): void {
     roundedBox(this, 20, 190, GAME_WIDTH - 40, 86, COLORS.surface, 16, COLORS.border);
     const w = (GAME_WIDTH - 40) / SERVICES.length;
@@ -52,13 +53,25 @@ export class HomeScene extends Phaser.Scene {
       label(this, cx, 220, svc.icon, { size: 28 }).setOrigin(0.5);
       label(this, cx, 252, t(svc.labelKey), { size: 14, bold: true }).setOrigin(0.5);
       hitArea(this, 20 + i * w, 190, w, 86, () => {
-        if (svc.target === 'menu') this.scene.start(SCENES.menu);
-        else this.scene.start(SCENES.comingSoon, { title: t(svc.labelKey), note: svc.note ? t(svc.note) : '', tab: 'store' });
+        switch (svc.target) {
+          case 'menu':
+            this.scene.start(SCENES.menu);
+            break;
+          case 'promos':
+            this.scene.start(SCENES.promos);
+            break;
+          case 'pilot':
+            watchPilot();
+            break;
+          case 'play':
+            this.scene.start(SCENES.game);
+            break;
+        }
       });
     });
   }
 
-  /** Under the tiles: the countdown once an air date is set, otherwise a link to the About the show page (where the pilot plays). */
+  /** Under the tiles: the countdown once an air date is set, otherwise a link to the Bake Love Feeling page (where the pilot plays). */
   private drawCountdown(): void {
     roundedBox(this, 20, 294, GAME_WIDTH - 40, 48, 0xffecb3, 24);
     const hasAirDate = SHOW.airDate !== null;

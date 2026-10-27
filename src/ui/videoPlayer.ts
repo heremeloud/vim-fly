@@ -8,6 +8,8 @@ export interface VideoOptions {
   watchUrl: string;
 }
 
+const YOUTUBE = 'https://www.youtube-nocookie.com';
+
 let current: HTMLElement | null = null;
 
 /**
@@ -39,6 +41,8 @@ export function openVideo({ videoId, watchUrl }: VideoOptions): void {
   const close = () => {
     overlay.remove(); // removing the iframe also stops the video
     document.removeEventListener('keydown', onKey);
+    window.removeEventListener('message', onMessage);
+    window.clearTimeout(giveUp);
     current = null;
   };
   const onKey = (e: KeyboardEvent) => {
@@ -74,15 +78,52 @@ export function openVideo({ videoId, watchUrl }: VideoOptions): void {
     background: '#000',
     borderRadius: '12px',
     overflow: 'hidden',
+    position: 'relative',
   } satisfies Partial<CSSStyleDeclaration>);
 
+  // Shown on top of the player until the video is actually ready, so a slow connection never looks like
+  // "nothing is playing". It lets taps through to the player underneath.
+  const loading = document.createElement('div');
+  loading.textContent = t('video.loading');
+  Object.assign(loading.style, {
+    position: 'absolute',
+    inset: '0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: '#ffffff',
+    fontSize: '18px',
+    textShadow: '0 1px 6px rgba(0, 0, 0, 0.9)',
+    pointerEvents: 'none',
+  } satisfies Partial<CSSStyleDeclaration>);
+  const hideLoading = () => loading.remove();
+  // Never leave it up forever (for example if the player reports nothing).
+  const giveUp = window.setTimeout(hideLoading, 20000);
+
   const frame = document.createElement('iframe');
-  frame.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&playsinline=1`;
+  frame.src = `${YOUTUBE}/embed/${videoId}?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`;
   frame.title = 'Video';
   frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
   frame.referrerPolicy = 'strict-origin-when-cross-origin'; // YouTube embeds need a referrer
-  Object.assign(frame.style, { width: '100%', height: '100%', border: '0' } satisfies Partial<CSSStyleDeclaration>);
-  frameBox.append(frame);
+  Object.assign(frame.style, { position: 'absolute', inset: '0', width: '100%', height: '100%', border: '0', background: 'transparent' } satisfies Partial<CSSStyleDeclaration>);
+  // Ask the player to report its state, and hide the loading message once it is playing, paused, ended or ready.
+  frame.addEventListener('load', () => {
+    frame.contentWindow?.postMessage(JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }), YOUTUBE);
+  });
+  const onMessage = (e: MessageEvent) => {
+    if (e.origin !== YOUTUBE || e.source !== frame.contentWindow) return;
+    let msg: { event?: string; info?: unknown };
+    try {
+      msg = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+    } catch {
+      return;
+    }
+    const info = msg?.info as { playerState?: number } | number | undefined;
+    const state = msg?.event === 'onStateChange' ? info : (info as { playerState?: number } | undefined)?.playerState;
+    if (state === 1 || state === 2 || state === 0 || state === 5) hideLoading();
+  };
+  window.addEventListener('message', onMessage);
+  frameBox.append(frame, loading);
 
   const fallback = document.createElement('a');
   fallback.href = watchUrl;

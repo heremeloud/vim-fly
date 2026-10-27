@@ -19,10 +19,10 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Item rework: removed delivery car, briefcase, rain cloud, burnt bread; added lawyer suit (shield), handkerchief (cleanse), rolling pin (strong flap), planner (-150), golden retriever (+150)
 - [x] Single difficulty curve (0-1 over 1000 m) driving spawn rate, double spawns, fall speed, swerving debuffs, camera speed and item mix
 - [x] Height zones (first version, replaced by the novel's locations below)
-- [x] Ordering-app menus, first part: shared UI (`src/ui`), home storefront, scrollable item guide with Points/Buffs/Debuffs filter, bottom tab bar, "coming soon" placeholders for Orders and Promos, promo config with countdown
+- [x] Ordering-app menus, first part: shared UI (`src/ui`), home storefront, scrollable item guide with Points/Buffs/Debuffs filter, bottom tab bar, promo config with countdown
 - [x] Menus restyled as a bee-themed parody ("BEE MAN"): honey-yellow palette, deliver-to line and search bar on the home screen; receipt has "Order again" and "Menu" buttons side by side
 - [x] Height zones replaced with the novel's 10 locations in 5 stages, 200 m apart (`src/core/ZONES.md`); all 10 placeholder backdrops and banners checked in the browser; dev shortcut `?zone=<id>`
-- [x] Menus now parody both LINE MAN and Grab: super-app service tile row (BeeFood, BeeMart, BeeExpress, BeeRide) on the home screen; joke pages for the unbuilt services
+- [x] Menus now parody both LINE MAN and Grab: super-app service tile row on the home screen
 - [x] Rebrand: app is now "LOVE MAN" (placeholder), "Delivered by a very good bee dog", shop "Bake Love Bakery", series title "Bake Love Feeling"
 - [x] Four languages (English, Thai, Japanese, Chinese Simplified) with a text-only language picker; `npm run check:i18n`; all non-English text is a draft
 - [x] Orders tab: local run history ("My orders") and ranking ("Top customers"), saved on the device; receipt saves runs and flags a new best
@@ -33,7 +33,10 @@ Last updated: 2026-10-27 (core loop session)
 - [x] "Tier" is now "Stage" everywhere (banner: "Stage 3" over the location; no stage names), in all four languages
 - [x] The pilot plays inside the game in a window (Promos tab, receipt); the home strip opens the Promos page; official account is X only; receipt line is "Thank you for baking loving feeling" in all four languages
 - [x] Cheese butter bread is now a high-points item (+100, rare)
-- [x] The Store tab always returns to the home page (also from the joke service pages)
+- [x] The Store tab always returns to the home page (also when another page is showing under a lit Store tab)
+- [x] Receipt rebuilt: fixed header and footer with a scrolling item list, long names wrap, nothing overlaps however long it gets
+- [x] Service tiles do real things (Food = menu, Mart = Bake Love Feeling page, Express = pilot window, Ride = start a run); the joke pages are gone
+- [x] Promos page is titled "Bake Love Feeling"; bottom tab bar is smaller (58 px); the pilot window shows "Loading the pilot…" until it is ready
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)

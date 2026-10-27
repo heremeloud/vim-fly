@@ -12,9 +12,6 @@ export const th: Record<StringKey, string> = {
   'app.tagline': 'ส่งโดยน้องหมาผึ้งแสนดี',
   'app.deliverTo': 'จัดส่งที่',
   'app.searchHint': 'ค้นหาขนมปัง ข้าวกล่อง โกลเด้น...',
-  'svc.mart.note': 'ของชำโดยน้องหมา รอสักครู่ น้องยังวิ่งไล่รถตู้อยู่',
-  'svc.express.note': 'พัสดุส่งด้วยความเร็วของน้องหมาสุดมุ่งมั่น',
-  'svc.ride.note': 'นั่งบนหลังน้องหมาในชุดผึ้ง ไม่รับประกันความปลอดภัย',
 
   'home.orderNow': 'สั่งเลย',
   'home.open': 'เปิดอยู่',
@@ -31,8 +28,6 @@ export const th: Record<StringKey, string> = {
   'price.buff': 'บัฟ',
   'price.debuff': 'ดีบัฟ',
 
-  'soon.title': 'เร็วๆ นี้',
-  'promos.title': 'เกี่ยวกับซีรีส์',
 
   'orders.title': 'ออเดอร์',
   'orders.subtitle': 'การเล่นของคุณบนอุปกรณ์นี้',
@@ -119,10 +114,10 @@ export const th: Record<StringKey, string> = {
   'promos.vimmy.role': 'น้องหมาผึ้งแสนดี และตัวละครที่คุณเล่น',
   'promos.soon': 'เร็วๆ นี้',
   'receipt.watchPilot': '▶ ดูตอนนำร่อง',
-  'receipt.more': '+อีก {n} รายการ',
   'hud.slow': 'ช้า',
   'effect.slow': 'บินช้าลง {p}% นาน {s} วินาที',
   'effect.stunPenalty': 'ทำให้ช็อกนาน {s} วินาที และเสีย {n} คะแนน',
   'video.close': 'ปิด',
   'video.openYoutube': 'เปิดใน YouTube',
+  'video.loading': 'กำลังโหลดตอนนำร่อง…',
 };

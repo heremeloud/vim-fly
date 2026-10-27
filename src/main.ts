@@ -6,7 +6,6 @@ import { RENDER_SCALE, installTextResolution } from './core/render';
 import { BootScene } from './scenes/BootScene';
 import { HomeScene } from './scenes/HomeScene';
 import { MenuScene } from './scenes/MenuScene';
-import { ComingSoonScene } from './scenes/ComingSoonScene';
 import { OrdersScene } from './scenes/OrdersScene';
 import { PromosScene } from './scenes/PromosScene';
 import { GameScene } from './scenes/GameScene';
@@ -26,7 +25,7 @@ function startGame(): void {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [BootScene, HomeScene, MenuScene, OrdersScene, PromosScene, ComingSoonScene, GameScene, ReceiptScene],
+    scene: [BootScene, HomeScene, MenuScene, OrdersScene, PromosScene, GameScene, ReceiptScene],
   });
   // Dev only: lets you poke at the game from the browser console (window.__game).
   if (import.meta.env.DEV) (window as unknown as { __game: Phaser.Game }).__game = game;

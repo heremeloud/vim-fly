@@ -15,18 +15,17 @@ export const APP = {
 export interface Service {
   icon: string;
   labelKey: StringKey;
-  /** 'menu' opens the item guide; 'soon' opens a joke "coming soon" page. */
-  target: 'menu' | 'soon';
-  note?: StringKey;
+  /** Where the tile goes: the item guide, the Bake Love Feeling page, the pilot (plays in a window), or straight into a run. */
+  target: 'menu' | 'promos' | 'pilot' | 'play';
 }
 
 /**
- * The super-app service tiles on the home screen. Pure genre decoration: only Food leads anywhere real
- * (the item guide); the others open a joke page. Remove any tile by deleting its line.
+ * The super-app service tiles on the home screen, like Grab's grid of services. Each one is a shortcut
+ * to something real. Change a tile's `target`, or delete its line to remove it.
  */
 export const SERVICES: readonly Service[] = [
-  { icon: '🍞', labelKey: 'svc.food', target: 'menu' },
-  { icon: '🛒', labelKey: 'svc.mart', target: 'soon', note: 'svc.mart.note' },
-  { icon: '📦', labelKey: 'svc.express', target: 'soon', note: 'svc.express.note' },
-  { icon: '🛵', labelKey: 'svc.ride', target: 'soon', note: 'svc.ride.note' },
+  { icon: '🍞', labelKey: 'svc.food', target: 'menu' }, // what falls from the sky
+  { icon: '🛒', labelKey: 'svc.mart', target: 'promos' }, // the show's page: cast, links
+  { icon: '📦', labelKey: 'svc.express', target: 'pilot' }, // the show, delivered fast: plays the pilot
+  { icon: '🛵', labelKey: 'svc.ride', target: 'play' }, // ride Vimmy up into the sky: start a run
 ];

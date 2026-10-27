@@ -13,9 +13,6 @@ export const en = {
   'app.tagline': 'Delivered by a very good bee dog',
   'app.deliverTo': 'Deliver to',
   'app.searchHint': 'Search bread, lunch box, golden retriever...',
-  'svc.mart.note': 'Groceries by dog. Please hold, he is still chasing the van.',
-  'svc.express.note': 'Parcels delivered at the speed of one very determined dog.',
-  'svc.ride.note': 'Rides on the back of a dog in a bee costume. Safety not guaranteed.',
 
   'home.orderNow': 'Order now',
   'home.open': 'Open now',
@@ -32,8 +29,6 @@ export const en = {
   'price.buff': 'Buff',
   'price.debuff': 'Debuff',
 
-  'soon.title': 'Coming soon',
-  'promos.title': 'About the show',
 
   'orders.title': 'Orders',
   'orders.subtitle': 'Your runs on this device',
@@ -120,12 +115,12 @@ export const en = {
   'promos.vimmy.role': 'The very good bee dog, and your player',
   'promos.soon': 'soon',
   'receipt.watchPilot': '▶ Watch the pilot',
-  'receipt.more': '+{n} more',
   'hud.slow': 'SLOW',
   'effect.slow': 'Flying {p}% slower for {s}s',
   'effect.stunPenalty': 'Stuns you for {s}s and costs {n} points',
   'video.close': 'Close',
   'video.openYoutube': 'Open on YouTube',
+  'video.loading': 'Loading the pilot…',
 };
 
 export type StringKey = keyof typeof en;

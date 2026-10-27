@@ -12,9 +12,6 @@ export const ja: Record<StringKey, string> = {
   'app.tagline': 'とってもいい子な蜂犬がお届け',
   'app.deliverTo': 'お届け先',
   'app.searchHint': 'パン、お弁当、ゴールデンを検索...',
-  'svc.mart.note': '犬が食料品をお届け。少々お待ちを、まだバンを追いかけています。',
-  'svc.express.note': 'とても一途な犬のスピードで荷物をお届け。',
-  'svc.ride.note': '蜂の衣装の犬の背中に乗れます。安全は保証しません。',
 
   'home.orderNow': '今すぐ注文',
   'home.open': '営業中',
@@ -31,8 +28,6 @@ export const ja: Record<StringKey, string> = {
   'price.buff': 'バフ',
   'price.debuff': 'デバフ',
 
-  'soon.title': '近日公開',
-  'promos.title': '作品について',
 
   'orders.title': '注文',
   'orders.subtitle': 'この端末でのプレイ記録',
@@ -119,10 +114,10 @@ export const ja: Record<StringKey, string> = {
   'promos.vimmy.role': 'とってもいい子な蜂犬。あなたの操作キャラ',
   'promos.soon': '準備中',
   'receipt.watchPilot': '▶ パイロット版を観る',
-  'receipt.more': 'ほか{n}件',
   'hud.slow': 'スロー',
   'effect.slow': '{s}秒間、飛ぶ速度が{p}%ダウン',
   'effect.stunPenalty': '{s}秒間スタンし、{n}ポイント失う',
   'video.close': '閉じる',
   'video.openYoutube': 'YouTubeで開く',
+  'video.loading': 'パイロット版を読み込み中…',
 };

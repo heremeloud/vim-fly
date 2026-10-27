@@ -23,7 +23,7 @@ export function countdownText(now: Date = new Date()): string {
   return d > 0 ? t('countdown.days', { d, h }) : t('countdown.hours', { h });
 }
 
-// ---- Links for the Promos tab ("About the show"), the home screen and the receipt ----
+// ---- Links for the Promos tab (the Bake Love Feeling page), the home screen and the receipt ----
 
 /** The pilot episode. It plays inside the game (see src/ui/videoPlayer.ts); `url` is the YouTube page. */
 export const PILOT = {

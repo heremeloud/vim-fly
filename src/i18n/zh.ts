@@ -8,14 +8,11 @@ export const zh: Record<StringKey, string> = {
   'tab.store': '商店',
   'tab.menu': '菜单',
   'tab.orders': '订单',
-  'tab.promos': '关于剧集',
+  'tab.promos': '宣传',
 
   'app.tagline': '由超乖的蜜蜂狗狗送达',
   'app.deliverTo': '配送至',
   'app.searchHint': '搜索面包、便当、金毛...',
-  'svc.mart.note': '狗狗送杂货。请稍等，它还在追货车。',
-  'svc.express.note': '包裹以一只超级执着的狗狗的速度送达。',
-  'svc.ride.note': '骑在穿蜜蜂服的狗狗背上。不保证安全。',
 
   'home.orderNow': '立即下单',
   'home.open': '营业中',
@@ -32,8 +29,6 @@ export const zh: Record<StringKey, string> = {
   'price.buff': '增益',
   'price.debuff': '减益',
 
-  'soon.title': '敬请期待',
-  'promos.title': '关于剧集',
 
   'orders.title': '订单',
   'orders.subtitle': '你在此设备上的游戏记录',
@@ -120,10 +115,10 @@ export const zh: Record<StringKey, string> = {
   'promos.vimmy.role': '超乖的蜜蜂狗狗，也是你操控的角色',
   'promos.soon': '即将开放',
   'receipt.watchPilot': '▶ 观看试播集',
-  'receipt.more': '另有 {n} 项',
   'hud.slow': '减速',
   'effect.slow': '{s} 秒内飞行速度降低 {p}%',
   'effect.stunPenalty': '眩晕 {s} 秒并扣 {n} 分',
   'video.close': '关闭',
   'video.openYoutube': '在 YouTube 打开',
+  'video.loading': '正在加载试播集…',
 };

@@ -13,7 +13,7 @@ const CARD_W = GAME_WIDTH - 40;
 const CARD_H = 120;
 
 /**
- * The Promos tab, "About the show": the pilot, the official account, the two main leads and Vimmy.
+ * The Promos tab, titled with the show's name (Bake Love Feeling): the pilot, the official account, the two main leads and Vimmy.
  * Every account has X, Instagram and TikTok buttons; a button shows "soon" until its handle is
  * filled in (src/promo/config.ts).
  */
@@ -39,8 +39,7 @@ export class PromosScene extends Phaser.Scene {
 
     // Opaque header (and interactive, so taps don't reach rows scrolled underneath).
     this.add.rectangle(0, 0, GAME_WIDTH, HEADER_H, COLORS.background).setOrigin(0).setDepth(40).setInteractive();
-    label(this, 20, 18, t('promos.title'), { size: 34, bold: true }).setDepth(41);
-    label(this, 20, 64, SHOW.title, { size: 15, color: COLORS.muted }).setDepth(41);
+    label(this, 20, 28, SHOW.title, { size: 34, bold: true }).setDepth(41);
     tabBar(this, 'promos');
   }
 

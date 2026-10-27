@@ -43,7 +43,7 @@ Add a file like `ko.ts`, add it to `TABLES` and `LOCALES` in `index.ts` (with a 
 
 **All Thai, Japanese and Chinese text is a first draft written without a native speaker.** Have native speakers review it before release, especially:
 
-- the jokes and puns (taglines, the joke service notes),
+- the jokes and puns (the tagline),
 - food and item names (for example 鱼露面包 for fish sauce bread, ナンプラーパン, ขนมปังสังขยาใบเตย),
 - the location and character names. Transliterations like ノイの家 (Noey's Residence) and บ้านของเนย are guesses; use the show's official names where they exist.
 

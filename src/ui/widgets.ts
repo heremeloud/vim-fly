@@ -4,7 +4,7 @@ import { toLayout } from '../core/render';
 import { LOCALES, getLocale, localeInfo, setLocale, t, type StringKey } from '../i18n';
 import { COLORS, FONT, hex } from './theme';
 
-export const TAB_BAR_HEIGHT = 80;
+export const TAB_BAR_HEIGHT = 58;
 
 export interface TextOpts {
   size?: number;
@@ -127,14 +127,14 @@ export function tabBar(scene: Phaser.Scene, active: TabId): void {
   TABS.forEach((tab, i) => {
     const cx = i * w + w / 2;
     const on = tab.id === active;
-    scene.add.text(cx, y + 26, tab.icon, { fontFamily: FONT.family, fontSize: '26px' }).setOrigin(0.5).setDepth(depth).setAlpha(on ? 1 : 0.5);
-    label(scene, cx, y + 56, t(tab.key), { size: 14, color: on ? COLORS.accent : COLORS.muted, bold: on })
+    scene.add.text(cx, y + 18, tab.icon, { fontFamily: FONT.family, fontSize: '22px' }).setOrigin(0.5).setDepth(depth).setAlpha(on ? 1 : 0.5);
+    label(scene, cx, y + 42, t(tab.key), { size: 12, color: on ? COLORS.accent : COLORS.muted, bold: on })
       .setOrigin(0.5)
       .setDepth(depth);
     const hit = hitArea(scene, i * w, y, w, TAB_BAR_HEIGHT, () => {
       const target = tabTarget(tab.id);
       // Only skip when we are already on that tab's own screen. A highlighted tab can be showing a
-      // different page (the Store tab stays lit on the joke service pages), and tapping it must still go home.
+      // different page (the Store tab can stay lit while another page is showing), and tapping it must still go home.
       if (scene.scene.key === target.scene) return;
       scene.scene.start(target.scene, target.data);
     });

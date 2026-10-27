@@ -4,7 +4,7 @@ The hooks that tie the game to the series.
 
 ## Built
 
-- **Promos tab ("About the show")** and the links config in `config.ts`:
+- **Promos tab (the Bake Love Feeling page)** and the links config in `config.ts`:
   - the **pilot** (YouTube, https://www.youtube.com/watch?v=NFFWV0X4i_c), shown as a big button on the Promos tab, a "Watch the pilot" strip on the home screen, and a button on the receipt;
   - the **official account** (X only), the **two main leads** and **Vimmy** (the playable dog); the leads and Vimmy each have X, Instagram and TikTok buttons.
 
@@ -12,7 +12,7 @@ The hooks that tie the game to the series.
 
 ## Planned features
 
-- **The Promos tab is "About the show":** the series, its stars, where to watch, and the links below.
+- **The Promos tab is the Bake Love Feeling page:** the series, its stars, where to watch, and the links below.
 
 - **Promotions tab:** links to the leads' socials, the series' socials and its YouTube channel.
 - **Receipt button:** "Watch the latest clip", linking to the newest YouTube video.
