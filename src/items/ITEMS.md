@@ -42,8 +42,6 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 
 - Wine and coffee are plain point items for now. Should they have effects (for example coffee as a short speed boost, wine as a wobble debuff)?
 - Are the point tiers right (breads 10, pasta and coffee 20, wine 30, lunch box 100)?
-- Thai names for each dish, for the menu.
-
 - Delivery car and helicopter are both upward dashes, differing only in strength. Should the car do something different (for example a sideways dash)?
 - Should the car crash be blocked by the shield, or break through it as the one unblockable debuff?
 - Thai names and prices (baht) for each item, for the menu-style item guide.
