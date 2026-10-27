@@ -2,9 +2,18 @@
 
 Score submission and the top-scores list, backed by Supabase (Postgres, free tier).
 
+## Orders tab: local runs now, ladder later
+
+Every finished run is saved as a `RunRecord` by `runStore.ts` (`LocalRunStore`, in this browser's localStorage, newest 100 runs, the best one is never dropped). The **Orders** tab shows them two ways:
+
+- **My orders:** your run history, newest first, with the best marked.
+- **Top customers:** your runs ranked by score. Ties go to the earlier run.
+
+The Orders screen only talks to the `RunStore` interface. When the worldwide leaderboard exists, a server-backed store implements the same interface and the Orders screen becomes the ladder without a redesign: same rows, same tabs, a different source. (The server-side rules below still apply: scores go through a server function with a run token, never a direct insert.)
+
 ## Status
 
-Interface only. `client.ts` defines `startRun`, `submitScore` and `fetchTopScores`; each throws "not implemented". The draft table is in `supabase/schema.sql`.
+Local order history is built (`runStore.ts`). The worldwide part is interface only: `client.ts` defines `startRun`, `submitScore` and `fetchTopScores`; each throws "not implemented". The draft table is in `supabase/schema.sql`.
 
 ## Why scores go through a server function
 

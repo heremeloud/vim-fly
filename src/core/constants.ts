@@ -46,6 +46,7 @@ export const SCENES = {
   boot: 'Boot',
   home: 'Home',
   menu: 'Menu',
+  orders: 'Orders',
   comingSoon: 'ComingSoon',
   game: 'Game',
   receipt: 'Receipt',

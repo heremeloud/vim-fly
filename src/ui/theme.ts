@@ -23,5 +23,5 @@ export function hex(color: number): string {
 }
 
 export const FONT = {
-  family: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+  family: 'system-ui, -apple-system, "Segoe UI", "Noto Sans Thai", "Noto Sans JP", "Noto Sans SC", sans-serif',
 } as const;

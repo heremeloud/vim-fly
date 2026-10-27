@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
+import { LOCALES, getLocale, localeInfo, setLocale, t, type StringKey } from '../i18n';
 import { COLORS, FONT, hex } from './theme';
 
 export const TAB_BAR_HEIGHT = 80;
@@ -25,8 +26,9 @@ export function label(
     fontSize: `${size}px`,
     fontStyle: bold ? 'bold' : 'normal',
     color: hex(color),
-    wordWrap: wrap ? { width: wrap } : undefined,
+    wordWrap: wrap ? { width: wrap, useAdvancedWrap: true } : undefined, // advanced wrap also breaks long unspaced text (Japanese, Chinese, Thai)
     align,
+    padding: { top: 3, bottom: 3 }, // room for tall Thai and CJK glyphs
   });
 }
 
@@ -89,19 +91,25 @@ export function button(
 
 export type TabId = 'store' | 'menu' | 'orders' | 'promos';
 
-const TABS: { id: TabId; icon: string; text: string }[] = [
-  { id: 'store', icon: '🏠', text: 'Store' },
-  { id: 'menu', icon: '📖', text: 'Menu' },
-  { id: 'orders', icon: '🧾', text: 'Orders' },
-  { id: 'promos', icon: '🎁', text: 'Promos' },
+const TABS: { id: TabId; icon: string; key: StringKey }[] = [
+  { id: 'store', icon: '🏠', key: 'tab.store' },
+  { id: 'menu', icon: '📖', key: 'tab.menu' },
+  { id: 'orders', icon: '🧾', key: 'tab.orders' },
+  { id: 'promos', icon: '🎁', key: 'tab.promos' },
 ];
 
-const TAB_TARGETS: Record<TabId, { scene: string; data?: object }> = {
-  store: { scene: SCENES.home },
-  menu: { scene: SCENES.menu },
-  orders: { scene: SCENES.comingSoon, data: { title: 'Order history', note: 'Your best runs will show up here.' } },
-  promos: { scene: SCENES.comingSoon, data: { title: 'Promotions', note: 'Series links and socials will show up here.' } },
-};
+function tabTarget(id: TabId): { scene: string; data?: object } {
+  switch (id) {
+    case 'store':
+      return { scene: SCENES.home };
+    case 'menu':
+      return { scene: SCENES.menu };
+    case 'orders':
+      return { scene: SCENES.orders };
+    case 'promos':
+      return { scene: SCENES.comingSoon, data: { title: t('promos.title'), note: t('promos.note'), tab: 'promos' } };
+  }
+}
 
 /** The bottom tab bar, drawn above scrolling content. */
 export function tabBar(scene: Phaser.Scene, active: TabId): void {
@@ -115,14 +123,58 @@ export function tabBar(scene: Phaser.Scene, active: TabId): void {
     const cx = i * w + w / 2;
     const on = tab.id === active;
     scene.add.text(cx, y + 26, tab.icon, { fontSize: '26px' }).setOrigin(0.5).setDepth(depth).setAlpha(on ? 1 : 0.5);
-    label(scene, cx, y + 56, tab.text, { size: 14, color: on ? COLORS.accent : COLORS.muted, bold: on })
+    label(scene, cx, y + 56, t(tab.key), { size: 14, color: on ? COLORS.accent : COLORS.muted, bold: on })
       .setOrigin(0.5)
       .setDepth(depth);
     const hit = hitArea(scene, i * w, y, w, TAB_BAR_HEIGHT, () => {
       if (on) return;
-      const t = TAB_TARGETS[tab.id];
-      scene.scene.start(t.scene, t.data);
+      const target = tabTarget(tab.id);
+      scene.scene.start(target.scene, target.data);
     });
     hit.setDepth(depth + 1);
+  });
+}
+
+/**
+ * A small language button (text only, no flags) for the top-right corner. Tapping it opens a list of
+ * the languages; choosing one saves it and restarts the scene so everything is redrawn.
+ */
+export function languageButton(scene: Phaser.Scene, rightX: number, y: number): void {
+  const text = label(scene, rightX, y, `🌐 ${localeInfo().name}`, { size: 15, color: COLORS.onPrimary, bold: true }).setOrigin(1, 0);
+  text.setDepth(30);
+  hitArea(scene, rightX - text.width - 8, y - 4, text.width + 16, text.height + 8, () => openLanguagePicker(scene)).setDepth(31);
+}
+
+function openLanguagePicker(scene: Phaser.Scene): void {
+  const depth = 100;
+  const items: Phaser.GameObjects.GameObject[] = [];
+  const close = () => items.forEach((o) => o.destroy());
+
+  // A dim backdrop that also swallows taps meant for what is underneath.
+  const dim = scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.45).setOrigin(0).setDepth(depth).setInteractive();
+  dim.on('pointerup', close);
+  items.push(dim);
+
+  const rowH = 58;
+  const cardW = 320;
+  const cardH = 70 + LOCALES.length * rowH;
+  const x = (GAME_WIDTH - cardW) / 2;
+  const y = (GAME_HEIGHT - cardH) / 2;
+  const card = roundedBox(scene, x, y, cardW, cardH, COLORS.surface, 20).setDepth(depth + 1);
+  items.push(card);
+  items.push(label(scene, GAME_WIDTH / 2, y + 20, t('lang.title'), { size: 22, bold: true }).setOrigin(0.5, 0).setDepth(depth + 2));
+
+  LOCALES.forEach((loc, i) => {
+    const ry = y + 62 + i * rowH;
+    const on = loc.id === getLocale();
+    items.push(roundedBox(scene, x + 16, ry, cardW - 32, rowH - 8, on ? COLORS.primary : COLORS.background, 14).setDepth(depth + 2));
+    items.push(label(scene, x + 36, ry + 12, loc.name, { size: 22, bold: true, color: on ? COLORS.onPrimary : COLORS.text }).setDepth(depth + 3));
+    if (on) items.push(label(scene, x + cardW - 40, ry + 12, '✓', { size: 22, bold: true, color: COLORS.onPrimary }).setOrigin(1, 0).setDepth(depth + 3));
+    const hit = hitArea(scene, x + 16, ry, cardW - 32, rowH - 8, () => {
+      setLocale(loc.id);
+      close();
+      scene.scene.restart();
+    }).setDepth(depth + 4);
+    items.push(hit);
   });
 }

@@ -32,15 +32,15 @@ One tileable (vertically repeating) image per height zone, ten in all, one per l
 
 ## Branding
 
-The in-game delivery app is a parody of LINE MAN and Grab called BEE MAN (see `src/ui/README.md`). It needs its own logo and a bee mascot; do not reuse either real app's logo or mascot.
+The in-game delivery app is a parody of LINE MAN and Grab called LOVE MAN (see `src/ui/README.md`). It needs its own logo and a bee mascot; do not reuse either real app's logo or mascot.
 
 ## Character
 
 The playable character is a dog in a bee costume. Needs idle/flap, boost and hurt/stunned frames.
 
-## Thai text
+## Fonts for Thai, Japanese and Chinese
 
-The menus are set in Thailand. Pick a font with Thai glyphs (for example Noto Sans Thai, SIL OFL) and check its license before shipping.
+The game is in four languages (`src/i18n/README.md`). It currently uses each device's own fonts, which cover all four on modern phones and computers, with Noto Sans fallbacks listed in `src/ui/theme.ts`. For a consistent look everywhere, bundle web fonts later (for example Noto Sans Thai, Noto Sans JP, Noto Sans SC under the SIL OFL; check licenses and file size, CJK fonts are large).
 
 ## Animation scope
 

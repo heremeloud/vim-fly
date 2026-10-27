@@ -1,5 +1,6 @@
 import { ITEM_RULES } from '../core/constants';
 import { difficulty, ramp } from '../core/difficulty';
+import { itemName, t } from '../i18n';
 
 // Single source of truth for items. Values are starting points to tune.
 // Mirrors the item table in plan.md. Durations are in milliseconds.
@@ -76,29 +77,29 @@ export function pickItem(heightMeters: number, rand: () => number = Math.random)
   return ITEMS[0];
 }
 
-/** Plain-English description of what an item does, built from its effect so it never drifts from the game. */
+/** Description of what an item does, built from its effect so it never drifts from the game. Translated. */
 export function describeEffect(item: ItemDef): string {
   const e = item.effect;
-  const secs = (ms: number) => `${ms / 1000}s`;
+  const secs = (ms: number) => ms / 1000;
   switch (e.type) {
     case 'points':
-      return e.amount >= 0 ? `Adds ${e.amount} points` : `Costs you ${-e.amount} points`;
+      return e.amount >= 0 ? t('effect.points.gain', { n: e.amount }) : t('effect.points.loss', { n: -e.amount });
     case 'dash':
-      return `Dashes you upward for ${secs(e.durationMs)}`;
+      return t('effect.dash', { s: secs(e.durationMs) });
     case 'shield':
-      return 'Blocks the next debuff';
+      return t('effect.shield');
     case 'cleanse':
-      return 'Clears stun and dizziness';
+      return t('effect.cleanse');
     case 'strongFlap':
-      return `Flaps ${Math.round((e.factor - 1) * 100)}% stronger for ${secs(e.durationMs)}`;
+      return t('effect.strongFlap', { p: Math.round((e.factor - 1) * 100), s: secs(e.durationMs) });
     case 'doublePoints':
-      return `Double points for ${secs(e.durationMs)}`;
+      return t('effect.doublePoints', { s: secs(e.durationMs) });
     case 'stun':
-      return `Stuns you for ${secs(e.durationMs)}`;
+      return t('effect.stun', { s: secs(e.durationMs) });
     case 'disorient':
-      return `Left and right swapped for ${secs(e.durationMs)}`;
+      return t('effect.disorient', { s: secs(e.durationMs) });
     case 'crash':
-      return `Knocks you down, stuns ${secs(e.stunMs)}, costs ${-e.points} points`;
+      return t('effect.crash', { s: secs(e.stunMs), n: -e.points });
   }
 }
 
@@ -106,5 +107,10 @@ export function describeEffect(item: ItemDef): string {
 export function priceLabel(item: ItemDef): string {
   const e = item.effect;
   if (e.type === 'points') return e.amount >= 0 ? `฿${e.amount}` : `-฿${-e.amount}`;
-  return item.kind === 'buff' ? 'Buff' : 'Debuff';
+  return item.kind === 'buff' ? t('price.buff') : t('price.debuff');
+}
+
+/** The item's name in the current language. */
+export function displayName(item: ItemDef): string {
+  return itemName(item.id, item.label);
 }

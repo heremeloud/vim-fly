@@ -1,0 +1,129 @@
+import Phaser from 'phaser';
+import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
+import { zoneAt, zoneLabel, ZONES } from '../core/zones';
+import { localeInfo, t } from '../i18n';
+import { runStore, type RunRecord } from '../leaderboard/runStore';
+import { ScrollList } from '../ui/ScrollList';
+import { COLORS, hex } from '../ui/theme';
+import { TAB_BAR_HEIGHT, button, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
+
+const HEADER_H = 150;
+const ROW_H = 76;
+const ROW_GAP = 10;
+const LIST_PAD = 14;
+
+type View = 'mine' | 'top';
+
+/**
+ * The Orders tab. "My orders" is the history of your runs, newest first; "Top customers" ranks
+ * your best runs. Both read from `runStore` (this device for now). When the worldwide leaderboard
+ * exists, a server-backed store plugs in here and this screen becomes the ladder.
+ */
+export class OrdersScene extends Phaser.Scene {
+  private view: View = 'mine';
+  private list!: ScrollList;
+  private chips: { bg: Phaser.GameObjects.Graphics; text: Phaser.GameObjects.Text }[] = [];
+
+  constructor() {
+    super(SCENES.orders);
+  }
+
+  create(): void {
+    this.view = 'mine';
+    this.chips = [];
+    this.list = new ScrollList(this, HEADER_H, GAME_HEIGHT - TAB_BAR_HEIGHT);
+    this.buildList();
+
+    this.add.rectangle(0, 0, GAME_WIDTH, HEADER_H, COLORS.background).setOrigin(0).setDepth(40);
+    label(this, 20, 22, t('tab.orders'), { size: 34, bold: true }).setDepth(41);
+    label(this, 20, 66, t('orders.subtitle'), { size: 15, color: COLORS.muted }).setDepth(41);
+    this.buildChips();
+    if (runStore.best() === null) {
+      button(this, GAME_WIDTH / 2, 380, 300, 60, t('home.orderNow'), () => this.scene.start(SCENES.game));
+    }
+    tabBar(this, 'orders');
+  }
+
+  private chipDefs(): { view: View; text: string }[] {
+    return [
+      { view: 'mine', text: t('orders.tab.mine') },
+      { view: 'top', text: t('orders.tab.top') },
+    ];
+  }
+
+  private buildChips(): void {
+    const w = 200;
+    const gap = 12;
+    this.chipDefs().forEach((c, i) => {
+      const x = 20 + i * (w + gap);
+      const bg = this.add.graphics().setDepth(41);
+      const text = label(this, x + w / 2, 118, c.text, { size: 17, bold: true }).setOrigin(0.5).setDepth(42);
+      this.chips.push({ bg, text });
+      hitArea(this, x, 98, w, 40, () => this.select(c.view)).setDepth(43);
+    });
+    this.paintChips();
+  }
+
+  private paintChips(): void {
+    const w = 200;
+    const gap = 12;
+    this.chipDefs().forEach((c, i) => {
+      const on = c.view === this.view;
+      const x = 20 + i * (w + gap);
+      const chip = this.chips[i];
+      chip.bg.clear();
+      chip.bg.fillStyle(on ? COLORS.primary : COLORS.surface, 1).fillRoundedRect(x, 98, w, 40, 20);
+      chip.bg.lineStyle(2, COLORS.primary, 1).strokeRoundedRect(x, 98, w, 40, 20);
+      chip.text.setColor(on ? hex(COLORS.onPrimary) : hex(COLORS.accent));
+    });
+  }
+
+  private select(view: View): void {
+    if (view === this.view) return;
+    this.view = view;
+    this.paintChips();
+    this.buildList();
+  }
+
+  private buildList(): void {
+    this.list.clear();
+    const runs = this.view === 'mine' ? runStore.recent() : runStore.top();
+    const best = runStore.best();
+    const c = this.list.container;
+
+    if (runs.length === 0) {
+      c.add(label(this, GAME_WIDTH / 2, 120, t('orders.empty'), { size: 18, color: COLORS.muted, wrap: 340, align: 'center' }).setOrigin(0.5, 0));
+      return;
+    }
+
+    let y = LIST_PAD;
+    if (this.view === 'top') {
+      c.add(label(this, 20, y, t('orders.topNote'), { size: 13, color: COLORS.muted, wrap: GAME_WIDTH - 40 }));
+      y += 38;
+    }
+
+    runs.forEach((run, i) => {
+      const isBest = best !== null && run.no === best.no;
+      this.addRow(c, y, run, this.view === 'top' ? i + 1 : null, isBest);
+      y += ROW_H + ROW_GAP;
+    });
+    this.list.setContentHeight(y + LIST_PAD);
+  }
+
+  private addRow(c: Phaser.GameObjects.Container, y: number, run: RunRecord, rank: number | null, isBest: boolean): void {
+    c.add(roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, 14, isBest ? COLORS.primary : COLORS.border));
+
+    // Left badge: the rank on the ladder, or the order number in the history.
+    const badge = rank !== null ? `${rank}` : '#' + run.no;
+    c.add(this.add.circle(58, y + ROW_H / 2, 24, rank === 1 ? COLORS.primary : COLORS.background));
+    c.add(label(this, 58, y + ROW_H / 2, badge, { size: rank !== null ? 20 : 15, bold: true, color: COLORS.text }).setOrigin(0.5));
+
+    const zone = zoneAt(ZONES.find((z) => z.id === run.zoneId)?.fromMeters ?? 0);
+    c.add(label(this, 96, y + 10, t('orders.orderNo', { n: run.no }), { size: 17, bold: true }));
+    const when = new Date(run.playedAt).toLocaleDateString(localeInfo().dateLocale, { day: 'numeric', month: 'short', year: 'numeric' });
+    c.add(label(this, 96, y + 38, `${zoneLabel(zone)} · ${run.heightMeters} m · ${when}`, { size: 12, color: COLORS.muted, wrap: 250 }));
+
+    c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2 - 8, `฿${run.score}`, { size: 22, bold: true, color: COLORS.accent }).setOrigin(1, 0.5));
+    if (isBest) c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2 + 14, `★ ${t('orders.bestBadge')}`, { size: 12, bold: true, color: COLORS.primaryDark }).setOrigin(1, 0.5));
+  }
+}

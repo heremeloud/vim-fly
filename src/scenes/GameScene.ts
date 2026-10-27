@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '../core/constants';
 import { bindSteering } from '../core/input';
+import { t } from '../i18n';
 import { RunState } from '../core/RunState';
 import { difficulty, ramp } from '../core/difficulty';
 import { zoneAt, zoneBannerText, zoneTextureKey, ZONES, type Zone } from '../core/zones';
@@ -218,18 +219,18 @@ export class GameScene extends Phaser.Scene {
   private updateHud(): void {
     this.hud.setText(`${this.run.score}   (${Math.floor(this.run.heightMeters)} m)`);
     const bits: string[] = [];
-    if (this.run.shield) bits.push('SHIELD');
-    if (this.run.dashMs > 0) bits.push('DASH');
-    if (this.run.isStunned) bits.push('STUNNED');
-    if (this.run.strongFlapMs > 0) bits.push('POWER');
-    if (this.run.isDisoriented) bits.push('DIZZY');
-    if (this.run.doublePointsMs > 0) bits.push('x2');
+    if (this.run.shield) bits.push(t('hud.shield'));
+    if (this.run.dashMs > 0) bits.push(t('hud.dash'));
+    if (this.run.isStunned) bits.push(t('hud.stunned'));
+    if (this.run.strongFlapMs > 0) bits.push(t('hud.power'));
+    if (this.run.isDisoriented) bits.push(t('hud.dizzy'));
+    if (this.run.doublePointsMs > 0) bits.push(t('hud.x2'));
     this.status.setText(bits.join('  '));
     this.player.setFillStyle(this.run.isStunned ? 0xb0bec5 : 0xffb300);
   }
 
   private endRun(): void {
     this.ended = true;
-    this.scene.start(SCENES.receipt, { result: { ...this.run.result(), zone: this.zone.label } });
+    this.scene.start(SCENES.receipt, { result: { ...this.run.result(), zone: this.zone.id } });
   }
 }

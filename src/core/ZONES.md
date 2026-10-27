@@ -30,6 +30,10 @@ Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1
 
 The banner shows the tier and the location (for example "Tier 3 · Getting Serious / CC Law Office"). The receipt lists the last location reached. Tier names ("Humble Beginnings" and so on) are my own placeholders in `TIER_NAMES`.
 
+## Names in other languages
+
+Location and tier names are in `src/i18n` (`zone.<id>`, `tier.<n>`) in all four languages. They are drafts; use the show's official names where they exist.
+
 ## Changing a zone
 
 Edit `ZONE_DEFS` in `zones.ts` (id, label, tier, placeholder colors); start heights come from the order and `ZONE_SPACING_METERS`. Add a matching `case` in `BootScene.makeBackdrop` for the placeholder motif if you add a new id. To swap in real art, load a tileable image per zone in `BootScene.preload` using the key from `zoneTextureKey`.

@@ -4,9 +4,11 @@ The hooks that tie the game to the series.
 
 ## Built
 
-- `config.ts`: the show's title, air date and hashtag in one place (placeholders for now), plus `countdownText()` used by the home screen. Set `SHOW.airDate` (ISO date with timezone) and the countdown starts working.
+- `config.ts`: the show's title ("Bake Love Feeling", spelling to confirm), air date and hashtag in one place, plus `countdownText()` used by the home screen (translated). Set `SHOW.airDate` (ISO date with timezone) and the countdown starts working.
 
 ## Planned features
+
+- **The Promos tab is "About the show":** the series, its stars, where to watch, and the links below.
 
 - **Promotions tab:** links to the leads' socials, the series' socials and its YouTube channel.
 - **Receipt button:** "Watch the latest clip", linking to the newest YouTube video.

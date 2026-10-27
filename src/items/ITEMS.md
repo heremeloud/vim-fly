@@ -62,6 +62,10 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 - Are the point tiers right (breads 10, pasta and coffee 20, wine 30, lunch box 100)?
 - Thai names (and baht prices) for each item, for the menu-style item guide.
 
+## Names in other languages
+
+Item names are in `src/i18n` (`item.<id>`) in English, Thai, Japanese and Chinese; the English names in this file are the same as `en.ts`.
+
 ## Adding an item
 
 1. Add it to `ITEMS` in `itemDefs.ts`, choosing its kind (new effect types also go in `ItemEffect` and `RunState.collect`).

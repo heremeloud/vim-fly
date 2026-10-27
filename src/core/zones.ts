@@ -1,3 +1,5 @@
+import { t, tierName, zoneName } from '../i18n';
+
 /**
  * Height zones, taken from the locations of the original novel: five story tiers,
  * two locations per tier, ZONE_SPACING_METERS apart. Passing a milestone swaps the
@@ -64,7 +66,12 @@ export function zoneTextureKey(zone: Zone): string {
   return `bg-${zone.id}`;
 }
 
-/** Banner text: the tier on the first line, the location below. */
+/** The location's name in the current language. */
+export function zoneLabel(zone: Zone): string {
+  return zoneName(zone.id, zone.label);
+}
+
+/** Banner text: the tier on the first line, the location below. Translated. */
 export function zoneBannerText(zone: Zone): string {
-  return `Tier ${zone.tier} · ${TIER_NAMES[zone.tier]}\n${zone.label}`;
+  return `${t('zone.tier', { n: zone.tier, name: tierName(zone.tier) })}\n${zoneLabel(zone)}`;
 }

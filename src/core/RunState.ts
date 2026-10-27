@@ -1,4 +1,5 @@
 import type { ItemDef } from '../items/itemDefs';
+import type { ZoneId } from './zones';
 
 export interface ReceiptLine {
   id: string;
@@ -13,7 +14,7 @@ export interface RunResult {
   total: number;
   durationMs: number;
   /** Highest zone reached; filled in by the game scene. */
-  zone?: string;
+  zone?: ZoneId;
 }
 
 /**

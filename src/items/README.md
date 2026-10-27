@@ -15,7 +15,7 @@ All durations, point values and weights are starting points to tune in playtesti
 
 ## Adding or changing an item
 
-1. Edit `ITEMS` in `itemDefs.ts`. If the effect is new, add a variant to `ItemEffect`.
+1. Edit `ITEMS` in `itemDefs.ts`, and add `item.<id>` to all four language files in `src/i18n` (then run `npm run check:i18n`). If the effect is new, add a variant to `ItemEffect`.
 2. Handle the new effect in `RunState.collect` (and in `GameScene` if it moves the player).
 3. Update `ITEMS.md` and the table in the root `README.md`.
 

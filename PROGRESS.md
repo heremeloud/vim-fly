@@ -23,12 +23,15 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Menus restyled as a bee-themed parody ("BEE MAN"): honey-yellow palette, deliver-to line and search bar on the home screen; receipt has "Order again" and "Menu" buttons side by side
 - [x] Height zones replaced with the novel's 10 locations in 5 tiers, 200 m apart (`src/core/ZONES.md`); all 10 placeholder backdrops and banners checked in the browser; dev shortcut `?zone=<id>`
 - [x] Menus now parody both LINE MAN and Grab: super-app service tile row (BeeFood, BeeMart, BeeExpress, BeeRide) on the home screen; joke pages for the unbuilt services
+- [x] Rebrand: app is now "LOVE MAN" (placeholder), "Delivered by a very good bee dog", shop "Bake Love Bakery", series title "Bake Love Feeling"
+- [x] Four languages (English, Thai, Japanese, Chinese Simplified) with a text-only language picker; `npm run check:i18n`; all non-English text is a draft
+- [x] Orders tab: local run history ("My orders") and ranking ("Top customers"), saved on the device; receipt saves runs and flags a new best
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
 
 1. **Play it by hand and tune the feel.** Edit `PHYSICS` and `ITEM_RULES` in `src/core/constants.ts`. Not yet judged by a human; a bot climbs ~150 m in 5 s, so check pacing against 30-90 s runs.
-2. **Rest of the ordering-app menus.** Order history (best runs, needs local save) and the promotions tab (series links). Then real branding and Thai text once decided.
+2. **Promos tab = About the show.** The series, its stars, where to watch, links, "Watch the latest clip". Needs the real links and details (placeholders until then).
 3. **Real art, animation and sound.** Dog-in-bee-costume character, Kenney packs for items; log licenses in `src/assets/README.md`.
 4. **Local best runs** (order history) using localStorage.
 5. **Leaderboard.** Supabase project, server functions with run tokens, name entry, top-scores screen.
@@ -37,10 +40,14 @@ Last updated: 2026-10-27 (core loop session)
 
 ## Decisions waiting on me
 
+- App name: "LOVE MAN" is my placeholder pun (LINE MAN + the series' "love"), with LoveFood/LoveMart/LoveExpress/LoveRide. Keep or change? Series title is set to "Bake Love Feeling": is that exact?
+- How should "Bake Love Feeling" show up in gameplay, beyond the names? Idea: a Love meter that fills as you collect food and bursts into a short double-points "Bake Love" moment.
+- Chinese: Simplified or Traditional (or both)? Have native speakers review all Thai, Japanese and Chinese text.
+
 - Story-driven items: add a kitten, the Benz, cheese popcorn, the Cheese-Noey Bread? (see `src/core/ZONES.md`)
 - Are 200 m per location and my tier names right? (Decided: difficulty stays topping out at 1000 m, the harder option.)
 
-- Parody names: "BEE MAN" and the Bee-services are my placeholder puns. Keep them, or pick others? Have the final names and look checked by a lawyer before public release (two real brands are being parodied).
+- Have the final app names and look checked by a lawyer before public release (two real brands are being parodied).
 
 - Show name and logo, brand colors, air date, hashtag and social/YouTube links (needed for the promo features and menu styling).
 - Confirm effects for lawyer suit, handkerchief, rolling pin, oyster. More debuff ideas? (see `src/items/ITEMS.md`)

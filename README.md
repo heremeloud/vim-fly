@@ -1,6 +1,6 @@
-# Vimmy Fly
+# Bake Love Feeling: the game
 
-A tap-to-fly web game. One cute character climbs an endless sky, steering left and right to catch food and dodge gavel hammers. The menus look like a bakery food-ordering app.
+A tap-to-fly web game for the series *Bake Love Feeling*. A dog in a bee costume climbs an endless sky, steering left and right to catch food and dodge gavel hammers. The menus are a parody of a Thai delivery app ("LOVE MAN"). Available in English, Thai, Japanese and Chinese.
 
 ## How to play
 
@@ -58,6 +58,7 @@ Other commands:
 ```bash
 npm run build      # type-check and produce a static build in dist/
 npm run preview    # serve the production build locally
+npm run check:i18n # check all four languages are complete (needs Node 22.6+)
 ```
 
 ## Tech
@@ -72,7 +73,8 @@ Each folder under `src/` is one domain and has its own `README.md` explaining ho
 | --- | --- |
 | `src/core` | Physics values, input, the main game loop |
 | `src/items` | Item definitions, spawning and effects |
-| `src/scenes` | Screens: home storefront, item guide menu, game, receipt |
+| `src/scenes` | Screens: home storefront, item guide menu, orders (run history and ladder), game, receipt |
+| `src/i18n` | The four languages and how to add text |
 | `src/ui` | Shared look and widgets for the ordering-app menus |
 | `src/leaderboard` | Score submission and top-scores |
 | `src/promo` | Series links, countdown, share card |
