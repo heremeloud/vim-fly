@@ -13,7 +13,7 @@ The game's backdrops are the locations of the series' original novel. The climb 
 
 Each location is `ZONE_SPACING_METERS` (200 m) apart, so a tier is 400 m and the last location starts at 1800 m. Change the one constant in `zones.ts` to spread the story out more or less.
 
-Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1000 m, in `constants.ts`), which is now partway through tier 3 (CC Law Office to the Gym). Everything after that stays at full difficulty. If you want difficulty to keep building across the whole story, raise `fullAtMeters` toward 1800.
+Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1000 m, in `constants.ts`), which is now partway through tier 3 (CC Law Office to the Gym). Everything after that stays at full difficulty. This is deliberate: reaching full difficulty sooner keeps the game harder. Raising `fullAtMeters` toward 1800 would spread the ramp across the whole story but make the middle easier.
 
 | Tier | From | Location | Vibe | Placeholder backdrop |
 | --- | --- | --- | --- | --- |

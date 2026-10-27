@@ -37,7 +37,7 @@ Last updated: 2026-10-27 (core loop session)
 ## Decisions waiting on me
 
 - Story-driven items: add a kitten, the Benz, cheese popcorn, the Cheese-Noey Bread? (see `src/core/ZONES.md`)
-- Are 200 m per location and my tier names right? Difficulty still tops out at 1000 m (mid tier 3): should it build across the whole story instead (`DIFFICULTY.fullAtMeters`)?
+- Are 200 m per location and my tier names right? (Decided: difficulty stays topping out at 1000 m, the harder option.)
 
 - Parody name: "BEE MAN" is my placeholder pun. Keep it, or pick another? Have the final name and look checked by a lawyer before public release.
 
