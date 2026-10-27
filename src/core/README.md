@@ -16,6 +16,7 @@ The game's feel: physics values, input and the main loop.
 
 ## Files (continued)
 
+- `ZONES.md`: the novel's locations as height zones, with story context.
 - `RunState.ts`: pure rules state for one run (score, active effects, collected items, receipt data). No Phaser inside.
 
 ## How the loop works now
@@ -39,16 +40,9 @@ Combo multipliers, and a proper tuning pass (see below).
 
 ## Height zones
 
-`zones.ts` defines the backdrop zones. Passing a milestone swaps the background and shows a banner with the zone's name. The Receipt lists the highest zone reached.
+The backdrops are the locations from the series' original novel: five story tiers, two locations each, 100 m apart (Rural Road, Heartwarming Bakery, Suburban Cafés, Shopping Mall, CC Law Office, Fitness Second Gym, The Courtroom, Sweet Sea Beach, Noey's Residence, Bake Love Bakery). The tiers match the difficulty curve. Passing a milestone swaps the background and shows a banner with the tier and location; the Receipt lists the last location reached.
 
-| Zone | From |
-| --- | --- |
-| Bakery Street | 0 m |
-| Downtown Rooftops | 250 m |
-| The Courthouse | 500 m |
-| Above the Clouds | 800 m |
-
-The backdrops are generated placeholder tiles (`BootScene.makeBackdrop`). To add or move a zone, edit `ZONES`; to swap in real art, load a tileable image per zone in `BootScene.preload` using the key from `zoneTextureKey`.
+The full list, story context and vibes are in [ZONES.md](ZONES.md). The code is `zones.ts`. Backdrops are generated placeholders (`BootScene.makeBackdrop`). In dev, open `/?zone=<id>` to start a run inside a zone.
 
 ## Difficulty curve
 

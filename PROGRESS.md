@@ -18,9 +18,10 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Items split into three kinds (points, buffs, debuffs); cilantro and fish sauce bread are disorient debuffs; oyster added as a double-points buff
 - [x] Item rework: removed delivery car, briefcase, rain cloud, burnt bread; added lawyer suit (shield), handkerchief (cleanse), rolling pin (strong flap), planner (-150), golden retriever (+150)
 - [x] Single difficulty curve (0-1 over 1000 m) driving spawn rate, double spawns, fall speed, swerving debuffs, camera speed and item mix
-- [x] Height zones: backdrop and banner change at 250, 500 and 800 m; receipt shows the zone reached (courthouse and clouds backdrops not yet seen in the browser)
+- [x] Height zones (first version, replaced by the novel's locations below)
 - [x] Ordering-app menus, first part: shared UI (`src/ui`), home storefront, scrollable item guide with Points/Buffs/Debuffs filter, bottom tab bar, "coming soon" placeholders for Orders and Promos, promo config with countdown
 - [x] Menus restyled as a bee-themed parody ("BEE MAN"): honey-yellow palette, deliver-to line and search bar on the home screen; receipt has "Order again" and "Menu" buttons side by side
+- [x] Height zones replaced with the novel's 10 locations in 5 tiers (`src/core/ZONES.md`); all 10 placeholder backdrops and banners checked in the browser; dev shortcut `?zone=<id>`
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
@@ -34,6 +35,9 @@ Last updated: 2026-10-27 (core loop session)
 7. **Polish.** Screen shake, particles, combo multipliers, mobile testing.
 
 ## Decisions waiting on me
+
+- Story-driven items: add a kitten, the Benz, cheese popcorn, the Cheese-Noey Bread? (see `src/core/ZONES.md`)
+- Are 100 m per location and my tier names right?
 
 - Parody name: "BEE MAN" is my placeholder pun. Keep it, or pick another? Have the final name and look checked by a lawyer before public release.
 

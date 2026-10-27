@@ -28,7 +28,7 @@ Add a row for every third-party file or pack you use.
 
 ## Backdrops
 
-One tileable (vertically repeating) image per height zone: bakery street, downtown rooftops, the courthouse, above the clouds. See `src/core/zones.ts`.
+One tileable (vertically repeating) image per height zone, ten in all, one per location in the novel (rural road, heartwarming bakery, suburban cafés, shopping mall, CC law office, fitness gym, courtroom, beach, Noey's residence, Bake Love Bakery). See `src/core/ZONES.md`.
 
 ## Branding
 

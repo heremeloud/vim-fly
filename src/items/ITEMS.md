@@ -42,7 +42,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Cilantro Bread | `cilantroBread` | Disoriented | 3 s, left/right swapped | 4 | No points |
 | Fish Sauce Bread | `fishSauceBread` | Disoriented | 4 s, left/right swapped | 3 | No points; the smellier one lasts longer |
 | Planner | `planner` | Huge point loss | -150 | 2 | Only docks points, no movement effect |
-| **Car crash** | `carCrash` | **Big debuff** | Stun 1.8 s, knocked down 500 px/s, -50 points, cancels any active dash | 2 | Nod to how the leads met (their cars bumped) |
+| **Car crash** | `carCrash` | **Big debuff** | Stun 1.8 s, knocked down 500 px/s, -50 points, cancels any active dash | 2 | Nod to how the leads met: Cheese swerves for a kitten and crashes into Noey's Benz |
 
 ## Rules that apply to every item
 

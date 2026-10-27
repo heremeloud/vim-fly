@@ -10,7 +10,7 @@ Every screen. The menus are a parody of a Thai delivery app: a bee-themed "BEE M
 | Home | `HomeScene.ts` | Storefront: deliver-to line, search bar (opens Menu), BEE MAN banner (placeholder key art), shop info, episode countdown, popular menu, "Order now" |
 | Menu | `MenuScene.ts` | Item guide: scrollable menu with Points / Buffs / Debuffs filter, descriptions and "prices" read from `ITEMS` |
 | ComingSoon | `ComingSoonScene.ts` | Placeholder for the Orders and Promos tabs |
-| Game | `GameScene.ts` | Playable loop: camera climb, falling items, height-zone backdrops and banners, HUD (placeholder rectangles) |
+| Game | `GameScene.ts` | Playable loop: camera climb, falling items, height-zone backdrops and tier banners (the novel's locations), HUD (placeholder rectangles) |
 | Receipt | `ReceiptScene.ts` | Zone reached, height, line items per collected item, total, "Order again" and "Menu" buttons side by side, plus a "Back to store" link |
 
 Scenes are registered in `src/main.ts`. Scene keys live in `SCENES` in `src/core/constants.ts`.
