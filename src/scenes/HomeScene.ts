@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { getItem, priceLabel } from '../items/itemDefs';
 import { SHOW, countdownText } from '../promo/config';
-import { APP } from '../ui/brand';
+import { APP, SERVICES } from '../ui/brand';
 import { COLORS } from '../ui/theme';
 import { TAB_BAR_HEIGHT, button, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
 
@@ -17,7 +17,7 @@ export class HomeScene extends Phaser.Scene {
 
   create(): void {
     this.drawBanner();
-    this.drawShopInfo();
+    this.drawServices();
     this.drawCountdown();
     this.drawPopular();
     button(this, GAME_WIDTH / 2, GAME_HEIGHT - TAB_BAR_HEIGHT - 56, 420, 68, 'Order now', () =>
@@ -41,10 +41,19 @@ export class HomeScene extends Phaser.Scene {
     label(this, GAME_WIDTH / 2, 162, APP.tagline, { size: 16, color: COLORS.onPrimary }).setOrigin(0.5);
   }
 
-  private drawShopInfo(): void {
+  /** Super-app style grid of services under the banner. Only BeeFood leads anywhere real. */
+  private drawServices(): void {
     roundedBox(this, 20, 190, GAME_WIDTH - 40, 86, COLORS.surface, 16, COLORS.border);
-    label(this, 36, 204, `${SHOW.title} Bakery`, { size: 24, bold: true });
-    label(this, 36, 240, '★ 4.9   ·   Open now   ·   Bakery & lunch boxes', { size: 15, color: COLORS.muted });
+    const w = (GAME_WIDTH - 40) / SERVICES.length;
+    SERVICES.forEach((svc, i) => {
+      const cx = 20 + i * w + w / 2;
+      label(this, cx, 220, svc.icon, { size: 28 }).setOrigin(0.5);
+      label(this, cx, 252, svc.label, { size: 14, bold: true }).setOrigin(0.5);
+      hitArea(this, 20 + i * w, 190, w, 86, () => {
+        if (svc.target === 'menu') this.scene.start(SCENES.menu);
+        else this.scene.start(SCENES.comingSoon, { title: svc.label, note: svc.note, tab: 'store' });
+      });
+    });
   }
 
   private drawCountdown(): void {
@@ -53,7 +62,8 @@ export class HomeScene extends Phaser.Scene {
   }
 
   private drawPopular(): void {
-    label(this, 20, 364, 'Popular menu', { size: 22, bold: true });
+    label(this, 20, 364, `${SHOW.title} Bakery`, { size: 22, bold: true });
+    label(this, GAME_WIDTH - 20, 370, '★ 4.9  ·  Open now', { size: 14, color: COLORS.muted }).setOrigin(1, 0);
     const cardW = 138;
     const gap = 13;
     POPULAR.forEach((id, i) => {

@@ -32,7 +32,7 @@ One tileable (vertically repeating) image per height zone, ten in all, one per l
 
 ## Branding
 
-The in-game delivery app is a parody called BEE MAN (see `src/ui/README.md`). It needs its own logo and a bee mascot; do not reuse any real app's logo or mascot.
+The in-game delivery app is a parody of LINE MAN and Grab called BEE MAN (see `src/ui/README.md`). It needs its own logo and a bee mascot; do not reuse either real app's logo or mascot.
 
 ## Character
 

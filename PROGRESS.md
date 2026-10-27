@@ -22,6 +22,7 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Ordering-app menus, first part: shared UI (`src/ui`), home storefront, scrollable item guide with Points/Buffs/Debuffs filter, bottom tab bar, "coming soon" placeholders for Orders and Promos, promo config with countdown
 - [x] Menus restyled as a bee-themed parody ("BEE MAN"): honey-yellow palette, deliver-to line and search bar on the home screen; receipt has "Order again" and "Menu" buttons side by side
 - [x] Height zones replaced with the novel's 10 locations in 5 tiers, 200 m apart (`src/core/ZONES.md`); all 10 placeholder backdrops and banners checked in the browser; dev shortcut `?zone=<id>`
+- [x] Menus now parody both LINE MAN and Grab: super-app service tile row (BeeFood, BeeMart, BeeExpress, BeeRide) on the home screen; joke pages for the unbuilt services
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
@@ -39,7 +40,7 @@ Last updated: 2026-10-27 (core loop session)
 - Story-driven items: add a kitten, the Benz, cheese popcorn, the Cheese-Noey Bread? (see `src/core/ZONES.md`)
 - Are 200 m per location and my tier names right? (Decided: difficulty stays topping out at 1000 m, the harder option.)
 
-- Parody name: "BEE MAN" is my placeholder pun. Keep it, or pick another? Have the final name and look checked by a lawyer before public release.
+- Parody names: "BEE MAN" and the Bee-services are my placeholder puns. Keep them, or pick others? Have the final names and look checked by a lawyer before public release (two real brands are being parodied).
 
 - Show name and logo, brand colors, air date, hashtag and social/YouTube links (needed for the promo features and menu styling).
 - Confirm effects for lawyer suit, handkerchief, rolling pin, oyster. More debuff ideas? (see `src/items/ITEMS.md`)

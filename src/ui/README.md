@@ -5,18 +5,18 @@ Shared building blocks for the ordering-app menus, so every screen looks like on
 ## Files
 
 - `theme.ts`: the colors and font. This is the one place to change the look. The current honey-yellow and brown palette matches the bee costume and is a **placeholder** until the show's own colors and logo are decided.
-- `brand.ts`: the in-game app's name, tagline and header text (`BEE MAN`, placeholders).
+- `brand.ts`: the in-game app's name, tagline, header text and the super-app service tiles (`BEE MAN`, `BeeFood` and so on, placeholders).
 - `widgets.ts`: `label` (text), `roundedBox`, `hitArea` (invisible tap target), `button` (pill button, `primary` filled or `secondary` outlined) and `tabBar` (bottom navigation).
 
 ## Design rules: a parody, not a copy
 
-The menus are a **parody** of Thai delivery apps such as LINE MAN: same kind of layout (deliver-to line, search bar, shop page, menu cards with prices, bottom tabs), but a pun name (`BEE MAN`, for the dog in a bee costume) and its own look.
+The menus are a **parody of two Thai delivery apps at once**: LINE MAN (the shop page, menu cards with prices, rider-style status) and Grab (the "super app" grid of services). The in-game app is called `BEE MAN`, a pun on the dog in a bee costume, with a row of bee-named service tiles (BeeFood, BeeMart, BeeExpress, BeeRide) like Grab's. Only BeeFood goes anywhere real; the others open joke "coming soon" pages (`SERVICES` in `brand.ts`).
 
 To keep it clearly a joke and clearly the show's own:
 
-- Use our own name, logo, mascot and colors. Do **not** use any real app's logo, mascot, exact green, icons, screenshots or wording.
-- Make the humor obvious (the bee, the dog, the taglines), so nobody could mistake it for the real app or for an endorsement.
-- Parody is not a guarantee against trademark complaints. Before public release, get the name and look checked by someone qualified (the series has a lawyer, after all). This is not legal advice.
+- Use our own name, logo, mascot and colors. Do **not** use either app's logo, mascot, exact green, icons, screenshots or wording (neither LINE MAN's nor Grab's).
+- Make the humor obvious (the bee, the dog, the taglines, the silly services), so nobody could mistake it for a real app or for an endorsement.
+- Parody is not a guarantee against trademark complaints, and now two companies are involved. Before public release, get the name and look checked by someone qualified (the series has a lawyer, after all). This is not legal advice.
 
 ## Layout rules
 
