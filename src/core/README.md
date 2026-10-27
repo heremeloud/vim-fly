@@ -22,7 +22,7 @@ The game's feel: physics values, input and the main loop.
 
 `GameScene.update` each frame: moves the player (gravity, drift, effects), moves the camera up (it never scrolls down), spawns and moves items, checks collisions, updates the HUD, and ends the run when the player falls below the bottom of the screen.
 
-- A tap sets vertical velocity to `flapVelocity` and horizontal velocity to `±driftVelocity`. The character wraps around the left/right edges.
+- A tap sets vertical velocity to `flapVelocity` and horizontal velocity to `±driftVelocity`. The left/right screen edges are walls: the character stops there instead of wrapping around.
 - **Height** = pixels climbed / `pixelsPerMeter`. **Score** = height + item points (never below 0).
 - **Effects:** a dash (helicopter) overrides vertical speed with the item's own velocity; shield (lawyer suit) blocks the next debuff; handkerchief clears stun and disorient; rolling pin multiplies flap strength; stun ignores taps; disorient swaps left/right on taps; oyster doubles gained item points (never penalties); a car crash stuns, cancels any dash and knocks the dog downward once (`pendingKnockback`). Per-item numbers live in `itemDefs.ts`, see `src/items/ITEMS.md`.
 - Frame time is clamped to 50 ms so a background tab can't teleport the player.

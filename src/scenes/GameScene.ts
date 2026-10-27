@@ -103,8 +103,11 @@ export class GameScene extends Phaser.Scene {
     }
     this.vx *= Math.pow(PHYSICS.horizontalDrag, dt * 60);
 
-    // Wrap horizontally so the character never leaves the playfield sideways.
-    this.player.x = Phaser.Math.Wrap(this.player.x + this.vx * dt, 0, GAME_WIDTH);
+    // Side walls: the character stops at the screen edges instead of wrapping around.
+    const half = PLAYER_SIZE / 2;
+    const nextX = this.player.x + this.vx * dt;
+    this.player.x = Phaser.Math.Clamp(nextX, half, GAME_WIDTH - half);
+    if (this.player.x !== nextX) this.vx = 0;
     this.player.y += this.vy * dt;
   }
 
