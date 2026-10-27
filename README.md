@@ -18,9 +18,9 @@ Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
 
 | Item | Points |
 | --- | --- |
-| Pandan custard bread, cheese butter bread, shiopan, sandwich | Small |
+| Pandan custard bread, shiopan, sandwich | Small |
 | Pasta, coffee, wine | Medium |
-| Shrimp fried rice lunch box | Big |
+| Shrimp fried rice lunch box, cheese butter bread | Big |
 | Golden retriever | Biggest |
 
 **Buffs** (power-ups)

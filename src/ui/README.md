@@ -6,6 +6,7 @@ Shared building blocks for the ordering-app menus, so every screen looks like on
 
 - `theme.ts`: the colors and font. This is the one place to change the look. The current honey-yellow and brown palette matches the bee costume and is a **placeholder** until the show's own colors and logo are decided.
 - `brand.ts`: the in-game app's name, tagline, header text and the super-app service tiles (`VIMMY`, Food/Mart/Express/Ride, placeholders; text that changes with language is in `src/i18n`).
+- `videoPlayer.ts`: `openVideo()` plays a YouTube video in a window over the game (close button, tap outside or Escape closes it, with an "Open on YouTube" fallback link).
 - `ScrollList.ts`: a drag/wheel scrolling list used by the Menu and Orders screens.
 - `widgets.ts`: `label` (text), `roundedBox`, `hitArea` (invisible tap target), `button` (pill button, `primary` filled or `secondary` outlined) `tabBar` (bottom navigation) and `languageButton` (the language picker, text only, no flags).
 
@@ -27,7 +28,7 @@ To keep it clearly a joke and clearly the show's own:
 
 ## Tab bar
 
-Store, Menu, Orders, Promos. Store, Menu and Orders are built. Promos (about the show) opens `ComingSoonScene`. Tab targets are in `tabTarget` in `widgets.ts`; point a tab at its real scene when it exists.
+Store, Menu, Orders, Promos. The Store tab always goes to the home page, including from the joke service pages where it stays highlighted. Store, Menu and Orders are built. Promos (about the show) opens `ComingSoonScene`. Tab targets are in `tabTarget` in `widgets.ts`; point a tab at its real scene when it exists.
 
 ## Adding a screen
 

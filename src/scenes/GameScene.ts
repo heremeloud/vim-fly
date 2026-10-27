@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '../core/constants';
 import { bindSteering } from '../core/input';
 import { t } from '../i18n';
+import { FONT } from '../ui/theme';
 import { RunState } from '../core/RunState';
 import { difficulty, ramp } from '../core/difficulty';
 import { zoneAt, zoneBannerText, zoneTextureKey, ZONES, type Zone } from '../core/zones';
@@ -70,16 +71,16 @@ export class GameScene extends Phaser.Scene {
     this.player = this.add.rectangle(GAME_WIDTH / 2, START_Y, PLAYER_SIZE, PLAYER_SIZE, 0xffb300).setDepth(5);
 
     this.hud = this.add
-      .text(12, 10, '', { fontSize: '22px', color: '#5d4037' })
+      .text(12, 10, '', { fontFamily: FONT.family, fontSize: '22px', color: '#5d4037' })
       .setScrollFactor(0)
       .setDepth(20);
     this.status = this.add
-      .text(12, 40, '', { fontSize: '16px', color: '#8d6e63' })
+      .text(12, 40, '', { fontFamily: FONT.family, fontSize: '16px', color: '#8d6e63' })
       .setScrollFactor(0)
       .setDepth(20);
 
     this.banner = this.add
-      .text(GAME_WIDTH / 2, 120, '', { fontSize: '26px', align: 'center', color: '#4e342e', backgroundColor: '#ffffffcc', padding: { x: 14, y: 8 } })
+      .text(GAME_WIDTH / 2, 120, '', { fontFamily: FONT.family, fontSize: '26px', align: 'center', color: '#4e342e', backgroundColor: '#ffffffcc', padding: { x: 14, y: 8 } })
       .setOrigin(0.5)
       .setScrollFactor(0)
       .setDepth(25)

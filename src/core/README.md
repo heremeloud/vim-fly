@@ -17,6 +17,7 @@ The game's feel: physics values, input and the main loop.
 ## Files (continued)
 
 - `ZONES.md`: the novel's locations as height zones, with story context.
+- `render.ts`: the render scale (sharpness), see below.
 - `RunState.ts`: pure rules state for one run (score, active effects, collected items, receipt data). No Phaser inside.
 
 ## How the loop works now
@@ -38,9 +39,19 @@ Everything in `PHYSICS` is a starting point. Change values, reload, and play unt
 
 Combo multipliers, and a proper tuning pass (see below).
 
+## Sharpness (render scale)
+
+All layout uses a 480x800 coordinate space, but the canvas is drawn `RENDER_SCALE` times bigger (1 to 3, chosen at start-up from the screen density and the size the game is shown at) and every camera zooms by the same amount. Layout never changes; shapes and text are just drawn at full sharpness instead of being stretched (which looked soft on retina screens and big windows). See `render.ts`.
+
+- Pointer positions are in canvas pixels; convert with `toLayout()` before comparing them with layout coordinates.
+- Every Text object is rendered at `RENDER_SCALE` resolution (installed once in `main.ts`).
+- The zone backdrop tiles are small bitmaps, so they use hard (nearest) edges when zoomed.
+- The scale is chosen once when the page loads; reload after resizing the window a lot.
+- In dev, `?scale=1` to `?scale=3` forces it, to compare.
+
 ## Height zones
 
-The backdrops are the locations from the series' original novel: five story tiers, two locations each, 200 m apart (`ZONE_SPACING_METERS`) (Rural Road, Heartwarming Bakery, Suburban Cafés, Shopping Mall, CC Law Office, Fitness Second Gym, The Courtroom, Sweet Sea Beach, Noey's Residence, Bake Love Bakery). Passing a milestone swaps the background and shows a banner with the tier and location; the Receipt lists the last location reached.
+The backdrops are the locations from the series' original novel: five story stages, two locations each, 200 m apart (`ZONE_SPACING_METERS`) (Rural Road, Heartwarming Bakery, Suburban Cafés, Shopping Mall, CC Law Office, Fitness Second Gym, The Courtroom, Sweet Sea Beach, Noey's Residence, Bake Love Bakery). Passing a milestone swaps the background and shows a banner with the stage and location; the Receipt lists the last location reached.
 
 The full list, story context and vibes are in [ZONES.md](ZONES.md). The code is `zones.ts`. Backdrops are generated placeholders (`BootScene.makeBackdrop`). In dev, open `/?zone=<id>` to start a run inside a zone.
 

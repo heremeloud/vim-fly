@@ -4,7 +4,7 @@ import type { RunResult } from '../core/RunState';
 import { ZONES, zoneLabel } from '../core/zones';
 import { itemName, t } from '../i18n';
 import { runStore } from '../leaderboard/runStore';
-import { PILOT, openLink } from '../promo/config';
+import { watchPilot } from '../promo/pilot';
 import { COLORS } from '../ui/theme';
 import { button, hitArea, label } from '../ui/widgets';
 
@@ -16,7 +16,7 @@ export class ReceiptScene extends Phaser.Scene {
 
   create(data: { result?: RunResult }): void {
     const r = data.result ?? { heightMeters: 0, lines: [], total: 0, durationMs: 0 };
-    const mono = { fontFamily: 'ui-monospace, Menlo, monospace', fontSize: '20px', color: '#4e342e', padding: { top: 3, bottom: 3 } };
+    const mono = { fontFamily: '"Noto Sans Thai", ui-monospace, Menlo, monospace', fontSize: '20px', color: '#4e342e', padding: { top: 3, bottom: 3 } };
     const x = 50;
     let y = 90;
 
@@ -61,7 +61,7 @@ export class ReceiptScene extends Phaser.Scene {
     label(this, GAME_WIDTH / 2, GAME_HEIGHT - 250, t('receipt.thanks'), { size: 16, color: COLORS.muted }).setOrigin(0.5);
 
     // Hype: a link to the pilot right where players feel good about their score.
-    button(this, GAME_WIDTH / 2, GAME_HEIGHT - 195, 420, 52, t('receipt.watchPilot'), () => openLink(PILOT.url), 'secondary');
+    button(this, GAME_WIDTH / 2, GAME_HEIGHT - 195, 420, 52, t('receipt.watchPilot'), () => watchPilot(), 'secondary');
 
     // Two buttons side by side: play again, or go back to the menu (item guide).
     const by = GAME_HEIGHT - 110;

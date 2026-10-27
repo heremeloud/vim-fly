@@ -51,7 +51,7 @@ export const ja: Record<StringKey, string> = {
   'receipt.menu': 'メニュー',
   'receipt.backToStore': 'ストアに戻る',
   'receipt.newBest': 'ベスト更新！',
-  'receipt.thanks': '愛を焼いてくれてありがとう',
+  'receipt.thanks': '愛のある気持ちを焼いてくれてありがとう',
 
   'hud.shield': 'シールド',
   'hud.dash': 'ダッシュ',
@@ -60,12 +60,7 @@ export const ja: Record<StringKey, string> = {
   'hud.dizzy': 'めまい',
   'hud.x2': 'x2',
 
-  'zone.tier': 'ティア{n} · {name}',
-  'tier.1': 'ささやかな始まり',
-  'tier.2': '世界を広げて',
-  'tier.3': '本気モード',
-  'tier.4': '大切な瞬間',
-  'tier.5': '本当の自立',
+  'zone.stage': 'ステージ{n}',
 
   'zone.ruralRoad': '田舎道',
   'zone.bakery': 'ハートウォーミング・ベーカリー',
@@ -128,4 +123,6 @@ export const ja: Record<StringKey, string> = {
   'hud.slow': 'スロー',
   'effect.slow': '{s}秒間、飛ぶ速度が{p}%ダウン',
   'effect.stunPenalty': '{s}秒間スタンし、{n}ポイント失う',
+  'video.close': '閉じる',
+  'video.openYoutube': 'YouTubeで開く',
 };

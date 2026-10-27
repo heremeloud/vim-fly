@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { toLayout } from '../core/render';
 
 /**
  * A vertically scrolling list between `top` and `bottom` (screen y). Add rows to `container`,
@@ -19,13 +20,14 @@ export class ScrollList {
     this.container = scene.add.container(0, top).setDepth(1);
 
     const onDown = (p: Phaser.Input.Pointer) => {
-      if (p.y > top && p.y < bottom) {
-        this.dragStartY = p.y;
+      const y = toLayout(p.y);
+      if (y > top && y < bottom) {
+        this.dragStartY = y;
         this.listStartY = this.container.y;
       }
     };
     const onMove = (p: Phaser.Input.Pointer) => {
-      if (this.dragStartY !== null && p.isDown) this.scrollTo(this.listStartY + (p.y - this.dragStartY));
+      if (this.dragStartY !== null && p.isDown) this.scrollTo(this.listStartY + (toLayout(p.y) - this.dragStartY));
     };
     const onUp = () => (this.dragStartY = null);
     const onWheel = (_p: Phaser.Input.Pointer, _o: unknown, _dx: number, dy: number) => this.scrollTo(this.container.y - dy);

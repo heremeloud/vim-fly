@@ -12,7 +12,7 @@ Add a row for every third-party file or pack you use.
 
 | Asset / pack | Source | License | Attribution required | Used for |
 | --- | --- | --- | --- | --- |
-| (none yet) | | | | |
+| Noto Sans Thai (Thai glyphs, weights 400 and 700) | `@fontsource/noto-sans-thai` (npm) | SIL Open Font License 1.1 | No (keep the license with the font files) | Thai text everywhere |
 
 ## Where to look
 
@@ -40,7 +40,10 @@ The playable character is a dog in a bee costume. Needs idle/flap, boost and hur
 
 ## Fonts for Thai, Japanese and Chinese
 
-The game is in four languages (`src/i18n/README.md`). It currently uses each device's own fonts, which cover all four on modern phones and computers, with Noto Sans fallbacks listed in `src/ui/theme.ts`. For a consistent look everywhere, bundle web fonts later (for example Noto Sans Thai, Noto Sans JP, Noto Sans SC under the SIL OFL; check licenses and file size, CJK fonts are large).
+The game is in four languages (`src/i18n/README.md`).
+
+- **Thai:** **Noto Sans Thai** (weights 400 and 700) is bundled from the `@fontsource/noto-sans-thai` package (SIL OFL). Device fallback fonts for Thai can look odd, so it is listed first in `FONT.family` (`src/ui/theme.ts`); it only covers Thai characters, so Latin text still uses the device font. `main.ts` waits for it to load (up to 3 s) before the first screen draws, because text on the canvas is drawn once.
+- **Japanese and Chinese:** these use the device's own fonts (Hiragino, PingFang, Noto and so on), with Noto Sans JP / SC as fallbacks. Bundling them is possible later, but CJK fonts are large.
 
 ## Animation scope
 

@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { t } from '../i18n';
-import { LEADS, OFFICIAL, PILOT, PLATFORMS, SHOW, VIMMY, openLink, profileUrl, type Account } from '../promo/config';
+import { LEADS, OFFICIAL, PLATFORMS, SHOW, VIMMY, openLink, profileUrl, type Account } from '../promo/config';
+import { watchPilot } from '../promo/pilot';
 import { ScrollList } from '../ui/ScrollList';
 import { COLORS } from '../ui/theme';
 import { TAB_BAR_HEIGHT, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
@@ -55,7 +56,7 @@ export class PromosScene extends Phaser.Scene {
     c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.primary, 20));
     c.add(label(this, 44, y + 20, `▶  ${t('promos.pilot.title')}`, { size: 26, bold: true, color: COLORS.onPrimary }));
     c.add(label(this, 44, y + 58, t('promos.pilot.sub'), { size: 15, color: COLORS.onPrimary }));
-    c.add(hitArea(this, 20, y, CARD_W, h, () => openLink(PILOT.url)));
+    c.add(hitArea(this, 20, y, CARD_W, h, () => watchPilot()));
     return y + h;
   }
 
@@ -65,9 +66,11 @@ export class PromosScene extends Phaser.Scene {
     c.add(label(this, 36, y + 10, account.name, { size: 19, bold: true, wrap: CARD_W - 32 }));
     if (account.roleKey) c.add(label(this, 36, y + 38, t(account.roleKey), { size: 13, color: COLORS.muted, wrap: CARD_W - 32 }));
 
+    // One button per platform the account has (the official account is X only), at most 3 across.
+    const platforms = PLATFORMS.filter((p) => p.id in account.handles);
     const gap = 8;
-    const w = (CARD_W - 32 - gap * (PLATFORMS.length - 1)) / PLATFORMS.length;
-    PLATFORMS.forEach((p, i) => {
+    const w = Math.min(130, (CARD_W - 32 - gap * (PLATFORMS.length - 1)) / PLATFORMS.length);
+    platforms.forEach((p, i) => {
       const url = profileUrl(p.id, account.handles[p.id]);
       const x = 36 + i * (w + gap);
       const cy = y + 68;

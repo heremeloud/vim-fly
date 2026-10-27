@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
+import { toLayout } from '../core/render';
 import { LOCALES, getLocale, localeInfo, setLocale, t, type StringKey } from '../i18n';
 import { COLORS, FONT, hex } from './theme';
 
@@ -61,7 +62,7 @@ export function hitArea(
   const r = scene.add.rectangle(x, y, w, h, 0xffffff, 0.001).setOrigin(0).setInteractive({ useHandCursor: true });
   // Ignore the tap if the finger dragged (scrolling a list), so scrolling never opens things.
   r.on('pointerup', (p: Phaser.Input.Pointer) => {
-    if (Math.hypot(p.x - p.downX, p.y - p.downY) < 12) onTap();
+    if (toLayout(Math.hypot(p.x - p.downX, p.y - p.downY)) < 12) onTap();
   });
   return r;
 }
@@ -126,13 +127,15 @@ export function tabBar(scene: Phaser.Scene, active: TabId): void {
   TABS.forEach((tab, i) => {
     const cx = i * w + w / 2;
     const on = tab.id === active;
-    scene.add.text(cx, y + 26, tab.icon, { fontSize: '26px' }).setOrigin(0.5).setDepth(depth).setAlpha(on ? 1 : 0.5);
+    scene.add.text(cx, y + 26, tab.icon, { fontFamily: FONT.family, fontSize: '26px' }).setOrigin(0.5).setDepth(depth).setAlpha(on ? 1 : 0.5);
     label(scene, cx, y + 56, t(tab.key), { size: 14, color: on ? COLORS.accent : COLORS.muted, bold: on })
       .setOrigin(0.5)
       .setDepth(depth);
     const hit = hitArea(scene, i * w, y, w, TAB_BAR_HEIGHT, () => {
-      if (on) return;
       const target = tabTarget(tab.id);
+      // Only skip when we are already on that tab's own screen. A highlighted tab can be showing a
+      // different page (the Store tab stays lit on the joke service pages), and tapping it must still go home.
+      if (scene.scene.key === target.scene) return;
       scene.scene.start(target.scene, target.data);
     });
     hit.setDepth(depth + 1);

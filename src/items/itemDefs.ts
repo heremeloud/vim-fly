@@ -33,7 +33,7 @@ export interface ItemDef {
 
 export const ITEMS: readonly ItemDef[] = [
   { id: 'pandanCustardBread', label: 'Pandan Custard Bread', kind: 'points', weight: 6, effect: { type: 'points', amount: 10 }, color: 0x8bc34a },
-  { id: 'cheeseButterBread', label: 'Cheese Butter Bread', kind: 'points', weight: 6, effect: { type: 'points', amount: 10 }, color: 0xffca28 },
+  { id: 'cheeseButterBread', label: 'Cheese Butter Bread', kind: 'points', weight: 2, effect: { type: 'points', amount: 100 }, color: 0xffca28 },
   { id: 'cilantroBread', label: 'Cilantro Bread', kind: 'debuff', weight: 4, effect: { type: 'disorient', durationMs: 3000 }, color: 0x66bb6a },
   { id: 'shiopan', label: 'Shiopan', kind: 'points', weight: 5, effect: { type: 'points', amount: 10 }, color: 0xd7a86e },
   { id: 'fishSauceBread', label: 'Fish Sauce Bread', kind: 'debuff', weight: 3, effect: { type: 'slow', durationMs: 5000, factor: 0.6 }, color: 0xa1887f },

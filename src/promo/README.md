@@ -6,7 +6,7 @@ The hooks that tie the game to the series.
 
 - **Promos tab ("About the show")** and the links config in `config.ts`:
   - the **pilot** (YouTube, https://www.youtube.com/watch?v=NFFWV0X4i_c), shown as a big button on the Promos tab, a "Watch the pilot" strip on the home screen, and a button on the receipt;
-  - the **official account**, the **two main leads** and **Vimmy** (the playable dog), each with X, Instagram and TikTok buttons.
+  - the **official account** (X only), the **two main leads** and **Vimmy** (the playable dog); the leads and Vimmy each have X, Instagram and TikTok buttons.
 
 - `config.ts`: the show's title ("Bake Love Feeling", spelling to confirm), air date and hashtag in one place, plus `countdownText()` used by the home screen (translated). Set `SHOW.airDate` (ISO date with timezone) and the countdown starts working.
 
@@ -34,4 +34,6 @@ Series YouTube channel and videos, the series' socials and the leads' socials. A
 
 ## Filling in the accounts
 
-Open `src/promo/config.ts` and set the handles (without the @) in `OFFICIAL`, `LEADS` and `VIMMY`, for example `x: 'bakelovefeeling'`. A button shows "soon" and does nothing until its handle is set; once set, it opens `https://x.com/<handle>`, `https://www.instagram.com/<handle>` or `https://www.tiktok.com/@<handle>` in a new tab. The leads' names are placeholders ("name TBD"); set `name` too. Links are only built from plain usernames and always use https.
+Open `src/promo/config.ts` and set the handles (without the @) in `OFFICIAL` (X only), `LEADS` and `VIMMY`, for example `x: 'bakelovefeeling'`. A button shows "soon" and does nothing until its handle is set; once set, it opens `https://x.com/<handle>`, `https://www.instagram.com/<handle>` or `https://www.tiktok.com/@<handle>` in a new tab. The leads' names are placeholders ("name TBD"); set `name` too. Links are only built from plain usernames and always use https.
+
+An account only gets buttons for the platforms listed in its `handles`, so the official account shows just X. Add a platform key to give it another button.

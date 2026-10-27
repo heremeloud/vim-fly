@@ -1,6 +1,6 @@
 # Locations (height zones)
 
-The game's backdrops are the locations of the series' original novel. The climb moves through the story in five tiers, two locations per tier, from humble beginnings to the leads' shared future. The code is in [zones.ts](zones.ts); keep this file in step with it.
+The game's backdrops are the locations of the series' original novel. The climb moves through the story in five stages, two locations per stage, from humble beginnings to the leads' shared future. The code is in [zones.ts](zones.ts); keep this file in step with it.
 
 ## Story context
 
@@ -11,32 +11,32 @@ The game's backdrops are the locations of the series' original novel. The climb 
 
 ## Zones
 
-Each location is `ZONE_SPACING_METERS` (200 m) apart, so a tier is 400 m and the last location starts at 1800 m. Change the one constant in `zones.ts` to spread the story out more or less.
+Each location is `ZONE_SPACING_METERS` (200 m) apart, so a stage is 400 m and the last location starts at 1800 m. Change the one constant in `zones.ts` to spread the story out more or less.
 
-Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1000 m, in `constants.ts`), which is now partway through tier 3 (CC Law Office to the Gym). Everything after that stays at full difficulty. This is deliberate: reaching full difficulty sooner keeps the game harder. Raising `fullAtMeters` toward 1800 would spread the ramp across the whole story but make the middle easier.
+Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1000 m, in `constants.ts`), which is now partway through stage 3 (CC Law Office to the Gym). Everything after that stays at full difficulty. This is deliberate: reaching full difficulty sooner keeps the game harder. Raising `fullAtMeters` toward 1800 would spread the ramp across the whole story but make the middle easier.
 
-| Tier | From | Location | Vibe | Placeholder backdrop |
+| Stage | From | Location | Vibe | Placeholder backdrop |
 | --- | --- | --- | --- | --- |
-| **1 Humble Beginnings** | 0 m | Rural Road (near rice fields) | Quiet road through golden fields; where the inciting crash happens | Gold with rice stalks and road edges |
+| **Stage 1** | 0 m | Rural Road (near rice fields) | Quiet road through golden fields; where the inciting crash happens | Gold with rice stalks and road edges |
 | | 200 m | Heartwarming Bakery | Cheese's inherited two-story shop, the cozy starting hub, under her father's shadow | Cream with shelves and loaves |
-| **2 Branching Out** | 400 m | Suburban Cafés | Local spots where Cheese delivers bread samples and builds her reputation | Pale green with coffee cups |
+| **Stage 2** | 400 m | Suburban Cafés | Local spots where Cheese delivers bread samples and builds her reputation | Pale green with coffee cups |
 | | 600 m | Shopping Mall and Popcorn Shop | Busy downtown spot to relax, meet other characters, boost morale (the cheese popcorn counter) | Lavender with popcorn dots and shop frames |
-| **3 Getting Serious** | 800 m | CC Law Office | Sharp corporate setting: legal help, bread peace offerings, Cheese and Noey grow closer | Grey-blue with a window grid |
+| **Stage 3** | 800 m | CC Law Office | Sharp corporate setting: legal help, bread peace offerings, Cheese and Noey grow closer | Grey-blue with a window grid |
 | | 1000 m | Fitness Second Gym | Where Lal works and Cheese secretly trains for fitness and confidence | Peach with dumbbells |
-| **4 The Big Moments** | 1200 m | The Courtroom | Tense, formal arena where the forged-signature fight is won | Brown with wooden pillars |
+| **Stage 4** | 1200 m | The Courtroom | Tense, formal arena where the forged-signature fight is won | Brown with wooden pillars |
 | | 1400 m | Sweet Sea Beach and Seaside Restaurant | Coastal getaway: Cheese opens up about her past and the romance is sealed | Aqua with waves |
-| **5 True Independence** | 1600 m | Noey's Residence (YZ Village) | Gated community house: late-night recipe tests, a shared domestic future | Lavender-blue with gate bars |
+| **Stage 5** | 1600 m | Noey's Residence (YZ Village) | Gated community house: late-night recipe tests, a shared domestic future | Lavender-blue with gate bars |
 | | 1800 m | Bake Love Bakery | Cheese's own shop, free of her father's shadow; home of the Cheese-Noey Bread | Pink with hearts |
 
-The banner shows the tier and the location (for example "Tier 3 · Getting Serious / CC Law Office"). The receipt lists the last location reached. Tier names ("Humble Beginnings" and so on) are my own placeholders in `TIER_NAMES`.
+The banner shows the stage number and the location (for example "Stage 3 / CC Law Office"). Stages have no names of their own. The receipt lists the last location reached.
 
 ## Names in other languages
 
-Location and tier names are in `src/i18n` (`zone.<id>`, `tier.<n>`) in all four languages. They are drafts; use the show's official names where they exist.
+Location names are in `src/i18n` (`zone.<id>`) in all four languages, and the "Stage {n}" label is `zone.stage`. They are drafts; use the show's official names where they exist.
 
 ## Changing a zone
 
-Edit `ZONE_DEFS` in `zones.ts` (id, label, tier, placeholder colors); start heights come from the order and `ZONE_SPACING_METERS`. Add a matching `case` in `BootScene.makeBackdrop` for the placeholder motif if you add a new id. To swap in real art, load a tileable image per zone in `BootScene.preload` using the key from `zoneTextureKey`.
+Edit `ZONE_DEFS` in `zones.ts` (id, label, stage, placeholder colors); start heights come from the order and `ZONE_SPACING_METERS`. Add a matching `case` in `BootScene.makeBackdrop` for the placeholder motif if you add a new id. To swap in real art, load a tileable image per zone in `BootScene.preload` using the key from `zoneTextureKey`.
 
 ## Testing a zone quickly
 

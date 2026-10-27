@@ -15,7 +15,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Item | id | Points | Weight | Notes |
 | --- | --- | --- | --- | --- |
 | Pandan Custard Bread | `pandanCustardBread` | +10 | 6 | Core series food |
-| Cheese Butter Bread | `cheeseButterBread` | +10 | 6 | Milk, butter and cream cheese |
+| Cheese Butter Bread | `cheeseButterBread` | +100 | 2 | Milk, butter and cream cheese; a high-points item, as rare as the lunch box |
 | Shiopan | `shiopan` | +10 | 5 | |
 | Sandwich | `sandwich` | +10 | 6 | |
 | Pasta | `pasta` | +20 | 4 | Savory dish |
@@ -60,7 +60,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 - More debuff ideas? Current movement debuffs are stun, disorient, slow and the car crash. Candidates: heavy (falls faster), wind gust (pushed sideways), slippery (drift doesn't stop), fog (screen dims).
 - Should the shield block the car crash and planner, or should one of them be unblockable?
 - Should coffee and wine have effects of their own, or stay plain points?
-- Are the point tiers right (breads 10, pasta and coffee 20, wine 30, lunch box 100)?
+- Are the point tiers right (breads 10, pasta and coffee 20, wine 30, lunch box and cheese butter bread 100, golden retriever 150)?
 - Thai names (and baht prices) for each item, for the menu-style item guide.
 
 ## Names in other languages

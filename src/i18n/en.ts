@@ -52,7 +52,7 @@ export const en = {
   'receipt.menu': 'Menu',
   'receipt.backToStore': 'Back to store',
   'receipt.newBest': 'New best order!',
-  'receipt.thanks': 'Thank you for baking love',
+  'receipt.thanks': 'Thank you for baking loving feeling',
 
   'hud.shield': 'SHIELD',
   'hud.dash': 'DASH',
@@ -61,12 +61,7 @@ export const en = {
   'hud.dizzy': 'DIZZY',
   'hud.x2': 'x2',
 
-  'zone.tier': 'Tier {n} · {name}',
-  'tier.1': 'Humble Beginnings',
-  'tier.2': 'Branching Out',
-  'tier.3': 'Getting Serious',
-  'tier.4': 'The Big Moments',
-  'tier.5': 'True Independence',
+  'zone.stage': 'Stage {n}',
 
   'zone.ruralRoad': 'Rural Road',
   'zone.bakery': 'Heartwarming Bakery',
@@ -129,6 +124,8 @@ export const en = {
   'hud.slow': 'SLOW',
   'effect.slow': 'Flying {p}% slower for {s}s',
   'effect.stunPenalty': 'Stuns you for {s}s and costs {n} points',
+  'video.close': 'Close',
+  'video.openYoutube': 'Open on YouTube',
 };
 
 export type StringKey = keyof typeof en;

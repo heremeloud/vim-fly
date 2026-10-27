@@ -21,7 +21,7 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Height zones (first version, replaced by the novel's locations below)
 - [x] Ordering-app menus, first part: shared UI (`src/ui`), home storefront, scrollable item guide with Points/Buffs/Debuffs filter, bottom tab bar, "coming soon" placeholders for Orders and Promos, promo config with countdown
 - [x] Menus restyled as a bee-themed parody ("BEE MAN"): honey-yellow palette, deliver-to line and search bar on the home screen; receipt has "Order again" and "Menu" buttons side by side
-- [x] Height zones replaced with the novel's 10 locations in 5 tiers, 200 m apart (`src/core/ZONES.md`); all 10 placeholder backdrops and banners checked in the browser; dev shortcut `?zone=<id>`
+- [x] Height zones replaced with the novel's 10 locations in 5 stages, 200 m apart (`src/core/ZONES.md`); all 10 placeholder backdrops and banners checked in the browser; dev shortcut `?zone=<id>`
 - [x] Menus now parody both LINE MAN and Grab: super-app service tile row (BeeFood, BeeMart, BeeExpress, BeeRide) on the home screen; joke pages for the unbuilt services
 - [x] Rebrand: app is now "LOVE MAN" (placeholder), "Delivered by a very good bee dog", shop "Bake Love Bakery", series title "Bake Love Feeling"
 - [x] Four languages (English, Thai, Japanese, Chinese Simplified) with a text-only language picker; `npm run check:i18n`; all non-English text is a draft
@@ -29,6 +29,11 @@ Last updated: 2026-10-27 (core loop session)
 - [x] App renamed to VIMMY (after the dog); service tiles are plain Food / Mart / Express / Ride; header says "Deliver to Current location"
 - [x] Promos tab built: pilot link, official account, two leads, Vimmy, each with X / Instagram / TikTok (handles not filled in yet); pilot also on home and receipt
 - [x] Planner now stuns (1.5 s) and costs 150 points; fish sauce bread slows flying 40% for 5 s
+- [x] Sharper rendering: canvas drawn up to 3x bigger with the same layout (`src/core/render.ts`); bundled Noto Sans Thai font for Thai text
+- [x] "Tier" is now "Stage" everywhere (banner: "Stage 3" over the location; no stage names), in all four languages
+- [x] The pilot plays inside the game in a window (Promos tab, receipt); the home strip opens the Promos page; official account is X only; receipt line is "Thank you for baking loving feeling" in all four languages
+- [x] Cheese butter bread is now a high-points item (+100, rare)
+- [x] The Store tab always returns to the home page (also from the joke service pages)
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
@@ -49,7 +54,7 @@ Last updated: 2026-10-27 (core loop session)
 - Chinese: Simplified or Traditional (or both)? Have native speakers review all Thai, Japanese and Chinese text.
 
 - Story-driven items: add a kitten, the Benz, cheese popcorn, the Cheese-Noey Bread? (see `src/core/ZONES.md`)
-- Are 200 m per location and my tier names right? (Decided: difficulty stays topping out at 1000 m, the harder option.)
+- Is 200 m per location right? (Decided: difficulty stays topping out at 1000 m, the harder option.)
 
 - Have the final app names and look checked by a lawyer before public release (two real brands are being parodied).
 

@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { t } from '../i18n';
 import { displayName, getItem, priceLabel } from '../items/itemDefs';
-import { PILOT, SHOW, countdownText, openLink } from '../promo/config';
+import { SHOW, countdownText } from '../promo/config';
 import { APP, SERVICES } from '../ui/brand';
 import { COLORS } from '../ui/theme';
 import { TAB_BAR_HEIGHT, button, hitArea, label, languageButton, roundedBox, tabBar } from '../ui/widgets';
@@ -58,13 +58,13 @@ export class HomeScene extends Phaser.Scene {
     });
   }
 
-  /** Under the tiles: the countdown once an air date is set, otherwise a link to the pilot. */
+  /** Under the tiles: the countdown once an air date is set, otherwise a link to the About the show page (where the pilot plays). */
   private drawCountdown(): void {
     roundedBox(this, 20, 294, GAME_WIDTH - 40, 48, 0xffecb3, 24);
     const hasAirDate = SHOW.airDate !== null;
     const text = hasAirDate ? countdownText() : t('home.watchPilot');
     label(this, GAME_WIDTH / 2, 318, text, { size: 18, bold: true, color: COLORS.accent }).setOrigin(0.5);
-    if (!hasAirDate) hitArea(this, 20, 294, GAME_WIDTH - 40, 48, () => openLink(PILOT.url));
+    if (!hasAirDate) hitArea(this, 20, 294, GAME_WIDTH - 40, 48, () => this.scene.start(SCENES.promos));
   }
 
   private drawPopular(): void {

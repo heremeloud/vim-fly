@@ -81,6 +81,3 @@ export function zoneName(id: string, fallback: string): string {
   return tDynamic(`zone.${id}`, fallback);
 }
 
-export function tierName(tier: number): string {
-  return tDynamic(`tier.${tier}`, `Tier ${tier}`);
-}

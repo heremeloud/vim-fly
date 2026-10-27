@@ -52,7 +52,7 @@ export const zh: Record<StringKey, string> = {
   'receipt.menu': '菜单',
   'receipt.backToStore': '返回商店',
   'receipt.newBest': '新纪录！',
-  'receipt.thanks': '谢谢你一起烘焙爱',
+  'receipt.thanks': '谢谢你一起烘焙爱的感觉',
 
   'hud.shield': '护盾',
   'hud.dash': '冲刺',
@@ -61,12 +61,7 @@ export const zh: Record<StringKey, string> = {
   'hud.dizzy': '迷糊',
   'hud.x2': 'x2',
 
-  'zone.tier': '第{n}阶 · {name}',
-  'tier.1': '平凡的起点',
-  'tier.2': '拓展天地',
-  'tier.3': '认真起来',
-  'tier.4': '重要时刻',
-  'tier.5': '真正的独立',
+  'zone.stage': '第{n}关',
 
   'zone.ruralRoad': '乡间小路',
   'zone.bakery': '暖心面包店',
@@ -129,4 +124,6 @@ export const zh: Record<StringKey, string> = {
   'hud.slow': '减速',
   'effect.slow': '{s} 秒内飞行速度降低 {p}%',
   'effect.stunPenalty': '眩晕 {s} 秒并扣 {n} 分',
+  'video.close': '关闭',
+  'video.openYoutube': '在 YouTube 打开',
 };

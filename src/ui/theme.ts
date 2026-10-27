@@ -23,5 +23,7 @@ export function hex(color: number): string {
 }
 
 export const FONT = {
-  family: 'system-ui, -apple-system, "Segoe UI", "Noto Sans Thai", "Noto Sans JP", "Noto Sans SC", sans-serif',
+  // Noto Sans Thai is bundled and only covers Thai characters, so it is listed first: Thai text always gets it,
+  // and Latin text falls through to the device font.
+  family: '"Noto Sans Thai", system-ui, -apple-system, "Segoe UI", "Noto Sans JP", "Noto Sans SC", sans-serif',
 } as const;

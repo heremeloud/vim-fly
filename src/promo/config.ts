@@ -25,8 +25,9 @@ export function countdownText(now: Date = new Date()): string {
 
 // ---- Links for the Promos tab ("About the show"), the home screen and the receipt ----
 
-/** The pilot episode. */
+/** The pilot episode. It plays inside the game (see src/ui/videoPlayer.ts); `url` is the YouTube page. */
 export const PILOT = {
+  videoId: 'NFFWV0X4i_c',
   url: 'https://www.youtube.com/watch?v=NFFWV0X4i_c',
 } as const;
 
@@ -39,8 +40,11 @@ export const PLATFORMS: readonly { id: Platform; name: string }[] = [
   { id: 'tiktok', name: 'TikTok' },
 ];
 
-/** Handles without the @, for example 'bakelovefeeling'. null = not set yet (the button shows "soon"). */
-export type Handles = Record<Platform, string | null>;
+/**
+ * The platforms an account has, with handles without the @ (for example 'bakelovefeeling').
+ * Only the platforms listed here get a button. null = not set yet (the button shows "soon").
+ */
+export type Handles = Partial<Record<Platform, string | null>>;
 
 export interface Account {
   id: string;
@@ -51,21 +55,22 @@ export interface Account {
   handles: Handles;
 }
 
-const NO_HANDLES: Handles = { x: null, instagram: null, tiktok: null };
+const ALL_PLATFORMS_UNSET: Handles = { x: null, instagram: null, tiktok: null };
 
 /** TODO: fill in the handles below. Names marked TBD are placeholders. */
-export const OFFICIAL: Account = { id: 'official', name: SHOW.title, handles: { ...NO_HANDLES } };
+// The official account is on X only.
+export const OFFICIAL: Account = { id: 'official', name: SHOW.title, handles: { x: null } };
 
 export const LEADS: readonly Account[] = [
-  { id: 'lead1', name: 'Lead actor 1 (name TBD)', roleKey: 'promos.role.cheese', handles: { ...NO_HANDLES } },
-  { id: 'lead2', name: 'Lead actor 2 (name TBD)', roleKey: 'promos.role.noey', handles: { ...NO_HANDLES } },
+  { id: 'lead1', name: 'Lead actor 1 (name TBD)', roleKey: 'promos.role.cheese', handles: { ...ALL_PLATFORMS_UNSET } },
+  { id: 'lead2', name: 'Lead actor 2 (name TBD)', roleKey: 'promos.role.noey', handles: { ...ALL_PLATFORMS_UNSET } },
 ];
 
 /** Vimmy, the dog in a bee costume: always the playable character. */
-export const VIMMY: Account = { id: 'vimmy', name: 'Vimmy', roleKey: 'promos.vimmy.role', handles: { ...NO_HANDLES } };
+export const VIMMY: Account = { id: 'vimmy', name: 'Vimmy', roleKey: 'promos.vimmy.role', handles: { ...ALL_PLATFORMS_UNSET } };
 
 /** The profile page for a handle, or null if the handle is missing or not a plain username. */
-export function profileUrl(platform: Platform, handle: string | null): string | null {
+export function profileUrl(platform: Platform, handle: string | null | undefined): string | null {
   const h = (handle ?? '').replace(/^@/, '');
   if (!/^[A-Za-z0-9._]{1,40}$/.test(h)) return null;
   switch (platform) {

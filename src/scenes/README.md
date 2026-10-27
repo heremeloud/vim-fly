@@ -7,13 +7,13 @@ Every screen. The menus are a parody of a Thai delivery app: a bee-themed app ca
 | Scene | File | State |
 | --- | --- | --- |
 | Boot | `BootScene.ts` | Generates a placeholder backdrop texture per height zone, then opens Home |
-| Home | `HomeScene.ts` | Storefront: deliver-to line, language button, search bar (opens Menu), VIMMY banner (placeholder key art), service tiles (Food, Mart, Express, Ride), a "Watch the pilot" strip (the countdown once an air date is set), popular menu, "Order now" |
+| Home | `HomeScene.ts` | Storefront: deliver-to line, language button, search bar (opens Menu), VIMMY banner (placeholder key art), service tiles (Food, Mart, Express, Ride), a "Watch the pilot now" strip that opens the About the show page (the countdown once an air date is set), popular menu, "Order now" |
 | Menu | `MenuScene.ts` | Item guide: scrollable menu with Points / Buffs / Debuffs filter, descriptions and "prices" read from `ITEMS` |
 | Orders | `OrdersScene.ts` | The ladder tab: "My orders" (run history) and "Top customers" (ranked), from the local run store for now |
-| Promos | `PromosScene.ts` | About the show: watch the pilot, the official account, the two main leads and Vimmy, each with X / Instagram / TikTok buttons |
+| Promos | `PromosScene.ts` | About the show: watch the pilot (plays in a window), the official account, the two main leads and Vimmy, each with X / Instagram / TikTok buttons (the official account is X only) |
 | ComingSoon | `ComingSoonScene.ts` | Joke pages for the Mart, Express and Ride tiles |
-| Game | `GameScene.ts` | Playable loop: camera climb, falling items, height-zone backdrops and tier banners (the novel's locations), HUD (placeholder rectangles) |
-| Receipt | `ReceiptScene.ts` | Zone reached, height, line items per collected item, total, "Order again" and "Menu" buttons side by side, plus a "Back to store" link. Also saves the run to the order history, and has a "Watch the pilot" button |
+| Game | `GameScene.ts` | Playable loop: camera climb, falling items, height-zone backdrops and stage banners (the novel's locations), HUD (placeholder rectangles) |
+| Receipt | `ReceiptScene.ts` | Zone reached, height, line items per collected item, total, "Order again" and "Menu" buttons side by side, plus a "Back to store" link. Also saves the run to the order history, and has a "Watch the pilot" button that plays the pilot in a window |
 
 Scenes are registered in `src/main.ts`. Scene keys live in `SCENES` in `src/core/constants.ts`.
 

@@ -6,17 +6,17 @@ The game speaks four languages: **English, Thai (ไทย), Japanese (日本語
 
 - `en.ts`: the English strings, which are the source of truth.
 - `th.ts`, `ja.ts`, `zh.ts`: the other languages. Each has exactly the same keys as English (TypeScript enforces it).
-- `index.ts`: `t(key, params)` to translate, plus `itemName`, `zoneName`, `tierName`, `getLocale`, `setLocale` and the `LOCALES` list.
+- `index.ts`: `t(key, params)` to translate, plus `itemName`, `zoneName`, `getLocale`, `setLocale` and the `LOCALES` list.
 
 ## How it works
 
 - Screens call `t('menu.title')` or `t('effect.dash', { s: 3 })`. `{placeholders}` are filled from the params.
 - The language is saved in the browser (`localStorage`). On first visit it follows the browser language (Thai, Japanese or Chinese if it matches, otherwise English).
 - The language button is on the home screen (top right, a globe and the language name). Choosing one restarts the scene so everything is redrawn.
-- Item names, zone names and tier names are strings too (`item.<id>`, `zone.<id>`, `tier.<n>`). Item descriptions are built from the item's effect with `effect.*` strings, so they cannot disagree with the game.
+- Item names and zone names are strings too (`item.<id>`, `zone.<id>`); the stage banner is `zone.stage` ("Stage {n}"). Item descriptions are built from the item's effect with `effect.*` strings, so they cannot disagree with the game.
 - Brand-style names stay the same in every language: the app name (VIMMY), the shop name (Bake Love Bakery), the platform names (X, Instagram, TikTok) and the lead and Vimmy names.
 - Dates on the Orders screen use the language's own format. Thai uses the Thai Buddhist-era year (for example 2569), which is correct in Thailand.
-- Text uses the device's own fonts (with Noto Sans fallbacks). A bundled Thai/Japanese/Chinese web font is an option later, see `src/assets/README.md`.
+- Thai uses the bundled Noto Sans Thai font (loaded before the first screen). Japanese and Chinese use the device's own fonts for now. See `src/assets/README.md`.
 
 ## Checking translations
 

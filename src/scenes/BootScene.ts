@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { SCENES } from '../core/constants';
+import { applyRenderScale } from '../core/render';
 import { ZONES, zoneTextureKey, type Zone } from '../core/zones';
 
 const TILE_W = 480;
@@ -9,6 +10,13 @@ const TILE_H = 200;
 export class BootScene extends Phaser.Scene {
   constructor() {
     super(SCENES.boot);
+  }
+
+  init(): void {
+    // Zoom every scene's camera when it is created (Boot itself draws nothing).
+    for (const scene of this.game.scene.getScenes(false)) {
+      scene.events.on(Phaser.Scenes.Events.CREATE, () => applyRenderScale(scene));
+    }
   }
 
   preload(): void {
@@ -69,6 +77,8 @@ export class BootScene extends Phaser.Scene {
     }
 
     g.generateTexture(zoneTextureKey(zone), TILE_W, TILE_H);
+    // Flat shapes stay crisp (hard edges) when the camera zooms them up, instead of going soft.
+    this.textures.get(zoneTextureKey(zone)).setFilter(Phaser.Textures.FilterMode.NEAREST);
     g.destroy();
   }
 }

@@ -51,7 +51,7 @@ export const th: Record<StringKey, string> = {
   'receipt.menu': 'เมนู',
   'receipt.backToStore': 'กลับไปที่ร้าน',
   'receipt.newBest': 'ออเดอร์ที่ดีที่สุดใหม่!',
-  'receipt.thanks': 'ขอบคุณที่ร่วมอบความรักด้วยกัน',
+  'receipt.thanks': 'ขอบคุณที่ร่วมอบความรู้สึกแห่งความรัก',
 
   'hud.shield': 'โล่',
   'hud.dash': 'พุ่ง',
@@ -60,12 +60,7 @@ export const th: Record<StringKey, string> = {
   'hud.dizzy': 'มึน',
   'hud.x2': 'x2',
 
-  'zone.tier': 'ระดับ {n} · {name}',
-  'tier.1': 'จุดเริ่มต้นเรียบง่าย',
-  'tier.2': 'ก้าวออกไปข้างนอก',
-  'tier.3': 'จริงจังขึ้น',
-  'tier.4': 'ช่วงเวลาสำคัญ',
-  'tier.5': 'อิสระที่แท้จริง',
+  'zone.stage': 'ด่านที่ {n}',
 
   'zone.ruralRoad': 'ถนนชนบท',
   'zone.bakery': 'เบเกอรี่อบอุ่นหัวใจ',
@@ -128,4 +123,6 @@ export const th: Record<StringKey, string> = {
   'hud.slow': 'ช้า',
   'effect.slow': 'บินช้าลง {p}% นาน {s} วินาที',
   'effect.stunPenalty': 'ทำให้ช็อกนาน {s} วินาที และเสีย {n} คะแนน',
+  'video.close': 'ปิด',
+  'video.openYoutube': 'เปิดใน YouTube',
 };

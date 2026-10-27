@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH } from './constants';
+import { toLayout } from './render';
 
 export type Steer = -1 | 1;
 
@@ -14,7 +15,7 @@ const RIGHT_KEYS = ['RIGHT', 'D'];
  * never stacks duplicate handlers.
  */
 export function bindSteering(scene: Phaser.Scene, onSteer: (dir: Steer) => void): void {
-  const onPointer = (p: Phaser.Input.Pointer) => onSteer(p.x < GAME_WIDTH / 2 ? -1 : 1);
+  const onPointer = (p: Phaser.Input.Pointer) => onSteer(toLayout(p.x) < GAME_WIDTH / 2 ? -1 : 1);
   scene.input.on('pointerdown', onPointer);
 
   const kb = scene.input.keyboard;
