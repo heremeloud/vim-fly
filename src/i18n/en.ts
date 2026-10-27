@@ -34,7 +34,6 @@ export const en = {
 
   'soon.title': 'Coming soon',
   'promos.title': 'About the show',
-  'promos.note': 'The series, its stars and where to watch will show up here.',
 
   'orders.title': 'Orders',
   'orders.subtitle': 'Your runs on this device',
@@ -110,6 +109,26 @@ export const en = {
   'item.helicopter': 'Helicopter',
   'item.gavelHammer': 'Gavel Hammer',
   'item.carCrash': 'Car Crash',
+
+  'app.currentLocation': 'Current location',
+  'svc.food': 'Food',
+  'svc.mart': 'Mart',
+  'svc.express': 'Express',
+  'svc.ride': 'Ride',
+  'home.watchPilot': '▶ Watch the pilot now',
+  'promos.pilot.title': 'Watch the pilot',
+  'promos.pilot.sub': 'Episode 1 on YouTube',
+  'promos.official': 'Official account',
+  'promos.leads': 'Main leads',
+  'promos.role.cheese': 'Plays Cheese, the baker',
+  'promos.role.noey': 'Plays Noey, the lawyer',
+  'promos.vimmy.role': 'The very good bee dog, and your player',
+  'promos.soon': 'soon',
+  'receipt.watchPilot': '▶ Watch the pilot',
+  'receipt.more': '+{n} more',
+  'hud.slow': 'SLOW',
+  'effect.slow': 'Flying {p}% slower for {s}s',
+  'effect.stunPenalty': 'Stuns you for {s}s and costs {n} points',
 };
 
 export type StringKey = keyof typeof en;

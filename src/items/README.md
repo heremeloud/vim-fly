@@ -9,7 +9,7 @@ Everything that falls from the sky.
 
 ## Items
 
-Three kinds: **points** (food and drinks, score only, topped by the golden retriever), **buffs** (oyster double points, lawyer suit shield, handkerchief cleanse, rolling pin strong flap, helicopter dash) and **debuffs** (gavel hammer stun, cilantro and fish sauce bread disorient, planner point loss, car crash). The full list with values, weights and rules is in [ITEMS.md](ITEMS.md).
+Three kinds: **points** (food and drinks, score only, topped by the golden retriever), **buffs** (oyster double points, lawyer suit shield, handkerchief cleanse, rolling pin strong flap, helicopter dash) and **debuffs** (gavel hammer stun, cilantro bread disorient, fish sauce bread slows flying, planner stun and point loss, car crash). The full list with values, weights and rules is in [ITEMS.md](ITEMS.md).
 
 All durations, point values and weights are starting points to tune in playtesting.
 
@@ -31,7 +31,7 @@ The item guide screen ("menu list with prices") should read from `ITEMS` so it n
 ## Helpers for the menu
 
 - `describeEffect(item)` builds the plain-English description from the item's effect, so the Menu screen never disagrees with the game.
-- `priceLabel(item)` gives the menu "price": `฿<points>` for points items and penalties (for example `-฿150` for the planner), or "Buff"/"Debuff" for the rest.
+- `priceLabel(item)` gives the menu "price": `฿<points>` for points items and penalties (for example `-฿150` for a point loss), or "Buff"/"Debuff" for the rest.
 
 ## Still to build
 

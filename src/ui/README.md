@@ -5,13 +5,13 @@ Shared building blocks for the ordering-app menus, so every screen looks like on
 ## Files
 
 - `theme.ts`: the colors and font. This is the one place to change the look. The current honey-yellow and brown palette matches the bee costume and is a **placeholder** until the show's own colors and logo are decided.
-- `brand.ts`: the in-game app's name, tagline, header text and the super-app service tiles (`LOVE MAN`, `LoveFood` and so on, placeholders; text that changes with language is in `src/i18n`).
+- `brand.ts`: the in-game app's name, tagline, header text and the super-app service tiles (`VIMMY`, Food/Mart/Express/Ride, placeholders; text that changes with language is in `src/i18n`).
 - `ScrollList.ts`: a drag/wheel scrolling list used by the Menu and Orders screens.
 - `widgets.ts`: `label` (text), `roundedBox`, `hitArea` (invisible tap target), `button` (pill button, `primary` filled or `secondary` outlined) `tabBar` (bottom navigation) and `languageButton` (the language picker, text only, no flags).
 
 ## Design rules: a parody, not a copy
 
-The menus are a **parody of two Thai delivery apps at once**: LINE MAN (the shop page, menu cards with prices, rider-style status) and Grab (the "super app" grid of services). The in-game app is called `LOVE MAN`, a pun on LINE MAN that brings in the series' "love" (Bake Love Feeling), delivered by "a very good bee dog", with a row of service tiles (LoveFood, LoveMart, LoveExpress, LoveRide) like Grab's. Only LoveFood goes anywhere real; the others open joke "coming soon" pages (`SERVICES` in `brand.ts`).
+The menus are a **parody of two Thai delivery apps at once**: LINE MAN (the shop page, menu cards with prices, rider-style status) and Grab (the "super app" grid of services). The in-game app is called `VIMMY`, after the dog who delivers ("Delivered by a very good bee dog"). The parody is in the layout and the jokes, not the name, so the name borrows nothing from either app. The home screen has Grab's row of service tiles (Food, Mart, Express, Ride). They are pure genre decoration: only Food goes anywhere real (the item guide); the others open joke "coming soon" pages, and any tile can be deleted from `SERVICES` in `brand.ts`. The header says "Deliver to: Current location", like the real apps' default (no real location is used).
 
 To keep it clearly a joke and clearly the show's own:
 

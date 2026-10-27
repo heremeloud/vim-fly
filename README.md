@@ -1,6 +1,6 @@
 # Bake Love Feeling: the game
 
-A tap-to-fly web game for the series *Bake Love Feeling*. A dog in a bee costume climbs an endless sky, steering left and right to catch food and dodge gavel hammers. The menus are a parody of a Thai delivery app ("LOVE MAN"). Available in English, Thai, Japanese and Chinese.
+A tap-to-fly web game for the series *Bake Love Feeling*. A dog in a bee costume climbs an endless sky, steering left and right to catch food and dodge gavel hammers. The menus are a parody of a Thai delivery app ("VIMMY", named after the dog). Available in English, Thai, Japanese and Chinese.
 
 ## How to play
 
@@ -38,8 +38,9 @@ Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
 | Item | Effect |
 | --- | --- |
 | Gavel hammer | Stuns you for about 1 s |
-| Cilantro bread, fish sauce bread | Disoriented: left and right are swapped |
-| Planner | Huge point loss |
+| Cilantro bread | Disoriented: left and right are swapped |
+| Fish sauce bread | Slows your flying for a few seconds |
+| Planner | Stuns you and costs a lot of points |
 | Car crash | Big debuff: knocks you down, stuns you and costs points |
 
 ## Run it locally

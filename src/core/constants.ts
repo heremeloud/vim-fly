@@ -47,6 +47,7 @@ export const SCENES = {
   home: 'Home',
   menu: 'Menu',
   orders: 'Orders',
+  promos: 'Promos',
   comingSoon: 'ComingSoon',
   game: 'Game',
   receipt: 'Receipt',

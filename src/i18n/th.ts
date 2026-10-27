@@ -33,7 +33,6 @@ export const th: Record<StringKey, string> = {
 
   'soon.title': 'เร็วๆ นี้',
   'promos.title': 'เกี่ยวกับซีรีส์',
-  'promos.note': 'ข้อมูลซีรีส์ นักแสดง และช่องทางรับชมจะอยู่ที่นี่',
 
   'orders.title': 'ออเดอร์',
   'orders.subtitle': 'การเล่นของคุณบนอุปกรณ์นี้',
@@ -109,4 +108,24 @@ export const th: Record<StringKey, string> = {
   'item.helicopter': 'เฮลิคอปเตอร์',
   'item.gavelHammer': 'ค้อนประธานศาล',
   'item.carCrash': 'รถชน',
+
+  'app.currentLocation': 'ตำแหน่งปัจจุบัน',
+  'svc.food': 'อาหาร',
+  'svc.mart': 'มาร์ท',
+  'svc.express': 'เอ็กซ์เพรส',
+  'svc.ride': 'ไรด์',
+  'home.watchPilot': '▶ ดูตอนนำร่องเลย',
+  'promos.pilot.title': 'ดูตอนนำร่อง',
+  'promos.pilot.sub': 'ตอนที่ 1 บน YouTube',
+  'promos.official': 'บัญชีทางการ',
+  'promos.leads': 'นักแสดงนำ',
+  'promos.role.cheese': 'รับบทชีส เจ้าของร้านเบเกอรี่',
+  'promos.role.noey': 'รับบทเนย ทนายความ',
+  'promos.vimmy.role': 'น้องหมาผึ้งแสนดี และตัวละครที่คุณเล่น',
+  'promos.soon': 'เร็วๆ นี้',
+  'receipt.watchPilot': '▶ ดูตอนนำร่อง',
+  'receipt.more': '+อีก {n} รายการ',
+  'hud.slow': 'ช้า',
+  'effect.slow': 'บินช้าลง {p}% นาน {s} วินาที',
+  'effect.stunPenalty': 'ทำให้ช็อกนาน {s} วินาที และเสีย {n} คะแนน',
 };

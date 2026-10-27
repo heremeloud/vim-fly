@@ -107,9 +107,10 @@ export class GameScene extends Phaser.Scene {
   private flap(dir: -1 | 1): void {
     if (this.ended || this.run.isStunned) return;
     const power = this.run.strongFlapMs > 0 ? this.run.strongFlapFactor : 1;
-    this.vy = PHYSICS.flapVelocity * power;
+    const slow = this.run.slowMs > 0 ? this.run.slowFactor : 1; // fish sauce bread: slower flaps and drift
+    this.vy = PHYSICS.flapVelocity * power * slow;
     const steer = this.run.isDisoriented ? -dir : dir; // disoriented: left/right swapped
-    this.vx = steer * PHYSICS.driftVelocity;
+    this.vx = steer * PHYSICS.driftVelocity * slow;
   }
 
   update(_time: number, deltaMs: number): void {
@@ -224,6 +225,7 @@ export class GameScene extends Phaser.Scene {
     if (this.run.isStunned) bits.push(t('hud.stunned'));
     if (this.run.strongFlapMs > 0) bits.push(t('hud.power'));
     if (this.run.isDisoriented) bits.push(t('hud.dizzy'));
+    if (this.run.slowMs > 0) bits.push(t('hud.slow'));
     if (this.run.doublePointsMs > 0) bits.push(t('hud.x2'));
     this.status.setText(bits.join('  '));
     this.player.setFillStyle(this.run.isStunned ? 0xb0bec5 : 0xffb300);

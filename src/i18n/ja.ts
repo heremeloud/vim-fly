@@ -33,7 +33,6 @@ export const ja: Record<StringKey, string> = {
 
   'soon.title': '近日公開',
   'promos.title': '作品について',
-  'promos.note': 'シリーズの紹介、キャスト、視聴方法はここに表示されます。',
 
   'orders.title': '注文',
   'orders.subtitle': 'この端末でのプレイ記録',
@@ -109,4 +108,24 @@ export const ja: Record<StringKey, string> = {
   'item.helicopter': 'ヘリコプター',
   'item.gavelHammer': 'ガベルハンマー',
   'item.carCrash': '交通事故',
+
+  'app.currentLocation': '現在地',
+  'svc.food': 'フード',
+  'svc.mart': 'マート',
+  'svc.express': 'エクスプレス',
+  'svc.ride': 'ライド',
+  'home.watchPilot': '▶ パイロット版を観る',
+  'promos.pilot.title': 'パイロット版を観る',
+  'promos.pilot.sub': '第1話をYouTubeで',
+  'promos.official': '公式アカウント',
+  'promos.leads': '主演',
+  'promos.role.cheese': 'ベーカリー店主チーズ役',
+  'promos.role.noey': '弁護士ノイ役',
+  'promos.vimmy.role': 'とってもいい子な蜂犬。あなたの操作キャラ',
+  'promos.soon': '準備中',
+  'receipt.watchPilot': '▶ パイロット版を観る',
+  'receipt.more': 'ほか{n}件',
+  'hud.slow': 'スロー',
+  'effect.slow': '{s}秒間、飛ぶ速度が{p}%ダウン',
+  'effect.stunPenalty': '{s}秒間スタンし、{n}ポイント失う',
 };

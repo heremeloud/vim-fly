@@ -40,8 +40,8 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | --- | --- | --- | --- | --- | --- |
 | Gavel Hammer | `gavelHammer` | Stun | 1 s, taps ignored | 6 | The courtroom gavel |
 | Cilantro Bread | `cilantroBread` | Disoriented | 3 s, left/right swapped | 4 | No points |
-| Fish Sauce Bread | `fishSauceBread` | Disoriented | 4 s, left/right swapped | 3 | No points; the smellier one lasts longer |
-| Planner | `planner` | Huge point loss | -150 | 2 | Only docks points, no movement effect |
+| Fish Sauce Bread | `fishSauceBread` | Slows flying | 5 s, flaps and drift at 60% speed (40% slower) | 3 | No points |
+| Planner | `planner` | Stun and huge point loss | Stun 1.5 s, taps ignored, and -150 points | 2 | Stuns and costs points, with no knock-back |
 | **Car crash** | `carCrash` | **Big debuff** | Stun 1.8 s, knocked down 500 px/s, -50 points, cancels any active dash | 2 | Nod to how the leads met: Cheese swerves for a kitten and crashes into Noey's Benz |
 
 ## Rules that apply to every item
@@ -49,14 +49,15 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 - **Shield:** the lawyer suit blocks the next debuff of any kind, including the car crash, and is used up when it does. A blocked item does not appear on the receipt.
 - **Dash** (helicopter) overrides gravity and flapping for its duration. A car crash cancels it.
 - **Stun** ignores taps; gravity keeps pulling the dog down.
-- **Disoriented** swaps what left and right do: tapping the left half drifts the dog right, and the other way round. It still flaps up.
-- **Score** is metres climbed plus item points, never below 0. Items with no points (dash, shield, cleanse, strong flap, stun, disorient, oyster) show as a line with no points on the receipt.
+- **Slow** (fish sauce bread) scales both the flap and the sideways drift to 60% for its duration.
+- **Disoriented** (cilantro bread) swaps what left and right do: tapping the left half drifts the dog right, and the other way round. It still flaps up.
+- **Score** is metres climbed plus item points, never below 0. Items with no points (dash, shield, cleanse, strong flap, plain stun, disorient, slow, oyster) show as a line with no points on the receipt.
 
 ## Open questions
 
 - Oyster is double points for 5 s. Is that the buff you want?
 - Lawyer suit, handkerchief and rolling pin effects are my guesses (shield, cleanse, stronger flaps). Tell me what each should really do.
-- More debuff ideas? Current movement debuffs are stun, disorient and the car crash. Candidates: heavy (falls faster), wind gust (pushed sideways), slippery (drift doesn't stop), fog (screen dims).
+- More debuff ideas? Current movement debuffs are stun, disorient, slow and the car crash. Candidates: heavy (falls faster), wind gust (pushed sideways), slippery (drift doesn't stop), fog (screen dims).
 - Should the shield block the car crash and planner, or should one of them be unblockable?
 - Should coffee and wine have effects of their own, or stay plain points?
 - Are the point tiers right (breads 10, pasta and coffee 20, wine 30, lunch box 100)?

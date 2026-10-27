@@ -59,7 +59,10 @@ export function hitArea(
   onTap: () => void,
 ): Phaser.GameObjects.Rectangle {
   const r = scene.add.rectangle(x, y, w, h, 0xffffff, 0.001).setOrigin(0).setInteractive({ useHandCursor: true });
-  r.on('pointerup', onTap);
+  // Ignore the tap if the finger dragged (scrolling a list), so scrolling never opens things.
+  r.on('pointerup', (p: Phaser.Input.Pointer) => {
+    if (Math.hypot(p.x - p.downX, p.y - p.downY) < 12) onTap();
+  });
   return r;
 }
 
@@ -107,7 +110,7 @@ function tabTarget(id: TabId): { scene: string; data?: object } {
     case 'orders':
       return { scene: SCENES.orders };
     case 'promos':
-      return { scene: SCENES.comingSoon, data: { title: t('promos.title'), note: t('promos.note'), tab: 'promos' } };
+      return { scene: SCENES.promos };
   }
 }
 
@@ -115,7 +118,8 @@ function tabTarget(id: TabId): { scene: string; data?: object } {
 export function tabBar(scene: Phaser.Scene, active: TabId): void {
   const y = GAME_HEIGHT - TAB_BAR_HEIGHT;
   const depth = 50;
-  scene.add.rectangle(0, y, GAME_WIDTH, TAB_BAR_HEIGHT, COLORS.surface).setOrigin(0).setDepth(depth);
+  // Interactive so taps on rows scrolled underneath the bar don't reach them.
+  scene.add.rectangle(0, y, GAME_WIDTH, TAB_BAR_HEIGHT, COLORS.surface).setOrigin(0).setDepth(depth).setInteractive();
   scene.add.rectangle(0, y, GAME_WIDTH, 2, COLORS.border).setOrigin(0).setDepth(depth);
 
   const w = GAME_WIDTH / TABS.length;

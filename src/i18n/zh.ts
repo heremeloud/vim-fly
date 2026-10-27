@@ -34,7 +34,6 @@ export const zh: Record<StringKey, string> = {
 
   'soon.title': '敬请期待',
   'promos.title': '关于剧集',
-  'promos.note': '剧集介绍、演员阵容和观看方式将显示在这里。',
 
   'orders.title': '订单',
   'orders.subtitle': '你在此设备上的游戏记录',
@@ -110,4 +109,24 @@ export const zh: Record<StringKey, string> = {
   'item.helicopter': '直升机',
   'item.gavelHammer': '法槌',
   'item.carCrash': '车祸',
+
+  'app.currentLocation': '当前位置',
+  'svc.food': '美食',
+  'svc.mart': '超市',
+  'svc.express': '快递',
+  'svc.ride': '出行',
+  'home.watchPilot': '▶ 立即观看试播集',
+  'promos.pilot.title': '观看试播集',
+  'promos.pilot.sub': '第1集 YouTube 观看',
+  'promos.official': '官方账号',
+  'promos.leads': '主演',
+  'promos.role.cheese': '饰演芝士，面包店主',
+  'promos.role.noey': '饰演诺伊，律师',
+  'promos.vimmy.role': '超乖的蜜蜂狗狗，也是你操控的角色',
+  'promos.soon': '即将开放',
+  'receipt.watchPilot': '▶ 观看试播集',
+  'receipt.more': '另有 {n} 项',
+  'hud.slow': '减速',
+  'effect.slow': '{s} 秒内飞行速度降低 {p}%',
+  'effect.stunPenalty': '眩晕 {s} 秒并扣 {n} 分',
 };

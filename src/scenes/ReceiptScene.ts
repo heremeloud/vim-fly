@@ -4,6 +4,7 @@ import type { RunResult } from '../core/RunState';
 import { ZONES, zoneLabel } from '../core/zones';
 import { itemName, t } from '../i18n';
 import { runStore } from '../leaderboard/runStore';
+import { PILOT, openLink } from '../promo/config';
 import { COLORS } from '../ui/theme';
 import { button, hitArea, label } from '../ui/widgets';
 
@@ -44,9 +45,11 @@ export class ReceiptScene extends Phaser.Scene {
     row(t('receipt.height'), `${r.heightMeters} m`);
     const zone = ZONES.find((z) => z.id === r.zone);
     if (zone) row(t('receipt.reached'), zoneLabel(zone));
-    for (const l of r.lines.slice(0, 12)) {
+    const MAX_LINES = 9;
+    for (const l of r.lines.slice(0, MAX_LINES)) {
       row(`${itemName(l.id, l.label)} x${l.count}`, l.points === 0 ? '-' : `${l.points > 0 ? '+' : ''}${l.points}`);
     }
+    if (r.lines.length > MAX_LINES) row(t('receipt.more', { n: r.lines.length - MAX_LINES }), '');
     y += 10;
     this.add.rectangle(GAME_WIDTH / 2, y, GAME_WIDTH - x * 2, 2, 0x4e342e);
     y += 16;
@@ -55,7 +58,10 @@ export class ReceiptScene extends Phaser.Scene {
     if (isBest) {
       label(this, GAME_WIDTH / 2, y + 8, `★ ${t('receipt.newBest')}`, { size: 22, bold: true, color: COLORS.accent }).setOrigin(0.5, 0);
     }
-    label(this, GAME_WIDTH / 2, GAME_HEIGHT - 170, t('receipt.thanks'), { size: 16, color: COLORS.muted }).setOrigin(0.5);
+    label(this, GAME_WIDTH / 2, GAME_HEIGHT - 250, t('receipt.thanks'), { size: 16, color: COLORS.muted }).setOrigin(0.5);
+
+    // Hype: a link to the pilot right where players feel good about their score.
+    button(this, GAME_WIDTH / 2, GAME_HEIGHT - 195, 420, 52, t('receipt.watchPilot'), () => openLink(PILOT.url), 'secondary');
 
     // Two buttons side by side: play again, or go back to the menu (item guide).
     const by = GAME_HEIGHT - 110;

@@ -31,6 +31,8 @@ export class RunState {
   stunMs = 0;
   strongFlapMs = 0;
   strongFlapFactor = 1;
+  slowMs = 0;
+  slowFactor = 1;
   disorientMs = 0;
   doublePointsMs = 0;
   elapsedMs = 0;
@@ -64,6 +66,7 @@ export class RunState {
     this.dashMs = Math.max(0, this.dashMs - dtMs);
     this.stunMs = Math.max(0, this.stunMs - dtMs);
     this.strongFlapMs = Math.max(0, this.strongFlapMs - dtMs);
+    this.slowMs = Math.max(0, this.slowMs - dtMs);
     this.disorientMs = Math.max(0, this.disorientMs - dtMs);
     this.doublePointsMs = Math.max(0, this.doublePointsMs - dtMs);
   }
@@ -96,6 +99,11 @@ export class RunState {
         break;
       case 'stun':
         this.stunMs = e.durationMs;
+        points = e.points ?? 0;
+        break;
+      case 'slow':
+        this.slowMs = e.durationMs;
+        this.slowFactor = e.factor;
         break;
       case 'cleanse':
         this.stunMs = 0;
