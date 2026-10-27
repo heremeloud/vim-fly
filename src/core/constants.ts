@@ -8,8 +8,19 @@ export const PHYSICS = {
   flapVelocity: -420, // upward velocity set on each tap
   driftVelocity: 220, // horizontal velocity set on each tap
   horizontalDrag: 0.92, // per-frame (at 60 fps) damping of horizontal speed
+  wallBounce: 0.6, // share of sideways speed kept (and reversed) when hitting a side wall
   maxFallSpeed: 700,
   pixelsPerMeter: 10, // converts climbed pixels to the height score
+} as const;
+
+// Camera climb. The screen always scrolls up at least this fast, and speeds up with
+// height; it also jumps ahead if the dog flies above the lead line. Set baseSpeed to 0
+// for the old behavior (camera moves only when the dog passes the lead line).
+export const CAMERA = {
+  leadPx: 350, // dog is pulled to at most this far below the top of the screen
+  baseSpeed: 70, // px/s of automatic upward scroll at 0 m
+  maxSpeed: 180,
+  speedRamp: 0.3, // px/s added per meter climbed
 } as const;
 
 // Item spawning and fall speed. Spawn gets faster and items fall faster with height.

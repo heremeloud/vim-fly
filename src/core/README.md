@@ -20,9 +20,9 @@ The game's feel: physics values, input and the main loop.
 
 ## How the loop works now
 
-`GameScene.update` each frame: moves the player (gravity, drift, effects), moves the camera up (it never scrolls down), spawns and moves items, checks collisions, updates the HUD, and ends the run when the player falls below the bottom of the screen.
+`GameScene.update` each frame: moves the player (gravity, drift, effects), moves the camera up (it scrolls steadily, faster with height, and never scrolls down; see `CAMERA` in `constants.ts`), spawns and moves items, checks collisions, updates the HUD, and ends the run when the player falls below the bottom of the screen.
 
-- A tap sets vertical velocity to `flapVelocity` and horizontal velocity to `±driftVelocity`. The left/right screen edges are walls: the character stops there instead of wrapping around.
+- A tap sets vertical velocity to `flapVelocity` and horizontal velocity to `±driftVelocity`. The left/right screen edges are walls: the character bounces off them (keeping `wallBounce` of its sideways speed) so it can't stick to a wall or wrap around.
 - **Height** = pixels climbed / `pixelsPerMeter`. **Score** = height + item points (never below 0).
 - **Effects:** a dash (helicopter) overrides vertical speed with the item's own velocity; shield (lawyer suit) blocks the next debuff; handkerchief clears stun and disorient; rolling pin multiplies flap strength; stun ignores taps; disorient swaps left/right on taps; oyster doubles gained item points (never penalties); a car crash stuns, cancels any dash and knocks the dog downward once (`pendingKnockback`). Per-item numbers live in `itemDefs.ts`, see `src/items/ITEMS.md`.
 - Frame time is clamped to 50 ms so a background tab can't teleport the player.
@@ -38,5 +38,8 @@ Everything in `PHYSICS` is a starting point. Change values, reload, and play unt
 Height zones with backdrop changes, combo multipliers, and a proper tuning pass (see below).
 
 ## Tuning notes
+
+The camera auto-scrolls from `CAMERA.baseSpeed` (70 px/s) up to `maxSpeed` (180 px/s) so the dog can't outrun the screen; if you stop flapping you fall off the bottom sooner. Set `baseSpeed` to 0 for the old behavior.
+
 
 An automated bot flapping every ~260 ms climbed about 150 m in 5 s. A human tapping slower will climb slower, but the difficulty ramps in `ITEM_RULES` and `pickItem` are scaled to roughly 0-400 m, so check them against real play and rescale.

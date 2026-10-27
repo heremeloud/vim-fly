@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, SCENES } from '../core/constants';
+import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '../core/constants';
 import { bindSteering } from '../core/input';
 import { RunState } from '../core/RunState';
 import { pickItem, type ItemDef } from '../items/itemDefs';
@@ -14,7 +14,6 @@ const OUTLINE = { points: 0xf9a825, buff: 0x2e7d32, debuff: 0xb71c1c } as const;
 
 const PLAYER_SIZE = 40;
 const START_Y = GAME_HEIGHT - 200;
-const CAMERA_LEAD = 350; // player sits this far below the camera top when climbing
 
 /**
  * Core loop with placeholder rectangles. Tap left/right to flap and drift,
@@ -82,7 +81,7 @@ export class GameScene extends Phaser.Scene {
     this.run.tick(dt * 1000);
 
     this.movePlayer(dt);
-    this.updateCamera();
+    this.updateCamera(dt);
     this.spawnItems(dt * 1000);
     this.updateItems(dt);
     this.updateHud();
@@ -103,18 +102,22 @@ export class GameScene extends Phaser.Scene {
     }
     this.vx *= Math.pow(PHYSICS.horizontalDrag, dt * 60);
 
-    // Side walls: the character stops at the screen edges instead of wrapping around.
+    // Side walls: the character bounces off the screen edges so it never sticks to them.
     const half = PLAYER_SIZE / 2;
     const nextX = this.player.x + this.vx * dt;
     this.player.x = Phaser.Math.Clamp(nextX, half, GAME_WIDTH - half);
-    if (this.player.x !== nextX) this.vx = 0;
+    if (this.player.x !== nextX) this.vx = -this.vx * PHYSICS.wallBounce;
     this.player.y += this.vy * dt;
   }
 
-  /** Camera only ever moves up; the player can fall back toward its bottom edge. */
-  private updateCamera(): void {
+  /**
+   * Camera only ever moves up. It scrolls steadily (faster with height) and jumps
+   * ahead if the player flies above the lead line, so the player can never outrun it.
+   */
+  private updateCamera(dt: number): void {
     const cam = this.cameras.main;
-    cam.scrollY = Math.min(cam.scrollY, this.player.y - CAMERA_LEAD);
+    const speed = Math.min(CAMERA.maxSpeed, CAMERA.baseSpeed + this.run.heightMeters * CAMERA.speedRamp);
+    cam.scrollY = Math.min(cam.scrollY - speed * dt, this.player.y - CAMERA.leadPx);
     this.bg.tilePositionY = cam.scrollY;
     this.run.heightMeters = Math.max(this.run.heightMeters, (this.startY - this.player.y) / PHYSICS.pixelsPerMeter);
   }
