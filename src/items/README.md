@@ -4,28 +4,20 @@ Everything that falls from the sky.
 
 ## Files
 
+- `ITEMS.md`: human-readable catalog of every item and its effect.
 - `itemDefs.ts`: the single source of truth. Each item has an `id`, display `label`, `kind` (buff or debuff), a spawn `weight` and a typed `effect`.
 
 ## Items
 
-| Item | Kind | Effect |
-| --- | --- | --- |
-| Croissant, bread, cupcake | Buff | Small points |
-| Cake | Rare buff | Big points |
-| Delivery car | Buff | Upward dash, about 3 s |
-| Helicopter | Buff | Auto-lift and pulls in nearby items, about 4 s |
-| Briefcase | Buff | Shield: blocks the next debuff |
-| Objection hammer | Debuff | Stun, about 1 s |
-| Burnt bread | Debuff | Lose points |
-| Rain cloud | Debuff | Slows the climb |
+The full list with values, weights and rules is in [ITEMS.md](ITEMS.md). In short: pastries give points, the delivery car and helicopter dash upward, the briefcase shields, and the hammer, burnt bread, rain cloud and car crash are debuffs (the car crash is the big one).
 
 All durations, point values and weights are starting points to tune in playtesting.
 
 ## Adding or changing an item
 
 1. Edit `ITEMS` in `itemDefs.ts`. If the effect is new, add a variant to `ItemEffect`.
-2. Handle the new effect where effects are applied (not built yet).
-3. Update this table and the one in the root `README.md`.
+2. Handle the new effect in `RunState.collect` (and in `GameScene` if it moves the player).
+3. Update `ITEMS.md` and the table in the root `README.md`.
 
 The item guide screen ("menu list with prices") should read from `ITEMS` so it never drifts from the game.
 

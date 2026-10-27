@@ -12,16 +12,19 @@ A tap-to-fly web game. One cute character climbs an endless sky, steering left a
 
 ## Items
 
+Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
+
 | Item | Effect |
 | --- | --- |
 | Croissant, bread, cupcake | Small points |
 | Cake | Big points |
-| Delivery car | Upward dash for about 3 s |
-| Helicopter | Auto-lift and pulls in nearby items for about 4 s |
+| Delivery car | Short upward dash |
+| Helicopter | Strong upward dash |
 | Briefcase | Shield: blocks the next debuff |
 | Objection hammer | Stuns you for about 1 s |
 | Burnt bread | Lose points |
 | Rain cloud | Slows your climb |
+| Car crash | Big debuff: knocks you down, stuns you and costs points |
 
 ## Run it locally
 

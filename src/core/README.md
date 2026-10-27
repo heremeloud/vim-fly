@@ -24,7 +24,7 @@ The game's feel: physics values, input and the main loop.
 
 - A tap sets vertical velocity to `flapVelocity` and horizontal velocity to `±driftVelocity`. The character wraps around the left/right edges.
 - **Height** = pixels climbed / `pixelsPerMeter`. **Score** = height + item points (never below 0).
-- **Effects:** dash overrides vertical speed; helicopter keeps lift going and pulls buffs within `magnetRadius`; shield blocks the next debuff; stun ignores taps; rain cloud scales flap strength by `slowFactor`.
+- **Effects:** a dash (delivery car, helicopter) overrides vertical speed with the item's own velocity; shield blocks the next debuff; stun ignores taps; rain cloud scales flap strength by `slowFactor`; a car crash stuns, cancels any dash and knocks the dog downward once (`pendingKnockback`). Per-item numbers live in `itemDefs.ts`, see `src/items/ITEMS.md`.
 - Frame time is clamped to 50 ms so a background tab can't teleport the player.
 
 Physics is hand-rolled rather than using Phaser's physics engine; items are simple box overlaps. Re-evaluate if collisions get complicated.

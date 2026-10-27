@@ -10,10 +10,6 @@ export const PHYSICS = {
   horizontalDrag: 0.92, // per-frame (at 60 fps) damping of horizontal speed
   maxFallSpeed: 700,
   pixelsPerMeter: 10, // converts climbed pixels to the height score
-  dashVelocity: -650, // delivery car
-  helicopterLift: -180, // helicopter keeps rising at least this fast
-  magnetRadius: 180, // helicopter pulls buffs within this distance
-  magnetSpeed: 320,
   slowFactor: 0.6, // rain cloud scales flap strength by this
 } as const;
 

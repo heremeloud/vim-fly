@@ -22,7 +22,9 @@ export class RunState {
   heightMeters = 0;
   shield = false;
   dashMs = 0;
-  helicopterMs = 0;
+  dashVelocity = 0;
+  /** Downward speed (px/s) the scene should apply once, then reset to 0. Set by a car crash. */
+  pendingKnockback = 0;
   stunMs = 0;
   slowMs = 0;
   elapsedMs = 0;
@@ -45,7 +47,6 @@ export class RunState {
   tick(dtMs: number): void {
     this.elapsedMs += dtMs;
     this.dashMs = Math.max(0, this.dashMs - dtMs);
-    this.helicopterMs = Math.max(0, this.helicopterMs - dtMs);
     this.stunMs = Math.max(0, this.stunMs - dtMs);
     this.slowMs = Math.max(0, this.slowMs - dtMs);
   }
@@ -64,9 +65,7 @@ export class RunState {
         break;
       case 'dash':
         this.dashMs = e.durationMs;
-        break;
-      case 'helicopter':
-        this.helicopterMs = e.durationMs;
+        this.dashVelocity = e.velocity;
         break;
       case 'shield':
         this.shield = true;
@@ -76,6 +75,12 @@ export class RunState {
         break;
       case 'slowClimb':
         this.slowMs = e.durationMs;
+        break;
+      case 'crash':
+        this.stunMs = e.stunMs;
+        this.dashMs = 0; // a crash cancels any dash
+        this.pendingKnockback = e.knockback;
+        points = e.points;
         break;
     }
     const line = this.lines.get(item.id) ?? { id: item.id, label: item.label, count: 0, points: 0 };

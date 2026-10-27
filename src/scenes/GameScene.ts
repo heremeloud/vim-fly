@@ -88,10 +88,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   private movePlayer(dt: number): void {
+    if (this.run.pendingKnockback > 0) {
+      this.vy = this.run.pendingKnockback;
+      this.run.pendingKnockback = 0;
+    }
     if (this.run.dashMs > 0) {
-      this.vy = PHYSICS.dashVelocity;
-    } else if (this.run.helicopterMs > 0) {
-      this.vy = Math.min(this.vy, PHYSICS.helicopterLift);
+      this.vy = this.run.dashVelocity;
     } else {
       this.vy = Math.min(this.vy + PHYSICS.gravity * dt, PHYSICS.maxFallSpeed);
     }
@@ -129,22 +131,11 @@ export class GameScene extends Phaser.Scene {
   private updateItems(dt: number): void {
     const cam = this.cameras.main;
     const fall = Math.min(ITEM_RULES.maxFallSpeed, ITEM_RULES.baseFallSpeed + this.run.heightMeters * ITEM_RULES.fallRamp);
-    const magnet = this.run.helicopterMs > 0;
     const reach = (PLAYER_SIZE + ITEM_RULES.size) / 2;
 
     for (const it of [...this.items]) {
       const s = it.shape;
       s.y += fall * dt;
-
-      if (magnet && it.def.kind === 'buff') {
-        const dx = this.player.x - s.x;
-        const dy = this.player.y - s.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist < PHYSICS.magnetRadius && dist > 1) {
-          s.x += (dx / dist) * PHYSICS.magnetSpeed * dt;
-          s.y += (dy / dist) * PHYSICS.magnetSpeed * dt;
-        }
-      }
 
       if (Math.abs(s.x - this.player.x) < reach && Math.abs(s.y - this.player.y) < reach) {
         this.run.collect(it.def);
@@ -165,7 +156,6 @@ export class GameScene extends Phaser.Scene {
     const bits: string[] = [];
     if (this.run.shield) bits.push('SHIELD');
     if (this.run.dashMs > 0) bits.push('DASH');
-    if (this.run.helicopterMs > 0) bits.push('HELI');
     if (this.run.isStunned) bits.push('STUNNED');
     if (this.run.slowMs > 0) bits.push('SLOW');
     this.status.setText(bits.join('  '));
