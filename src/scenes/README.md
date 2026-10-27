@@ -12,7 +12,7 @@ Every screen. The menus are a parody of a Thai delivery app: a bee-themed app ca
 | Orders | `OrdersScene.ts` | The ladder tab: "My orders" (run history) and "Top customers" (ranked), from the local run store for now |
 | Promos | `PromosScene.ts` | The Bake Love Feeling page: watch the pilot (plays in a window), the official account, the two main leads and Vimmy, each with X / Instagram / TikTok buttons (the official account is X only) |
 | Game | `GameScene.ts` | Playable loop: camera climb, falling items, height-zone backdrops and stage banners (the novel's locations), HUD (placeholder rectangles) |
-| Receipt | `ReceiptScene.ts` | Zone reached, height, the item lines (a scrolling list, so a long receipt never overlaps), total, a \"new best\" star, **the pilot playing right on the receipt** (muted, with the player's own controls), \"Order again\" and \"Menu\" buttons, and a \"Back to store\" link. Also saves the run to the order history |
+| Receipt | `ReceiptScene.ts` | Zone reached, height, the item lines (a scrolling list, so a long receipt never overlaps), total, a \"new best\" star, **the pilot player right on the receipt** (poster with a play button, no autoplay), \"Order again\" and \"Menu\" buttons, and a \"Back to store\" link. Also saves the run to the order history |
 
 Scenes are registered in `src/main.ts`. Scene keys live in `SCENES` in `src/core/constants.ts`.
 

@@ -15,9 +15,9 @@ import { button, hitArea, label } from '../ui/widgets';
 //   fixed footer  (total, new best, the pilot player, thanks, buttons)  y FOOTER_TOP .. bottom
 const X = 50;
 const LIST_TOP = 130;
-const FOOTER_TOP = 262;
+const FOOTER_TOP = 341;
 /** The pilot player: 16:9, centered, under the total. */
-const VIDEO = { x: 50, y: 358, w: 380, h: 214 };
+const VIDEO = { x: 50, y: 429, w: 380, h: 214 };
 const ROW_MIN = 32;
 
 /** Game-over receipt: collected items as line items, total = score. Also saves the run to the order history. */
@@ -76,17 +76,17 @@ export class ReceiptScene extends Phaser.Scene {
     this.add.rectangle(GAME_WIDTH / 2, FOOTER_TOP + 8, GAME_WIDTH - X * 2, 2, 0x4e342e);
     addRow(FOOTER_TOP + 18, t('receipt.total'), `฿${r.total}`);
     if (isBest) {
-      label(this, GAME_WIDTH / 2, FOOTER_TOP + 58, `★ ${t('receipt.newBest')}`, { size: 22, bold: true, color: COLORS.accent }).setOrigin(0.5, 0);
+      label(this, GAME_WIDTH / 2, FOOTER_TOP + 52, `★ ${t('receipt.newBest')}`, { size: 22, bold: true, color: COLORS.accent }).setOrigin(0.5, 0);
     }
-    // The pilot, playing right here (muted so it can start by itself; the viewer can unmute it).
+    // The pilot, right here: poster with a play button (no autoplay, so it never clashes with the game's sound).
     embedPilot(this, VIDEO);
     label(this, GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 22, t('receipt.thanks'), { size: 16, color: COLORS.muted }).setOrigin(0.5);
 
     // Two buttons side by side: play again, or go back to the menu (item guide).
-    const by = GAME_HEIGHT - 110;
+    const by = GAME_HEIGHT - 82;
     button(this, 130, by, 200, 64, t('receipt.orderAgain'), () => this.scene.start(SCENES.game));
     button(this, 350, by, 200, 64, t('receipt.menu'), () => this.scene.start(SCENES.menu), 'secondary');
-    label(this, GAME_WIDTH / 2, GAME_HEIGHT - 40, t('receipt.backToStore'), { size: 18, color: COLORS.muted }).setOrigin(0.5);
-    hitArea(this, GAME_WIDTH / 2 - 80, GAME_HEIGHT - 58, 160, 36, () => this.scene.start(SCENES.home));
+    label(this, GAME_WIDTH / 2, GAME_HEIGHT - 26, t('receipt.backToStore'), { size: 18, color: COLORS.muted }).setOrigin(0.5);
+    hitArea(this, GAME_WIDTH / 2 - 80, GAME_HEIGHT - 44, 160, 36, () => this.scene.start(SCENES.home));
   }
 }

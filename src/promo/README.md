@@ -6,7 +6,7 @@ The hooks that tie the game to the series.
 
 - **Promos tab (the Bake Love Feeling page)** and the links config in `config.ts`:
   - the **pilot** (YouTube, https://www.youtube.com/watch?v=NFFWV0X4i_c), played inside the game in two ways (`src/promo/pilot.ts`, `src/ui/videoPlayer.ts`):
-    - **on the receipt**, the pilot window is built into the screen and starts by itself, muted (browsers only allow sound after a tap; viewers unmute with the player's own button). It disappears when you leave the receipt. To show the poster with a play button instead, set `autoplay: false` in `embedPilot`;
+    - **on the receipt**, the pilot window is built into the screen and shows its poster with a play button; it waits for a tap (no autoplay), so it never competes with the game's sound or streams on every game over. It disappears when you leave the receipt. When the game gets sound, pause or lower it while the pilot plays. To start by itself instead, use `autoplay: true, muted: true` in `embedPilot` (browsers only allow muted autoplay);
     - **in a pop-up window** from the Promos tab's big button and the Express tile on the home screen (with a Close button, and an "Open on YouTube" link in case embedding is ever turned off). The home "Watch the pilot now" strip opens the Promos page;
   - the **official account** (X only), the **two main leads** and **Vimmy** (the playable dog); the leads and Vimmy each have X, Instagram and TikTok buttons.
 
