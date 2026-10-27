@@ -15,25 +15,31 @@ export const PHYSICS = {
   pixelsPerMeter: 10, // converts climbed pixels to the height score
 } as const;
 
-// Camera climb. The screen always scrolls up at least this fast, and speeds up with
-// height; it also jumps ahead if the dog flies above the lead line. Set baseSpeed to 0
-// for the old behavior (camera moves only when the dog passes the lead line).
-export const CAMERA = {
-  leadPx: 350, // dog is pulled to at most this far below the top of the screen
-  baseSpeed: 70, // px/s of automatic upward scroll at 0 m
-  maxSpeed: 180,
-  speedRamp: 0.3, // px/s added per meter climbed
+// Difficulty rises linearly from 0 at the start to 1 at this height, then stays at 1.
+// Every [start, end] pair below is interpolated by it (see src/core/difficulty.ts).
+export const DIFFICULTY = {
+  fullAtMeters: 1000,
 } as const;
 
-// Item spawning and fall speed. Spawn gets faster and items fall faster with height.
+// Camera climb. The screen always scrolls up at `speed` px/s (faster with height); it also
+// jumps ahead if the dog flies above the lead line. Set speed to [0, 0] for the old behavior
+// (camera moves only when the dog passes the lead line).
+export const CAMERA = {
+  leadPx: 350, // dog is pulled to at most this far below the top of the screen
+  speed: [70, 220] as const,
+} as const;
+
+// Item spawning. All [start, end] pairs run from difficulty 0 to 1.
 export const ITEM_RULES = {
   size: 36,
-  baseSpawnMs: 900,
-  minSpawnMs: 350,
-  spawnRamp: 0.8, // ms shaved off the interval per meter
-  baseFallSpeed: 110,
-  maxFallSpeed: 260,
-  fallRamp: 0.4, // px/s added per meter
+  spawnMs: [900, 300] as const, // time between spawns
+  fallSpeed: [110, 340] as const, // px/s
+  doubleSpawnChance: [0, 0.5] as const, // chance a spawn drops a second item at once
+  debuffSway: [0, 80] as const, // debuffs swerve side to side by up to this many px
+  swayRate: 2.2, // radians/s of the swerve
+  debuffWeightScale: [1, 3] as const, // multiplies debuff spawn weights
+  pointsWeightScale: [1, 0.6] as const, // food gets rarer
+  buffWeightScale: [1, 0.5] as const, // power-ups get rarer
 } as const;
 
 export const SCENES = {

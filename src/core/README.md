@@ -37,9 +37,23 @@ Everything in `PHYSICS` is a starting point. Change values, reload, and play unt
 
 Height zones with backdrop changes, combo multipliers, and a proper tuning pass (see below).
 
+## Difficulty curve
+
+One number drives it all: `difficulty(height)` in `difficulty.ts` goes from 0 at the start to 1 at `DIFFICULTY.fullAtMeters` (1000 m), then stays at 1. Everything below is a `[start, end]` pair in `constants.ts` interpolated by it, so it is easy to retune in one place.
+
+| What | At 0 m | At full difficulty |
+| --- | --- | --- |
+| Time between item spawns | 900 ms | 300 ms |
+| Chance of a second item per spawn | 0% | 50% |
+| Item fall speed | 110 px/s | 340 px/s |
+| Debuffs swerve side to side | 0 px | 80 px |
+| Camera scroll speed | 70 px/s | 220 px/s |
+| Share of debuffs among drops | about 25% | about 64% |
+| Share of points items / buffs | 54% / 21% | 27% / 9% |
+
+Food and power-ups get rarer and debuffs more common as you climb (`pointsWeightScale`, `buffWeightScale`, `debuffWeightScale`).
+
 ## Tuning notes
 
-The camera auto-scrolls from `CAMERA.baseSpeed` (70 px/s) up to `maxSpeed` (180 px/s) so the dog can't outrun the screen; if you stop flapping you fall off the bottom sooner. Set `baseSpeed` to 0 for the old behavior.
-
-
-An automated bot flapping every ~260 ms climbed about 150 m in 5 s. A human tapping slower will climb slower, but the difficulty ramps in `ITEM_RULES` and `pickItem` are scaled to roughly 0-400 m, so check them against real play and rescale.
+- The camera auto-scrolls (`CAMERA.speed`) so the dog can't outrun the screen; if you stop flapping you fall off the bottom sooner. Set `speed` to `[0, 0]` for the old behavior.
+- A bot tapping every ~230 ms reaches about 340 m in 10 s, so a fast player hits full difficulty in about 30 s. If it feels too easy or too hard, change `DIFFICULTY.fullAtMeters` first (smaller = ramps sooner), then the individual pairs.

@@ -17,6 +17,7 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Food items replaced with the series' dishes (breads, sandwich, pasta, coffee, wine, shrimp fried rice lunch box)
 - [x] Items split into three kinds (points, buffs, debuffs); cilantro and fish sauce bread are disorient debuffs; oyster added as a double-points buff
 - [x] Item rework: removed delivery car, briefcase, rain cloud, burnt bread; added lawyer suit (shield), handkerchief (cleanse), rolling pin (strong flap), planner (-150), golden retriever (+150)
+- [x] Single difficulty curve (0-1 over 1000 m) driving spawn rate, double spawns, fall speed, swerving debuffs, camera speed and item mix
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)

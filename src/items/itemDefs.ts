@@ -1,3 +1,6 @@
+import { ITEM_RULES } from '../core/constants';
+import { difficulty, ramp } from '../core/difficulty';
+
 // Single source of truth for items. Values are starting points to tune.
 // Mirrors the item table in plan.md. Durations are in milliseconds.
 
@@ -53,12 +56,17 @@ export function getItem(id: string): ItemDef | undefined {
 }
 
 /**
- * Weighted random pick. Debuff weights grow with height (up to 3x at 400 m),
- * which is the "debuff ratio rises with height" part of the difficulty curve.
+ * Weighted random pick. As difficulty rises, debuffs become more common and
+ * points items and buffs rarer (see ITEM_RULES in core/constants.ts).
  */
 export function pickItem(heightMeters: number, rand: () => number = Math.random): ItemDef {
-  const debuffScale = 1 + Math.min(2, heightMeters / 200);
-  const weightOf = (i: ItemDef) => (i.kind === 'debuff' ? i.weight * debuffScale : i.weight);
+  const d = difficulty(heightMeters);
+  const scale = {
+    points: ramp(ITEM_RULES.pointsWeightScale, d),
+    buff: ramp(ITEM_RULES.buffWeightScale, d),
+    debuff: ramp(ITEM_RULES.debuffWeightScale, d),
+  };
+  const weightOf = (i: ItemDef) => i.weight * scale[i.kind];
   const total = ITEMS.reduce((sum, i) => sum + weightOf(i), 0);
   let roll = rand() * total;
   for (const item of ITEMS) {

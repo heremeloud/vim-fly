@@ -2,11 +2,14 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '../core/constants';
 import { bindSteering } from '../core/input';
 import { RunState } from '../core/RunState';
+import { difficulty, ramp } from '../core/difficulty';
 import { pickItem, type ItemDef } from '../items/itemDefs';
 
 interface FallingItem {
   def: ItemDef;
   shape: Phaser.GameObjects.Rectangle;
+  baseX: number;
+  swayPhase: number;
 }
 
 // Placeholder outlines so item types read at a glance: gold points, green buff, red debuff.
@@ -120,7 +123,7 @@ export class GameScene extends Phaser.Scene {
    */
   private updateCamera(dt: number): void {
     const cam = this.cameras.main;
-    const speed = Math.min(CAMERA.maxSpeed, CAMERA.baseSpeed + this.run.heightMeters * CAMERA.speedRamp);
+    const speed = ramp(CAMERA.speed, difficulty(this.run.heightMeters));
     cam.scrollY = Math.min(cam.scrollY - speed * dt, this.player.y - CAMERA.leadPx);
     this.bg.tilePositionY = cam.scrollY;
     this.run.heightMeters = Math.max(this.run.heightMeters, (this.startY - this.player.y) / PHYSICS.pixelsPerMeter);
@@ -130,26 +133,39 @@ export class GameScene extends Phaser.Scene {
     this.spawnTimerMs -= dtMs;
     if (this.spawnTimerMs > 0) return;
     const h = this.run.heightMeters;
-    this.spawnTimerMs = Math.max(ITEM_RULES.minSpawnMs, ITEM_RULES.baseSpawnMs - h * ITEM_RULES.spawnRamp);
+    const d = difficulty(h);
+    this.spawnTimerMs = ramp(ITEM_RULES.spawnMs, d);
 
-    const def = pickItem(h);
+    this.spawnOne(h, 0);
+    if (Math.random() < ramp(ITEM_RULES.doubleSpawnChance, d)) this.spawnOne(h, 1);
+  }
+
+  private spawnOne(heightMeters: number, row: number): void {
+    const def = pickItem(heightMeters);
     const cam = this.cameras.main;
-    const x = Phaser.Math.Between(30, GAME_WIDTH - 30);
+    const x = Phaser.Math.Between(40, GAME_WIDTH - 40);
     const shape = this.add
-      .rectangle(x, cam.scrollY - 40, ITEM_RULES.size, ITEM_RULES.size, def.color)
+      .rectangle(x, cam.scrollY - 40 - row * 70, ITEM_RULES.size, ITEM_RULES.size, def.color)
       .setStrokeStyle(3, OUTLINE[def.kind])
       .setDepth(3);
-    this.items.push({ def, shape });
+    this.items.push({ def, shape, baseX: x, swayPhase: Math.random() * Math.PI * 2 });
   }
 
   private updateItems(dt: number): void {
     const cam = this.cameras.main;
-    const fall = Math.min(ITEM_RULES.maxFallSpeed, ITEM_RULES.baseFallSpeed + this.run.heightMeters * ITEM_RULES.fallRamp);
+    const d = difficulty(this.run.heightMeters);
+    const fall = ramp(ITEM_RULES.fallSpeed, d);
+    const sway = ramp(ITEM_RULES.debuffSway, d);
     const reach = (PLAYER_SIZE + ITEM_RULES.size) / 2;
 
     for (const it of [...this.items]) {
       const s = it.shape;
       s.y += fall * dt;
+      if (it.def.kind === 'debuff' && sway > 0) {
+        // Debuffs swerve, harder to dodge the higher you climb. Kept inside the walls.
+        const wobble = Math.sin(this.time.now / 1000 * ITEM_RULES.swayRate + it.swayPhase) * sway;
+        s.x = Phaser.Math.Clamp(it.baseX + wobble, ITEM_RULES.size / 2, GAME_WIDTH - ITEM_RULES.size / 2);
+      }
 
       if (Math.abs(s.x - this.player.x) < reach && Math.abs(s.y - this.player.y) < reach) {
         this.run.collect(it.def);

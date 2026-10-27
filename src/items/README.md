@@ -23,8 +23,8 @@ The item guide screen ("menu list with prices") should read from `ITEMS` so it n
 
 ## How spawning works
 
-- `pickItem(heightMeters)` does a weighted random pick. Debuff weights scale up to 3x by 400 m.
-- `GameScene` spawns one item above the camera every `ITEM_RULES` interval (shrinks with height) at a random x. Items fall straight down, faster with height.
+- `pickItem(heightMeters)` does a weighted random pick. As difficulty rises, debuff weights scale up and points/buff weights down (`ITEM_RULES` in `src/core/constants.ts`).
+- `GameScene` spawns an item above the camera every `ITEM_RULES.spawnMs` (shrinks with height), sometimes two at once. Items fall faster with height, and debuffs swerve side to side.
 - Collision is a box overlap with the player. `RunState.collect` applies the effect; a shield consumes itself instead of a debuff.
 - Each `ItemDef` has a placeholder `color`; points items get a gold outline, buffs green, debuffs red.
 
