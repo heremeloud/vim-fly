@@ -9,6 +9,9 @@ interface FallingItem {
   shape: Phaser.GameObjects.Rectangle;
 }
 
+// Placeholder outlines so item types read at a glance: gold points, green buff, red debuff.
+const OUTLINE = { points: 0xf9a825, buff: 0x2e7d32, debuff: 0xb71c1c } as const;
+
 const PLAYER_SIZE = 40;
 const START_Y = GAME_HEIGHT - 200;
 const CAMERA_LEAD = 350; // player sits this far below the camera top when climbing
@@ -69,7 +72,8 @@ export class GameScene extends Phaser.Scene {
     if (this.ended || this.run.isStunned) return;
     const slow = this.run.slowMs > 0 ? PHYSICS.slowFactor : 1;
     this.vy = PHYSICS.flapVelocity * slow;
-    this.vx = dir * PHYSICS.driftVelocity;
+    const steer = this.run.isDisoriented ? -dir : dir; // disoriented: left/right swapped
+    this.vx = steer * PHYSICS.driftVelocity;
   }
 
   update(_time: number, deltaMs: number): void {
@@ -123,7 +127,7 @@ export class GameScene extends Phaser.Scene {
     const x = Phaser.Math.Between(30, GAME_WIDTH - 30);
     const shape = this.add
       .rectangle(x, cam.scrollY - 40, ITEM_RULES.size, ITEM_RULES.size, def.color)
-      .setStrokeStyle(3, def.kind === 'buff' ? 0x2e7d32 : 0xb71c1c)
+      .setStrokeStyle(3, OUTLINE[def.kind])
       .setDepth(3);
     this.items.push({ def, shape });
   }
@@ -158,6 +162,8 @@ export class GameScene extends Phaser.Scene {
     if (this.run.dashMs > 0) bits.push('DASH');
     if (this.run.isStunned) bits.push('STUNNED');
     if (this.run.slowMs > 0) bits.push('SLOW');
+    if (this.run.isDisoriented) bits.push('DIZZY');
+    if (this.run.doublePointsMs > 0) bits.push('x2');
     this.status.setText(bits.join('  '));
     this.player.setFillStyle(this.run.isStunned ? 0xb0bec5 : 0xffb300);
   }

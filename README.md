@@ -14,15 +14,29 @@ A tap-to-fly web game. One cute character climbs an endless sky, steering left a
 
 Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
 
+**Points** (food and drinks that add to your score)
+
+| Item | Points |
+| --- | --- |
+| Pandan custard bread, cheese butter bread, shiopan, sandwich | Small |
+| Pasta, coffee, wine | Medium |
+| Shrimp fried rice lunch box | Big |
+
+**Buffs** (power-ups)
+
 | Item | Effect |
 | --- | --- |
-| Pandan custard bread, cheese butter bread, cilantro bread, shiopan, fish sauce bread, sandwich | Small points |
-| Pasta, coffee, wine | Medium points |
-| Shrimp fried rice lunch box | Big points |
+| Oyster | Double points for a few seconds |
 | Delivery car | Short upward dash |
 | Helicopter | Strong upward dash |
 | Briefcase | Shield: blocks the next debuff |
+
+**Debuffs** (dodge these)
+
+| Item | Effect |
+| --- | --- |
 | Objection hammer | Stuns you for about 1 s |
+| Cilantro bread, fish sauce bread | Disoriented: left and right are swapped |
 | Burnt bread | Lose points |
 | Rain cloud | Slows your climb |
 | Car crash | Big debuff: knocks you down, stuns you and costs points |

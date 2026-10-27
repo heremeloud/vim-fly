@@ -27,11 +27,17 @@ export class RunState {
   pendingKnockback = 0;
   stunMs = 0;
   slowMs = 0;
+  disorientMs = 0;
+  doublePointsMs = 0;
   elapsedMs = 0;
   private lines = new Map<string, ReceiptLine>();
 
   get isStunned(): boolean {
     return this.stunMs > 0;
+  }
+
+  get isDisoriented(): boolean {
+    return this.disorientMs > 0;
   }
 
   get itemPoints(): number {
@@ -49,6 +55,8 @@ export class RunState {
     this.dashMs = Math.max(0, this.dashMs - dtMs);
     this.stunMs = Math.max(0, this.stunMs - dtMs);
     this.slowMs = Math.max(0, this.slowMs - dtMs);
+    this.disorientMs = Math.max(0, this.disorientMs - dtMs);
+    this.doublePointsMs = Math.max(0, this.doublePointsMs - dtMs);
   }
 
   /** Apply a collected item. Returns false if a shield blocked it. */
@@ -61,7 +69,8 @@ export class RunState {
     let points = 0;
     switch (e.type) {
       case 'points':
-        points = e.amount;
+        // Double points only boosts gains, never doubles a penalty.
+        points = e.amount > 0 && this.doublePointsMs > 0 ? e.amount * 2 : e.amount;
         break;
       case 'dash':
         this.dashMs = e.durationMs;
@@ -69,6 +78,12 @@ export class RunState {
         break;
       case 'shield':
         this.shield = true;
+        break;
+      case 'doublePoints':
+        this.doublePointsMs = e.durationMs;
+        break;
+      case 'disorient':
+        this.disorientMs = e.durationMs;
         break;
       case 'stun':
         this.stunMs = e.durationMs;

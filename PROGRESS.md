@@ -15,6 +15,7 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Receipt shows height and collected items as line items
 - [x] Item catalog doc (`src/items/ITEMS.md`); helicopter is now an upward dash; added the car crash big debuff
 - [x] Food items replaced with the series' dishes (breads, sandwich, pasta, coffee, wine, shrimp fried rice lunch box)
+- [x] Items split into three kinds (points, buffs, debuffs); cilantro and fish sauce bread are disorient debuffs; oyster added as a double-points buff
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
@@ -31,7 +32,7 @@ Last updated: 2026-10-27 (core loop session)
 ## Decisions waiting on me
 
 - Show name and logo, brand colors, air date, hashtag and social/YouTube links (needed for the promo features and menu styling).
-- Do wine and coffee get effects? Thai names for each dish? (see `src/items/ITEMS.md`)
+- Is oyster = double points the buff you want? Do wine and coffee get effects? Thai names for each dish? (see `src/items/ITEMS.md`)
 - Item questions in `src/items/ITEMS.md` (should the delivery car differ from the helicopter? does the shield block the car crash?).
 - Menu language: Thai, English or both.
 - Hosting choice: Vercel, Netlify or Cloudflare Pages.

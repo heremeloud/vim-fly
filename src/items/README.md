@@ -9,7 +9,7 @@ Everything that falls from the sky.
 
 ## Items
 
-The full list with values, weights and rules is in [ITEMS.md](ITEMS.md). In short: the series' foods and drinks (breads, sandwich, pasta, coffee, wine, shrimp fried rice lunch box) give points, the delivery car and helicopter dash upward, the briefcase shields, and the hammer, burnt bread, rain cloud and car crash are debuffs (the car crash is the big one).
+Three kinds: **points** (food and drinks, score only), **buffs** (oyster double points, delivery car and helicopter dashes, briefcase shield) and **debuffs** (hammer stun, cilantro and fish sauce bread disorient, burnt bread, rain cloud, car crash). The full list with values, weights and rules is in [ITEMS.md](ITEMS.md).
 
 All durations, point values and weights are starting points to tune in playtesting.
 
@@ -26,7 +26,7 @@ The item guide screen ("menu list with prices") should read from `ITEMS` so it n
 - `pickItem(heightMeters)` does a weighted random pick. Debuff weights scale up to 3x by 400 m.
 - `GameScene` spawns one item above the camera every `ITEM_RULES` interval (shrinks with height) at a random x. Items fall straight down, faster with height.
 - Collision is a box overlap with the player. `RunState.collect` applies the effect; a shield consumes itself instead of a debuff.
-- Each `ItemDef` has a placeholder `color`; buffs get a green outline, debuffs red.
+- Each `ItemDef` has a placeholder `color`; points items get a gold outline, buffs green, debuffs red.
 
 ## Still to build
 
