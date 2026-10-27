@@ -22,7 +22,7 @@ To keep it clearly a joke and clearly the show's own:
 
 ## Layout rules
 
-- The screen is 480x800. The bottom tab bar is 58 px tall (`TAB_BAR_HEIGHT`); keep content above it.
+- The screen is 480x800. The bottom tab bar is 54 px tall (`TAB_BAR_HEIGHT`); keep content above it.
 - Text on the honey-yellow primary color is dark brown (`COLORS.onPrimary`); on white use `COLORS.accent` for highlights, since yellow on white is hard to read.
 - Scrolling lists draw an opaque header and the tab bar on top (higher depth) to hide rows scrolled underneath. See `MenuScene`.
 

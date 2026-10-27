@@ -36,7 +36,7 @@ Last updated: 2026-10-27 (core loop session)
 - [x] The Store tab always returns to the home page (also when another page is showing under a lit Store tab)
 - [x] Receipt rebuilt: fixed header and footer with a scrolling item list, long names wrap, nothing overlaps however long it gets
 - [x] Service tiles do real things (Food = menu, Mart = Bake Love Feeling page, Express = pilot window, Ride = start a run); the joke pages are gone
-- [x] Promos page is titled "Bake Love Feeling"; bottom tab bar is smaller (58 px); the pilot window shows "Loading the pilot…" until it is ready
+- [x] Promos page is titled "Bake Love Feeling"; bottom tab bar is smaller (54 px, icon and label centered with equal space above and below); the pilot window shows "Loading the pilot…" until it is ready
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
