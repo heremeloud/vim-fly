@@ -102,11 +102,15 @@ export class GameScene extends Phaser.Scene {
     }
     this.vx *= Math.pow(PHYSICS.horizontalDrag, dt * 60);
 
-    // Side walls: the character bounces off the screen edges so it never sticks to them.
+    // Side walls: bounce away and stagger briefly, so hugging a wall is never a free path up.
     const half = PLAYER_SIZE / 2;
     const nextX = this.player.x + this.vx * dt;
     this.player.x = Phaser.Math.Clamp(nextX, half, GAME_WIDTH - half);
-    if (this.player.x !== nextX) this.vx = -this.vx * PHYSICS.wallBounce;
+    if (this.player.x !== nextX) {
+      const away = nextX < half ? 1 : -1;
+      this.vx = away * Math.max(PHYSICS.wallKick, Math.abs(this.vx) * PHYSICS.wallBounce);
+      this.run.stun(PHYSICS.wallStunMs);
+    }
     this.player.y += this.vy * dt;
   }
 

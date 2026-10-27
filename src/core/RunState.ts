@@ -33,6 +33,11 @@ export class RunState {
   elapsedMs = 0;
   private lines = new Map<string, ReceiptLine>();
 
+  /** Stun for at least `ms`, without shortening a longer stun already running. */
+  stun(ms: number): void {
+    this.stunMs = Math.max(this.stunMs, ms);
+  }
+
   get isStunned(): boolean {
     return this.stunMs > 0;
   }

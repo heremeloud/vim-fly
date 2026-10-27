@@ -9,6 +9,8 @@ export const PHYSICS = {
   driftVelocity: 220, // horizontal velocity set on each tap
   horizontalDrag: 0.92, // per-frame (at 60 fps) damping of horizontal speed
   wallBounce: 0.6, // share of sideways speed kept (and reversed) when hitting a side wall
+  wallKick: 400, // minimum speed away from the wall after a hit, so tapping into it can't hold you there
+  wallStunMs: 600, // brief stagger on a wall hit (taps ignored), so hugging a wall costs climb
   maxFallSpeed: 700,
   pixelsPerMeter: 10, // converts climbed pixels to the height score
 } as const;
