@@ -1,6 +1,6 @@
 # Vimmy Fly
 
-A tap-to-fly web game. One cute character climbs an endless sky, steering left and right to catch pastries and dodge objection hammers. The menus look like a bakery food-ordering app.
+A tap-to-fly web game. One cute character climbs an endless sky, steering left and right to catch food and dodge gavel hammers. The menus look like a bakery food-ordering app.
 
 ## How to play
 
@@ -37,7 +37,7 @@ Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
 
 | Item | Effect |
 | --- | --- |
-| Objection hammer | Stuns you for about 1 s |
+| Gavel hammer | Stuns you for about 1 s |
 | Cilantro bread, fish sauce bread | Disoriented: left and right are swapped |
 | Planner | Huge point loss |
 | Car crash | Big debuff: knocks you down, stuns you and costs points |

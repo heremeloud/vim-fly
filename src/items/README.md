@@ -9,7 +9,7 @@ Everything that falls from the sky.
 
 ## Items
 
-Three kinds: **points** (food and drinks, score only, topped by the golden retriever), **buffs** (oyster double points, lawyer suit shield, handkerchief cleanse, rolling pin strong flap, helicopter dash) and **debuffs** (hammer stun, cilantro and fish sauce bread disorient, planner point loss, car crash). The full list with values, weights and rules is in [ITEMS.md](ITEMS.md).
+Three kinds: **points** (food and drinks, score only, topped by the golden retriever), **buffs** (oyster double points, lawyer suit shield, handkerchief cleanse, rolling pin strong flap, helicopter dash) and **debuffs** (gavel hammer stun, cilantro and fish sauce bread disorient, planner point loss, car crash). The full list with values, weights and rules is in [ITEMS.md](ITEMS.md).
 
 All durations, point values and weights are starting points to tune in playtesting.
 

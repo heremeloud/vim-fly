@@ -38,7 +38,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 
 | Item | id | Effect | Value | Weight | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Objection hammer | `hammer` | Stun | 1 s, taps ignored | 6 | The courtroom gavel |
+| Gavel Hammer | `gavelHammer` | Stun | 1 s, taps ignored | 6 | The courtroom gavel |
 | Cilantro Bread | `cilantroBread` | Disoriented | 3 s, left/right swapped | 4 | No points |
 | Fish Sauce Bread | `fishSauceBread` | Disoriented | 4 s, left/right swapped | 3 | No points; the smellier one lasts longer |
 | Planner | `planner` | Huge point loss | -150 | 2 | Only docks points, no movement effect |
