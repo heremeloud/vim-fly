@@ -11,26 +11,28 @@ The game's backdrops are the locations of the series' original novel. The climb 
 
 ## Zones
 
-Each tier is 200 m, so the five tiers line up with the difficulty curve (full difficulty at 1000 m, see `DIFFICULTY.fullAtMeters` in `constants.ts`). Each location is 100 m.
+Each location is `ZONE_SPACING_METERS` (200 m) apart, so a tier is 400 m and the last location starts at 1800 m. Change the one constant in `zones.ts` to spread the story out more or less.
+
+Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1000 m, in `constants.ts`), which is now partway through tier 3 (CC Law Office to the Gym). Everything after that stays at full difficulty. If you want difficulty to keep building across the whole story, raise `fullAtMeters` toward 1800.
 
 | Tier | From | Location | Vibe | Placeholder backdrop |
 | --- | --- | --- | --- | --- |
 | **1 Humble Beginnings** | 0 m | Rural Road (near rice fields) | Quiet road through golden fields; where the inciting crash happens | Gold with rice stalks and road edges |
-| | 100 m | Heartwarming Bakery | Cheese's inherited two-story shop, the cozy starting hub, under her father's shadow | Cream with shelves and loaves |
-| **2 Branching Out** | 200 m | Suburban Cafés | Local spots where Cheese delivers bread samples and builds her reputation | Pale green with coffee cups |
-| | 300 m | Shopping Mall and Popcorn Shop | Busy downtown spot to relax, meet other characters, boost morale (the cheese popcorn counter) | Lavender with popcorn dots and shop frames |
-| **3 Getting Serious** | 400 m | CC Law Office | Sharp corporate setting: legal help, bread peace offerings, Cheese and Noey grow closer | Grey-blue with a window grid |
-| | 500 m | Fitness Second Gym | Where Lal works and Cheese secretly trains for fitness and confidence | Peach with dumbbells |
-| **4 The Big Moments** | 600 m | The Courtroom | Tense, formal arena where the forged-signature fight is won | Brown with wooden pillars |
-| | 700 m | Sweet Sea Beach and Seaside Restaurant | Coastal getaway: Cheese opens up about her past and the romance is sealed | Aqua with waves |
-| **5 True Independence** | 800 m | Noey's Residence (YZ Village) | Gated community house: late-night recipe tests, a shared domestic future | Lavender-blue with gate bars |
-| | 900 m | Bake Love Bakery | Cheese's own shop, free of her father's shadow; home of the Cheese-Noey Bread | Pink with hearts |
+| | 200 m | Heartwarming Bakery | Cheese's inherited two-story shop, the cozy starting hub, under her father's shadow | Cream with shelves and loaves |
+| **2 Branching Out** | 400 m | Suburban Cafés | Local spots where Cheese delivers bread samples and builds her reputation | Pale green with coffee cups |
+| | 600 m | Shopping Mall and Popcorn Shop | Busy downtown spot to relax, meet other characters, boost morale (the cheese popcorn counter) | Lavender with popcorn dots and shop frames |
+| **3 Getting Serious** | 800 m | CC Law Office | Sharp corporate setting: legal help, bread peace offerings, Cheese and Noey grow closer | Grey-blue with a window grid |
+| | 1000 m | Fitness Second Gym | Where Lal works and Cheese secretly trains for fitness and confidence | Peach with dumbbells |
+| **4 The Big Moments** | 1200 m | The Courtroom | Tense, formal arena where the forged-signature fight is won | Brown with wooden pillars |
+| | 1400 m | Sweet Sea Beach and Seaside Restaurant | Coastal getaway: Cheese opens up about her past and the romance is sealed | Aqua with waves |
+| **5 True Independence** | 1600 m | Noey's Residence (YZ Village) | Gated community house: late-night recipe tests, a shared domestic future | Lavender-blue with gate bars |
+| | 1800 m | Bake Love Bakery | Cheese's own shop, free of her father's shadow; home of the Cheese-Noey Bread | Pink with hearts |
 
 The banner shows the tier and the location (for example "Tier 3 · Getting Serious / CC Law Office"). The receipt lists the last location reached. Tier names ("Humble Beginnings" and so on) are my own placeholders in `TIER_NAMES`.
 
 ## Changing a zone
 
-Edit `ZONES` in `zones.ts` (id, label, tier, start height, placeholder colors). Add a matching `case` in `BootScene.makeBackdrop` for the placeholder motif if you add a new id. To swap in real art, load a tileable image per zone in `BootScene.preload` using the key from `zoneTextureKey`.
+Edit `ZONE_DEFS` in `zones.ts` (id, label, tier, placeholder colors); start heights come from the order and `ZONE_SPACING_METERS`. Add a matching `case` in `BootScene.makeBackdrop` for the placeholder motif if you add a new id. To swap in real art, load a tileable image per zone in `BootScene.preload` using the key from `zoneTextureKey`.
 
 ## Testing a zone quickly
 

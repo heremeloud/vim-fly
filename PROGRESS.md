@@ -21,7 +21,7 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Height zones (first version, replaced by the novel's locations below)
 - [x] Ordering-app menus, first part: shared UI (`src/ui`), home storefront, scrollable item guide with Points/Buffs/Debuffs filter, bottom tab bar, "coming soon" placeholders for Orders and Promos, promo config with countdown
 - [x] Menus restyled as a bee-themed parody ("BEE MAN"): honey-yellow palette, deliver-to line and search bar on the home screen; receipt has "Order again" and "Menu" buttons side by side
-- [x] Height zones replaced with the novel's 10 locations in 5 tiers (`src/core/ZONES.md`); all 10 placeholder backdrops and banners checked in the browser; dev shortcut `?zone=<id>`
+- [x] Height zones replaced with the novel's 10 locations in 5 tiers, 200 m apart (`src/core/ZONES.md`); all 10 placeholder backdrops and banners checked in the browser; dev shortcut `?zone=<id>`
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
@@ -37,7 +37,7 @@ Last updated: 2026-10-27 (core loop session)
 ## Decisions waiting on me
 
 - Story-driven items: add a kitten, the Benz, cheese popcorn, the Cheese-Noey Bread? (see `src/core/ZONES.md`)
-- Are 100 m per location and my tier names right?
+- Are 200 m per location and my tier names right? Difficulty still tops out at 1000 m (mid tier 3): should it build across the whole story instead (`DIFFICULTY.fullAtMeters`)?
 
 - Parody name: "BEE MAN" is my placeholder pun. Keep it, or pick another? Have the final name and look checked by a lawyer before public release.
 
