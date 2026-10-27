@@ -23,10 +23,16 @@ export interface ItemDef {
 }
 
 export const ITEMS: readonly ItemDef[] = [
-  { id: 'croissant', label: 'Croissant', kind: 'buff', weight: 10, effect: { type: 'points', amount: 10 }, color: 0xe6a23c },
-  { id: 'bread', label: 'Bread', kind: 'buff', weight: 10, effect: { type: 'points', amount: 10 }, color: 0xc8955a },
-  { id: 'cupcake', label: 'Cupcake', kind: 'buff', weight: 8, effect: { type: 'points', amount: 15 }, color: 0xf48fb1 },
-  { id: 'cake', label: 'Cake', kind: 'buff', weight: 2, effect: { type: 'points', amount: 100 }, color: 0xffd54f },
+  { id: 'pandanCustardBread', label: 'Pandan Custard Bread', kind: 'buff', weight: 6, effect: { type: 'points', amount: 10 }, color: 0x8bc34a },
+  { id: 'cheeseButterBread', label: 'Cheese Butter Bread', kind: 'buff', weight: 6, effect: { type: 'points', amount: 10 }, color: 0xffca28 },
+  { id: 'cilantroBread', label: 'Cilantro Bread', kind: 'buff', weight: 5, effect: { type: 'points', amount: 10 }, color: 0x66bb6a },
+  { id: 'shiopan', label: 'Shiopan', kind: 'buff', weight: 5, effect: { type: 'points', amount: 10 }, color: 0xd7a86e },
+  { id: 'fishSauceBread', label: 'Fish Sauce Bread', kind: 'buff', weight: 4, effect: { type: 'points', amount: 15 }, color: 0xa1887f },
+  { id: 'sandwich', label: 'Sandwich', kind: 'buff', weight: 6, effect: { type: 'points', amount: 10 }, color: 0xffe0b2 },
+  { id: 'pasta', label: 'Pasta', kind: 'buff', weight: 4, effect: { type: 'points', amount: 20 }, color: 0xef5350 },
+  { id: 'coffee', label: 'Coffee', kind: 'buff', weight: 4, effect: { type: 'points', amount: 20 }, color: 0x6d4c41 },
+  { id: 'wine', label: 'Wine', kind: 'buff', weight: 2, effect: { type: 'points', amount: 30 }, color: 0x8e24aa },
+  { id: 'shrimpFriedRiceBox', label: 'Shrimp Fried Rice Lunch Box', kind: 'buff', weight: 2, effect: { type: 'points', amount: 100 }, color: 0xff8a65 },
   { id: 'deliveryCar', label: 'Delivery Car', kind: 'buff', weight: 2, effect: { type: 'dash', durationMs: 2000, velocity: -500 }, color: 0x4caf50 },
   { id: 'helicopter', label: 'Helicopter', kind: 'buff', weight: 2, effect: { type: 'dash', durationMs: 3000, velocity: -700 }, color: 0x26c6da },
   { id: 'briefcase', label: 'Briefcase', kind: 'buff', weight: 3, effect: { type: 'shield' }, color: 0x5c6bc0 },

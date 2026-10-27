@@ -16,8 +16,9 @@ Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
 
 | Item | Effect |
 | --- | --- |
-| Croissant, bread, cupcake | Small points |
-| Cake | Big points |
+| Pandan custard bread, cheese butter bread, cilantro bread, shiopan, fish sauce bread, sandwich | Small points |
+| Pasta, coffee, wine | Medium points |
+| Shrimp fried rice lunch box | Big points |
 | Delivery car | Short upward dash |
 | Helicopter | Strong upward dash |
 | Briefcase | Shield: blocks the next debuff |

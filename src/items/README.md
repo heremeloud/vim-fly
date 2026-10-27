@@ -9,7 +9,7 @@ Everything that falls from the sky.
 
 ## Items
 
-The full list with values, weights and rules is in [ITEMS.md](ITEMS.md). In short: pastries give points, the delivery car and helicopter dash upward, the briefcase shields, and the hammer, burnt bread, rain cloud and car crash are debuffs (the car crash is the big one).
+The full list with values, weights and rules is in [ITEMS.md](ITEMS.md). In short: the series' foods and drinks (breads, sandwich, pasta, coffee, wine, shrimp fried rice lunch box) give points, the delivery car and helicopter dash upward, the briefcase shields, and the hammer, burnt bread, rain cloud and car crash are debuffs (the car crash is the big one).
 
 All durations, point values and weights are starting points to tune in playtesting.
 
