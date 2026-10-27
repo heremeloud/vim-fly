@@ -2,8 +2,9 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { getItem, priceLabel } from '../items/itemDefs';
 import { SHOW, countdownText } from '../promo/config';
+import { APP } from '../ui/brand';
 import { COLORS } from '../ui/theme';
-import { TAB_BAR_HEIGHT, button, label, roundedBox, tabBar } from '../ui/widgets';
+import { TAB_BAR_HEIGHT, button, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
 
 // Items shown as "popular" on the storefront.
 const POPULAR = ['goldenRetriever', 'shrimpFriedRiceBox', 'pandanCustardBread'];
@@ -25,12 +26,19 @@ export class HomeScene extends Phaser.Scene {
     tabBar(this, 'store');
   }
 
-  /** Key-art banner. Placeholder block until the real art exists. */
+  /** App header and key-art banner: deliver-to line, search bar, app name. Banner art is a placeholder. */
   private drawBanner(): void {
     this.add.rectangle(0, 0, GAME_WIDTH, 230, COLORS.primary).setOrigin(0);
-    this.add.rectangle(0, 200, GAME_WIDTH, 30, COLORS.primaryDark).setOrigin(0).setAlpha(0.35);
-    label(this, GAME_WIDTH / 2, 100, SHOW.title, { size: 44, color: 0xffffff, bold: true }).setOrigin(0.5);
-    label(this, GAME_WIDTH / 2, 150, 'key art banner goes here', { size: 14, color: 0xffffff }).setOrigin(0.5).setAlpha(0.7);
+    this.add.rectangle(0, 200, GAME_WIDTH, 30, COLORS.primaryDark).setOrigin(0).setAlpha(0.25);
+    label(this, 20, 14, `Deliver to  ${APP.deliverTo}  ▾`, { size: 15, color: COLORS.onPrimary, bold: true });
+
+    roundedBox(this, 20, 42, GAME_WIDTH - 40, 44, COLORS.surface, 22);
+    label(this, 40, 54, '🔍', { size: 18 });
+    label(this, 72, 55, APP.searchHint, { size: 15, color: COLORS.muted });
+    hitArea(this, 20, 42, GAME_WIDTH - 40, 44, () => this.scene.start(SCENES.menu));
+
+    label(this, GAME_WIDTH / 2, 124, `🐝 ${APP.name}`, { size: 42, color: COLORS.onPrimary, bold: true }).setOrigin(0.5);
+    label(this, GAME_WIDTH / 2, 162, APP.tagline, { size: 16, color: COLORS.onPrimary }).setOrigin(0.5);
   }
 
   private drawShopInfo(): void {
@@ -40,8 +48,8 @@ export class HomeScene extends Phaser.Scene {
   }
 
   private drawCountdown(): void {
-    roundedBox(this, 20, 294, GAME_WIDTH - 40, 48, 0xffe0b2, 24);
-    label(this, GAME_WIDTH / 2, 318, countdownText(), { size: 18, bold: true, color: COLORS.primaryDark }).setOrigin(0.5);
+    roundedBox(this, 20, 294, GAME_WIDTH - 40, 48, 0xffecb3, 24);
+    label(this, GAME_WIDTH / 2, 318, countdownText(), { size: 18, bold: true, color: COLORS.accent }).setOrigin(0.5);
   }
 
   private drawPopular(): void {
@@ -56,7 +64,7 @@ export class HomeScene extends Phaser.Scene {
       roundedBox(this, x, y, cardW, 160, COLORS.surface, 14, COLORS.border);
       this.add.circle(x + cardW / 2, y + 44, 30, item.color).setStrokeStyle(3, COLORS.points);
       label(this, x + cardW / 2, y + 92, item.label, { size: 14, bold: true, wrap: cardW - 16, align: 'center' }).setOrigin(0.5, 0);
-      label(this, x + cardW / 2, y + 144, priceLabel(item), { size: 18, bold: true, color: COLORS.primary }).setOrigin(0.5);
+      label(this, x + cardW / 2, y + 144, priceLabel(item), { size: 18, bold: true, color: COLORS.accent }).setOrigin(0.5);
     });
   }
 }

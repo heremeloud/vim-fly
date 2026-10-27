@@ -1,10 +1,13 @@
-// Visual theme for the ordering-app menus. Placeholder brand until the show's
-// own colors and logo are decided: change them here and every menu follows.
-// Do not copy any real delivery app's logo, exact colors or icons.
+// Visual theme for the ordering-app menus: a bee-themed parody of a Thai delivery app
+// (honey yellow and dark brown, to match the dog in a bee costume). Placeholder until the
+// show's own colors and logo are decided: change them here and every menu follows.
+// Do not copy any real delivery app's logo, mascot, exact colors or icons (see README).
 
 export const COLORS = {
-  primary: 0xff7043, // main brand color (buttons, active tab, prices)
-  primaryDark: 0xe64a19,
+  primary: 0xffb300, // honey yellow: buttons, banner, filled chips
+  primaryDark: 0xc68400, // button shadow
+  onPrimary: 0x3e2723, // text on top of the primary color
+  accent: 0xe65100, // readable highlight on white: prices, active tab
   background: 0xfff3e0,
   surface: 0xffffff,
   border: 0xf0dcc3,

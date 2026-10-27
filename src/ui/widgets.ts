@@ -61,7 +61,10 @@ export function hitArea(
   return r;
 }
 
-/** A pill-shaped call-to-action button, centered on (cx, cy). */
+/**
+ * A pill-shaped button, centered on (cx, cy). `primary` is filled honey yellow;
+ * `secondary` is white with a yellow outline.
+ */
 export function button(
   scene: Phaser.Scene,
   cx: number,
@@ -70,12 +73,17 @@ export function button(
   h: number,
   text: string,
   onTap: () => void,
+  variant: 'primary' | 'secondary' = 'primary',
 ): void {
   const x = cx - w / 2;
   const y = cy - h / 2;
-  roundedBox(scene, x, y + 4, w, h, COLORS.primaryDark, h / 2); // shadow
-  roundedBox(scene, x, y, w, h, COLORS.primary, h / 2);
-  label(scene, cx, cy, text, { size: 26, color: 0xffffff, bold: true }).setOrigin(0.5);
+  if (variant === 'primary') {
+    roundedBox(scene, x, y + 4, w, h, COLORS.primaryDark, h / 2); // shadow
+    roundedBox(scene, x, y, w, h, COLORS.primary, h / 2);
+  } else {
+    roundedBox(scene, x, y, w, h, COLORS.surface, h / 2, COLORS.primary);
+  }
+  label(scene, cx, cy, text, { size: 24, color: COLORS.onPrimary, bold: true }).setOrigin(0.5);
   hitArea(scene, x, y, w, h, onTap);
 }
 
@@ -107,7 +115,7 @@ export function tabBar(scene: Phaser.Scene, active: TabId): void {
     const cx = i * w + w / 2;
     const on = tab.id === active;
     scene.add.text(cx, y + 26, tab.icon, { fontSize: '26px' }).setOrigin(0.5).setDepth(depth).setAlpha(on ? 1 : 0.5);
-    label(scene, cx, y + 56, tab.text, { size: 14, color: on ? COLORS.primary : COLORS.muted, bold: on })
+    label(scene, cx, y + 56, tab.text, { size: 14, color: on ? COLORS.accent : COLORS.muted, bold: on })
       .setOrigin(0.5)
       .setDepth(depth);
     const hit = hitArea(scene, i * w, y, w, TAB_BAR_HEIGHT, () => {

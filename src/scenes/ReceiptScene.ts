@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import type { RunResult } from '../core/RunState';
+import { COLORS } from '../ui/theme';
+import { button, hitArea, label } from '../ui/widgets';
 
 /** Game-over receipt: collected items as line items, total = score. */
 export class ReceiptScene extends Phaser.Scene {
@@ -32,18 +34,12 @@ export class ReceiptScene extends Phaser.Scene {
     y += 16;
     row('TOTAL', `${r.total}`);
 
-    const btn = this.add
-      .rectangle(GAME_WIDTH / 2, GAME_HEIGHT - 120, 240, 70, 0xff7043)
-      .setInteractive({ useHandCursor: true });
-    this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT - 120, 'Order again', { fontSize: '28px', color: '#ffffff' })
+    // Two buttons side by side: play again, or go back to the menu (item guide).
+    const by = GAME_HEIGHT - 110;
+    button(this, 130, by, 200, 64, 'Order again', () => this.scene.start(SCENES.game));
+    button(this, 350, by, 200, 64, 'Menu', () => this.scene.start(SCENES.menu), 'secondary');
+    label(this, GAME_WIDTH / 2, GAME_HEIGHT - 40, 'Back to store', { size: 18, color: COLORS.muted })
       .setOrigin(0.5);
-    btn.on('pointerdown', () => this.scene.start(SCENES.game));
-
-    const back = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT - 50, 'Back to store', { fontSize: '20px', color: '#8d6e63' })
-      .setOrigin(0.5)
-      .setInteractive({ useHandCursor: true });
-    back.on('pointerdown', () => this.scene.start(SCENES.home));
+    hitArea(this, GAME_WIDTH / 2 - 80, GAME_HEIGHT - 58, 160, 36, () => this.scene.start(SCENES.home));
   }
 }

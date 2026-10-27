@@ -20,6 +20,7 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Single difficulty curve (0-1 over 1000 m) driving spawn rate, double spawns, fall speed, swerving debuffs, camera speed and item mix
 - [x] Height zones: backdrop and banner change at 250, 500 and 800 m; receipt shows the zone reached (courthouse and clouds backdrops not yet seen in the browser)
 - [x] Ordering-app menus, first part: shared UI (`src/ui`), home storefront, scrollable item guide with Points/Buffs/Debuffs filter, bottom tab bar, "coming soon" placeholders for Orders and Promos, promo config with countdown
+- [x] Menus restyled as a bee-themed parody ("BEE MAN"): honey-yellow palette, deliver-to line and search bar on the home screen; receipt has "Order again" and "Menu" buttons side by side
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
@@ -33,6 +34,8 @@ Last updated: 2026-10-27 (core loop session)
 7. **Polish.** Screen shake, particles, combo multipliers, mobile testing.
 
 ## Decisions waiting on me
+
+- Parody name: "BEE MAN" is my placeholder pun. Keep it, or pick another? Have the final name and look checked by a lawyer before public release.
 
 - Show name and logo, brand colors, air date, hashtag and social/YouTube links (needed for the promo features and menu styling).
 - Confirm effects for lawyer suit, handkerchief, rolling pin, oyster. More debuff ideas? (see `src/items/ITEMS.md`)

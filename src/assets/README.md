@@ -30,6 +30,10 @@ Add a row for every third-party file or pack you use.
 
 One tileable (vertically repeating) image per height zone: bakery street, downtown rooftops, the courthouse, above the clouds. See `src/core/zones.ts`.
 
+## Branding
+
+The in-game delivery app is a parody called BEE MAN (see `src/ui/README.md`). It needs its own logo and a bee mascot; do not reuse any real app's logo or mascot.
+
 ## Character
 
 The playable character is a dog in a bee costume. Needs idle/flap, boost and hurt/stunned frames.

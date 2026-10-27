@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { ITEMS, describeEffect, priceLabel, type ItemKind } from '../items/itemDefs';
-import { COLORS } from '../ui/theme';
+import { COLORS, hex } from '../ui/theme';
 import { TAB_BAR_HEIGHT, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
 
 const HEADER_H = 150;
@@ -80,7 +80,7 @@ export class MenuScene extends Phaser.Scene {
       chip.bg.clear();
       chip.bg.fillStyle(on ? c.color : COLORS.surface, 1).fillRoundedRect(x, 98, w, 40, 20);
       chip.bg.lineStyle(2, c.color, 1).strokeRoundedRect(x, 98, w, 40, 20);
-      chip.text.setColor(on ? '#ffffff' : '#' + c.color.toString(16).padStart(6, '0'));
+      chip.text.setColor(on ? hex(COLORS.onPrimary) : hex(c.color));
     });
   }
 
@@ -109,7 +109,7 @@ export class MenuScene extends Phaser.Scene {
         label(this, GAME_WIDTH - 36, y + ROW_H / 2, priceLabel(item), {
           size: 22,
           bold: true,
-          color: item.kind === 'debuff' ? COLORS.debuff : item.kind === 'buff' ? COLORS.buff : COLORS.primary,
+          color: item.kind === 'debuff' ? COLORS.debuff : item.kind === 'buff' ? COLORS.buff : COLORS.accent,
         }).setOrigin(1, 0.5),
       ];
       this.list.add(row);
