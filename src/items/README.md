@@ -29,9 +29,16 @@ All durations, point values and weights are starting points to tune in playtesti
 
 The item guide screen ("menu list with prices") should read from `ITEMS` so it never drifts from the game.
 
+## How spawning works
+
+- `pickItem(heightMeters)` does a weighted random pick. Debuff weights scale up to 3x by 400 m.
+- `GameScene` spawns one item above the camera every `ITEM_RULES` interval (shrinks with height) at a random x. Items fall straight down, faster with height.
+- Collision is a box overlap with the player. `RunState.collect` applies the effect; a shield consumes itself instead of a debuff.
+- Each `ItemDef` has a placeholder `color`; buffs get a green outline, debuffs red.
+
 ## Still to build
 
-Spawner (weighted random from the top, rate rising with height), collision checks, effect handling (timers, shield consumption) and sprites.
+Sprites, pickup effects and sounds, and a Thai/English label pair per item.
 
 ## Known plan discrepancy
 

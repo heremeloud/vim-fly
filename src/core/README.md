@@ -14,11 +14,20 @@ The game's feel: physics values, input and the main loop.
 - Stop tapping and the character falls. Falling off the bottom ends the run.
 - Why not alternating taps to climb straight up? It gives no steering, so item pickups would be pure luck.
 
+## Files (continued)
+
+- `RunState.ts`: pure rules state for one run (score, active effects, collected items, receipt data). No Phaser inside.
+
 ## How the loop works now
 
-`GameScene.update` applies gravity to a vertical velocity, damps the horizontal velocity, moves a placeholder rectangle and ends the run when it passes the bottom. A tap sets vertical velocity to `flapVelocity` and horizontal velocity to `±driftVelocity`. The character wraps around the left/right edges.
+`GameScene.update` each frame: moves the player (gravity, drift, effects), moves the camera up (it never scrolls down), spawns and moves items, checks collisions, updates the HUD, and ends the run when the player falls below the bottom of the screen.
 
-Physics is hand-rolled rather than using Phaser's physics engine. Re-evaluate when item collisions need it.
+- A tap sets vertical velocity to `flapVelocity` and horizontal velocity to `±driftVelocity`. The character wraps around the left/right edges.
+- **Height** = pixels climbed / `pixelsPerMeter`. **Score** = height + item points (never below 0).
+- **Effects:** dash overrides vertical speed; helicopter keeps lift going and pulls buffs within `magnetRadius`; shield blocks the next debuff; stun ignores taps; rain cloud scales flap strength by `slowFactor`.
+- Frame time is clamped to 50 ms so a background tab can't teleport the player.
+
+Physics is hand-rolled rather than using Phaser's physics engine; items are simple box overlaps. Re-evaluate if collisions get complicated.
 
 ## Tuning
 
@@ -26,4 +35,8 @@ Everything in `PHYSICS` is a starting point. Change values, reload, and play unt
 
 ## Still to build
 
-Camera that scrolls up as the character climbs, a height/score counter, and the difficulty curve (spawn rate and debuff ratio rising with height).
+Height zones with backdrop changes, combo multipliers, and a proper tuning pass (see below).
+
+## Tuning notes
+
+An automated bot flapping every ~260 ms climbed about 150 m in 5 s. A human tapping slower will climb slower, but the difficulty ramps in `ITEM_RULES` and `pickItem` are scaled to roughly 0-400 m, so check them against real play and rescale.

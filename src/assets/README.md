@@ -26,6 +26,14 @@ Add a row for every third-party file or pack you use.
 | Sound effects | Freesound.org | Mixed, read each |
 | Music | Incompetech | Free with attribution |
 
+## Character
+
+The playable character is a dog in a bee costume. Needs idle/flap, boost and hurt/stunned frames.
+
+## Thai text
+
+The menus are set in Thailand. Pick a font with Thai glyphs (for example Noto Sans Thai, SIL OFL) and check its license before shipping.
+
 ## Animation scope
 
 About 3 animations for the character: idle/flap (4-6 frames), a boost pose, and a hurt/stunned pose. Squash-and-stretch tweens in code add charm for free.

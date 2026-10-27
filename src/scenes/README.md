@@ -6,12 +6,18 @@ Every screen. The menus are styled as a bakery food-ordering app, using the seri
 
 | Scene | File | State |
 | --- | --- | --- |
-| Boot | `BootScene.ts` | Preloads assets (none yet) then opens Home |
+| Boot | `BootScene.ts` | Generates the placeholder background texture, then opens Home |
 | Home | `HomeScene.ts` | Title and "Order now" button (placeholder) |
-| Game | `GameScene.ts` | Core loop with placeholder rectangle |
-| Receipt | `ReceiptScene.ts` | Shows the score and "Order again" |
+| Game | `GameScene.ts` | Playable loop: camera climb, falling items, HUD (placeholder rectangles) |
+| Receipt | `ReceiptScene.ts` | Line items per collected item, height and total, "Order again" |
 
 Scenes are registered in `src/main.ts`. Scene keys live in `SCENES` in `src/core/constants.ts`.
+
+## Design direction
+
+The story is set in Thailand and follows a bakery shop owner and a lawyer. The playable character is a dog in a bee costume. The menu style is inspired by the layout conventions of Thai delivery apps such as LINE MAN (storefront header, category chips, menu cards with prices, bottom tab bar, order status), but must use the series' own name, colors and logo. LINE MAN's branding is trademarked; do not copy its logo, exact green, icons or assets.
+
+Thai text needs a font with Thai glyphs; decide Thai, English or both for menu labels (see `src/assets/README.md`).
 
 ## Planned mapping: ordering-app screen to game function
 
@@ -27,5 +33,5 @@ Scenes are registered in `src/main.ts`. Scene keys live in `SCENES` in `src/core
 
 ## Conventions
 
-- Scenes pass data through `scene.start(key, data)`; the Receipt receives `{ score }`.
+- Scenes pass data through `scene.start(key, data)`; the Receipt receives `{ result }` (a `RunResult` from `src/core/RunState.ts`).
 - Keep game rules out of scenes where possible; put reusable logic in `core` or `items`.

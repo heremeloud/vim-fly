@@ -13,6 +13,10 @@ The hooks that tie the game to the series. Empty for now; nothing is built here 
 
 Keep all links, the air date and the hashtag in one config file here (for example `config.ts`) so they can be updated in one place without touching scenes.
 
+## Links to wire up
+
+Series YouTube channel and videos, the series' socials and the leads' socials. All will live in the single config file above.
+
 ## Open questions
 
 - Show title, air date, hashtag, colors and links are not decided yet.
