@@ -39,7 +39,7 @@ export class HomeScene extends Phaser.Scene {
     label(this, 72, 53, t('app.searchHint'), { size: 15, color: COLORS.muted });
     hitArea(this, 20, 42, GAME_WIDTH - 40, 44, () => this.scene.start(SCENES.menu));
 
-    label(this, GAME_WIDTH / 2, 124, `🐝🐶 ${APP.name}`, { size: 42, color: COLORS.onPrimary, bold: true }).setOrigin(0.5);
+    label(this, GAME_WIDTH / 2, 124, `🐝 ${APP.name} 🐶`, { size: 42, color: COLORS.onPrimary, bold: true }).setOrigin(0.5);
     label(this, GAME_WIDTH / 2, 162, t('app.tagline'), { size: 16, color: COLORS.onPrimary }).setOrigin(0.5);
   }
 
