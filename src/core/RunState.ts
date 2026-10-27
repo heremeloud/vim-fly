@@ -12,6 +12,8 @@ export interface RunResult {
   lines: ReceiptLine[];
   total: number;
   durationMs: number;
+  /** Highest zone reached; filled in by the game scene. */
+  zone?: string;
 }
 
 /**

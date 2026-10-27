@@ -18,18 +18,18 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Items split into three kinds (points, buffs, debuffs); cilantro and fish sauce bread are disorient debuffs; oyster added as a double-points buff
 - [x] Item rework: removed delivery car, briefcase, rain cloud, burnt bread; added lawyer suit (shield), handkerchief (cleanse), rolling pin (strong flap), planner (-150), golden retriever (+150)
 - [x] Single difficulty curve (0-1 over 1000 m) driving spawn rate, double spawns, fall speed, swerving debuffs, camera speed and item mix
+- [x] Height zones: backdrop and banner change at 250, 500 and 800 m; receipt shows the zone reached (courthouse and clouds backdrops not yet seen in the browser)
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
 
 1. **Play it by hand and tune the feel.** Edit `PHYSICS` and `ITEM_RULES` in `src/core/constants.ts`. Not yet judged by a human; a bot climbs ~150 m in 5 s, so check pacing against 30-90 s runs.
-2. **Height zones.** Backdrop changes at milestones (bakery street, rooftops, courthouse, clouds).
-3. **Ordering-app menus.** Home storefront, item guide (menu with prices), order history, promotions tab. LINE MAN-inspired layout, original branding.
-4. **Real art, animation and sound.** Dog-in-bee-costume character, Kenney packs for items; log licenses in `src/assets/README.md`.
-5. **Local best runs** (order history) using localStorage.
-6. **Leaderboard.** Supabase project, server functions with run tokens, name entry, top-scores screen.
-7. **Promo hooks.** Countdown, links, share card, "Watch the latest clip".
-8. **Polish.** Screen shake, particles, combo multipliers, mobile testing.
+2. **Ordering-app menus.** Home storefront, item guide (menu with prices), order history, promotions tab. LINE MAN-inspired layout, original branding.
+3. **Real art, animation and sound.** Dog-in-bee-costume character, Kenney packs for items; log licenses in `src/assets/README.md`.
+4. **Local best runs** (order history) using localStorage.
+5. **Leaderboard.** Supabase project, server functions with run tokens, name entry, top-scores screen.
+6. **Promo hooks.** Countdown, links, share card, "Watch the latest clip".
+7. **Polish.** Screen shake, particles, combo multipliers, mobile testing.
 
 ## Decisions waiting on me
 

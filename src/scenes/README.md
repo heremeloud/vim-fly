@@ -6,9 +6,9 @@ Every screen. The menus are styled as a bakery food-ordering app, using the seri
 
 | Scene | File | State |
 | --- | --- | --- |
-| Boot | `BootScene.ts` | Generates the placeholder background texture, then opens Home |
+| Boot | `BootScene.ts` | Generates a placeholder backdrop texture per height zone, then opens Home |
 | Home | `HomeScene.ts` | Title and "Order now" button (placeholder) |
-| Game | `GameScene.ts` | Playable loop: camera climb, falling items, HUD (placeholder rectangles) |
+| Game | `GameScene.ts` | Playable loop: camera climb, falling items, height-zone backdrops and banners, HUD (placeholder rectangles) |
 | Receipt | `ReceiptScene.ts` | Line items per collected item, height and total, "Order again" |
 
 Scenes are registered in `src/main.ts`. Scene keys live in `SCENES` in `src/core/constants.ts`.

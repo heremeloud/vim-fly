@@ -26,6 +26,10 @@ Add a row for every third-party file or pack you use.
 | Sound effects | Freesound.org | Mixed, read each |
 | Music | Incompetech | Free with attribution |
 
+## Backdrops
+
+One tileable (vertically repeating) image per height zone: bakery street, downtown rooftops, the courthouse, above the clouds. See `src/core/zones.ts`.
+
 ## Character
 
 The playable character is a dog in a bee costume. Needs idle/flap, boost and hurt/stunned frames.

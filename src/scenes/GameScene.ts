@@ -3,6 +3,7 @@ import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '..
 import { bindSteering } from '../core/input';
 import { RunState } from '../core/RunState';
 import { difficulty, ramp } from '../core/difficulty';
+import { zoneAt, zoneTextureKey, type Zone } from '../core/zones';
 import { pickItem, type ItemDef } from '../items/itemDefs';
 
 interface FallingItem {
@@ -26,6 +27,8 @@ const START_Y = GAME_HEIGHT - 200;
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.GameObjects.Rectangle;
   private bg!: Phaser.GameObjects.TileSprite;
+  private zone: Zone = zoneAt(0);
+  private banner!: Phaser.GameObjects.Text;
   private hud!: Phaser.GameObjects.Text;
   private status!: Phaser.GameObjects.Text;
   private run = new RunState();
@@ -48,10 +51,11 @@ export class GameScene extends Phaser.Scene {
     this.vx = 0;
     this.vy = PHYSICS.flapVelocity;
     this.startY = START_Y;
+    this.zone = zoneAt(0);
 
     this.cameras.main.setScroll(0, 0);
     this.bg = this.add
-      .tileSprite(0, 0, GAME_WIDTH, GAME_HEIGHT, 'bg')
+      .tileSprite(0, 0, GAME_WIDTH, GAME_HEIGHT, zoneTextureKey(this.zone))
       .setOrigin(0)
       .setScrollFactor(0)
       .setDepth(-10);
@@ -67,7 +71,30 @@ export class GameScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setDepth(20);
 
+    this.banner = this.add
+      .text(GAME_WIDTH / 2, 120, '', { fontSize: '30px', color: '#4e342e', backgroundColor: '#ffffffcc', padding: { x: 14, y: 8 } })
+      .setOrigin(0.5)
+      .setScrollFactor(0)
+      .setDepth(25)
+      .setAlpha(0);
+    this.showBanner(this.zone.label);
+
     bindSteering(this, (dir) => this.flap(dir));
+  }
+
+  private showBanner(text: string): void {
+    this.tweens.killTweensOf(this.banner);
+    this.banner.setText(text).setAlpha(1);
+    this.tweens.add({ targets: this.banner, alpha: 0, delay: 1400, duration: 600 });
+  }
+
+  /** Swap the backdrop and announce the zone when the dog climbs past a milestone. */
+  private updateZone(): void {
+    const zone = zoneAt(this.run.heightMeters);
+    if (zone.id === this.zone.id) return;
+    this.zone = zone;
+    this.bg.setTexture(zoneTextureKey(zone));
+    this.showBanner(zone.label);
   }
 
   private flap(dir: -1 | 1): void {
@@ -85,6 +112,7 @@ export class GameScene extends Phaser.Scene {
 
     this.movePlayer(dt);
     this.updateCamera(dt);
+    this.updateZone();
     this.spawnItems(dt * 1000);
     this.updateItems(dt);
     this.updateHud();
@@ -196,6 +224,6 @@ export class GameScene extends Phaser.Scene {
 
   private endRun(): void {
     this.ended = true;
-    this.scene.start(SCENES.receipt, { result: this.run.result() });
+    this.scene.start(SCENES.receipt, { result: { ...this.run.result(), zone: this.zone.label } });
   }
 }

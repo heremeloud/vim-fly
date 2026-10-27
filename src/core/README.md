@@ -35,7 +35,20 @@ Everything in `PHYSICS` is a starting point. Change values, reload, and play unt
 
 ## Still to build
 
-Height zones with backdrop changes, combo multipliers, and a proper tuning pass (see below).
+Combo multipliers, and a proper tuning pass (see below).
+
+## Height zones
+
+`zones.ts` defines the backdrop zones. Passing a milestone swaps the background and shows a banner with the zone's name. The Receipt lists the highest zone reached.
+
+| Zone | From |
+| --- | --- |
+| Bakery Street | 0 m |
+| Downtown Rooftops | 250 m |
+| The Courthouse | 500 m |
+| Above the Clouds | 800 m |
+
+The backdrops are generated placeholder tiles (`BootScene.makeBackdrop`). To add or move a zone, edit `ZONES`; to swap in real art, load a tileable image per zone in `BootScene.preload` using the key from `zoneTextureKey`.
 
 ## Difficulty curve
 

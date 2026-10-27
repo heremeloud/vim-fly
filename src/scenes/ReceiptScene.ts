@@ -23,6 +23,7 @@ export class ReceiptScene extends Phaser.Scene {
     };
 
     row('Height', `${r.heightMeters} m`);
+    if (r.zone) row('Reached', r.zone);
     for (const l of r.lines.slice(0, 12)) {
       row(`${l.label} x${l.count}`, l.points === 0 ? '-' : `${l.points > 0 ? '+' : ''}${l.points}`);
     }
