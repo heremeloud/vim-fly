@@ -40,6 +40,7 @@ Last updated: 2026-10-27 (core loop session)
 - [x] The pilot player is built into the receipt (poster with a play button, no autoplay because the game will have sound); the pop-up window stays for the Promos tab and the Express tile. Receipt spacing tightened
 - [x] Promos accounts redesigned: avatar cards (wide for official and Vimmy, side by side for the leads); only real platforms get buttons, otherwise one "soon" tag; wording says "the pilot" (Episode 1 is not out yet)
 - [x] Links live in one editable file, `src/promo/links.json`, with `npm run check:links`; the official X account (https://x.com/BakeLoveFeeling) is set; Promos header tightened; pilot card says "Ep1 coming soon"
+- [x] The social buttons are round X / Instagram / TikTok icons (SVGs in `src/assets/icons`, CC0 shapes from Simple Icons)
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)

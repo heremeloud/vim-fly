@@ -12,6 +12,7 @@ Add a row for every third-party file or pack you use.
 
 | Asset / pack | Source | License | Attribution required | Used for |
 | --- | --- | --- | --- | --- |
+| X, Instagram and TikTok icons (`src/assets/icons`) | Simple Icons (simpleicons.org) | CC0 1.0 for the shapes; the logos belong to the platforms | No; used only to link to the platforms' own pages | Social buttons on the Promos page |
 | Noto Sans Thai (Thai glyphs, weights 400 and 700) | `@fontsource/noto-sans-thai` (npm) | SIL Open Font License 1.1 | No (keep the license with the font files) | Thai text everywhere |
 
 ## Where to look

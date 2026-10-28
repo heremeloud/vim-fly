@@ -8,7 +8,7 @@ The hooks that tie the game to the series.
   - the **pilot** (YouTube, https://www.youtube.com/watch?v=NFFWV0X4i_c), played inside the game in two ways (`src/promo/pilot.ts`, `src/ui/videoPlayer.ts`):
     - **on the receipt**, the pilot window is built into the screen and shows its poster with a play button; it waits for a tap (no autoplay), so it never competes with the game's sound or streams on every game over. It disappears when you leave the receipt. When the game gets sound, pause or lower it while the pilot plays. To start by itself instead, use `autoplay: true, muted: true` in `embedPilot` (browsers only allow muted autoplay);
     - **in a pop-up window** from the Promos tab's big button and the Express tile on the home screen (with a Close button, and an "Open on YouTube" link in case embedding is ever turned off). The home "Watch the pilot now" strip opens the Promos page;
-  - the **accounts**, shown as cards with an avatar, a name and a role: the **official account** (X only) and **Vimmy** (the playable dog) as wide cards, and the **two main leads** side by side. A card only shows buttons for platforms that have a handle set; an account with nothing set yet shows a single quiet "soon" tag instead of a row of placeholders.
+  - the **accounts**, shown as cards with an avatar, a name and a role: the **official account** (X only) and **Vimmy** (the playable dog) as wide cards, and the **two main leads** side by side. The social buttons are round **icons** (X, Instagram, TikTok; see `src/assets/icons`). A card only shows an icon for a platform that has a handle set; an account with nothing set yet shows a single quiet "soon" tag instead of a row of placeholders.
 
 - `links.json`: **the file you edit**: the show's title, air date and hashtag, the pilot link, and every account (name, avatar, role, handles). See "Editing the links" below.
 - `config.ts`: reads and checks `links.json`, and provides it to the screens (plus `countdownText()` for the home screen).
@@ -56,7 +56,7 @@ Everything is in **`src/promo/links.json`**. You never need to touch the code.
 ```
 
 - **Handles:** write the username (`"BakeLoveFeeling"` or `"@BakeLoveFeeling"`), or paste the full profile link (`"https://x.com/BakeLoveFeeling"`). A link must be https and on that platform's own site. Use `null` for "not yet".
-- **Which buttons show:** an account only shows buttons for the platforms listed in its `handles`, and only the ones with a value get a button. If it lists platforms but none has a value yet, it shows one quiet "soon" tag. The official account lists only `x`; add `"instagram": null` to it later if it gets one.
+- **Which buttons show:** an account only shows icons for the platforms listed in its `handles`, and only the ones with a value get an icon button. If it lists platforms but none has a value yet, it shows one quiet "soon" tag. The official account lists only `x`; add `"instagram": null` to it later if it gets one.
 - **Pilot:** paste any normal YouTube link (watch, youtu.be or embed).
 - **Air date:** an ISO date with timezone, for example `"2026-12-01T20:00:00+07:00"`. Once it is set, the home screen shows a countdown to Episode 1 instead of "Watch the pilot now".
 - **avatar:** an emoji for now; a photo can replace it later.

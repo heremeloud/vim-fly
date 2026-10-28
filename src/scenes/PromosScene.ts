@@ -1,7 +1,10 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { t } from '../i18n';
-import { LEADS, OFFICIAL, PLATFORMS, SHOW, VIMMY, openLink, profileUrl, type Account } from '../promo/config';
+import instagramIcon from '../assets/icons/instagram.svg?no-inline';
+import tiktokIcon from '../assets/icons/tiktok.svg?no-inline';
+import xIcon from '../assets/icons/x.svg?no-inline';
+import { LEADS, OFFICIAL, PLATFORMS, SHOW, VIMMY, openLink, profileUrl, type Account, type Platform } from '../promo/config';
 import { watchPilot } from '../promo/pilot';
 import { ScrollList } from '../ui/ScrollList';
 import { COLORS } from '../ui/theme';
@@ -13,17 +16,30 @@ const CARD_W = GAME_WIDTH - 40;
 const GAP = 12;
 const HALF_W = (CARD_W - GAP) / 2;
 
+/** Round icon buttons: the button is BUTTON px across, the icon inside is ICON px. */
+const BUTTON = 36;
+const ICON = 20;
+const ICON_URLS: Record<Platform, string> = { x: xIcon, instagram: instagramIcon, tiktok: tiktokIcon };
+const iconKey = (p: Platform) => `icon-${p}`;
+
 /**
  * The Promos tab, titled with the show's name (Bake Love Feeling): the pilot, then the accounts.
  *
- * Accounts are cards with an avatar, a name and a role. A card only shows buttons for the platforms
- * that are really set up (handles in src/promo/config.ts); an account with nothing set yet shows a
- * single quiet "soon" tag instead of a row of placeholders. The official account and Vimmy are wide
+ * Accounts are cards with an avatar, a name and a role. A card only shows round icon buttons (X,
+ * Instagram, TikTok) for the platforms that are really set up (src/promo/links.json); an account with
+ * nothing set yet shows a single quiet "soon" tag instead of a row of placeholders. The official account and Vimmy are wide
  * cards; the two main leads sit side by side.
  */
 export class PromosScene extends Phaser.Scene {
   constructor() {
     super(SCENES.promos);
+  }
+
+  /** The platform icons are small SVG files, loaded once and kept for later visits. */
+  preload(): void {
+    for (const p of PLATFORMS) {
+      if (!this.textures.exists(iconKey(p.id))) this.load.svg(iconKey(p.id), ICON_URLS[p.id], { width: 128, height: 128 });
+    }
   }
 
   create(): void {
@@ -73,13 +89,13 @@ export class PromosScene extends Phaser.Scene {
     const name = label(this, x, y + 12, account.name, { size: 19, bold: true, wrap: room });
     c.add(name);
     if (account.roleKey) c.add(label(this, x, y + 12 + name.height, t(account.roleKey), { size: 13, color: COLORS.muted, wrap: room }));
-    this.buttonRow(c, x, y + h - 14 - 28, account, 'left');
+    this.buttonRow(c, x, y + h - 12 - BUTTON, account, 'left');
     return y + h;
   }
 
   /** The two main leads, side by side: avatar on top, then name, role and buttons, centered. */
   private leadsRow(c: Phaser.GameObjects.Container, y: number): number {
-    const h = 176;
+    const h = 182;
     LEADS.forEach((lead, i) => {
       const x = 20 + i * (HALF_W + GAP);
       const cx = x + HALF_W / 2;
@@ -90,7 +106,7 @@ export class PromosScene extends Phaser.Scene {
       if (lead.roleKey) {
         c.add(label(this, cx, y + 76 + name.height + 2, t(lead.roleKey), { size: 12, color: COLORS.muted, wrap: HALF_W - 20, align: 'center' }).setOrigin(0.5, 0));
       }
-      this.buttonRow(c, cx, y + h - 14 - 28, lead, 'center');
+      this.buttonRow(c, cx, y + h - 12 - BUTTON, lead, 'center');
     });
     return y + h;
   }
@@ -101,36 +117,42 @@ export class PromosScene extends Phaser.Scene {
   }
 
   /**
-   * One button per platform that has a handle. If the account has platforms but none are set up yet,
-   * a single quiet "soon" tag instead. `anchor` is the left edge (align 'left') or the center ('center').
+   * One round icon button per platform that has a handle. If the account has platforms but none are set
+   * up yet, a single quiet "soon" tag instead. `anchor` is the left edge (align 'left') or the center ('center').
    */
   private buttonRow(c: Phaser.GameObjects.Container, anchor: number, y: number, account: Account, align: 'left' | 'center'): void {
-    const active = PLATFORMS.map((p) => ({ p, url: profileUrl(p.id, account.handles[p.id]) })).filter((a) => a.url !== null);
+    const live = PLATFORMS.map((p) => ({ p, url: profileUrl(p.id, account.handles[p.id]) })).filter((a) => a.url !== null);
     const hasAny = PLATFORMS.some((p) => p.id in account.handles);
-    const pills: { text: string; url: string | null }[] = active.length > 0
-      ? active.map((a) => ({ text: a.p.name, url: a.url }))
-      : hasAny
-        ? [{ text: t('promos.soon'), url: null }]
-        : [];
 
-    // Measure each label first so the pills fit their text.
-    const sizes = pills.map((pill) => {
-      const probe = label(this, 0, 0, pill.text, { size: 13, bold: true });
+    if (live.length === 0) {
+      if (!hasAny) return;
+      // Nothing set up yet: one quiet tag.
+      const text = t('promos.soon');
+      const probe = label(this, 0, 0, text, { size: 13 });
       const w = probe.width + 24;
       probe.destroy();
-      return w;
-    });
-    const gap = 8;
-    const total = sizes.reduce((a, b) => a + b, 0) + gap * Math.max(0, pills.length - 1);
-    let x = align === 'center' ? anchor - total / 2 : anchor;
+      const x = align === 'center' ? anchor - w / 2 : anchor;
+      const top = y + (BUTTON - 28) / 2;
+      c.add(roundedBox(this, x, top, w, 28, COLORS.background, 14, COLORS.border));
+      c.add(label(this, x + w / 2, top + 14, text, { size: 13, color: COLORS.muted }).setOrigin(0.5));
+      return;
+    }
 
-    pills.forEach((pill, i) => {
-      const w = sizes[i];
-      const live = pill.url !== null;
-      c.add(roundedBox(this, x, y, w, 28, live ? COLORS.primary : COLORS.background, 14, live ? undefined : COLORS.border));
-      c.add(label(this, x + w / 2, y + 14, pill.text, { size: 13, bold: live, color: live ? COLORS.onPrimary : COLORS.muted }).setOrigin(0.5));
-      if (live) c.add(hitArea(this, x, y, w, 28, () => openLink(pill.url)));
-      x += w + gap;
-    });
+    const gap = 10;
+    const total = live.length * BUTTON + gap * (live.length - 1);
+    let x = align === 'center' ? anchor - total / 2 : anchor;
+    for (const { p, url } of live) {
+      const cx = x + BUTTON / 2;
+      const cy = y + BUTTON / 2;
+      c.add(this.add.circle(cx, cy, BUTTON / 2, COLORS.primary));
+      if (this.textures.exists(iconKey(p.id))) {
+        c.add(this.add.image(cx, cy, iconKey(p.id)).setDisplaySize(ICON, ICON));
+      } else {
+        // The icon file did not load: fall back to the platform's name.
+        c.add(label(this, cx, cy, p.name.slice(0, 2), { size: 12, bold: true, color: COLORS.onPrimary }).setOrigin(0.5));
+      }
+      c.add(hitArea(this, x, y, BUTTON, BUTTON, () => openLink(url)));
+      x += BUTTON + gap;
+    }
   }
 }
