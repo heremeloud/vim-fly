@@ -8,7 +8,7 @@ Items come in three kinds:
 - **Buffs:** power-ups that change how the run plays, for a while or until used.
 - **Debuffs:** things to dodge. They hurt your movement, your score, or both.
 
-All numbers are **starting points to tune in playtesting**. Weights are relative: 6 is twice as common as 3. As the player climbs, debuffs get more common (weights up to 3x), and points items and buffs get rarer (down to 60% and 50%), reaching full effect at 1000 m. Debuffs also swerve side to side at height. See the difficulty curve in `src/core/README.md`. In the placeholder art, points items have a gold outline, buffs green and debuffs red.
+All numbers are **starting points to tune in playtesting**. Weights are relative: 6 is twice as common as 3. As the player climbs, debuffs get more common (weights up to 2x), and points items and buffs get rarer (down to 60% and 50%), reaching full effect at 1800 m. Debuffs also swerve side to side at height. See the difficulty curve in `src/core/README.md`. In the placeholder art, points items have a gold outline, buffs green and debuffs red.
 
 ## Points items
 

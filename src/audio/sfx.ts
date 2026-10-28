@@ -229,44 +229,54 @@ export function initSfx(game: Phaser.Game): void {
   game.sound.mute = !enabled;
   const manager = webAudio(game);
   if (!manager) return; // no Web Audio (very old browser): the game stays silent
-  allowSoundOnSilentSwitch();
+  applyAudioSession(enabled);
   for (const [key, build] of Object.entries(BUILDERS)) game.cache.audio.add(key, build(manager.context));
 }
 
+type AudioSession = { type: string };
+const audioSession = (): AudioSession | undefined => (navigator as unknown as { audioSession?: AudioSession }).audioSession;
+
 /**
- * iPhones silence Web Audio while the ringer switch is on silent, unless the page is in the "playback"
- * audio category. Newer iOS lets us ask for it directly; older iOS switches category when an HTML
- * audio element plays, so a silent clip is started on the first touch.
+ * iPhones silence Web Audio while the ringer switch is on silent, unless the page is in the "playback" audio
+ * category. That category also makes iOS show the page in the Dynamic Island / Now Playing, so it is only
+ * claimed while sound is on; with sound off the page goes back to "ambient". Older iOS has no such setting:
+ * it switches category when an HTML audio element plays, so one short silent clip is played (once, never looped,
+ * or the Dynamic Island would stay up) the first time sound is on.
  */
-function allowSoundOnSilentSwitch(): void {
+function applyAudioSession(on: boolean): void {
   try {
-    const session = (navigator as unknown as { audioSession?: { type: string } }).audioSession;
-    if (session) session.type = 'playback';
+    const session = audioSession();
+    if (session) session.type = on ? 'playback' : 'ambient';
+    else if (on) playSilentClipOnce();
   } catch {
     // Not supported.
   }
-  const unlock = (): void => {
-    window.removeEventListener('touchend', unlock);
-    window.removeEventListener('click', unlock);
-    try {
-      // 0.1 s of silence: 8-bit mono WAV, 8 kHz.
-      const samples = 800;
-      const bytes = new Uint8Array(44 + samples).fill(128);
-      const view = new DataView(bytes.buffer);
-      const text = (at: number, str: string): void => [...str].forEach((c, i) => view.setUint8(at + i, c.charCodeAt(0)));
-      text(0, 'RIFF'); view.setUint32(4, 36 + samples, true); text(8, 'WAVEfmt ');
-      view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
-      view.setUint32(24, 8000, true); view.setUint32(28, 8000, true); view.setUint16(32, 1, true); view.setUint16(34, 8, true);
-      text(36, 'data'); view.setUint32(40, samples, true);
-      const el = new Audio(URL.createObjectURL(new Blob([bytes], { type: 'audio/wav' })));
-      el.loop = true;
-      void el.play().catch(() => undefined);
-    } catch {
-      // Silent clip unavailable; sound still works with the ringer on.
-    }
-  };
-  window.addEventListener('touchend', unlock);
-  window.addEventListener('click', unlock);
+}
+
+let silentClipPlayed = false;
+
+function playSilentClipOnce(): void {
+  if (silentClipPlayed) return;
+  silentClipPlayed = true;
+  try {
+    // 0.1 s of silence: 8-bit mono WAV, 8 kHz.
+    const samples = 800;
+    const bytes = new Uint8Array(44 + samples).fill(128);
+    const view = new DataView(bytes.buffer);
+    const text = (at: number, str: string): void => [...str].forEach((c, i) => view.setUint8(at + i, c.charCodeAt(0)));
+    text(0, 'RIFF'); view.setUint32(4, 36 + samples, true); text(8, 'WAVEfmt ');
+    view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+    view.setUint32(24, 8000, true); view.setUint32(28, 8000, true); view.setUint16(32, 1, true); view.setUint16(34, 8, true);
+    text(36, 'data'); view.setUint32(40, samples, true);
+    const url = URL.createObjectURL(new Blob([bytes], { type: 'audio/wav' }));
+    const el = new Audio(url);
+    el.addEventListener('ended', () => URL.revokeObjectURL(url));
+    void el.play().catch(() => {
+      silentClipPlayed = false; // blocked (no tap yet): try again on the next toggle
+    });
+  } catch {
+    // Silent clip unavailable; sound still works with the ringer on.
+  }
 }
 
 export function soundEnabled(): boolean {
@@ -277,6 +287,7 @@ export function setSoundEnabled(game: Phaser.Game, on: boolean): void {
   enabled = on;
   game.sound.mute = !on;
   if (on) void webAudio(game)?.context.resume(); // this tap is a user gesture, which iOS requires
+  applyAudioSession(on);
   try {
     localStorage.setItem(KEY, on ? 'on' : 'off');
   } catch {

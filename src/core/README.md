@@ -57,21 +57,21 @@ The full list, story context and vibes are in [ZONES.md](ZONES.md). The code is 
 
 ## Difficulty curve
 
-One number drives it all: `difficulty(height)` in `difficulty.ts` goes from 0 at the start to 1 at `DIFFICULTY.fullAtMeters` (1000 m), then stays at 1. The rise is bent by `DIFFICULTY.curve` (2 = gentle early, steep near the top; 1 = linear). Everything below is a `[start, end]` pair in `constants.ts` interpolated by it, so it is easy to retune in one place.
+One number drives it all: `difficulty(height)` in `difficulty.ts` goes from 0 at the start to 1 at `DIFFICULTY.fullAtMeters` (1800 m), then stays at 1. The rise is bent by `DIFFICULTY.curve` (2 = gentle early, steep near the top; 1 = linear). Everything below is a `[start, end]` pair in `constants.ts` interpolated by it, so it is easy to retune in one place.
 
 | What | At 0 m | At full difficulty |
 | --- | --- | --- |
 | Time between item spawns | 900 ms | 300 ms |
-| Chance of a second item per spawn | 0% | 50% |
+| Chance of a second item per spawn | 0% | 35% |
 | Item fall speed | 110 px/s | 340 px/s |
 | Debuffs swerve side to side | 0 px | 80 px |
 | Camera scroll speed | 70 px/s | 220 px/s |
-| Share of debuffs among drops | about 25% | about 64% |
-| Share of points items / buffs | 54% / 21% | 27% / 9% |
+| Share of debuffs among drops | about 27% | about 57% |
+| Share of points items / buffs | 51% / 22% | 32% / 12% |
 
 Food and power-ups get rarer and debuffs more common as you climb (`pointsWeightScale`, `buffWeightScale`, `debuffWeightScale`).
 
 ## Tuning notes
 
 - The camera auto-scrolls (`CAMERA.speed`) so the dog can't outrun the screen; if you stop flapping you fall off the bottom sooner. Set `speed` to `[0, 0]` for the old behavior.
-- A bot tapping every ~230 ms reaches about 340 m in 10 s, so a fast player hits full difficulty in about 30 s. If it feels too easy or too hard, change `DIFFICULTY.fullAtMeters` first (smaller = ramps sooner), then the individual pairs.
+- A bot tapping every ~230 ms reaches about 340 m in 10 s, so a fast player hits full difficulty in about a minute. If it feels too easy or too hard, change `DIFFICULTY.fullAtMeters` first (smaller = ramps sooner), then the individual pairs.

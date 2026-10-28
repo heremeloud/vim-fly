@@ -23,7 +23,7 @@ export const PHYSICS = {
 // 1 is linear, 2 is gentle at first and steep near the top. Every [start, end] pair below is
 // interpolated by it (see src/core/difficulty.ts).
 export const DIFFICULTY = {
-  fullAtMeters: 1000,
+  fullAtMeters: 1800,
   curve: 2,
 } as const;
 
@@ -40,10 +40,10 @@ export const ITEM_RULES = {
   size: 36,
   spawnMs: [900, 300] as const, // time between spawns
   fallSpeed: [110, 340] as const, // px/s
-  doubleSpawnChance: [0, 0.5] as const, // chance a spawn drops a second item at once
+  doubleSpawnChance: [0, 0.35] as const, // chance a spawn drops a second item at once
   debuffSway: [0, 80] as const, // debuffs swerve side to side by up to this many px
   swayRate: 2.2, // radians/s of the swerve
-  debuffWeightScale: [1, 3] as const, // multiplies debuff spawn weights
+  debuffWeightScale: [1, 2] as const, // multiplies debuff spawn weights
   pointsWeightScale: [1, 0.6] as const, // food gets rarer
   buffWeightScale: [1, 0.5] as const, // power-ups get rarer
   // Opening stretch: extra food-only drops for pure points. The chance starts at `extraChance` and fades to 0 at `untilMeters`.
