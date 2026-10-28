@@ -64,7 +64,7 @@ export const ja: Record<StringKey, string> = {
 
   'zone.ruralRoad': '田舎道',
   'zone.bakery': 'ハートウォーミング ベーカリー',
-  'zone.cafes': 'Cafe',
+  'zone.cafes': 'カフェ',
   'zone.mall': 'ショッピングモール',
   'zone.lawOffice': 'CC法律事務所',
   'zone.gym': 'ジム',
