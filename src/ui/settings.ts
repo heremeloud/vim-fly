@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT } from '../core/constants';
+import { getPlayerName } from '../leaderboard/playerName';
 import { t } from '../i18n';
 import { COLORS, FONT } from './theme';
 import { button, label, roundedBox } from './widgets';
 
-const CARD = { x: 30, y: 120, w: GAME_WIDTH - 60, h: 500 };
+const CARD = { x: 30, y: 120, w: GAME_WIDTH - 60, h: 560 };
 
 /** Settings overlay opened from the home header. For now it only shows how to play; real options come later. */
 export function openSettings(scene: Phaser.Scene): void {
@@ -23,14 +24,18 @@ export function openSettings(scene: Phaser.Scene): void {
 
   const x = CARD.x + 30;
   const w = CARD.w - 60;
-  add(label(scene, x, CARD.y + 116, t('onboard.howTitle'), { size: 18, bold: true }).setDepth(depth + 2));
+  add(label(scene, x, CARD.y + 112, t('onboard.nameLabel'), { size: 15, color: COLORS.muted, bold: true }).setDepth(depth + 2));
+  add(roundedBox(scene, x, CARD.y + 138, w, 50, COLORS.background, 14).setDepth(depth + 2));
+  add(label(scene, x + 16, CARD.y + 163, getPlayerName() ?? '—', { size: 20, bold: true, wrap: w - 32 }).setOrigin(0, 0.5).setDepth(depth + 3));
+
+  add(label(scene, x, CARD.y + 212, t('onboard.howTitle'), { size: 18, bold: true }).setDepth(depth + 2));
   const steps = [
     ['👆', t('onboard.tap')],
     ['🍞', t('onboard.catch')],
     ['💨', t('onboard.swipe')],
   ];
   steps.forEach(([icon, text], i) => {
-    const y = CARD.y + 158 + i * 76;
+    const y = CARD.y + 254 + i * 76;
     add(roundedBox(scene, x, y, w, 64, COLORS.background, 14).setDepth(depth + 2));
     add(scene.add.text(x + 28, y + 32, icon, { fontFamily: FONT.family, fontSize: '26px' }).setOrigin(0.5).setDepth(depth + 3));
     add(label(scene, x + 56, y + 32, text, { size: 14, wrap: w - 70 }).setOrigin(0, 0.5).setDepth(depth + 3));
