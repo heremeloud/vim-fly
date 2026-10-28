@@ -60,6 +60,7 @@ Other commands:
 npm run build      # type-check and produce a static build in dist/
 npm run preview    # serve the production build locally
 npm run check:i18n # check all four languages are complete (needs Node 22.6+)
+npm run check:links # check src/promo/links.json and print what every link opens
 ```
 
 ## Tech

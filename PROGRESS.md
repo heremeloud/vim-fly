@@ -39,12 +39,13 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Promos page is titled "Bake Love Feeling"; bottom tab bar is smaller (54 px, icon and label centered with equal space above and below); the pilot window shows "Loading the pilot…" until it is ready
 - [x] The pilot player is built into the receipt (poster with a play button, no autoplay because the game will have sound); the pop-up window stays for the Promos tab and the Express tile. Receipt spacing tightened
 - [x] Promos accounts redesigned: avatar cards (wide for official and Vimmy, side by side for the leads); only real platforms get buttons, otherwise one "soon" tag; wording says "the pilot" (Episode 1 is not out yet)
+- [x] Links live in one editable file, `src/promo/links.json`, with `npm run check:links`; the official X account (https://x.com/BakeLoveFeeling) is set; Promos header tightened; pilot card says "Ep1 coming soon"
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)
 
 1. **Play it by hand and tune the feel.** Edit `PHYSICS` and `ITEM_RULES` in `src/core/constants.ts`. Not yet judged by a human; a bot climbs ~150 m in 5 s, so check pacing against 30-90 s runs.
-2. **Fill in the Promos handles** (see decisions below), then story-driven items and real art.
+2. **Fill in the Promos links** in `src/promo/links.json` (see decisions below), then story-driven items and real art.
 3. **Real art, animation and sound.** Dog-in-bee-costume character, Kenney packs for items; log licenses in `src/assets/README.md`.
 4. **Local best runs** (order history) using localStorage.
 5. **Leaderboard.** Supabase project, server functions with run tokens, name entry, top-scores screen.
@@ -53,7 +54,7 @@ Last updated: 2026-10-27 (core loop session)
 
 ## Decisions waiting on me
 
-- Handles for the official account, the two leads (and their real names) and Vimmy, on X, Instagram and TikTok. The buttons say "soon" until `src/promo/config.ts` is filled in.
+- Handles for the two leads (and their real names) and Vimmy, on X, Instagram and TikTok; the official X account is set. Edit `src/promo/links.json`; accounts show "soon" until then.
 - App name: VIMMY (after the dog) is a placeholder; is that OK? Is the series title "Bake Love Feeling" exact?
 - How should "Bake Love Feeling" show up in gameplay, beyond the names? Idea: a Love meter that fills as you collect food and bursts into a short double-points "Bake Love" moment.
 - Chinese: Simplified or Traditional (or both)? Have native speakers review all Thai, Japanese and Chinese text.

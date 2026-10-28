@@ -7,8 +7,8 @@ import { ScrollList } from '../ui/ScrollList';
 import { COLORS } from '../ui/theme';
 import { TAB_BAR_HEIGHT, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
 
-const HEADER_H = 100;
-const PAD = 14;
+const HEADER_H = 72;
+const PAD = 8;
 const CARD_W = GAME_WIDTH - 40;
 const GAP = 12;
 const HALF_W = (CARD_W - GAP) / 2;
@@ -42,7 +42,7 @@ export class PromosScene extends Phaser.Scene {
 
     // Opaque header (and interactive, so taps don't reach rows scrolled underneath).
     this.add.rectangle(0, 0, GAME_WIDTH, HEADER_H, COLORS.background).setOrigin(0).setDepth(40).setInteractive();
-    label(this, 20, 28, SHOW.title, { size: 34, bold: true }).setDepth(41);
+    label(this, 20, 12, SHOW.title, { size: 34, bold: true }).setDepth(41);
     tabBar(this, 'promos');
   }
 

@@ -1,15 +1,45 @@
-import { t, type StringKey } from '../i18n';
+import { hasKey, t, type StringKey } from '../i18n';
+import raw from './links.json';
 
-// Everything about the series that the game shows, in one place.
-// Fill these in when they are decided; the screens read from here.
+// Everything about the series that the game shows. The values live in links.json (edit that file,
+// not this one); this file reads it, checks it, and offers it to the screens.
+
+// ---- What links.json contains ----
+
+type Platform = 'x' | 'instagram' | 'tiktok';
+type Handles = Partial<Record<Platform, string | null>>;
+
+interface RawAccount {
+  name?: string;
+  avatar?: string;
+  roleKey?: string;
+  handles?: Handles;
+}
+
+interface RawLinks {
+  show?: { title?: string; airDate?: string | null; hashtag?: string };
+  pilot?: { youtube?: string };
+  official?: RawAccount;
+  leads?: RawAccount[];
+  vimmy?: RawAccount;
+}
+
+const links = raw as unknown as RawLinks;
+
+/** Say what is wrong with links.json in the browser console (dev) instead of failing silently. */
+function problem(message: string): void {
+  if (import.meta.env.DEV) console.warn(`[links.json] ${message}`);
+}
+
+// ---- The show ----
 
 export const SHOW = {
-  /** The series title (placeholder spelling; confirm). */
-  title: 'Bake Love Feeling',
+  /** The series title. */
+  title: links.show?.title?.trim() || 'Bake Love Feeling',
   /** ISO date of the first episode, e.g. '2026-12-01T20:00:00+07:00'. null = not announced. */
-  airDate: null as string | null,
+  airDate: links.show?.airDate ?? null,
   /** Without the leading #, e.g. 'MySeries'. Empty = not decided. */
-  hashtag: '',
+  hashtag: links.show?.hashtag ?? '',
 } as const;
 
 /** Text for the episode countdown strip on the home screen. */
@@ -23,15 +53,26 @@ export function countdownText(now: Date = new Date()): string {
   return d > 0 ? t('countdown.days', { d, h }) : t('countdown.hours', { h });
 }
 
-// ---- Links for the Promos tab (the Bake Love Feeling page), the home screen and the receipt ----
+// ---- The pilot ----
+
+/** The 11-character video id from any common YouTube link (watch, youtu.be, embed, shorts). */
+export function youtubeId(url: string | undefined): string | null {
+  const m = (url ?? '').match(/(?:[?&]v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);
+  return m ? m[1] : null;
+}
+
+const pilotId = youtubeId(links.pilot?.youtube);
+if (!pilotId) problem('pilot.youtube is not a YouTube link');
 
 /** The pilot episode. It plays inside the game (see src/ui/videoPlayer.ts); `url` is the YouTube page. */
 export const PILOT = {
-  videoId: 'NFFWV0X4i_c',
-  url: 'https://www.youtube.com/watch?v=NFFWV0X4i_c',
+  videoId: pilotId ?? '',
+  url: pilotId ? `https://www.youtube.com/watch?v=${pilotId}` : 'https://www.youtube.com/',
 } as const;
 
-export type Platform = 'x' | 'instagram' | 'tiktok';
+// ---- Accounts ----
+
+export type { Platform, Handles };
 
 /** Platform names are brand names, so they are not translated. */
 export const PLATFORMS: readonly { id: Platform; name: string }[] = [
@@ -39,13 +80,6 @@ export const PLATFORMS: readonly { id: Platform; name: string }[] = [
   { id: 'instagram', name: 'Instagram' },
   { id: 'tiktok', name: 'TikTok' },
 ];
-
-/**
- * The platforms an account has, with handles without the @ (for example 'bakelovefeeling').
- * A platform that is listed but still null is "coming" (an account with nothing set yet shows one
- * quiet "soon" tag); a platform with a handle gets a button. Platforms not listed are not shown.
- */
-export type Handles = Partial<Record<Platform, string | null>>;
 
 export interface Account {
   id: string;
@@ -55,26 +89,65 @@ export interface Account {
   avatar: string;
   /** Optional line under the name, translated. */
   roleKey?: StringKey;
+  /**
+   * The platforms the account has. A platform listed with a handle gets a button; one listed as null
+   * is "coming" (an account with nothing set yet shows one quiet "soon" tag); one not listed is not shown.
+   */
   handles: Handles;
 }
 
-const ALL_PLATFORMS_UNSET: Handles = { x: null, instagram: null, tiktok: null };
+function toAccount(id: string, a: RawAccount | undefined, fallbackName: string): Account {
+  const roleKey = a?.roleKey;
+  if (roleKey && !hasKey(roleKey)) problem(`${id}: unknown roleKey "${roleKey}"`);
+  const handles: Handles = {};
+  for (const p of PLATFORMS) if (a?.handles && p.id in a.handles) handles[p.id] = a.handles[p.id] ?? null;
+  for (const key of Object.keys(a?.handles ?? {})) if (!PLATFORMS.some((p) => p.id === key)) problem(`${id}: unknown platform "${key}"`);
+  for (const p of PLATFORMS) {
+    const value = handles[p.id];
+    if (value && !profileUrl(p.id, value)) problem(`${id}: "${value}" is not a valid ${p.name} handle or link`);
+  }
+  return {
+    id,
+    name: a?.name?.trim() || fallbackName,
+    avatar: a?.avatar || '🙂',
+    roleKey: roleKey && hasKey(roleKey) ? roleKey : undefined,
+    handles,
+  };
+}
 
-/** TODO: fill in the handles below. Names marked TBD are placeholders. */
-// The official account is on X only.
-export const OFFICIAL: Account = { id: 'official', name: SHOW.title, avatar: '🍞', handles: { x: null } };
+export const OFFICIAL: Account = toAccount('official', links.official, SHOW.title);
 
-export const LEADS: readonly Account[] = [
-  { id: 'lead1', name: 'Lead actor 1 (name TBD)', avatar: '👩‍🍳', roleKey: 'promos.role.cheese', handles: { ...ALL_PLATFORMS_UNSET } },
-  { id: 'lead2', name: 'Lead actor 2 (name TBD)', avatar: '⚖️', roleKey: 'promos.role.noey', handles: { ...ALL_PLATFORMS_UNSET } },
-];
+export const LEADS: readonly Account[] = (links.leads ?? []).map((a, i) => toAccount(`lead${i + 1}`, a, `Lead actor ${i + 1}`));
 
 /** Vimmy, the dog in a bee costume: always the playable character. */
-export const VIMMY: Account = { id: 'vimmy', name: 'Vimmy', avatar: '🐶', roleKey: 'promos.vimmy.role', handles: { ...ALL_PLATFORMS_UNSET } };
+export const VIMMY: Account = toAccount('vimmy', links.vimmy, 'Vimmy');
 
-/** The profile page for a handle, or null if the handle is missing or not a plain username. */
-export function profileUrl(platform: Platform, handle: string | null | undefined): string | null {
-  const h = (handle ?? '').replace(/^@/, '');
+// ---- Turning handles into links ----
+
+const HOSTS: Record<Platform, string[]> = {
+  x: ['x.com', 'twitter.com'],
+  instagram: ['instagram.com'],
+  tiktok: ['tiktok.com'],
+};
+
+/**
+ * The profile page for a handle ("BakeLoveFeeling" or "@BakeLoveFeeling") or for a full https link on that
+ * platform's own site. Anything else (empty, odd characters, another website) gives null.
+ */
+export function profileUrl(platform: Platform, value: string | null | undefined): string | null {
+  const v = (value ?? '').trim();
+  if (!v) return null;
+
+  if (v.startsWith('https://')) {
+    try {
+      const url = new URL(v);
+      return HOSTS[platform].includes(url.hostname.replace(/^www\./, '')) ? url.toString() : null;
+    } catch {
+      return null;
+    }
+  }
+
+  const h = v.replace(/^@/, '');
   if (!/^[A-Za-z0-9._]{1,40}$/.test(h)) return null;
   switch (platform) {
     case 'x':

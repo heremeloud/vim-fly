@@ -62,6 +62,11 @@ function fill(text: string, params?: Record<string, string | number>): string {
   return text.replace(/\{(\w+)\}/g, (_m, k: string) => (k in params ? String(params[k]) : `{${k}}`));
 }
 
+/** True if `key` is a real string key (used to check keys written in data files). */
+export function hasKey(key: string): key is StringKey {
+  return key in en;
+}
+
 /** Translate a known key, filling {placeholders}. */
 export function t(key: StringKey, params?: Record<string, string | number>): string {
   return fill(TABLES[current][key] ?? en[key], params);

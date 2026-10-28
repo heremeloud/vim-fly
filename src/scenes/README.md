@@ -31,7 +31,7 @@ Thai text needs a font with Thai glyphs; decide Thai, English or both for menu l
 | Menu list with item "prices" | Item guide: what each item does, price = point value |
 | Order history / Top customers (the Orders tab) | Your runs and, later, the worldwide ladder |
 | Receipt | Game over: items collected as line items, total = score |
-| Promotions tab | The Bake Love Feeling page: the series, its stars, links and where to watch (see `src/promo`). Built (handles to fill in) |
+| Promotions tab | The Bake Love Feeling page: the series, its stars, links and where to watch (see `src/promo`). Built; links are edited in `src/promo/links.json` |
 
 ## Conventions
 

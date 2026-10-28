@@ -107,7 +107,7 @@ export const en = {
   'svc.ride': 'Ride',
   'home.watchPilot': '▶ Watch the pilot now',
   'promos.pilot.title': 'Watch the pilot',
-  'promos.pilot.sub': 'The pilot, on YouTube',
+  'promos.pilot.sub': 'Ep1 coming soon',
   'promos.official': 'Official account',
   'promos.leads': 'Main leads',
   'promos.role.cheese': 'Plays Cheese, the baker',

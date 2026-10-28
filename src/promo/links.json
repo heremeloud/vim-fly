@@ -1,0 +1,37 @@
+{
+  "show": {
+    "title": "Bake Love Feeling",
+    "airDate": null,
+    "hashtag": ""
+  },
+  "pilot": {
+    "youtube": "https://www.youtube.com/watch?v=NFFWV0X4i_c"
+  },
+  "official": {
+    "name": "Bake Love Feeling",
+    "avatar": "🍞",
+    "handles": {
+      "x": "BakeLoveFeeling"
+    }
+  },
+  "leads": [
+    {
+      "name": "View Benyapa",
+      "avatar": "👩‍🍳⚖️",
+      "roleKey": "promos.role.cheese",
+      "handles": { "x": null, "instagram": null, "tiktok": null }
+    },
+    {
+      "name": "Lead actor 2 (name TBD)",
+      "avatar": "⚖️",
+      "roleKey": "promos.role.noey",
+      "handles": { "x": null, "instagram": null, "tiktok": null }
+    }
+  ],
+  "vimmy": {
+    "name": "Vimmy",
+    "avatar": "🐶",
+    "roleKey": "promos.vimmy.role",
+    "handles": { "x": null, "instagram": null, "tiktok": null }
+  }
+}
