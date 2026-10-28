@@ -139,7 +139,7 @@ export const zhHant: Record<StringKey, string> = {
   'promos.copied': '複製好囉!',
   'promos.official': '官方帳號',
   'promos.leads': '主演',
-  'promos.role.cheese': '飾演 Cheese, 麵包店店主',
+  'promos.role.cheese': '飾演 Cheese, 麵包店老闆',
   'promos.role.noey': '飾演 Noey, 律師',
   'promos.vimmy.role': 'Vimmy好愛好愛Mami和Mumu喔!!!',
   'promos.soon': '馬上就來',

@@ -140,7 +140,7 @@ export const zh: Record<StringKey, string> = {
   'promos.copied': '复制好啦!',
   'promos.official': '官方账号',
   'promos.leads': '主演',
-  'promos.role.cheese': '饰演 Cheese, 面包店店主',
+  'promos.role.cheese': '饰演 Cheese, 面包店老板',
   'promos.role.noey': '饰演 Noey, 律师',
   'promos.vimmy.role': 'Vimmy好爱好爱Mami和Mumu哦!!!',
   'promos.soon': '马上就来',
