@@ -15,6 +15,10 @@ import { ReceiptScene } from './scenes/ReceiptScene';
 
 installTextResolution();
 
+// iOS Safari ignores user-scalable=no, so block the pinch gesture itself. Without this an accidental
+// pinch zooms the page and it can't be shrunk back.
+for (const type of ['gesturestart', 'gesturechange', 'gestureend']) document.addEventListener(type, (e) => e.preventDefault());
+
 function startGame(): void {
   // The canvas is RENDER_SCALE times the layout size for sharpness; see src/core/render.ts.
   const game = new Phaser.Game({
