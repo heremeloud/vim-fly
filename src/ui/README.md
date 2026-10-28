@@ -8,7 +8,7 @@ Shared building blocks for the ordering-app menus, so every screen looks like on
 - `brand.ts`: the in-game app's name, tagline, header text and the super-app service tiles (`VIMMY FLY`, Food/Mart/Express/Ride; text that changes with language is in `src/i18n`).
 - `videoPlayer.ts`: `embedVideo()` builds a player into a scene at a spot in the layout (used on the receipt); `openVideo()` plays a YouTube video in a window over the game (close button, tap outside or Escape closes it, with an "Open on YouTube" fallback link). It shows "Loading the pilot…" until the player reports it is ready, using YouTube's player messages.
 - `ScrollList.ts`: a drag/wheel scrolling list used by the Menu and Orders screens.
-- `widgets.ts`: `label` (text), `roundedBox`, `hitArea` (invisible tap target), `button` (pill button, `primary` filled or `secondary` outlined) `tabBar` (bottom navigation) and `languageButton` (the language picker, text only, no flags).
+- `widgets.ts`: `label` (text; pass `maxWidth` for any single-line text whose length depends on the language or the player, so it shrinks and ends in "…" instead of overflowing), `roundedBox`, `hitArea` (invisible tap target), `button` (pill button, `primary` filled or `secondary` outlined) `tabBar` (bottom navigation) and `languageButton` (the language picker, text only, no flags).
 
 ## Design rules: a parody, not a copy
 

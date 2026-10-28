@@ -11,7 +11,22 @@ export interface TextOpts {
   color?: number;
   bold?: boolean;
   wrap?: number;
+  /** Keep the text on one line no more than this wide: it shrinks a little, then ends in "…". For labels whose text can change with the language. */
+  maxWidth?: number;
   align?: 'left' | 'center' | 'right';
+}
+
+/** Make a single-line text fit `maxWidth`: scale it down (not below `minScale`), then trim the end with "…". */
+export function fitWidth(text: Phaser.GameObjects.Text, maxWidth: number, minScale = 0.8): Phaser.GameObjects.Text {
+  if (text.width <= maxWidth) return text;
+  const scale = Math.max(minScale, maxWidth / text.width);
+  text.setScale(scale);
+  const chars = Array.from(text.text);
+  while (chars.length > 1 && text.width * scale > maxWidth) {
+    chars.pop();
+    text.setText(chars.join('').trimEnd() + '…');
+  }
+  return text;
 }
 
 /** Text in the menu font. */
@@ -20,9 +35,9 @@ export function label(
   x: number,
   y: number,
   text: string,
-  { size = 18, color = COLORS.text, bold = false, wrap, align }: TextOpts = {},
+  { size = 18, color = COLORS.text, bold = false, wrap, maxWidth, align }: TextOpts = {},
 ): Phaser.GameObjects.Text {
-  return scene.add.text(x, y, text, {
+  const obj = scene.add.text(x, y, text, {
     fontFamily: FONT.family,
     fontSize: `${size}px`,
     fontStyle: bold ? 'bold' : 'normal',
@@ -31,6 +46,7 @@ export function label(
     align,
     padding: { top: 3, bottom: 3 }, // room for tall Thai and CJK glyphs
   });
+  return maxWidth ? fitWidth(obj, maxWidth) : obj;
 }
 
 /** A filled rounded rectangle (top-left origin). */
