@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import '@fontsource/noto-sans-thai/thai-400.css';
 import '@fontsource/noto-sans-thai/thai-700.css';
 import '@fontsource/sacramento/latin-400.css';
+import { initSfx } from './audio/sfx';
 import { GAME_WIDTH, GAME_HEIGHT } from './core/constants';
 import { RENDER_SCALE, installTextResolution } from './core/render';
 import { BootScene } from './scenes/BootScene';
@@ -28,6 +29,7 @@ function startGame(): void {
     },
     scene: [BootScene, HomeScene, MenuScene, OrdersScene, PromosScene, GameScene, ReceiptScene],
   });
+  initSfx(game);
   // Dev only: lets you poke at the game from the browser console (window.__game).
   if (import.meta.env.DEV) (window as unknown as { __game: Phaser.Game }).__game = game;
 }

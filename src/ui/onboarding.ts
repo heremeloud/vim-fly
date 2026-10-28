@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
+import { setSoundEnabled, soundEnabled } from '../audio/sfx';
 import { getPlayerName, setPlayerName, NAME_MAX } from '../leaderboard/playerName';
 import { t } from '../i18n';
 import { COLORS, FONT, hex } from './theme';
@@ -11,7 +12,7 @@ export function startOrder(scene: Phaser.Scene): void {
   else openWelcome(scene);
 }
 
-const CARD = { x: 30, y: 120, w: GAME_WIDTH - 60, h: 560 };
+const CARD = { x: 30, y: 120, w: GAME_WIDTH - 60, h: 600 };
 const INPUT = { x: CARD.x + 30, y: CARD.y + 108, w: CARD.w - 60, h: 50 };
 
 function openWelcome(scene: Phaser.Scene): void {
@@ -38,6 +39,19 @@ function openWelcome(scene: Phaser.Scene): void {
     add(roundedBox(scene, INPUT.x, y, INPUT.w, 64, COLORS.background, 14).setDepth(depth + 2));
     add(scene.add.text(INPUT.x + 28, y + 32, icon, { fontFamily: FONT.family, fontSize: '26px' }).setOrigin(0.5).setDepth(depth + 3));
     add(label(scene, INPUT.x + 56, y + 32, text, { size: 14, wrap: INPUT.w - 70 }).setOrigin(0, 0.5).setDepth(depth + 3));
+  });
+
+  // Sound starts off; this is the player's first chance to turn it on.
+  const soundY = CARD.y + 454;
+  add(roundedBox(scene, INPUT.x, soundY, INPUT.w, 50, COLORS.background, 14).setDepth(depth + 2));
+  const soundText = add(label(scene, INPUT.x + 16, soundY + 25, '', { size: 18, bold: true }).setOrigin(0, 0.5).setDepth(depth + 3));
+  const showSound = (): void => {
+    soundText.setText(`${soundEnabled() ? '🔊' : '🔇'}  ${t('settings.sound')}: ${t(soundEnabled() ? 'settings.on' : 'settings.off')}`);
+  };
+  showSound();
+  add(scene.add.rectangle(INPUT.x, soundY, INPUT.w, 50, 0x000000, 0).setOrigin(0).setDepth(depth + 4).setInteractive({ useHandCursor: true })).on('pointerup', () => {
+    setSoundEnabled(scene.game, !soundEnabled());
+    showSound();
   });
 
   // The name field is a real <input> laid over the canvas, so phones show their keyboard and IME.

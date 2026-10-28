@@ -11,7 +11,7 @@ import { COLORS, hex } from '../ui/theme';
 import { TAB_BAR_HEIGHT, button, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
 
 const HEADER_H = 150;
-const ROW_H = 76;
+const ROW_H = 58;
 const ROW_GAP = 10;
 const LIST_PAD = 14;
 
@@ -36,7 +36,7 @@ export class OrdersScene extends Phaser.Scene {
   create(): void {
     this.view = 'top';
     this.chips = [];
-    this.list = new ScrollList(this, HEADER_H, GAME_HEIGHT - TAB_BAR_HEIGHT);
+    this.list = new ScrollList(this, HEADER_H, GAME_HEIGHT - TAB_BAR_HEIGHT, true);
     this.buildList();
 
     this.add.rectangle(0, 0, GAME_WIDTH, HEADER_H, COLORS.background).setOrigin(0).setDepth(40);
@@ -120,12 +120,12 @@ export class OrdersScene extends Phaser.Scene {
     rows.forEach((row, i) => {
       const rank = i + 1;
       c.add(roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, 14, me !== null && row.name === me ? COLORS.primary : COLORS.border));
-      c.add(this.add.circle(58, y + ROW_H / 2, 24, rank === 1 ? COLORS.primary : COLORS.background));
-      c.add(label(this, 58, y + ROW_H / 2, `${rank}`, { size: 20, bold: true }).setOrigin(0.5));
-      c.add(label(this, 96, y + 12, row.name, { size: 19, bold: true, wrap: 230 }));
+      c.add(this.add.circle(52, y + ROW_H / 2, 18, rank === 1 ? COLORS.primary : COLORS.background));
+      c.add(label(this, 52, y + ROW_H / 2, `${rank}`, { size: 17, bold: true }).setOrigin(0.5));
+      c.add(label(this, 84, y + 8, row.name, { size: 17, bold: true, wrap: 230 }));
       const when = new Date(row.createdAt).toLocaleDateString(localeInfo().dateLocale, { day: 'numeric', month: 'short', year: 'numeric' });
-      c.add(label(this, 96, y + 44, when, { size: 12, color: COLORS.muted }));
-      c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2, `฿${row.score}`, { size: 22, bold: true, color: COLORS.accent }).setOrigin(1, 0.5));
+      c.add(label(this, 84, y + 34, when, { size: 12, color: COLORS.muted }));
+      c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2, `฿${row.score}`, { size: 20, bold: true, color: COLORS.accent }).setOrigin(1, 0.5));
       y += ROW_H + ROW_GAP;
     });
     this.list.setContentHeight(y + LIST_PAD);
@@ -162,15 +162,15 @@ export class OrdersScene extends Phaser.Scene {
 
     // Left badge: the rank on the ladder, or the order number in the history.
     const badge = rank !== null ? `${rank}` : '#' + run.no;
-    c.add(this.add.circle(58, y + ROW_H / 2, 24, rank === 1 ? COLORS.primary : COLORS.background));
-    c.add(label(this, 58, y + ROW_H / 2, badge, { size: rank !== null ? 20 : 15, bold: true, color: COLORS.text }).setOrigin(0.5));
+    c.add(this.add.circle(52, y + ROW_H / 2, 18, rank === 1 ? COLORS.primary : COLORS.background));
+    c.add(label(this, 52, y + ROW_H / 2, badge, { size: rank !== null ? 17 : 13, bold: true, color: COLORS.text }).setOrigin(0.5));
 
     const zone = zoneAt(ZONES.find((z) => z.id === run.zoneId)?.fromMeters ?? 0);
-    c.add(label(this, 96, y + 10, t('orders.orderNo', { n: run.no }), { size: 17, bold: true }));
+    c.add(label(this, 84, y + 7, t('orders.orderNo', { n: run.no }), { size: 16, bold: true }));
     const when = new Date(run.playedAt).toLocaleDateString(localeInfo().dateLocale, { day: 'numeric', month: 'short', year: 'numeric' });
-    c.add(label(this, 96, y + 38, `${zoneLabel(zone)} · ${run.heightMeters} m · ${when}`, { size: 12, color: COLORS.muted, wrap: 250 }));
+    c.add(label(this, 84, y + 31, `${zoneLabel(zone)} · ${run.heightMeters} m · ${when}`, { size: 12, color: COLORS.muted, wrap: 250 }));
 
-    c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2 - 8, `฿${run.score}`, { size: 22, bold: true, color: COLORS.accent }).setOrigin(1, 0.5));
-    if (isBest) c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2 + 14, `★ ${t('orders.bestBadge')}`, { size: 12, bold: true, color: COLORS.primaryDark }).setOrigin(1, 0.5));
+    c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2 - 7, `฿${run.score}`, { size: 20, bold: true, color: COLORS.accent }).setOrigin(1, 0.5));
+    if (isBest) c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2 + 12, `★ ${t('orders.bestBadge')}`, { size: 12, bold: true, color: COLORS.primaryDark }).setOrigin(1, 0.5));
   }
 }
