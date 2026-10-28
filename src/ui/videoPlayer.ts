@@ -24,9 +24,9 @@ interface Player {
  * ready (so a slow connection never looks like nothing is playing). Shared by the pop-up window
  * and the player built into the receipt.
  *
- * With `facade`, nothing from YouTube is loaded up front: the box shows the video's thumbnail with a play
- * button, which is always there at once, and the real player is created (and started) when it is tapped.
- * That keeps game-over light and means a slow connection never leaves an empty black box.
+ * With `facade`, the box shows the video's thumbnail with a play button at once while the real player loads
+ * (paused) underneath. When the player is ready the thumbnail is swapped for it, so it plays on one tap. A tap
+ * on the thumbnail before then queues the video to start as soon as the player is ready.
  */
 function createPlayer(videoId: string, { autoplay, muted, facade = false }: { autoplay: boolean; muted: boolean; facade?: boolean }): Player {
   const box = document.createElement('div');
@@ -56,6 +56,8 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
   let giveUp = 0;
   let frame: HTMLIFrameElement | null = null;
   let poster: HTMLElement | null = null;
+  let ready = false;
+  let wantPlay = false;
   // When the player is ready (or we give up waiting), drop the loading message and thumbnail and show the player.
   const hideLoading = (): void => {
     loading.remove();
@@ -85,7 +87,8 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
     });
     frame = f;
     giveUp = window.setTimeout(hideLoading, 20000); // never leave it up forever
-    box.append(f, loading);
+    box.append(f);
+    if (!facade) box.append(loading);
   };
 
   const onMessage = (e: MessageEvent) => {
@@ -99,6 +102,12 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
     const info = msg?.info as { playerState?: number } | number | undefined;
     const state = msg?.event === 'onStateChange' ? info : (info as { playerState?: number } | undefined)?.playerState;
     if (state === 1 || state === 2 || state === 0 || state === 5) hideLoading();
+    // The preloaded player is ready: swap the thumbnail for it, so it can be played with one tap on its own button.
+    if (facade && !ready && (msg?.event === 'onReady' || msg?.event === 'initialDelivery')) {
+      ready = true;
+      if (wantPlay) frame.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: [] }), YOUTUBE);
+      hideLoading();
+    }
   };
   window.addEventListener('message', onMessage);
 
@@ -138,15 +147,18 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
     } satisfies Partial<CSSStyleDeclaration>);
     play.append(triangle);
     poster.append(play);
+    // Tapped before the player is ready: show the loading message and start as soon as it is.
     const start = () => {
-      if (frame) return;
-      play.remove(); // the thumbnail stays up, under the loading message, until the player is ready
-      mountFrame(true); // created inside the tap, so the browser lets it start with sound
+      if (wantPlay) return;
+      wantPlay = true;
+      play.remove();
+      box.append(loading);
     };
     poster.addEventListener('click', start);
     poster.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') start();
     });
+    mountFrame(false); // loads in the background, under the thumbnail, so it is ready when the page is reached
     box.append(poster);
   } else {
     mountFrame(autoplay);
