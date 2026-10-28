@@ -75,7 +75,7 @@ export const en = {
   'zone.bakeLove': 'Heart Baked Love Bakery',
 
   // The last stretch of each location (see src/core/finales.ts).
-  'finale.ruralRoad': 'Car crash hour!',
+  'finale.ruralRoad': 'Don\'t crash!',
   'finale.bakery': 'Fresh from the oven!',
   'finale.cafes': 'Coffee rush!',
   'finale.mall': 'Shopping spree!',
