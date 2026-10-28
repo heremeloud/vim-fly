@@ -240,24 +240,66 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  /** `big` is for the finale announcements: the same pill, larger and bolder, more solid and on screen longer. */
+  /**
+   * `big` is for the finale announcements: a larger butter-yellow pill that pops in with a wobble and a burst of stars,
+   * then pops away. It stays up under two seconds so it never hides the play area for long.
+   */
   private showBanner(text: string, big = false): void {
     this.tweens.killTweensOf(this.banner);
-    // Drop in from above, overshoot and settle, then fade out.
     this.layoutBanner(text, big);
-    this.banner.setAlpha(0).setScale(0.6).setY(BANNER_Y - 24);
-    this.tweens.add({ targets: this.banner, alpha: big ? 0.95 : BANNER_ALPHA, scale: 1, y: BANNER_Y, duration: 350, ease: 'Back.easeOut' });
-    this.tweens.add({ targets: this.banner, alpha: 0, scale: 1.08, delay: big ? 2400 : 1300, duration: 500 });
+    if (!big) {
+      // Drop in from above, overshoot and settle, then fade out.
+      this.banner.setRotation(0).setAlpha(0).setScale(0.6).setY(BANNER_Y - 24);
+      this.tweens.add({ targets: this.banner, alpha: BANNER_ALPHA, scale: 1, y: BANNER_Y, duration: 350, ease: 'Back.easeOut' });
+      this.tweens.add({ targets: this.banner, alpha: 0, scale: 1.08, delay: 1300, duration: 500 });
+      return;
+    }
+    this.banner.setAlpha(0).setScale(0.3).setRotation(-0.2).setY(BANNER_Y);
+    this.tweens.add({ targets: this.banner, alpha: 0.95, scale: 1, rotation: 0, duration: 340, ease: 'Back.easeOut' });
+    this.tweens.add({ targets: this.banner, rotation: 0.035, duration: 80, yoyo: true, repeat: 3, delay: 340 }); // a little wobble
+    this.tweens.add({ targets: this.banner, alpha: 0, scale: 1.25, delay: 1500, duration: 280, ease: 'Cubic.easeIn' });
+    // A quick burst of stars around the pill.
+    for (let i = 0; i < 12; i++) {
+      const angle = (i / 12) * Math.PI * 2 + Math.random() * 0.3;
+      const reach = 120 + Math.random() * 90;
+      const star = this.add
+        .text(GAME_WIDTH / 2, BANNER_Y, i % 2 ? '★' : '✦', { fontFamily: FONT.family, fontSize: `${14 + Math.floor(Math.random() * 12)}px`, color: i % 3 ? '#f7bd3b' : '#ffffff', stroke: '#b98022', strokeThickness: 3 })
+        .setOrigin(0.5)
+        .setScrollFactor(0)
+        .setDepth(24)
+        .setAlpha(0)
+        .setScale(0.3);
+      this.tweens.add({
+        targets: star,
+        x: GAME_WIDTH / 2 + Math.cos(angle) * reach * 1.4,
+        y: BANNER_Y + Math.sin(angle) * reach * 0.5,
+        alpha: { from: 1, to: 0 },
+        scale: 1,
+        angle: Math.random() * 120 - 60,
+        delay: 160,
+        duration: 650,
+        ease: 'Cubic.easeOut',
+        onStart: () => star.setAlpha(1),
+        onComplete: () => star.destroy(),
+      });
+    }
   }
 
-  /** Banner text is "stage\nname" (or just the name). Lays out one compact line with a see-through pill. */
+  /** Banner text is "stage\nname" (or just the name). Lays out one compact line in a pill (larger, yellow and outlined for finales). */
   private layoutBanner(text: string, big: boolean): void {
-    const pad = big ? 48 : 28;
-    this.bannerName.setScale(1).setFontSize(big ? 28 : 17).setText(text.replace('\n', '  ·  '));
+    const pad = big ? 56 : 28;
+    this.bannerName.setScale(1).setFontSize(big ? 32 : 17).setText(text.replace('\n', '  ·  '));
     fitWidth(this.bannerName, GAME_WIDTH - 24 - pad, 0.6); // a long line shrinks to fit the pill
     const w = Math.min(GAME_WIDTH - 24, this.bannerName.displayWidth + pad);
-    const h = big ? 52 : 32;
-    this.bannerBg.clear().fillStyle(0xffffff, 1).fillRoundedRect(-w / 2, -h / 2, w, h, h / 2);
+    const h = big ? 60 : 32;
+    this.bannerBg.clear();
+    if (big) {
+      this.bannerBg.fillStyle(0x000000, 0.18).fillRoundedRect(-w / 2, -h / 2 + 4, w, h, h / 2); // soft shadow
+      this.bannerBg.fillStyle(COLORS.primary, 1).fillRoundedRect(-w / 2, -h / 2, w, h, h / 2);
+      this.bannerBg.lineStyle(4, COLORS.onPrimary, 1).strokeRoundedRect(-w / 2, -h / 2, w, h, h / 2);
+    } else {
+      this.bannerBg.fillStyle(0xffffff, 1).fillRoundedRect(-w / 2, -h / 2, w, h, h / 2);
+    }
   }
 
   private createVimmyAnimations(): void {
