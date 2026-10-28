@@ -33,6 +33,8 @@ const BG_BLEED = 32;
 const BG_BLUR_MAX = { x: 3, y: 9 } as const;
 /** Climb speed alone only blurs the backdrop up to this fraction of the full effect. */
 const BG_BLUR_SPEED_SHARE = 0.6;
+/** How quickly the blur follows its target (per second). Lower is smoother: about a second to settle. */
+const BG_BLUR_EASE = 2;
 
 const PLAYER_HITBOX_SIZE = 44;
 const PLAYER_SPRITE_SIZE = 80;
@@ -521,7 +523,7 @@ export class GameScene extends Phaser.Scene {
     sprite.tilePositionX = -BG_BLEED; // keeps the pattern where it was before the bleed
     sprite.enableFilters();
     sprite.filters!.internal.addBlur(0, 0, 0, 1);
-    sprite.renderFilters = false;
+    this.applyBackdropBlur(sprite); // starts at the current blur, so a crossfading backdrop never flashes sharp
     return sprite;
   }
 
@@ -531,16 +533,18 @@ export class GameScene extends Phaser.Scene {
    */
   private updateBackdropBlur(dt: number, d: number): void {
     const target = this.run.dashMs > 0 ? 1 : d * BG_BLUR_SPEED_SHARE;
-    this.bgBlurLevel += (target - this.bgBlurLevel) * Math.min(1, dt * 4);
+    this.bgBlurLevel += (target - this.bgBlurLevel) * (1 - Math.exp(-BG_BLUR_EASE * dt));
+    this.applyBackdropBlur(this.bg);
+    if (this.bgFade) this.applyBackdropBlur(this.bgFade);
+  }
+
+  private applyBackdropBlur(sprite: Phaser.GameObjects.TileSprite): void {
     const level = this.bgBlurLevel;
-    for (const sprite of [this.bg, this.bgFade]) {
-      if (!sprite) continue;
-      sprite.renderFilters = level > 0.03;
-      if (!sprite.renderFilters) continue;
-      const blur = sprite.filters!.internal.list[0] as Phaser.Filters.Blur;
-      blur.x = BG_BLUR_MAX.x * level;
-      blur.y = BG_BLUR_MAX.y * level;
-    }
+    sprite.renderFilters = level > 0.01;
+    if (!sprite.renderFilters) return;
+    const blur = sprite.filters!.internal.list[0] as Phaser.Filters.Blur;
+    blur.x = BG_BLUR_MAX.x * level;
+    blur.y = BG_BLUR_MAX.y * level;
   }
 
   /**
