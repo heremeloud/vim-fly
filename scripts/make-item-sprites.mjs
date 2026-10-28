@@ -10,7 +10,10 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const SIZE = 16;
-const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'assets', 'items');
+const DEFAULT_OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'assets', 'items');
+const OUT = process.argv.includes('--v2')
+  ? join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'assets', 'items-v2')
+  : DEFAULT_OUT;
 
 const PALETTE = {
   '.': null, // transparent
@@ -37,6 +40,11 @@ const PALETTE = {
   p: '#5e1670', // dark purple
   S: '#4fc3f7', // sky blue
   T: '#f48fb1', // pink
+  H: '#d99a2b', // honey / caramel
+  E: '#4f9b68', // eco-car green
+  I: '#8fd3df', // ice / glass
+  V: '#eef0bd', // pale white wine
+  v: '#c9cf8d', // white-wine shadow
 };
 
 const SPRITES = {
@@ -274,6 +282,254 @@ const SPRITES = {
   ],
 };
 
+// Story-specific second pass. These deliberately use simple, hand-placed clusters rather than
+// generated detail: each silhouette must still read when it is only 16 physical pixels wide.
+const SPRITES_V2 = {
+  pandanCustardBread: [
+    '....KKKKKK....',
+    '..KKBBBBBBKK..',
+    '.KBBCCCCCCBBK.',
+    'KBBCCGGGGCCBBK',
+    'KBCGGggggGGCBK',
+    'KBCGgGGGGgGCBK',
+    'KBCGgGCCGgGCBK',
+    'KBCGGggggGGCBK',
+    'KBBCCGGGGCCBBK',
+    '.KBBCCCCCCBBK.',
+    '..KKbbbbbbKK..',
+    '....KKKKKK....',
+  ],
+  cheeseButterBread: [
+    '....KK..KK....',
+    '..KKBBKKBBKK..',
+    '.KBBBBBBBBBBK.',
+    'KBBYBBBBBBYBBK',
+    'KBBBBYYYYBBBBK',
+    'KBBBYYYYYYBBBK',
+    'KBBYYCCCCYYBBK',
+    'KBBYCCCCCCYBBK',
+    'KBBBBYYYYBBBBK',
+    '.KBBbbbbbbBBK.',
+    '..KKbbbbbbKK..',
+    '....KKKKKK....',
+  ],
+  shiopan: [
+    '.....KKKK.....',
+    '...KKBBBBKK...',
+    '..KBBBWWBBBK..',
+    '.KBBBbBBbBBBK.',
+    'KBBBbBBBBbBBBK',
+    'KBBbBBBBBBbBBK',
+    'KBBBbBBBBbBBBK',
+    '.KBBBbbbbBBBK.',
+    '..KKBBBBBBKK..',
+    '....KKKKKK....',
+  ],
+  sandwich: [
+    '.......K.......',
+    '......KCK......',
+    '.....KCCCK.....',
+    '....KCCCCCK....',
+    '...KCCCCCCCK...',
+    '..KGGGGGGGGGK..',
+    '.KRRRRRRRRRRRK.',
+    'KYYYYYYYYYYYYYK',
+    'KCCCCCCCCCCCCCK',
+    '.KKKKKKKKKKKKK.',
+  ],
+  pasta: [
+    '....KKKKKK....',
+    '..KKWWWWWWKK..',
+    '.KWWYYYYYYWWK.',
+    'KWYYyYYyYYYYWK',
+    'KWYyUYYYUYyYWK',
+    'KWYYyYYyYYYYWK',
+    'KWYUYyYYUYyYWK',
+    '.KWYYYYYYYYWK.',
+    '..KWWWWWWWWK..',
+    '...KKLLLLKK...',
+    '.....KKKK.....',
+  ],
+  coffee: [
+    '.....L..L......',
+    '......L..L.....',
+    '..KKKKKKKK.....',
+    '.KWWUUUUWWK....',
+    '.KWUUuUUUWK.KK.',
+    '.KWUUUUUUWK.K.K',
+    '.KWWWWWWWWK.K.K',
+    '..KWWWWWWK..KK.',
+    '...KKKKKK......',
+    '..KKLLLLLLKK.H.',
+    '.KKKKKKKKKKK...',
+  ],
+  wine: [
+    '......KK.......',
+    '.....KVvK......',
+    '.....KVVK......',
+    '....KKVVKK.....',
+    '...KWWWWWWK....',
+    '...KWVVVVWK....',
+    '...KWVVVVWK....',
+    '...KWWYWWWK....',
+    '...KWYYYWWK....',
+    '...KWWYWWWK....',
+    '...KWVVVVWK....',
+    '...KWWWWWWK....',
+    '....KKKKKK.....',
+  ],
+  shrimpFriedRiceBox: [
+    '..KKKKKKKKKKKK..',
+    '.KRRRRRRRRRRRRK.',
+    'KRRrrrrrrrrrrRRK',
+    'KKKKKKKKKKKKKKKK',
+    'KYYYYyYYYYyYYYYK',
+    'KYYOOOKGKOYYOYYK',
+    'KYOOOWYYYWOOOYYK',
+    'KYYOOYYYYYOOYYYK',
+    'KYYYYYGYYYYYYYYK',
+    '.KKKKKKKKKKKKKK.',
+  ],
+  goldenRetriever: [
+    '..KKK....KKK...',
+    '.KOOOKKKKOOOK..',
+    'KOOOYYYYYYOOOK.',
+    'KOOYKYKKYKYOOK.',
+    'KOYYYYYYYYYYOK.',
+    '.KYYYCCCCYYYK..',
+    '.KYYCKKKKCYYK..',
+    '..KYCCTTCYK....',
+    '..KYYYTTYYK....',
+    '...KYYYYK......',
+    '....KKKK.......',
+  ],
+  oyster: [
+    'Y...........II..',
+    'YY...KKKKK.III..',
+    '.Y.KKLLLLLKK.I..',
+    '..KLALALALLLK...',
+    '.KLLALLALLLLK...',
+    'KDDDDDDDDDDDK...',
+    'KDWWWWWWWWWDK...',
+    'KDWWWCCWWWWDK...',
+    '.KDDWWWWWWDK....',
+    '..KKDDDDDKK.....',
+    '....KKKKK.......',
+  ],
+  lawyerSuit: [
+    '...KKK..KKK.....',
+    '..KNNNKKNNNK....',
+    '.KNNNWKKWNNNK...',
+    'KNNNNWKRKWNNNNK.',
+    'KNNNNWKRKWNNNNK.',
+    'KNNNNNKrKNNNNNK.',
+    'KNNNNNNKNNNNNNK.',
+    'KNNnNNNKNNNnNNK.',
+    'KNNNNNNKNNNNNNK.',
+    '.KKKKKKKKKKKKK..',
+  ],
+  handkerchief: [
+    '.KKKKKKKKKKK....',
+    'KSSSSSSSSSSSK...',
+    'KSWWWWWWWWWSK...',
+    'KSWLWWWWWWWSK...',
+    'KSWWLWWWWTWSK...',
+    'KSWWWLWWTTTSK...',
+    'KSWWWWLWWTWSK...',
+    'KSWWWWWLWWWSK...',
+    'KSSSSSSSSLSSK...',
+    '.KKKKKKKKKKK....',
+  ],
+  rollingPin: [
+    '.....KKKK.......',
+    '....KBBBBK......',
+    '..KKBBBBBBBBKK..',
+    '.KbbKBBbBBKbbK..',
+    'KbbbKBBBBBBKbbbK',
+    '.KbbKBBbBBKbbK..',
+    '..KKBBBBBBBBKK..',
+    '....KBBBBK......',
+    '.....KKKK.......',
+  ],
+  helicopter: [
+    '..DDDDDDDDDDDD..',
+    '.......KK.......',
+    '....KKKKKK...KK.',
+    '..KKRRRRRRKKKKK.',
+    '.KRRRSSIRRRRRRRK',
+    'KRRRSSIRRRRRRRRK',
+    '.KRRRRRRRKKKKKK.',
+    '..KKKKKKKK......',
+    '...KK....KK.....',
+  ],
+  gavelHammer: [
+    '..KKKKKKKKKK....',
+    '.KUUUUBBBBUUUK..',
+    '.KUuUUBBBBUuUK..',
+    '.KUUUUbbbbUUUK..',
+    '..KKKKKKKKKK....',
+    '......KBBK......',
+    '.....KBBK.......',
+    '....KBBK........',
+    '...KBBK.........',
+    '..KBBK..........',
+    '..KKK...........',
+    'KKUUUUKK........',
+    'KUUUUUUK........',
+    'KKKKKKKK........',
+  ],
+  cilantroBread: [
+    '...Gg..Gg.Gg....',
+    '..gGGgGGgGGgG...',
+    '...gGGGGGGg.....',
+    '..KKKKKKKKKK....',
+    '.KBBBBBBBBBBK...',
+    'KBBbBBBBBBbBBK..',
+    'KBBBBBBBBBBBBK..',
+    'KBBBbBBBBbBBBK..',
+    '.KBBBBBBBBBBK...',
+    '..KKbbbbbbKK....',
+    '....KKKKKK......',
+  ],
+  fishSauceBread: [
+    '....H.H.H.......',
+    '..KKKKKKKKKK....',
+    '.KBBBBBBBBBBK...',
+    'KBBbBBBBBBbBBK..',
+    'KBBHHBBBBHHBBK..',
+    'KBBBHHBBHHBBBK..',
+    'KBBBBHHHHBBBBK..',
+    'KBBBbHBBHbBBBK..',
+    '.KBBBBBBBBBBK...',
+    '..KKbbbbbbKK....',
+    '....KKKKKK......',
+  ],
+  planner: [
+    '..L.L.L.L.L.....',
+    '.KKKKKKKKKKK....',
+    'KPPPPPPPPPPPK...',
+    'KPPWWWWWWWPPK...',
+    'KPPWKKKKKWPPK...',
+    'KPPWWWWWWWPPK...',
+    'KPPWKKKKKWPPK...',
+    'KPPWWWWWWWPPK...',
+    'KPPWKKKKKWPPK...',
+    'KppppppppppPK...',
+    '.KKKKKKKKKKK....',
+  ],
+  carCrash: [
+    '.......Y........',
+    '......YyY.......',
+    '..KKK..Y..KKK...',
+    '.KIIIK...KIIIK..',
+    'KREEEEKKKKNNNNK.',
+    'KREEEEEEENNNNNK.',
+    'KKKKKKKKKKKKKKK.',
+    '.KWWK......KWWK.',
+    '.KKKK......KKKK.',
+  ],
+};
+
 // ---- rendering ----
 
 function toRgba(grid, id) {
@@ -338,8 +594,9 @@ function png(width, height, rgba) {
 }
 
 mkdirSync(OUT, { recursive: true });
-const ids = Object.keys(SPRITES);
-const rendered = ids.map((id) => ({ id, px: toRgba(SPRITES[id], id) }));
+const activeSprites = process.argv.includes('--v2') ? SPRITES_V2 : SPRITES;
+const ids = Object.keys(activeSprites);
+const rendered = ids.map((id) => ({ id, px: toRgba(activeSprites[id], id) }));
 for (const { id, px } of rendered) writeFileSync(join(OUT, `${id}.png`), png(SIZE, SIZE, px));
 
 // Contact sheet: 5 columns, 8x scale, on a light background.

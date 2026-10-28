@@ -17,20 +17,21 @@
   "leads": [
     {
       "name": "View Benyapa",
-      "avatar": "👩‍🍳⚖️",
-      "roleKey": "promos.role.cheese",
-      "handles": { "x": null, "instagram": null, "tiktok": null }
+      "avatar": "view.jpg",
+      "roleKey": "promos.role.noey",
+      "handles": { "x": "https://x.com/view_benyapa", "instagram": "https://www.instagram.com/view.benyapa/", "tiktok": "https://www.tiktok.com/@view.benyapa" }
     },
     {
-      "name": "Lead actor 2 (name TBD)",
-      "avatar": "⚖️",
-      "roleKey": "promos.role.noey",
-      "handles": { "x": null, "instagram": null, "tiktok": null }
+      "name": "Mim Rattanawadee",
+      "avatar": "mim.jpg",
+      "roleKey": "promos.role.cheese",
+      "handles": { "x": "https://x.com/mimrtd", "instagram": "https://www.instagram.com/mim.rattanawadee/", "tiktok": "https://www.tiktok.com/@mim.rattanawadee" }
     }
+    
   ],
   "vimmy": {
     "name": "Vimmy",
-    "avatar": "🐶",
+    "avatar": "vimmy.jpg",
     "roleKey": "promos.vimmy.role",
     "handles": { "x": null, "instagram": null, "tiktok": null }
   }

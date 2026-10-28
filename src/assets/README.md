@@ -1,6 +1,6 @@
 # assets
 
-Art, animation and sound. The 19 item sprites are original 16x16 pixel art in `items/`, drawn from text grids by `scripts/make-item-sprites.mjs` (edit the grid, rerun `node scripts/make-item-sprites.mjs`; the PNGs are overwritten). Everything else still uses placeholder shapes.
+Art, animation and sound. The active 19 item sprites are original 16x16 pixel art in `items-v2/`, drawn from story-specific text grids by `scripts/make-item-sprites.mjs` (edit the v2 grid, rerun `node scripts/make-item-sprites.mjs --v2`). The ten active zone tiles are original 480x200 pixel scenes in `zones-v2/`, composed at 120x50 and enlarged without smoothing by `scripts/make-zone-backgrounds.mjs`. The earlier `items/` art and procedural zone renderer remain as fallbacks.
 
 ## Approach
 
@@ -29,7 +29,7 @@ Add a row for every third-party file or pack you use.
 
 ## Backdrops
 
-One tileable (vertically repeating) image per height zone, ten in all, one per location in the novel (rural road, heartwarming bakery, suburban cafés, shopping mall, CC law office, fitness gym, courtroom, beach, Noey's residence, Bake Love Bakery). See `src/core/ZONES.md`.
+One tileable (vertically repeating) image per height zone, ten in all, one per location in the novel (rural road, heartwarming bakery, suburban cafés, shopping mall, CC law office, fitness gym, courtroom, beach, Noey's residence, Bake Love Bakery). The current hand-authored set is in `zones-v2/`. See `src/core/ZONES.md`.
 
 ## Branding
 

@@ -4,8 +4,9 @@ import { applyRenderScale } from '../core/render';
 import { ZONES, zoneTextureKey, type Zone } from '../core/zones';
 import { itemTextureKey } from '../items/itemSprite';
 
-// Item sprites: every PNG in src/assets/items becomes the texture `item-<id>` (see scripts/make-item-sprites.mjs).
-const ITEM_PNGS = import.meta.glob('../assets/items/*.png', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+// The story-specific v2 sprite set is hand-authored on exact 16x16 grids.
+const ITEM_PNGS = import.meta.glob(['../assets/items-v2/*.png', '!../assets/items-v2/_preview.png'], { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+const ZONE_PNGS = import.meta.glob(['../assets/zones-v2/*.png', '!../assets/zones-v2/_preview.png'], { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 
 const TILE_W = 480;
 const TILE_H = 200;
@@ -28,14 +29,19 @@ export class BootScene extends Phaser.Scene {
       const id = path.split('/').pop()!.replace('.png', '');
       if (!id.startsWith('_')) this.load.image(itemTextureKey(id), url);
     }
+    for (const [path, url] of Object.entries(ZONE_PNGS)) {
+      const id = path.split('/').pop()!.replace('.png', '');
+      if (!id.startsWith('_')) this.load.image(`bg-${id}`, url);
+    }
   }
 
   create(): void {
     // Pixel art stays crisp (no smoothing) without turning smoothing off for text, which shares the canvas.
     for (const key of this.textures.getTextureKeys()) {
-      if (key.startsWith('item-')) this.textures.get(key).setFilter(Phaser.Textures.FilterMode.NEAREST);
+      if (key.startsWith('item-') || key.startsWith('bg-')) this.textures.get(key).setFilter(Phaser.Textures.FilterMode.NEAREST);
     }
-    for (const zone of ZONES) this.makeBackdrop(zone);
+    // Keep the old procedural renderer as a safe fallback if a zone PNG is absent.
+    for (const zone of ZONES) if (!this.textures.exists(zoneTextureKey(zone))) this.makeBackdrop(zone);
     this.scene.start(SCENES.home);
   }
 

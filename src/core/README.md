@@ -53,7 +53,7 @@ All layout uses a 480x800 coordinate space, but the canvas is drawn `RENDER_SCAL
 
 The backdrops are the locations from the series' original novel: five story stages, two locations each, 200 m apart (`ZONE_SPACING_METERS`) (Rural Road, Heartwarming Bakery, Suburban Cafés, Shopping Mall, CC Law Office, Fitness Second Gym, The Courtroom, Sweet Sea Beach, Noey's Residence, Bake Love Bakery). Passing a milestone swaps the background and shows a banner with the stage and location; the Receipt lists the last location reached.
 
-The full list, story context and vibes are in [ZONES.md](ZONES.md). The code is `zones.ts`. Backdrops are generated placeholders (`BootScene.makeBackdrop`). In dev, open `/?zone=<id>` to start a run inside a zone.
+The full list, story context and vibes are in [ZONES.md](ZONES.md). The code is `zones.ts`. Active backdrops are hand-authored pixel tiles in `src/assets/zones-v2`; `BootScene.makeBackdrop` remains as a fallback. In dev, open `/?zone=<id>` to start a run inside a zone.
 
 ## Difficulty curve
 

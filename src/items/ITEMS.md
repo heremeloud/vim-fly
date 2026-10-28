@@ -15,20 +15,20 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Item | id | Points | Weight | Notes |
 | --- | --- | --- | --- | --- |
 | Pandan Custard Bread | `pandanCustardBread` | +10 | 6 | Core series food |
-| Cheese Butter Bread | `cheeseButterBread` | +100 | 2 | Milk, butter and cream cheese; a high-points item, as rare as the lunch box |
+| Cheese Butter Bread (Cheese-Noey Bread) | `cheeseButterBread` | +100 | 2 | Aroma of Love's star bread, created from milk, butter and cream cheese; a high-points item, as rare as the lunch box |
 | Shiopan | `shiopan` | +10 | 5 | |
 | Sandwich | `sandwich` | +10 | 6 | |
-| Pasta | `pasta` | +20 | 4 | Savory dish |
-| Coffee | `coffee` | +20 | 4 | Drink |
-| Wine | `wine` | +30 | 2 | Drink; premium |
-| Shrimp Fried Rice Lunch Box | `shrimpFriedRiceBox` | +100 | 2 | Rare |
+| Pasta | `pasta` | +20 | 4 | Cheese's homemade spaghetti carbonara for Noey |
+| Coffee | `coffee` | +20 | 4 | Noey's black coffee with honey |
+| Wine | `wine` | +30 | 2 | Premium white wine shared over an oyster dinner |
+| Shrimp Fried Rice Lunch Box | `shrimpFriedRiceBox` | +100 | 2 | Noey's homemade apology meal with fried shrimp; rare |
 | Golden Retriever | `goldenRetriever` | +150 | 1 | Rarest and highest; the jackpot item |
 
 ## Buffs
 
 | Item | id | Effect | Value | Weight | Notes |
 | --- | --- | --- | --- | --- | --- |
-| Oyster | `oyster` | Double points | Item points x2 for 5 s | 3 | Only doubles gains, never penalties |
+| Oyster | `oyster` | Double points | Item points x2 for 5 s | 3 | Served on ice with lemon; only doubles gains, never penalties |
 | Lawyer Suit | `lawyerSuit` | Shield | Blocks the next debuff | 3 | Replaces the briefcase |
 | Handkerchief | `handkerchief` | Cleanse | Instantly clears stun and disorient | 3 | |
 | Rolling Pin | `rollingPin` | Strong flap | Flaps at 150% strength for 5 s | 3 | Bakery tool |
