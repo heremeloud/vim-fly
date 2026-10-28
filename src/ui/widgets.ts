@@ -80,6 +80,7 @@ export function button(
   text: string,
   onTap: () => void,
   variant: 'primary' | 'secondary' = 'primary',
+  size = 24,
 ): void {
   const x = cx - w / 2;
   const y = cy - h / 2;
@@ -89,7 +90,7 @@ export function button(
   } else {
     roundedBox(scene, x, y, w, h, COLORS.surface, h / 2, COLORS.primary);
   }
-  label(scene, cx, cy, text, { size: 24, color: COLORS.onPrimary, bold: true }).setOrigin(0.5);
+  label(scene, cx, cy, text, { size, color: COLORS.onPrimary, bold: true }).setOrigin(0.5);
   hitArea(scene, x, y, w, h, onTap);
 }
 
