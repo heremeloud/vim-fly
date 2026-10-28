@@ -122,7 +122,7 @@ export class ReceiptScene extends Phaser.Scene {
     label(this, GAME_WIDTH / 2, VIDEO.y - 14, t('receipt.thanks'), { size: 13, color: COLORS.muted }).setOrigin(0.5);
     embedPilot(this, VIDEO);
     this.add
-      .text(GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 22, t('receipt.tagline'), {
+      .text(GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 32, t('receipt.tagline'), {
         fontFamily: 'Sacramento, "Brush Script MT", cursive',
         fontSize: '22px',
         color: '#8d6e63',

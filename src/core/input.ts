@@ -8,7 +8,7 @@ const LEFT_KEYS = ['LEFT', 'A'];
 const RIGHT_KEYS = ['RIGHT', 'D'];
 
 /**
- * Swipe left/right (or Shift + arrow) => emergency dash.
+ * Swipe left/right (or hold Shift while pressing an arrow key / A / D) => emergency dash.
  * Left half of the screen / left arrow / A  => -1 (flap up, drift left)
  * Right half of the screen / right arrow / D => +1 (flap up, drift right)
  *
@@ -35,7 +35,7 @@ export function bindSteering(scene: Phaser.Scene, onSteer: (dir: Steer) => void,
     const dir = LEFT_KEYS.includes(key) ? -1 : RIGHT_KEYS.includes(key) ? 1 : 0;
     if (!dir) return;
     onSteer(dir);
-    if (e.shiftKey) onSwipe?.(dir); // Shift + arrow = the same dash as a swipe
+    if (e.shiftKey) onSwipe?.(dir); // Hold Shift and press a direction key = the same dash as a swipe.
 
   };
   kb?.on('keydown', onKey);
