@@ -4,7 +4,7 @@ Score submission and the top-scores list, backed by Supabase (Postgres, free tie
 
 ## Orders tab: local runs now, ladder later
 
-Every finished run is saved as a `RunRecord` by `runStore.ts` (`LocalRunStore`, in this browser's localStorage, newest 100 runs, the best one is never dropped). The **Orders** tab shows them two ways:
+Every finished run is saved as a `RunRecord` by `runStore.ts` (`LocalRunStore`, in this browser's localStorage, only your 5 best runs are kept). The **Orders** tab shows them two ways:
 
 - **My orders:** your run history, newest first, with the best marked.
 - **Top customers:** your runs ranked by score. Ties go to the earlier run.

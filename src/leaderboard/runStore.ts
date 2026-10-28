@@ -35,7 +35,7 @@ export interface RunStore {
 }
 
 const KEY = 'vimmy-fly.runs';
-const MAX_RUNS = 100;
+const MAX_RUNS = 5;
 
 interface Saved {
   nextNo: number;
@@ -74,10 +74,9 @@ export class LocalRunStore implements RunStore {
     const record: RunRecord = { ...run, no: data.nextNo };
     data.nextNo += 1;
     data.runs.push(record);
-    // Keep the newest runs, but never drop the best one.
-    while (data.runs.length > MAX_RUNS) {
-      const best = data.runs.reduce((b, r) => (r.score > b.score ? r : b));
-      data.runs.splice(data.runs.findIndex((r) => r !== best), 1); // drop the oldest that isn't the best
+    // Keep only the best runs. Ties go to the earlier run, matching `top`.
+    if (data.runs.length > MAX_RUNS) {
+      data.runs = [...data.runs].sort((a, b) => b.score - a.score || a.no - b.no).slice(0, MAX_RUNS).sort((a, b) => a.no - b.no);
     }
     this.save(data);
     return { record, isBest: run.score > previousBest && run.score > 0 };
