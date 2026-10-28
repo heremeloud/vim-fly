@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT } from '../core/constants';
-import { setSoundEnabled, soundEnabled } from '../audio/sfx';
 import { getPlayerName } from '../leaderboard/playerName';
 import { t } from '../i18n';
 import { COLORS, FONT } from './theme';
+import { addSoundToggle } from './soundToggle';
 import { button, label, roundedBox } from './widgets';
 
 const CARD = { x: 30, y: 80, w: GAME_WIDTH - 60, h: 640 };
@@ -29,17 +29,7 @@ export function openSettings(scene: Phaser.Scene): void {
   add(roundedBox(scene, x, CARD.y + 110, w, 50, COLORS.background, 14).setDepth(depth + 2));
   add(label(scene, x + 16, CARD.y + 135, getPlayerName() ?? '—', { size: 20, bold: true, wrap: w - 32 }).setOrigin(0, 0.5).setDepth(depth + 3));
 
-  add(label(scene, x, CARD.y + 176, t('settings.sound'), { size: 15, color: COLORS.muted, bold: true }).setDepth(depth + 2));
-  add(roundedBox(scene, x, CARD.y + 202, w, 50, COLORS.background, 14).setDepth(depth + 2));
-  const soundText = add(label(scene, x + 16, CARD.y + 227, '', { size: 20, bold: true }).setOrigin(0, 0.5).setDepth(depth + 3));
-  const showSound = (): void => {
-    soundText.setText(`${soundEnabled() ? '🔊' : '🔇'}  ${t(soundEnabled() ? 'settings.on' : 'settings.off')}`);
-  };
-  showSound();
-  add(scene.add.rectangle(x, CARD.y + 202, w, 50, 0x000000, 0).setOrigin(0).setDepth(depth + 4).setInteractive({ useHandCursor: true })).on('pointerup', () => {
-    setSoundEnabled(scene.game, !soundEnabled());
-    showSound();
-  });
+  addSoundToggle(scene, add, x, CARD.y + 176, w, depth);
 
   add(label(scene, x, CARD.y + 266, t('onboard.howTitle'), { size: 18, bold: true }).setDepth(depth + 2));
   const steps = [
