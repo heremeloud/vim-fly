@@ -3,7 +3,7 @@ import type { ZoneId } from './zones';
 /**
  * Emoji that decorate each location's backdrop. Each zone has two rows of three different emoji:
  * the first row sits on the upper half of the tile, the second on the lower half (see
- * BootScene.makeBackdrop).
+ * BootScene.makeBackdrop). Emoji that show a person or body part use the light skin tone.
  */
 export const ZONE_ICONS: Record<ZoneId, [string[], string[]]> = {
   ruralRoad: [['🌾', '🚗', '🌳'], ['🚙', '🐱', '🌻']],
@@ -11,8 +11,8 @@ export const ZONE_ICONS: Record<ZoneId, [string[], string[]]> = {
   cafes: [['☕', '🍰', '🥪'], ['🧋', '🍪', '🥐']],
   mall: [['🍿', '🛍️', '🎬'], ['👗', '🧸', '🍦']],
   lawOffice: [['⚖️', '💼', '📜'], ['🖊️', '📁', '📎']],
-  gym: [['🏋️', '💪', '🥤'], ['🤸', '🥗', '👟']],
-  courtroom: [['🧑‍⚖️', '⚖️', '📜'], ['🏛️', '📚', '🖋️']],
+  gym: [['🏋🏻', '💪🏻', '🥤'], ['🤸🏻', '🥗', '👟']],
+  courtroom: [['🧑🏻‍⚖️', '⚖️', '📜'], ['🏛️', '📚', '🖋️']],
   beach: [['🐚', '🌊', '🦀'], ['⛱️', '🍹', '🌴']],
   residence: [['🏢', '🌃', '🔑'], ['🍷', '🛋️', '🌙']],
   bakeLove: [['🤎', '🤍', '🧁'], ['🍞', '🧈', '🧀']],

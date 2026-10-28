@@ -1,6 +1,6 @@
 # assets
 
-Art, animation and sound. The active item set is the complete 32x32, palette-limited collection in `items-v5/`. It is derived from the v4 art but intentionally reduced to a maximum of 20 colors per sprite so it feels less polished and more like native game pixel art. Phaser displays the sprites at 48x48 in gameplay and primary item cards using nearest-neighbour filtering, keeping them larger and crisp without increasing the source resolution. The Thai courtroom lawyer item keeps its black gown and yellow/white ceremonial ribbon but has no tie. `items-v4/` and `items-v4-sources/` remain as the previous pass and editable masters. Zone backdrops are not image files: each is a flat color, a seam line and two emoji drawn in code (`src/core/zoneIcons.ts`).
+Art, animation and sound. The active item set is the complete 32x32 collection in `items-v6/`. Phaser displays the sprites at 48x48 in gameplay and primary item cards using nearest-neighbour filtering, keeping them larger and crisp without increasing the source resolution. The Thai courtroom lawyer item keeps its black gown and yellow/white ceremonial ribbon but has no tie. Earlier passes remain available as editable references. Zone backdrops are not image files: each is a flat color, a seam line and two emoji drawn in code (`src/core/zoneIcons.ts`).
 
 ## Approach
 
@@ -40,7 +40,7 @@ The in-game delivery app is a parody of LINE MAN and Grab called VIMMY (see `src
 
 ## Character
 
-The playable character is a dog in a bee costume. Needs idle/flap, boost and hurt/stunned frames.
+The playable cocker spaniel in a bee costume is implemented in `vimmy-v1/`. Four back-view normal-flight frames animate her large fluffy ears and tiny water-blue wings. Five brief front-view buff reactions use her approved star-eyed face, with only subtle pixel-level expression changes. Four helicopter-contact frames perform a backward somersault before returning to normal flight. Full-resolution sheet masters are in `vimmy-v1-sources/`.
 
 ## Fonts for Thai, Japanese and Chinese
 

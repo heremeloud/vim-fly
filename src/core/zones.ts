@@ -63,7 +63,8 @@ export function zoneLabel(zone: Zone): string {
   return zoneName(zone.id, zone.label);
 }
 
-/** Banner text: the stage on the first line, the location below. Translated. */
-export function zoneBannerText(zone: Zone): string {
+/** Banner text: the stage on the first line, the location below. Translated. Pass the previous zone to omit the stage line when the stage hasn't changed. */
+export function zoneBannerText(zone: Zone, previous?: Zone): string {
+  if (previous && previous.stage === zone.stage) return zoneLabel(zone);
   return `${t('zone.stage', { n: zone.stage })}\n${zoneLabel(zone)}`;
 }

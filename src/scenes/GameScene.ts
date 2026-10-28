@@ -22,18 +22,28 @@ interface FallingItem {
 // Halo colors so item types read at a glance: gold points, green buff, red debuff.
 const OUTLINE = { points: 0xf9a825, buff: 0x2e7d32, debuff: 0xb71c1c } as const;
 
-const PLAYER_SIZE = 40;
+const PLAYER_HITBOX_SIZE = 40;
+const PLAYER_SPRITE_SIZE = 64;
 /** Native 32x32 sprites are displayed at 48x48 with nearest-neighbour filtering for clarity. */
 const ITEM_SPRITE_SIZE = 48;
 const START_Y = GAME_HEIGHT - 200;
+const VIMMY_FLY_ANIM = 'vimmy-fly';
+const VIMMY_FLIP_ANIM = 'vimmy-helicopter-flip';
+const BUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
+  oyster: 'vimmy-buff-oyster',
+  lawyerSuit: 'vimmy-buff-lawyerSuit',
+  handkerchief: 'vimmy-buff-handkerchief',
+  rollingPin: 'vimmy-buff-rollingPin',
+  helicopter: 'vimmy-buff-helicopter',
+};
 
 /**
- * Core loop with placeholder rectangles. Tap left/right to flap and drift,
+ * Core loop with Vimmy's animated sprite. Tap left/right to flap and drift,
  * gravity pulls down, the camera follows the climb, items fall from above.
  * Falling off the bottom of the screen ends the run.
  */
 export class GameScene extends Phaser.Scene {
-  private player!: Phaser.GameObjects.Rectangle;
+  private player!: Phaser.GameObjects.Sprite;
   private bg!: Phaser.GameObjects.TileSprite;
   private zone: Zone = zoneAt(0);
   private banner!: Phaser.GameObjects.Text;
@@ -46,6 +56,8 @@ export class GameScene extends Phaser.Scene {
   private vy = 0;
   private startY = START_Y;
   private ended = false;
+  private isFlipping = false;
+  private reactionTimer?: Phaser.Time.TimerEvent;
 
   constructor() {
     super(SCENES.game);
@@ -59,6 +71,8 @@ export class GameScene extends Phaser.Scene {
     this.vx = 0;
     this.vy = PHYSICS.flapVelocity;
     this.startY = START_Y;
+    this.isFlipping = false;
+    this.reactionTimer = undefined;
     // Dev only: open http://localhost:5173/?zone=courtroom to start the run inside a zone.
     const devZone = import.meta.env.DEV ? ZONES.find((z) => z.id === new URLSearchParams(location.search).get('zone')) : undefined;
     if (devZone) {
@@ -74,7 +88,9 @@ export class GameScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setDepth(-10);
 
-    this.player = this.add.rectangle(GAME_WIDTH / 2, START_Y, PLAYER_SIZE, PLAYER_SIZE, 0xffb300).setDepth(5);
+    this.createVimmyAnimations();
+    this.player = this.add.sprite(GAME_WIDTH / 2, START_Y, 'vimmy-fly-0').setDisplaySize(PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE).setDepth(5);
+    this.player.play(VIMMY_FLY_ANIM);
 
     this.hud = this.add
       .text(12, 10, '', { fontFamily: FONT.family, fontSize: '22px', color: '#5d4037' })
@@ -102,13 +118,60 @@ export class GameScene extends Phaser.Scene {
     this.tweens.add({ targets: this.banner, alpha: 0, delay: 1400, duration: 600 });
   }
 
+  private createVimmyAnimations(): void {
+    if (!this.anims.exists(VIMMY_FLY_ANIM)) {
+      this.anims.create({
+        key: VIMMY_FLY_ANIM,
+        frames: [0, 1, 2, 3].map((i) => ({ key: `vimmy-fly-${i}` })),
+        frameRate: 8,
+        repeat: -1,
+      });
+    }
+    if (!this.anims.exists(VIMMY_FLIP_ANIM)) {
+      this.anims.create({
+        key: VIMMY_FLIP_ANIM,
+        frames: [0, 1, 2, 3].map((i) => ({ key: `vimmy-flip-${i}` })),
+        frameRate: 10,
+        repeat: 0,
+      });
+    }
+  }
+
+  /** Contacting the helicopter plays one backward tumble, then returns to normal flight. */
+  private playHelicopterFlip(): void {
+    if (this.isFlipping) return;
+    this.isFlipping = true;
+    this.player.play(VIMMY_FLIP_ANIM, true);
+    this.player.once(Phaser.Animations.Events.ANIMATION_COMPLETE, (animation: Phaser.Animations.Animation) => {
+      if (animation.key !== VIMMY_FLIP_ANIM || !this.player.active) return;
+      this.isFlipping = false;
+      this.player.play(VIMMY_FLY_ANIM);
+    });
+  }
+
+  /** Briefly turn Vimmy toward the player when she collects one of the five buffs. */
+  private playBuffReaction(item: ItemDef): void {
+    const texture = BUFF_REACTION_TEXTURE[item.id];
+    if (!texture || this.isFlipping) return;
+
+    this.reactionTimer?.remove(false);
+    this.player.stop().setTexture(texture);
+    this.reactionTimer = this.time.delayedCall(item.id === 'helicopter' ? 280 : 560, () => {
+      this.reactionTimer = undefined;
+      if (!this.player.active || this.ended) return;
+      if (item.id === 'helicopter') this.playHelicopterFlip();
+      else this.player.play(VIMMY_FLY_ANIM);
+    });
+  }
+
   /** Swap the backdrop and announce the zone when the dog climbs past a milestone. */
   private updateZone(): void {
     const zone = zoneAt(this.run.heightMeters);
     if (zone.id === this.zone.id) return;
+    const previous = this.zone;
     this.zone = zone;
     this.bg.setTexture(zoneTextureKey(zone));
-    this.showBanner(zoneBannerText(zone));
+    this.showBanner(zoneBannerText(zone, previous));
   }
 
   private flap(dir: -1 | 1): void {
@@ -133,7 +196,7 @@ export class GameScene extends Phaser.Scene {
     this.updateHud();
 
     const cam = this.cameras.main;
-    if (this.player.y > cam.scrollY + GAME_HEIGHT + PLAYER_SIZE) this.endRun();
+    if (this.player.y > cam.scrollY + GAME_HEIGHT + PLAYER_SPRITE_SIZE) this.endRun();
   }
 
   private movePlayer(dt: number): void {
@@ -149,7 +212,7 @@ export class GameScene extends Phaser.Scene {
     this.vx *= Math.pow(PHYSICS.horizontalDrag, dt * 60);
 
     // Side walls: bounce away and stagger briefly, so hugging a wall is never a free path up.
-    const half = PLAYER_SIZE / 2;
+    const half = PLAYER_SPRITE_SIZE / 2;
     const nextX = this.player.x + this.vx * dt;
     this.player.x = Phaser.Math.Clamp(nextX, half, GAME_WIDTH - half);
     if (this.player.x !== nextX) {
@@ -211,8 +274,9 @@ export class GameScene extends Phaser.Scene {
 
       it.halo.setPosition(s.x, s.y);
 
-      const reach = (PLAYER_SIZE + Math.max(ITEM_RULES.size, it.visualSize * 0.75)) / 2;
+      const reach = (PLAYER_HITBOX_SIZE + Math.max(ITEM_RULES.size, it.visualSize * 0.75)) / 2;
       if (Math.abs(s.x - this.player.x) < reach && Math.abs(s.y - this.player.y) < reach) {
+        if (it.def.kind === 'buff') this.playBuffReaction(it.def);
         this.run.collect(it.def);
         this.remove(it);
       } else if (s.y > cam.scrollY + GAME_HEIGHT + 60) {
@@ -238,7 +302,8 @@ export class GameScene extends Phaser.Scene {
     if (this.run.slowMs > 0) bits.push(t('hud.slow'));
     if (this.run.doublePointsMs > 0) bits.push(t('hud.x2'));
     this.status.setText(bits.join('  '));
-    this.player.setFillStyle(this.run.isStunned ? 0xb0bec5 : 0xffb300);
+    if (this.run.isStunned) this.player.setTint(0xb0bec5);
+    else this.player.clearTint();
   }
 
   private endRun(): void {

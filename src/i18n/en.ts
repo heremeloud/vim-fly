@@ -22,7 +22,7 @@ export const en = {
   'countdown.hours': 'Episode 1 airs in {h}h',
 
   'menu.title': 'Menu',
-  'menu.subtitle': 'What falls from the sky, and what it does',
+  'menu.subtitle': '"Just my luck..."',
   'kind.points': 'Points',
   'kind.buff': 'Buffs',
   'kind.debuff': 'Debuffs',
@@ -31,7 +31,7 @@ export const en = {
 
 
   'orders.title': 'Orders',
-  'orders.subtitle': 'Your runs on this device',
+  'orders.subtitle': 'Leaderboard',
   'orders.tab.mine': 'My orders',
   'orders.tab.top': 'Top customers',
   'orders.orderNo': 'Order #{n}',
@@ -112,7 +112,7 @@ export const en = {
   'promos.leads': 'Main leads',
   'promos.role.cheese': 'Plays Cheese, the baker',
   'promos.role.noey': 'Plays Noey, the lawyer',
-  'promos.vimmy.role': 'Mascot of the View Mim fans',
+  'promos.vimmy.role': 'Mascot of the ViewMim fans',
   'promos.soon': 'soon',
   'hud.slow': 'SLOW',
   'effect.slow': 'Flying {p}% slower for {s}s',
