@@ -115,8 +115,7 @@ export class OrdersScene extends Phaser.Scene {
       c.add(label(this, GAME_WIDTH / 2, 120, t('orders.empty'), { size: 18, color: COLORS.muted, wrap: 340, align: 'center' }).setOrigin(0.5, 0));
       return;
     }
-    c.add(label(this, 20, LIST_PAD, t('orders.topNote'), { size: 13, color: COLORS.muted, wrap: GAME_WIDTH - 40 }));
-    let y = LIST_PAD + 38;
+    let y = LIST_PAD;
     const me = getPlayerName();
     rows.forEach((row, i) => {
       const rank = i + 1;

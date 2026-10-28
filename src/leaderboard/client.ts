@@ -19,11 +19,14 @@ export interface RunSession {
   startedAt: number;
 }
 
-/** True when the Supabase URL and public key are set in .env. */
-export const leaderboardConfigured = Boolean(URL && KEY);
+// A game running on localhost never talks to the worldwide ladder, so dev runs don't pollute it.
+const isLocalHost = ['localhost', '127.0.0.1', '[::1]', ''].includes(location.hostname) || location.hostname.endsWith('.localhost');
+
+/** True when the Supabase URL and public key are set in .env and the game is not running locally. */
+export const leaderboardConfigured = Boolean(URL && KEY) && !isLocalHost;
 
 async function request(path: string, init: RequestInit = {}): Promise<Response> {
-  if (!URL || !KEY) throw new Error('Leaderboard is not configured (.env)');
+  if (!URL || !KEY || !leaderboardConfigured) throw new Error('Leaderboard is not configured (.env) or running locally');
   const res = await fetch(`${URL}${path}`, {
     ...init,
     headers: { apikey: KEY, 'Content-Type': 'application/json', ...init.headers },
