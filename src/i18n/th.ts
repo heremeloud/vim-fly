@@ -50,7 +50,7 @@ export const th: Record<StringKey, string> = {
   'receipt.thanks': 'Thank you for playing!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': 'แชร์',
-  'receipt.shareText': 'ฉันได้ ฿{score} ใน Vimmy Fly! มาลองเอาชนะฉันสิ',
+  'receipt.shareText': 'เล่น Vimmy Fly ได้ ฿{score} แล้ว! ใครจะทำได้มากกว่าเราบ้าง? 🐶🐝\nร้านขนมปังเปิดแล้ว! 🍞🧀🧈\nฝากติดตามซีรีส์ #BakeLoveFeeling และเป็นกำลังใจให้ ViewMim ในบทเนยชีสด้วยน้า! 💕\n\n#ViewMim #วิวมิ้ม #VIMMY',
 
   'hud.shield': 'โล่',
   'hud.dash': 'พุ่ง',

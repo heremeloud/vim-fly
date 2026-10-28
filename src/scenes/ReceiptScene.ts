@@ -31,7 +31,8 @@ async function shareScore(score: number): Promise<void> {
   const url = window.location.origin + window.location.pathname;
   if (navigator.share) {
     try {
-      await navigator.share({ text, url });
+      // Link inside the text: iOS share targets often drop `text` when a separate `url` is given.
+      await navigator.share({ text: `${text}\n${url}` });
     } catch {
       // Closed without sharing.
     }

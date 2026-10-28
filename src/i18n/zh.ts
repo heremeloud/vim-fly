@@ -51,7 +51,7 @@ export const zh: Record<StringKey, string> = {
   'receipt.thanks': 'Thank you for playing!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': '分享',
-  'receipt.shareText': '我在 Vimmy Fly 拿到了 ฿{score}!你能超过我吗?',
+  'receipt.shareText': '我在 Vimmy Fly 拿到了 ฿{score}！你能打破我的纪录吗？🐶🐝\n面包店开张啦！🍞🧀🧈\n敬请期待新剧 #BakeLoveFeeling，也要多多支持饰演 NoeyCheese 的 ViewMim 哦！💕\n\n#ViewMim #วิวมิ้ม #VIMMY',
 
   'hud.shield': '护盾',
   'hud.dash': '冲刺',
