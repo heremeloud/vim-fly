@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import type { RunResult } from '../core/RunState';
 import { ZONES, zoneLabel } from '../core/zones';
-import { itemName, t } from '../i18n';
+import { itemName, localeInfo, t } from '../i18n';
 import { addItemSprite } from '../items/itemSprite';
 import { leaderboardConfigured, submitFinishedRun } from '../leaderboard/client';
 import { getPlayerName } from '../leaderboard/playerName';
@@ -17,13 +17,29 @@ import { button, label } from '../ui/widgets';
 //   scrolling item lines                          y LIST_TOP .. FOOTER_TOP
 //   fixed footer  (total, new best, the pilot player, thanks, buttons)  y FOOTER_TOP .. bottom
 const X = 50;
-const LIST_TOP = 118;
-const FOOTER_TOP = 300;
+const LIST_TOP = 126;
+const FOOTER_TOP = 350;
 /** The pilot player: 16:9, centered, under the total. */
-const VIDEO = { x: 40, y: 432, w: 400, h: 225 };
-const ROW_MIN = 30;
+const VIDEO = { x: 40, y: 461, w: 400, h: 225 };
+const ROW_MIN = 27;
 /** Native-size item icon beside each receipt line. */
-const ICON = 32;
+const ICON = 26;
+/** The paper: a sheet with torn (zigzag) top and bottom edges on a table-coloured background. */
+const PAPER = 0xfffdf7;
+const TABLE = 0xefdcc0;
+const SHEET = { x0: 20, x1: 460, top: 2, bottom: 727, tooth: 10, depth: 5 };
+/** Item lines are set a little smaller than the header and total so more of them fit before scrolling. */
+const LIST_FONT = '17px';
+
+/** Outline of the receipt paper: straight sides, zigzag top and bottom. */
+function paperOutline(dy = 0): { x: number; y: number }[] {
+  const { x0, x1, top, bottom, tooth, depth } = SHEET;
+  const teeth = Math.round((x1 - x0) / tooth);
+  const pts: { x: number; y: number }[] = [];
+  for (let i = 0; i <= teeth; i++) pts.push({ x: x0 + i * tooth, y: top + dy + (i % 2 ? depth : 0) });
+  for (let i = teeth; i >= 0; i--) pts.push({ x: x0 + i * tooth, y: bottom + dy - (i % 2 ? depth : 0) });
+  return pts;
+}
 
 /** Native share sheet where there is one (lists Instagram, TikTok, X...); otherwise a pre-filled X post. */
 async function shareScore(score: number): Promise<void> {
@@ -53,23 +69,27 @@ export class ReceiptScene extends Phaser.Scene {
 
     // Save once per run. The receipt is only opened with a result right after a run ends.
     let isBest = false;
+    let orderNo: number | null = null;
     if (data.result) {
-      isBest = runStore.add({
+      const saved = runStore.add({
         playedAt: new Date().toISOString(),
         score: r.total,
         heightMeters: r.heightMeters,
         zoneId: r.zone ?? ZONES[0].id,
         durationMs: r.durationMs,
         itemCount: r.lines.reduce((n, l) => n + l.count, 0),
-      }).isBest;
+      });
+      isBest = saved.isBest;
+      orderNo = saved.record.no;
     }
 
     /** One receipt line: the name on the left (wrapping if long), the amount on the right. Returns its height. */
     const addRow = (y: number, left: string, right: string, into?: Phaser.GameObjects.Container, itemId?: string): number => {
-      const rightText = this.add.text(GAME_WIDTH - X, y, right, mono).setOrigin(1, 0);
+      const style = into ? { ...mono, fontSize: LIST_FONT } : mono;
+      const rightText = this.add.text(GAME_WIDTH - X, y, right, style).setOrigin(1, 0);
       const indent = itemId ? ICON + 8 : 0;
       const room = GAME_WIDTH - X * 2 - rightText.width - 14 - indent;
-      const leftText = this.add.text(X + indent, y, left, { ...mono, wordWrap: { width: room, useAdvancedWrap: true } });
+      const leftText = this.add.text(X + indent, y, left, { ...style, wordWrap: { width: room, useAdvancedWrap: true } });
       // Header rows must stay one line (they sit above the list), so shrink a label that would wrap on a wider phone font.
       if (!into) {
         let size = 20;
@@ -83,6 +103,15 @@ export class ReceiptScene extends Phaser.Scene {
 
     // The item lines scroll behind opaque header and footer panels: the list sits at depth -1 and everything
     // else (the panels, then the texts and buttons created after them) is at the default depth 0.
+    this.cameras.main.setBackgroundColor(TABLE);
+    this.add.polygon(0, 0, paperOutline(3)).setOrigin(0).setFillStyle(0x000000, 0.12).setDepth(-3);
+    this.add.polygon(0, 0, paperOutline()).setOrigin(0).setFillStyle(PAPER, 1).setDepth(-2);
+    /** A dashed rule like the ones on printed receipts. */
+    const dashed = (y: number): void => {
+      const g = this.add.graphics();
+      g.fillStyle(0x8d6e63, 1);
+      for (let x = X; x < GAME_WIDTH - X; x += 8) g.fillRect(x, y, 4, 1.5);
+    };
     const list = new ScrollList(this, LIST_TOP, FOOTER_TOP);
     list.container.setDepth(-1);
     let listY = 0;
@@ -93,25 +122,30 @@ export class ReceiptScene extends Phaser.Scene {
     list.setContentHeight(listY + 8);
 
     // Fixed header.
-    this.add.rectangle(0, 0, GAME_WIDTH, LIST_TOP, COLORS.background).setOrigin(0);
-    this.add.text(GAME_WIDTH / 2, 28, t('receipt.title'), { ...mono, fontSize: '22px' }).setOrigin(0.5);
-    let hy = 52;
+    this.add.rectangle(SHEET.x0, SHEET.top + SHEET.depth, SHEET.x1 - SHEET.x0, LIST_TOP - SHEET.top - SHEET.depth, PAPER).setOrigin(0);
+    const small = { fontFamily: mono.fontFamily, fontSize: '11px', color: '#8d6e63', padding: { top: 2, bottom: 2 } };
+    if (orderNo !== null) this.add.text(X, 13, t('orders.orderNo', { n: orderNo }), small);
+    const when = new Date().toLocaleString(localeInfo().dateLocale, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    this.add.text(GAME_WIDTH - X, 13, when, small).setOrigin(1, 0);
+    this.add.text(GAME_WIDTH / 2, 40, t('receipt.title'), { ...mono, fontSize: '22px' }).setOrigin(0.5);
+    dashed(LIST_TOP - 6);
+    let hy = 58;
     hy += addRow(hy, t('receipt.height'), `${r.heightMeters} m`);
     const zone = ZONES.find((z) => z.id === r.zone);
     if (zone) addRow(hy, t('receipt.reached'), zoneLabel(zone));
 
     // Fixed footer.
-    this.add.rectangle(0, FOOTER_TOP, GAME_WIDTH, GAME_HEIGHT - FOOTER_TOP, COLORS.background).setOrigin(0);
-    this.add.rectangle(GAME_WIDTH / 2, FOOTER_TOP + 8, GAME_WIDTH - X * 2, 2, 0x4e342e);
-    addRow(FOOTER_TOP + 18, t('receipt.total'), `฿${r.total}`);
+    this.add.rectangle(SHEET.x0, FOOTER_TOP, SHEET.x1 - SHEET.x0, SHEET.bottom - SHEET.depth - FOOTER_TOP, PAPER).setOrigin(0);
+    dashed(FOOTER_TOP + 5);
+    addRow(FOOTER_TOP + 12, t('receipt.total'), `฿${r.total}`);
     if (isBest) {
-      label(this, GAME_WIDTH / 2, FOOTER_TOP + 20, `★ ${t('receipt.newBest')}`, { size: 16, bold: true, color: COLORS.accent }).setOrigin(0.5, 0);
+      label(this, GAME_WIDTH / 2, FOOTER_TOP + 14, `★ ${t('receipt.newBest')}`, { size: 16, bold: true, color: COLORS.accent }).setOrigin(0.5, 0);
     }
-    button(this, GAME_WIDTH / 2, FOOTER_TOP + 64, 110, 30, t('receipt.share'), () => void shareScore(r.total), 'secondary', 14);
+    button(this, GAME_WIDTH / 2, FOOTER_TOP + 54, 110, 30, t('receipt.share'), () => void shareScore(r.total), 'secondary', 14);
     // Send the score to the worldwide ranking (the run is already saved on this device either way).
     const name = getPlayerName();
     if (data.result && name && leaderboardConfigured) {
-      const status = label(this, GAME_WIDTH / 2, FOOTER_TOP + 84, t('receipt.sending'), { size: 12, color: COLORS.muted }).setOrigin(0.5, 0);
+      const status = label(this, GAME_WIDTH / 2, FOOTER_TOP + 72, t('receipt.sending'), { size: 12, color: COLORS.muted }).setOrigin(0.5, 0);
       void submitFinishedRun(name, r.total).then((ok) => {
         if (!status.active) return; // the player already left the receipt
         if (ok) status.setText('');
@@ -119,10 +153,10 @@ export class ReceiptScene extends Phaser.Scene {
       });
     }
     // The pilot, right here: poster with a play button (no autoplay, so it never clashes with the game's sound).
-    label(this, GAME_WIDTH / 2, VIDEO.y - 14, t('receipt.thanks'), { size: 13, color: COLORS.muted }).setOrigin(0.5);
+    label(this, GAME_WIDTH / 2, VIDEO.y - 12, t('receipt.thanks'), { size: 13, color: COLORS.muted }).setOrigin(0.5);
     embedPilot(this, VIDEO);
     this.add
-      .text(GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 43, t('receipt.tagline'), {
+      .text(GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 22, t('receipt.tagline'), {
         fontFamily: 'Sacramento, "Brush Script MT", cursive',
         fontSize: '22px',
         color: '#8d6e63',

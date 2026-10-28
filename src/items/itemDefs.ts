@@ -1,5 +1,6 @@
 import { ITEM_RULES } from '../core/constants';
 import { difficulty, ramp } from '../core/difficulty';
+import { finaleAt } from '../core/finales';
 import { zoneAt } from '../core/zones';
 import { itemName, t } from '../i18n';
 
@@ -74,9 +75,10 @@ export function pickItem(heightMeters: number, rand: () => number = Math.random,
     buff: ramp(ITEM_RULES.buffWeightScale, d),
     debuff: ramp(ITEM_RULES.debuffWeightScale, d),
   };
-  const weightOf = (i: ItemDef) => i.weight * scale[i.kind];
+  const finale = finaleAt(heightMeters);
+  const weightOf = (i: ItemDef) => i.weight * scale[i.kind] * (finale?.items[i.id] ?? 1);
   const stage = zoneAt(heightMeters).stage;
-  const pool = ITEMS.filter((i) => stage >= (i.minStage ?? 1) && (!onlyKind || i.kind === onlyKind));
+  const pool = ITEMS.filter((i) => (stage >= (i.minStage ?? 1) || (finale?.items[i.id] ?? 1) > 1) && (!onlyKind || i.kind === onlyKind));
   const total = pool.reduce((sum, i) => sum + weightOf(i), 0);
   let roll = rand() * total;
   for (const item of pool) {

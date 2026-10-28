@@ -6,10 +6,12 @@ import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '..
 import { bindSteering } from '../core/input';
 import { itemName, t, tDynamic } from '../i18n';
 import { COLORS, FONT } from '../ui/theme';
+import { fitWidth } from '../ui/widgets';
 import { RunState } from '../core/RunState';
 import { difficulty, ramp } from '../core/difficulty';
+import { FINALE_METERS, finaleAt } from '../core/finales';
 import { zoneAt, zoneBannerText, zoneTextureKey, ZONES, type Zone } from '../core/zones';
-import { pickItem, type ItemDef } from '../items/itemDefs';
+import { getItem, pickItem, type ItemDef } from '../items/itemDefs';
 import { addItemSprite, itemDisplaySize } from '../items/itemSprite';
 
 interface FallingItem {
@@ -66,6 +68,10 @@ export class GameScene extends Phaser.Scene {
   private bg!: Phaser.GameObjects.TileSprite;
   /** The previous location's backdrop, fading out on top of `bg` after a zone change. */
   private bgFade: Phaser.GameObjects.TileSprite | null = null;
+  /** The location whose finale (its last stretch) is under way, so its banner shows only once per run. */
+  private finaleZone: string | null = null;
+  /** How many of the finale's guaranteed items have been dropped so far. */
+  private finaleGiven = 0;
   private zone: Zone = zoneAt(0);
   private banner!: Phaser.GameObjects.Container;
   private bannerBg!: Phaser.GameObjects.Graphics;
@@ -104,6 +110,8 @@ export class GameScene extends Phaser.Scene {
     this.run = new RunState();
     this.items = [];
     this.bgFade = null;
+    this.finaleZone = null;
+    this.finaleGiven = 0;
     this.spawnTimerMs = 0;
     this.ended = false;
     this.swipesLeft = PHYSICS.swipeDashesPerRun;
@@ -177,12 +185,7 @@ export class GameScene extends Phaser.Scene {
     this.banner = this.add.container(GAME_WIDTH / 2, BANNER_Y, [this.bannerBg, this.bannerName]).setScrollFactor(0).setDepth(25).setAlpha(0);
     this.showBanner(zoneBannerText(this.zone));
 
-    const hint = this.add
-      .text(GAME_WIDTH / 2, GAME_HEIGHT - 60, t('hud.swipeHint'), { fontFamily: FONT.family, fontSize: '18px', color: '#4e342e', backgroundColor: '#ffffffcc', padding: { x: 10, y: 6 } })
-      .setOrigin(0.5)
-      .setScrollFactor(0)
-      .setDepth(25);
-    this.tweens.add({ targets: hint, alpha: 0, delay: 3500, duration: 600, onComplete: () => hint.destroy() });
+    this.showSwipeHint();
 
     bindSteering(this, (dir) => this.flap(dir), (dir) => this.swipeDash(dir));
 
@@ -203,6 +206,38 @@ export class GameScene extends Phaser.Scene {
         .setScrollFactor(0)
         .setDepth(30);
     }
+  }
+
+  /** Soft see-through pill near the bottom with a small caramel arrow either side that nudges outward, fading after a few seconds. */
+  private showSwipeHint(): void {
+    const text = this.add
+      .text(0, 0, t('hud.swipeHint'), { fontFamily: FONT.family, fontSize: '17px', fontStyle: 'bold', color: '#6d4c41', padding: { top: 3, bottom: 3 } })
+      .setOrigin(0.5);
+    fitWidth(text, GAME_WIDTH - 120);
+    const w = text.displayWidth + 76;
+    const h = 40;
+    const bg = this.add.graphics();
+    // Soft and see-through so the playfield shows behind it: a pale butter pill with a white rim.
+    bg.fillStyle(0xfff6e8, 0.62).fillRoundedRect(-w / 2, -h / 2, w, h, h / 2);
+    bg.lineStyle(2, 0xffffff, 0.85).strokeRoundedRect(-w / 2, -h / 2, w, h, h / 2);
+    const arrow = (dir: -1 | 1): Phaser.GameObjects.Graphics => {
+      const g = this.add.graphics().setPosition(dir * (w / 2 - 24), 0);
+      g.fillStyle(COLORS.primaryDark, 1).fillTriangle(dir * 7, 0, -dir * 5, -8, -dir * 5, 8);
+      this.tweens.add({ targets: g, x: g.x + dir * 5, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      return g;
+    };
+    const arrows = [arrow(-1), arrow(1)];
+    const hint = this.add.container(GAME_WIDTH / 2, GAME_HEIGHT - 60, [bg, text, ...arrows]).setScrollFactor(0).setDepth(25);
+    this.tweens.add({
+      targets: hint,
+      alpha: 0,
+      delay: 3500,
+      duration: 600,
+      onComplete: () => {
+        this.tweens.killTweensOf(arrows);
+        hint.destroy();
+      },
+    });
   }
 
   private showBanner(text: string): void {
@@ -301,6 +336,18 @@ export class GameScene extends Phaser.Scene {
 
   /** Swap the backdrop and announce the zone when the dog climbs past a milestone. */
   private updateZone(): void {
+    const finale = finaleAt(this.run.heightMeters);
+    if (finale && finale.zoneId !== this.finaleZone) {
+      this.showBanner(tDynamic(`finale.${finale.zoneId}`, ''));
+      this.finaleGiven = 0;
+    }
+    this.finaleZone = finale?.zoneId ?? null;
+    // Guaranteed items drop at even steps through the finale (two of them: a third and two thirds of the way).
+    const must = finale?.guaranteed;
+    if (finale && must && this.finaleGiven < must.count && this.run.heightMeters >= finale.fromMeters + (FINALE_METERS * (this.finaleGiven + 1)) / (must.count + 1)) {
+      this.finaleGiven += 1;
+      this.spawnOne(this.run.heightMeters, 0, undefined, must.id);
+    }
     const zone = zoneAt(this.run.heightMeters);
     if (zone.id === this.zone.id) return;
     const previous = this.zone;
@@ -347,7 +394,8 @@ export class GameScene extends Phaser.Scene {
     if (this.ended || this.run.isStunned || this.swipeDashDir !== 0) return;
     const power = this.run.strongFlapMs > 0 ? this.run.strongFlapFactor : 1;
     const slow = this.run.slowMs > 0 ? this.run.slowFactor : 1; // fish sauce bread: slower flaps and drift
-    this.vy = PHYSICS.flapVelocity * power * slow;
+    const finaleLift = finaleAt(this.run.heightMeters)?.flapScale ?? 1;
+    this.vy = PHYSICS.flapVelocity * power * slow * finaleLift;
     playSfx(this, 'flap', 0.5, 0.12);
     const steer = this.run.isDisoriented ? -dir : dir; // disoriented: left/right swapped
     this.vx = steer * PHYSICS.driftVelocity * slow;
@@ -401,6 +449,8 @@ export class GameScene extends Phaser.Scene {
       this.vy = Math.min(this.vy + PHYSICS.gravity * dt, PHYSICS.maxFallSpeed);
     }
     this.vx *= Math.pow(PHYSICS.horizontalDrag, dt * 60);
+    const wind = finaleAt(this.run.heightMeters)?.wind;
+    if (wind) this.vx += Math.sin(this.time.now / 1200) * wind * dt * 5; // a current that swings left and right; settles near `wind` px/s at its peak
 
     // Side walls: bounce away and stagger briefly, so hugging a wall is never a free path up.
     const half = PLAYER_SPRITE_SIZE / 2;
@@ -440,8 +490,8 @@ export class GameScene extends Phaser.Scene {
     if (h < untilMeters && Math.random() < extraChance * (1 - h / untilMeters)) this.spawnOne(h, 2, 'points');
   }
 
-  private spawnOne(heightMeters: number, row: number, onlyKind?: ItemDef['kind']): void {
-    const def = pickItem(heightMeters, Math.random, onlyKind);
+  private spawnOne(heightMeters: number, row: number, onlyKind?: ItemDef['kind'], forceId?: string): void {
+    const def = (forceId && getItem(forceId)) || pickItem(heightMeters, Math.random, onlyKind);
     const cam = this.cameras.main;
     const x = Phaser.Math.Between(40, GAME_WIDTH - 40);
     const y = cam.scrollY - 40 - row * 70;
