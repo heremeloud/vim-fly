@@ -51,6 +51,7 @@ export function openSettings(scene: Phaser.Scene): void {
     (o as Phaser.GameObjects.GameObject & { setDepth: (d: number) => void }).setDepth(depth + 3);
     items.push(o);
   });
+  add(label(scene, GAME_WIDTH / 2, CARD.y + CARD.h - 26, `v${__APP_VERSION__}`, { size: 10, color: COLORS.muted, align: 'center' }).setOrigin(0.5, 1).setDepth(depth + 3));
   add(label(scene, GAME_WIDTH / 2, CARD.y + CARD.h - 10, 'created by @heremeloud', { size: 11, color: COLORS.muted, align: 'center' }).setOrigin(0.5, 1).setDepth(depth + 3));
   scene.events.once(Phaser.Scenes.Events.SHUTDOWN, close);
 }
