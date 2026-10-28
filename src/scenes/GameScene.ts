@@ -30,9 +30,9 @@ const OUTLINE = { points: 0xf9a825, buff: 0x2e7d32, debuff: 0xb71c1c } as const;
 /** The backdrop is drawn this much past each screen edge so the blur has no bare fringe. */
 const BG_BLEED = 32;
 /** Backdrop blur at full effect (the helicopter, or the fastest climb): offsets in px, softened by a few steps. */
-const BG_BLUR_MAX = { x: 3, y: 9 } as const;
+const BG_BLUR_MAX = { x: 2, y: 5 } as const;
 /** Climb speed alone only blurs the backdrop up to this fraction of the full effect. */
-const BG_BLUR_SPEED_SHARE = 0.6;
+const BG_BLUR_SPEED_SHARE = 0.5;
 /** How quickly the blur follows its target (per second). Lower is smoother: about a second to settle. */
 const BG_BLUR_EASE = 2;
 
