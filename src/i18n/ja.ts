@@ -106,7 +106,7 @@ export const ja: Record<StringKey, string> = {
   'svc.ride': 'ライド',
   'home.watchPilot': '▶ パイロット版を観る',
   'promos.pilot.title': 'パイロット版を観る',
-  'promos.pilot.sub': '第1話をYouTubeで',
+  'promos.pilot.sub': 'パイロット版をYouTubeで',
   'promos.official': '公式アカウント',
   'promos.leads': '主演',
   'promos.role.cheese': 'ベーカリー店主チーズ役',

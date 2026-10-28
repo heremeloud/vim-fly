@@ -42,7 +42,8 @@ export const PLATFORMS: readonly { id: Platform; name: string }[] = [
 
 /**
  * The platforms an account has, with handles without the @ (for example 'bakelovefeeling').
- * Only the platforms listed here get a button. null = not set yet (the button shows "soon").
+ * A platform that is listed but still null is "coming" (an account with nothing set yet shows one
+ * quiet "soon" tag); a platform with a handle gets a button. Platforms not listed are not shown.
  */
 export type Handles = Partial<Record<Platform, string | null>>;
 
@@ -50,6 +51,8 @@ export interface Account {
   id: string;
   /** Display name. Not translated. */
   name: string;
+  /** Shown in the avatar circle: an emoji for now. A photo can replace it later. */
+  avatar: string;
   /** Optional line under the name, translated. */
   roleKey?: StringKey;
   handles: Handles;
@@ -59,15 +62,15 @@ const ALL_PLATFORMS_UNSET: Handles = { x: null, instagram: null, tiktok: null };
 
 /** TODO: fill in the handles below. Names marked TBD are placeholders. */
 // The official account is on X only.
-export const OFFICIAL: Account = { id: 'official', name: SHOW.title, handles: { x: null } };
+export const OFFICIAL: Account = { id: 'official', name: SHOW.title, avatar: '🍞', handles: { x: null } };
 
 export const LEADS: readonly Account[] = [
-  { id: 'lead1', name: 'Lead actor 1 (name TBD)', roleKey: 'promos.role.cheese', handles: { ...ALL_PLATFORMS_UNSET } },
-  { id: 'lead2', name: 'Lead actor 2 (name TBD)', roleKey: 'promos.role.noey', handles: { ...ALL_PLATFORMS_UNSET } },
+  { id: 'lead1', name: 'Lead actor 1 (name TBD)', avatar: '👩‍🍳', roleKey: 'promos.role.cheese', handles: { ...ALL_PLATFORMS_UNSET } },
+  { id: 'lead2', name: 'Lead actor 2 (name TBD)', avatar: '⚖️', roleKey: 'promos.role.noey', handles: { ...ALL_PLATFORMS_UNSET } },
 ];
 
 /** Vimmy, the dog in a bee costume: always the playable character. */
-export const VIMMY: Account = { id: 'vimmy', name: 'Vimmy', roleKey: 'promos.vimmy.role', handles: { ...ALL_PLATFORMS_UNSET } };
+export const VIMMY: Account = { id: 'vimmy', name: 'Vimmy', avatar: '🐶', roleKey: 'promos.vimmy.role', handles: { ...ALL_PLATFORMS_UNSET } };
 
 /** The profile page for a handle, or null if the handle is missing or not a plain username. */
 export function profileUrl(platform: Platform, handle: string | null | undefined): string | null {

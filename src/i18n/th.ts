@@ -106,7 +106,7 @@ export const th: Record<StringKey, string> = {
   'svc.ride': 'ไรด์',
   'home.watchPilot': '▶ ดูตอนนำร่องเลย',
   'promos.pilot.title': 'ดูตอนนำร่อง',
-  'promos.pilot.sub': 'ตอนที่ 1 บน YouTube',
+  'promos.pilot.sub': 'ตอนนำร่อง บน YouTube',
   'promos.official': 'บัญชีทางการ',
   'promos.leads': 'นักแสดงนำ',
   'promos.role.cheese': 'รับบทชีส เจ้าของร้านเบเกอรี่',

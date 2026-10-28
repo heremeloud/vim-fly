@@ -38,6 +38,7 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Service tiles do real things (Food = menu, Mart = Bake Love Feeling page, Express = pilot window, Ride = start a run); the joke pages are gone
 - [x] Promos page is titled "Bake Love Feeling"; bottom tab bar is smaller (54 px, icon and label centered with equal space above and below); the pilot window shows "Loading the pilot…" until it is ready
 - [x] The pilot player is built into the receipt (poster with a play button, no autoplay because the game will have sound); the pop-up window stays for the Promos tab and the Express tile. Receipt spacing tightened
+- [x] Promos accounts redesigned: avatar cards (wide for official and Vimmy, side by side for the leads); only real platforms get buttons, otherwise one "soon" tag; wording says "the pilot" (Episode 1 is not out yet)
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 
 ## Next up (do these in order)

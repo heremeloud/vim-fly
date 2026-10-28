@@ -10,7 +10,7 @@ Every screen. The menus are a parody of a Thai delivery app: a bee-themed app ca
 | Home | `HomeScene.ts` | Storefront: deliver-to line, language button, search bar (opens Menu), VIMMY banner (placeholder key art), service tiles (Food = menu, Mart = Bake Love Feeling page, Express = pilot window, Ride = start a run), a "Watch the pilot now" strip that opens the Bake Love Feeling page (the countdown once an air date is set), popular menu, "Order now" |
 | Menu | `MenuScene.ts` | Item guide: scrollable menu with Points / Buffs / Debuffs filter, descriptions and "prices" read from `ITEMS` |
 | Orders | `OrdersScene.ts` | The ladder tab: "My orders" (run history) and "Top customers" (ranked), from the local run store for now |
-| Promos | `PromosScene.ts` | The Bake Love Feeling page: watch the pilot (plays in a window), the official account, the two main leads and Vimmy, each with X / Instagram / TikTok buttons (the official account is X only) |
+| Promos | `PromosScene.ts` | The Bake Love Feeling page: watch the pilot (plays in a window), then account cards with avatars (the official account and Vimmy as wide cards, the two main leads side by side). Each card shows buttons only for platforms that are set up, or one quiet \"soon\" tag |
 | Game | `GameScene.ts` | Playable loop: camera climb, falling items, height-zone backdrops and stage banners (the novel's locations), HUD (placeholder rectangles) |
 | Receipt | `ReceiptScene.ts` | Zone reached, height, the item lines (a scrolling list, so a long receipt never overlaps), total, a \"new best\" star, **the pilot player right on the receipt** (poster with a play button, no autoplay), \"Order again\" and \"Menu\" buttons, and a \"Back to store\" link. Also saves the run to the order history |
 

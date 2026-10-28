@@ -107,7 +107,7 @@ export const zh: Record<StringKey, string> = {
   'svc.ride': '出行',
   'home.watchPilot': '▶ 立即观看试播集',
   'promos.pilot.title': '观看试播集',
-  'promos.pilot.sub': '第1集 YouTube 观看',
+  'promos.pilot.sub': '试播集 · YouTube 观看',
   'promos.official': '官方账号',
   'promos.leads': '主演',
   'promos.role.cheese': '饰演芝士，面包店主',
