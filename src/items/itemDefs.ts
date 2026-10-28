@@ -67,7 +67,7 @@ export function getItem(id: string): ItemDef | undefined {
  * Weighted random pick. As difficulty rises, debuffs become more common and
  * points items and buffs rarer (see ITEM_RULES in core/constants.ts).
  */
-export function pickItem(heightMeters: number, rand: () => number = Math.random): ItemDef {
+export function pickItem(heightMeters: number, rand: () => number = Math.random, onlyKind?: ItemDef['kind']): ItemDef {
   const d = difficulty(heightMeters);
   const scale = {
     points: ramp(ITEM_RULES.pointsWeightScale, d),
@@ -76,7 +76,7 @@ export function pickItem(heightMeters: number, rand: () => number = Math.random)
   };
   const weightOf = (i: ItemDef) => i.weight * scale[i.kind];
   const stage = zoneAt(heightMeters).stage;
-  const pool = ITEMS.filter((i) => stage >= (i.minStage ?? 1));
+  const pool = ITEMS.filter((i) => stage >= (i.minStage ?? 1) && (!onlyKind || i.kind === onlyKind));
   const total = pool.reduce((sum, i) => sum + weightOf(i), 0);
   let roll = rand() * total;
   for (const item of pool) {

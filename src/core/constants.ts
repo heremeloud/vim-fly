@@ -46,6 +46,8 @@ export const ITEM_RULES = {
   debuffWeightScale: [1, 3] as const, // multiplies debuff spawn weights
   pointsWeightScale: [1, 0.6] as const, // food gets rarer
   buffWeightScale: [1, 0.5] as const, // power-ups get rarer
+  // Opening stretch: extra food-only drops for pure points. The chance starts at `extraChance` and fades to 0 at `untilMeters`.
+  startFood: { untilMeters: 350, extraChance: 0.7 },
 } as const;
 
 export const SCENES = {

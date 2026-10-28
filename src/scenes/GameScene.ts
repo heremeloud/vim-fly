@@ -423,10 +423,12 @@ export class GameScene extends Phaser.Scene {
 
     this.spawnOne(h, 0);
     if (Math.random() < ramp(ITEM_RULES.doubleSpawnChance, d)) this.spawnOne(h, 1);
+    const { untilMeters, extraChance } = ITEM_RULES.startFood;
+    if (h < untilMeters && Math.random() < extraChance * (1 - h / untilMeters)) this.spawnOne(h, 2, 'points');
   }
 
-  private spawnOne(heightMeters: number, row: number): void {
-    const def = pickItem(heightMeters);
+  private spawnOne(heightMeters: number, row: number, onlyKind?: ItemDef['kind']): void {
+    const def = pickItem(heightMeters, Math.random, onlyKind);
     const cam = this.cameras.main;
     const x = Phaser.Math.Between(40, GAME_WIDTH - 40);
     const y = cam.scrollY - 40 - row * 70;
