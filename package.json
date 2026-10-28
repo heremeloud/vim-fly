@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "check:i18n": "node --experimental-strip-types --no-warnings scripts/check-i18n.mjs",
-    "check:links": "node --experimental-strip-types --no-warnings scripts/check-links.mjs"
+    "check:links": "node --experimental-strip-types --no-warnings scripts/check-links.mjs",
+    "emoji": "node --experimental-strip-types --no-warnings scripts/copy-emoji.mjs"
   },
   "dependencies": {
     "@fontsource/noto-sans-thai": "^5.3.0",
@@ -17,6 +18,7 @@
     "phaser": "^4.2.1"
   },
   "devDependencies": {
+    "emoji-datasource-google": "^16.0.0",
     "typescript": "^5.9.0",
     "vite": "^8.3.5"
   }

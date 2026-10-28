@@ -4,7 +4,7 @@ Art, animation and sound. The active item set is the complete 32x32 collection i
 
 ## Backdrops
 
-One tileable (vertically repeating) image per height zone, ten in all, one per location in the novel (rural road, heartwarming bakery, suburban cafés, shopping mall, CC law office, fitness gym, courtroom, beach, Noey's residence, Bake Love Bakery). They are generated at startup from a flat color plus themed emoji (`src/core/zoneIcons.ts`). See `src/core/ZONES.md`.
+One tileable (vertically repeating) image per height zone, ten in all, one per location in the novel (rural road, heartwarming bakery, suburban cafés, shopping mall, CC law office, fitness gym, courtroom, beach, Noey's residence, Bake Love Bakery). A hand-made `backdrops/<zoneId>.png` (480x200, seamless) is used when present; any zone without one is generated at startup from a flat color plus themed emoji (`src/core/zoneIcons.ts`), drawn from Google (Noto) emoji PNGs in `emoji/` so they look the same on every device. After changing the emoji list run `npm run emoji` to copy the new images. See `src/core/ZONES.md`.
 
 ## Branding
 
