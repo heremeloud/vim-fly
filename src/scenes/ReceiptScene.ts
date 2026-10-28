@@ -20,7 +20,7 @@ const X = 50;
 const LIST_TOP = 118;
 const FOOTER_TOP = 300;
 /** The pilot player: 16:9, centered, under the total. */
-const VIDEO = { x: 20, y: 424, w: 440, h: 248 };
+const VIDEO = { x: 40, y: 432, w: 400, h: 225 };
 const ROW_MIN = 30;
 /** Native-size item icon beside each receipt line. */
 const ICON = 32;
@@ -122,7 +122,7 @@ export class ReceiptScene extends Phaser.Scene {
     label(this, GAME_WIDTH / 2, VIDEO.y - 14, t('receipt.thanks'), { size: 13, color: COLORS.muted }).setOrigin(0.5);
     embedPilot(this, VIDEO);
     this.add
-      .text(GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 32, t('receipt.tagline'), {
+      .text(GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 43, t('receipt.tagline'), {
         fontFamily: 'Sacramento, "Brush Script MT", cursive',
         fontSize: '22px',
         color: '#8d6e63',
