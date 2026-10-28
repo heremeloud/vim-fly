@@ -76,7 +76,7 @@ export const th: Record<StringKey, string> = {
   'effect.points.gain': 'เพิ่ม {n} แต้ม',
   'effect.points.loss': 'เสีย {n} แต้ม',
   'effect.dash': 'พุ่งขึ้นฟ้านาน {s} วินาที',
-  'effect.shield': 'กันดีบัฟครั้งถัดไป',
+  'effect.shield': 'ป้องกันดีบัฟครั้งถัดไป',
   'effect.cleanse': 'ล้างสถานะสตันและเวียนหัว',
   'effect.strongFlap': 'กระพือแรงขึ้น {p}% นาน {s} วินาที',
   'effect.doublePoints': 'แต้มสองเท่านาน {s} วินาที',
