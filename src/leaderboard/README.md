@@ -13,7 +13,16 @@ The Orders screen only talks to the `RunStore` interface. When the worldwide lea
 
 ## Status
 
-Local order history is built (`runStore.ts`). The worldwide part is interface only: `client.ts` defines `startRun`, `submitScore` and `fetchTopScores`; each throws "not implemented". The draft table is in `supabase/schema.sql`.
+Built: `client.ts` (start, submit, fetch), the game starts a run token, the Receipt submits the score under the saved player name, and Top Customers reads the worldwide ladder (falling back to this device's best runs when it can't be reached). The server side is two Edge Functions in `supabase/functions/` (`start-run`, `submit-score`) plus the `scores` and `runs` tables in `supabase/schema.sql`.
+
+Deploy the functions with `--no-verify-jwt` (the browser sends the public key, not a user login; the run token is the check):
+
+```
+supabase login
+supabase link --project-ref <project-ref>
+supabase functions deploy start-run --no-verify-jwt
+supabase functions deploy submit-score --no-verify-jwt
+```
 
 ## Why scores go through a server function
 

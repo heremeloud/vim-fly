@@ -2,7 +2,10 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { zoneAt, zoneLabel, ZONES } from '../core/zones';
 import { localeInfo, t } from '../i18n';
+import { fetchTopScores, type ScoreEntry } from '../leaderboard/client';
+import { getPlayerName } from '../leaderboard/playerName';
 import { runStore, type RunRecord } from '../leaderboard/runStore';
+import { startOrder } from '../ui/onboarding';
 import { ScrollList } from '../ui/ScrollList';
 import { COLORS, hex } from '../ui/theme';
 import { TAB_BAR_HEIGHT, button, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
@@ -20,7 +23,9 @@ type View = 'mine' | 'top';
  * exists, a server-backed store plugs in here and this screen becomes the ladder.
  */
 export class OrdersScene extends Phaser.Scene {
-  private view: View = 'mine';
+  private view: View = 'top';
+  /** Bumped whenever the list is rebuilt, so a slow ladder response for an old view is ignored. */
+  private loadSeq = 0;
   private list!: ScrollList;
   private chips: { bg: Phaser.GameObjects.Graphics; text: Phaser.GameObjects.Text }[] = [];
 
@@ -29,7 +34,7 @@ export class OrdersScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.view = 'mine';
+    this.view = 'top';
     this.chips = [];
     this.list = new ScrollList(this, HEADER_H, GAME_HEIGHT - TAB_BAR_HEIGHT);
     this.buildList();
@@ -39,15 +44,15 @@ export class OrdersScene extends Phaser.Scene {
     label(this, 20, 66, t('orders.subtitle'), { size: 15, color: COLORS.muted }).setDepth(41);
     this.buildChips();
     if (runStore.best() === null) {
-      button(this, GAME_WIDTH / 2, 380, 300, 60, t('home.orderNow'), () => this.scene.start(SCENES.game));
+      button(this, GAME_WIDTH / 2, 380, 300, 60, t('home.orderNow'), () => startOrder(this));
     }
     tabBar(this, 'orders');
   }
 
   private chipDefs(): { view: View; text: string }[] {
     return [
-      { view: 'mine', text: t('orders.tab.mine') },
       { view: 'top', text: t('orders.tab.top') },
+      { view: 'mine', text: t('orders.tab.mine') },
     ];
   }
 
@@ -86,8 +91,51 @@ export class OrdersScene extends Phaser.Scene {
   }
 
   private buildList(): void {
+    this.loadSeq += 1; // any ladder request still in flight is now stale
+    if (this.view === 'top') this.buildTop();
+    else this.buildLocal('mine', null);
+  }
+
+  /** Top Customers: the worldwide ladder, falling back to this device's best runs when it can't be reached. */
+  private buildTop(): void {
     this.list.clear();
-    const runs = this.view === 'mine' ? runStore.recent() : runStore.top();
+    this.list.container.add(label(this, GAME_WIDTH / 2, 120, t('orders.loading'), { size: 18, color: COLORS.muted }).setOrigin(0.5, 0));
+    const seq = this.loadSeq;
+    const stale = () => seq !== this.loadSeq || this.view !== 'top' || !this.sys.isActive();
+    fetchTopScores(50).then(
+      (rows) => !stale() && this.showLadder(rows),
+      () => !stale() && this.buildLocal('top', t('orders.offline')),
+    );
+  }
+
+  private showLadder(rows: ScoreEntry[]): void {
+    this.list.clear();
+    const c = this.list.container;
+    if (rows.length === 0) {
+      c.add(label(this, GAME_WIDTH / 2, 120, t('orders.empty'), { size: 18, color: COLORS.muted, wrap: 340, align: 'center' }).setOrigin(0.5, 0));
+      return;
+    }
+    c.add(label(this, 20, LIST_PAD, t('orders.topNote'), { size: 13, color: COLORS.muted, wrap: GAME_WIDTH - 40 }));
+    let y = LIST_PAD + 38;
+    const me = getPlayerName();
+    rows.forEach((row, i) => {
+      const rank = i + 1;
+      c.add(roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, 14, me !== null && row.name === me ? COLORS.primary : COLORS.border));
+      c.add(this.add.circle(58, y + ROW_H / 2, 24, rank === 1 ? COLORS.primary : COLORS.background));
+      c.add(label(this, 58, y + ROW_H / 2, `${rank}`, { size: 20, bold: true }).setOrigin(0.5));
+      c.add(label(this, 96, y + 12, row.name, { size: 19, bold: true, wrap: 230 }));
+      const when = new Date(row.createdAt).toLocaleDateString(localeInfo().dateLocale, { day: 'numeric', month: 'short', year: 'numeric' });
+      c.add(label(this, 96, y + 44, when, { size: 12, color: COLORS.muted }));
+      c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2, `฿${row.score}`, { size: 22, bold: true, color: COLORS.accent }).setOrigin(1, 0.5));
+      y += ROW_H + ROW_GAP;
+    });
+    this.list.setContentHeight(y + LIST_PAD);
+  }
+
+  /** This device's runs: the history (`mine`), or its best runs ranked (`top`, with a note saying why). */
+  private buildLocal(view: View, note: string | null): void {
+    this.list.clear();
+    const runs = view === 'mine' ? runStore.recent() : runStore.top();
     const best = runStore.best();
     const c = this.list.container;
 
@@ -97,14 +145,14 @@ export class OrdersScene extends Phaser.Scene {
     }
 
     let y = LIST_PAD;
-    if (this.view === 'top') {
-      c.add(label(this, 20, y, t('orders.topNote'), { size: 13, color: COLORS.muted, wrap: GAME_WIDTH - 40 }));
+    if (note) {
+      c.add(label(this, 20, y, note, { size: 13, color: COLORS.muted, wrap: GAME_WIDTH - 40 }));
       y += 38;
     }
 
     runs.forEach((run, i) => {
       const isBest = best !== null && run.no === best.no;
-      this.addRow(c, y, run, this.view === 'top' ? i + 1 : null, isBest);
+      this.addRow(c, y, run, view === 'top' ? i + 1 : null, isBest);
       y += ROW_H + ROW_GAP;
     });
     this.list.setContentHeight(y + LIST_PAD);

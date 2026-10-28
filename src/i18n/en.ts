@@ -37,7 +37,9 @@ export const en = {
   'orders.orderNo': 'Order #{n}',
   'orders.bestBadge': 'Best',
   'orders.empty': 'No orders yet. Place your first order!',
-  'orders.topNote': 'Your best runs on this device. The worldwide ladder is coming.',
+  'orders.topNote': 'Worldwide top customers.',
+  'orders.offline': "Can't reach the worldwide ladder. Showing your best runs on this device.",
+  'orders.loading': 'Loading…',
 
   'receipt.title': 'RECEIPT',
   'receipt.height': 'Height',
@@ -89,6 +91,7 @@ export const en = {
   'item.oyster': 'Oyster',
   'item.sandwich': 'Sandwich',
   'item.pasta': 'Pasta',
+  'item.tomYum': 'Tom Yum',
   'item.coffee': 'Coffee',
   'item.wine': 'Wine',
   'item.shrimpFriedRiceBox': 'Shrimp Fried Rice Lunch Box',
@@ -121,6 +124,7 @@ export const en = {
   'home.watchPilot': 'Watch the Pilot Now',
   'promos.pilot.title': 'Watch the Pilot',
   'promos.pilot.sub': 'Ep. 1 · Coming Soon',
+  'promos.copied': 'Copied!',
   'promos.official': 'Official Account',
   'promos.leads': 'Main Leads',
   'promos.role.cheese': 'as Cheese, the bakery owner',
@@ -134,6 +138,21 @@ export const en = {
   'video.title': 'Video',
   'video.openYoutube': 'Open on YouTube',
   'video.loading': 'Loading the pilot…',
+
+  'onboard.title': 'Welcome, new customer!',
+  'onboard.nameLabel': 'Your name',
+  'onboard.namePlaceholder': 'Enter your name',
+  'onboard.howTitle': 'How to play',
+  'onboard.tap': 'Tap the left or right side of the screen (or press A / D) to flap up and drift that way.',
+  'onboard.catch': 'Catch food for points and fly as high as you can. Dodge the bad stuff.',
+  'onboard.swipe': 'In trouble? Swipe left or right (or hold Shift + A / D) to dash (3 per run).',
+  'onboard.start': 'Start Order',
+  'settings.title': 'Settings',
+  'settings.soon': 'More settings are coming soon.',
+  'settings.close': 'Close',
+  'receipt.sending': 'Sending your score…',
+  'receipt.sent': 'Added to the worldwide ranking!',
+  'receipt.sendFailed': "Couldn't reach the ranking. Saved on this device.",
 };
 
 export type StringKey = keyof typeof en;

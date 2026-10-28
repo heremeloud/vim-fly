@@ -18,11 +18,12 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Cheese Butter Bread (Cheese-Noey Bread) | `cheeseButterBread` | +75 | 2 | Aroma of Love's star bread, created from milk, butter and cream cheese; a high-points item, rarer than the pasta and wine |
 | Shiopan | `shiopan` | +15 | 5 | |
 | Sandwich | `sandwich` | +10 | 6 | |
-| Pasta | `pasta` | +30 | 4 | Cheese's homemade spaghetti carbonara for Noey |
 | Coffee | `coffee` | +25 | 4 | Noey's black coffee with honey |
 | Wine | `wine` | +50 | 2 | Premium white wine shared over an oyster dinner |
+| Pasta | `pasta` | +30 | 4 | Cheese's homemade spaghetti carbonara for Noey |
+| Tom Yum | `tomYum` | +80 | 2 | Hot and sour Thai shrimp soup |
 | Shrimp Fried Rice Lunch Box | `shrimpFriedRiceBox` | +100 | 2 | Noey's homemade apology meal with fried shrimp; rare |
-| Golden Retriever | `goldenRetriever` | +150 | 1 | Rarest and highest; the jackpot item |
+| Golden Retriever | `goldenRetriever` | +150 | 1 | Rarest and highest; the jackpot item. Only falls from stage 3 (800 m) up, drawn larger, and stays off the Menu until you have finished a run |
 
 ## Buffs
 

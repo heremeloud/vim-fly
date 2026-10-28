@@ -20,7 +20,7 @@ Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
 | --- | --- |
 | Pandan custard bread, shiopan, sandwich | Small |
 | Pasta, coffee, wine | Medium |
-| Shrimp fried rice lunch box, cheese butter bread | Big |
+| Shrimp fried rice lunch box, cheese butter bread, tom yum | Big |
 | Golden retriever | Biggest |
 
 **Buffs** (power-ups)

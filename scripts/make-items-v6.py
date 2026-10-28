@@ -187,7 +187,41 @@ def draw_shrimpFriedRiceBox():
     return img
 
 
-DRAWN = {f.__name__[5:]: f for f in (draw_pasta, draw_shrimpFriedRiceBox, draw_goldenRetriever, draw_lawyerSuit, draw_handkerchief)}
+def draw_tomYum():
+    img, d = canvas()
+    # A deep bowl and a few large ingredients read more clearly than many tiny toppings.
+    d.line([(10, 8), (9, 6), (11, 4), (10, 2)], fill='#d6ddd9', width=2)         # steam
+    d.line([(20, 7), (22, 5), (21, 3)], fill='#d6ddd9', width=2)
+    d.ellipse((2, 13, 29, 30), fill='#dbe2e5')                                  # bowl body
+    d.ellipse((2, 10, 29, 24), fill='#ffffff')                                  # thick white rim
+    d.ellipse((4, 12, 27, 22), fill='#c93619')                                  # dark soup edge
+    d.ellipse((5, 13, 26, 21), fill='#ef6424')                                  # orange-red broth
+
+    d.ellipse((6, 14, 11, 18), fill='#f4e3c5')                                  # straw mushroom halves
+    d.line((8, 17, 8, 20), fill='#c8a77d', width=2)
+    d.ellipse((20, 14, 25, 18), fill='#f4e3c5')
+    d.line((22, 17, 22, 20), fill='#c8a77d', width=2)
+    d.polygon([(6, 19), (10, 16), (13, 18), (10, 21)], fill='#276b35')          # kaffir-lime leaves
+    d.polygon([(18, 19), (21, 16), (25, 18), (22, 21)], fill='#276b35')
+    d.line((13, 20, 17, 14), fill='#d7d56b', width=2)                           # lemongrass
+    d.line((21, 20, 26, 18), fill='#b71c1c', width=2)                           # bird's-eye chili
+
+    # One shell-on prawn is the focal point. The internal outline keeps it separate from the broth.
+    d.arc((7, 8, 25, 25), 205, 520, fill='#9e2c14', width=6)
+    d.arc((7, 8, 25, 25), 205, 520, fill='#ff9a52', width=3)
+    d.ellipse((16, 9, 24, 16), fill='#9e2c14')
+    d.ellipse((18, 10, 23, 14), fill='#ff9a52')
+    d.polygon([(9, 16), (4, 13), (6, 17), (3, 20), (10, 19)], fill='#9e2c14')
+    d.polygon([(8, 16), (5, 15), (7, 17), (5, 19), (9, 18)], fill='#ff9a52')
+    d.point((21, 11), fill='#2b1b16')
+    d.line((22, 10, 26, 7), fill='#9e2c14')                                     # antennae
+    d.line((22, 11, 28, 10), fill='#9e2c14')
+
+    d.arc((3, 11, 28, 25), 5, 175, fill='#eef3f4', width=2)                    # front lip
+    return img
+
+
+DRAWN = {f.__name__[5:]: f for f in (draw_pasta, draw_shrimpFriedRiceBox, draw_goldenRetriever, draw_lawyerSuit, draw_handkerchief, draw_tomYum)}
 
 
 def patch(name, img):
@@ -209,7 +243,7 @@ def patch(name, img):
 
 def main():
     OUT.mkdir(exist_ok=True)
-    names = sorted(p.stem for p in SRC.glob('*.png'))
+    names = sorted({p.stem for p in SRC.glob('*.png')} | set(DRAWN))
     sheet = Image.new('RGBA', (5 * 32 * 6, ((len(names) + 4) // 5) * 32 * 6), (255, 255, 255, 255))
     for i, name in enumerate(names):
         sprite = outline(np.array(DRAWN[name]())) if name in DRAWN else patch(name, process(SRC / f'{name}.png', COLORS.get(name, DEFAULT_COLORS)))

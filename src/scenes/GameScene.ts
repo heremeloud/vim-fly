@@ -1,3 +1,4 @@
+import { beginRun } from '../leaderboard/client';
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '../core/constants';
 import { bindSteering } from '../core/input';
@@ -22,8 +23,8 @@ interface FallingItem {
 // Halo colors so item types read at a glance: gold points, green buff, red debuff.
 const OUTLINE = { points: 0xf9a825, buff: 0x2e7d32, debuff: 0xb71c1c } as const;
 
-const PLAYER_HITBOX_SIZE = 40;
-const PLAYER_SPRITE_SIZE = 64;
+const PLAYER_HITBOX_SIZE = 44;
+const PLAYER_SPRITE_SIZE = 80;
 /** Native 32x32 sprites are displayed at 48x48 with nearest-neighbour filtering for clarity. */
 const ITEM_SPRITE_SIZE = 48;
 /**
@@ -93,6 +94,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   create(): void {
+    beginRun(); // asks the server for a run token in the background; the receipt submits the score with it
     this.run = new RunState();
     this.items = [];
     this.spawnTimerMs = 0;

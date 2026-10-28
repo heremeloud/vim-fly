@@ -15,10 +15,11 @@ export interface LocaleInfo {
   dateLocale: string;
 }
 
+/** Ordered ascending by language code: en, ja, th, zh, zh-Hant. */
 export const LOCALES: readonly LocaleInfo[] = [
   { id: 'en', name: 'English', dateLocale: 'en-GB' },
-  { id: 'th', name: 'ไทย', dateLocale: 'th-TH' },
   { id: 'ja', name: '日本語', dateLocale: 'ja-JP' },
+  { id: 'th', name: 'ไทย', dateLocale: 'th-TH' },
   { id: 'zh', name: '简体中文', dateLocale: 'zh-CN' },
   { id: 'zh-Hant', name: '繁體中文', dateLocale: 'zh-TW' },
 ];

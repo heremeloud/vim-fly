@@ -41,7 +41,7 @@ Everything is in **`src/promo/links.json`**. You never need to touch the code.
 
 ```json
 {
-  "show":   { "title": "Bake Love Feeling", "airDate": null, "hashtag": "" },
+  "show":   { "title": "Bake Love Feeling", "airDate": null, "hashtag": "BakeLoveFeeling" },
   "pilot":  { "youtube": "https://www.youtube.com/watch?v=NFFWV0X4i_c" },
   "official": { "name": "Bake Love Feeling", "avatar": "🍞", "handles": { "x": "BakeLoveFeeling" } },
   "leads": [

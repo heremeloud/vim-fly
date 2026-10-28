@@ -7,7 +7,7 @@ Every screen. The menus are a parody of a Thai delivery app: a bee-themed app ca
 | Scene | File | State |
 | --- | --- | --- |
 | Boot | `BootScene.ts` | Generates a placeholder backdrop texture per height zone, then opens Home |
-| Home | `HomeScene.ts` | Storefront: deliver-to line, language button, search bar (opens Menu), VIMMY FLY banner (placeholder key art), service tiles (Food = menu, Mart = Bake Love Feeling page, Express = official X account, Ride = pilot window), a "Watch the pilot now" strip that opens the Bake Love Feeling page (the countdown once an air date is set), popular menu, "Order now" |
+| Home | `HomeScene.ts` | Storefront: deliver-to line, language button, search bar (opens Menu), VIMMY FLY banner (placeholder key art), service tiles (Food = menu, Mart = Bake Love Feeling page, Express = official X account, Ride = Bake Love Feeling page), a "Watch the pilot now" strip that opens the pilot on YouTube in a new tab (the countdown once an air date is set), popular menu, "Order now" |
 | Menu | `MenuScene.ts` | Item guide: scrollable menu with Points / Buffs / Debuffs filter, descriptions and "prices" read from `ITEMS` |
 | Orders | `OrdersScene.ts` | The ladder tab: "My orders" (run history) and "Top customers" (ranked), from the local run store for now |
 | Promos | `PromosScene.ts` | The Bake Love Feeling page: watch the pilot (plays in a window), then account cards with avatars (the official account as a wide card, the two main leads side by side, and Vimmy as a small one-line row). Each card shows round X / Instagram / TikTok / YouTube icon buttons only for platforms that are set up, or one quiet \"soon\" tag |

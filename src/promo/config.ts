@@ -170,6 +170,25 @@ export function profileUrl(platform: Platform, value: string | null | undefined)
   }
 }
 
+/** Copy text to the clipboard. Resolves false when the browser refuses. */
+export async function copyText(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    // Older browsers or blocked permissions: fall back to a hidden textarea.
+    const box = document.createElement('textarea');
+    box.value = text;
+    box.style.position = 'fixed';
+    box.style.opacity = '0';
+    document.body.appendChild(box);
+    box.select();
+    const ok = document.execCommand('copy');
+    box.remove();
+    return ok;
+  }
+}
+
 /** Open a link in a new tab. Only https links. */
 export function openLink(url: string | null): void {
   if (!url || !url.startsWith('https://')) return;

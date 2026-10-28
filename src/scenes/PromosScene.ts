@@ -6,13 +6,13 @@ import tiktokIcon from '../assets/icons/tiktok.svg?no-inline';
 import websiteIcon from '../assets/icons/website.svg?no-inline';
 import youtubeIcon from '../assets/icons/youtube.svg?no-inline';
 import xIcon from '../assets/icons/x.svg?no-inline';
-import { LEADS, OFFICIAL, PLATFORMS, SHOW, VIMMY, openLink, profileUrl, type Account, type Platform } from '../promo/config';
+import { LEADS, OFFICIAL, PLATFORMS, SHOW, VIMMY, copyText, openLink, profileUrl, type Account, type Platform } from '../promo/config';
 import { watchPilot } from '../promo/pilot';
 import { ScrollList } from '../ui/ScrollList';
-import { COLORS } from '../ui/theme';
+import { COLORS, hex as hexOf } from '../ui/theme';
 import { TAB_BAR_HEIGHT, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
 
-const HEADER_H = 58;
+const HEADER_H = 96;
 const PAD = 4;
 const CARD_W = GAME_WIDTH - 40;
 const GAP = 12;
@@ -88,8 +88,25 @@ export class PromosScene extends Phaser.Scene {
 
     // Opaque header (and interactive, so taps don't reach rows scrolled underneath).
     this.add.rectangle(0, 0, GAME_WIDTH, HEADER_H, COLORS.background).setOrigin(0).setDepth(40).setInteractive();
-    label(this, 20, 12, SHOW.title, { size: 34, bold: true }).setDepth(41);
+    label(this, 20, 22, SHOW.title, { size: 34, bold: true }).setDepth(41);
+    this.hashtagLine();
     tabBar(this, 'promos');
+  }
+
+  /** The show's hashtag under the title, like the subtitle on the other tabs. Tap it to copy. */
+  private hashtagLine(): void {
+    const tag = SHOW.hashtag.replace(/^#/, '');
+    if (!tag) return;
+    const text = `#${tag}`;
+    const line = label(this, 20, 66, text, { size: 15, color: COLORS.muted }).setDepth(41);
+    let timer: Phaser.Time.TimerEvent | undefined;
+    hitArea(this, 20, 60, 260, 28, () => {
+      void copyText(text).then((ok) => {
+        line.setText(ok ? t('promos.copied') : text).setColor(hexOf(ok ? COLORS.accent : COLORS.muted));
+        timer?.remove();
+        timer = this.time.delayedCall(1500, () => line.setText(text).setColor(hexOf(COLORS.muted)));
+      });
+    }).setDepth(43);
   }
 
   private section(c: Phaser.GameObjects.Container, y: number, text: string): number {

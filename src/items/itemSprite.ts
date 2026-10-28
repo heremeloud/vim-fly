@@ -7,6 +7,7 @@ export const itemTextureKey = (id: string): string => `item-${id}`;
 const DISPLAY_SCALE: Readonly<Record<string, number>> = {
   carCrash: 4 / 3,
   helicopter: 1.25,
+  goldenRetriever: 1.6,
 };
 
 /** Runtime display size only; every v5 source texture remains exactly 32x32. */

@@ -1,5 +1,6 @@
 import { ITEM_RULES } from '../core/constants';
 import { difficulty, ramp } from '../core/difficulty';
+import { zoneAt } from '../core/zones';
 import { itemName, t } from '../i18n';
 
 // Single source of truth for items. Values are starting points to tune.
@@ -27,6 +28,10 @@ export interface ItemDef {
   /** Relative spawn weight; higher = more common. */
   weight: number;
   effect: ItemEffect;
+  /** Only falls from this story stage on (see `zones.ts`). */
+  minStage?: number;
+  /** Hidden from the Menu until the player has finished a run. */
+  secret?: boolean;
   /** Placeholder rectangle color until real art exists. */
   color: number;
 }
@@ -39,11 +44,12 @@ export const ITEMS: readonly ItemDef[] = [
   { id: 'fishSauceBread', label: 'Fish Sauce Bread', kind: 'debuff', weight: 3, effect: { type: 'slow', durationMs: 5000, factor: 0.6 }, color: 0xa1887f },
   { id: 'oyster', label: 'Oyster', kind: 'buff', weight: 3, effect: { type: 'doublePoints', durationMs: 5000 }, color: 0xb0bec5 },
   { id: 'sandwich', label: 'Sandwich', kind: 'points', weight: 6, effect: { type: 'points', amount: 10 }, color: 0xffe0b2 },
-  { id: 'pasta', label: 'Pasta', kind: 'points', weight: 4, effect: { type: 'points', amount: 30 }, color: 0xef5350 },
   { id: 'coffee', label: 'Coffee', kind: 'points', weight: 4, effect: { type: 'points', amount: 25 }, color: 0x6d4c41 },
   { id: 'wine', label: 'Wine', kind: 'points', weight: 2, effect: { type: 'points', amount: 50 }, color: 0x8e24aa },
+  { id: 'pasta', label: 'Pasta', kind: 'points', weight: 4, effect: { type: 'points', amount: 30 }, color: 0xef5350 },
+  { id: 'tomYum', label: 'Tom Yum', kind: 'points', weight: 2, effect: { type: 'points', amount: 80 }, color: 0xe8641e },
   { id: 'shrimpFriedRiceBox', label: 'Shrimp Fried Rice Lunch Box', kind: 'points', weight: 2, effect: { type: 'points', amount: 100 }, color: 0xff8a65 },
-  { id: 'goldenRetriever', label: 'Golden Retriever', kind: 'points', weight: 1, effect: { type: 'points', amount: 150 }, color: 0xffc107 },
+  { id: 'goldenRetriever', label: 'Golden Retriever', kind: 'points', weight: 1, effect: { type: 'points', amount: 150 }, minStage: 3, secret: true, color: 0xffc107 },
   { id: 'lawyerSuit', label: 'Lawyer Suit', kind: 'buff', weight: 3, effect: { type: 'shield' }, color: 0x37474f },
   { id: 'handkerchief', label: 'Handkerchief', kind: 'buff', weight: 3, effect: { type: 'cleanse' }, color: 0xe3f2fd },
   { id: 'rollingPin', label: 'Rolling Pin', kind: 'buff', weight: 3, effect: { type: 'strongFlap', durationMs: 5000, factor: 1.5 }, color: 0xd7ccc8 },
@@ -69,13 +75,15 @@ export function pickItem(heightMeters: number, rand: () => number = Math.random)
     debuff: ramp(ITEM_RULES.debuffWeightScale, d),
   };
   const weightOf = (i: ItemDef) => i.weight * scale[i.kind];
-  const total = ITEMS.reduce((sum, i) => sum + weightOf(i), 0);
+  const stage = zoneAt(heightMeters).stage;
+  const pool = ITEMS.filter((i) => stage >= (i.minStage ?? 1));
+  const total = pool.reduce((sum, i) => sum + weightOf(i), 0);
   let roll = rand() * total;
-  for (const item of ITEMS) {
+  for (const item of pool) {
     roll -= weightOf(item);
     if (roll < 0) return item;
   }
-  return ITEMS[0];
+  return pool[0];
 }
 
 /** Description of what an item does, built from its effect so it never drifts from the game. Translated. */

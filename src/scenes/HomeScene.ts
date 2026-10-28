@@ -3,10 +3,11 @@ import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { t } from '../i18n';
 import { displayName, ITEMS, priceLabel, type ItemDef } from '../items/itemDefs';
 import { addItemSprite, itemDisplaySize } from '../items/itemSprite';
-import { OFFICIAL, SHOW, countdownText, openLink, profileUrl } from '../promo/config';
-import { watchPilot } from '../promo/pilot';
+import { OFFICIAL, PILOT, SHOW, countdownText, openLink, profileUrl } from '../promo/config';
 import youtubeIcon from '../assets/icons/youtube.svg?no-inline';
 import { APP, SERVICES } from '../ui/brand';
+import { startOrder } from '../ui/onboarding';
+import { openSettings } from '../ui/settings';
 import { COLORS } from '../ui/theme';
 import { TAB_BAR_HEIGHT, button, hitArea, label, languageButton, roundedBox, tabBar } from '../ui/widgets';
 
@@ -14,7 +15,7 @@ const POPULAR_COUNT = 3;
 
 /** Three different priced items (points items only, no buffs or debuffs), picked at random each time the home screen opens. */
 function pickPopular(): ItemDef[] {
-  return Phaser.Utils.Array.Shuffle(ITEMS.filter((i) => i.kind === 'points')).slice(0, POPULAR_COUNT);
+  return Phaser.Utils.Array.Shuffle(ITEMS.filter((i) => i.kind === 'points' && !i.secret)).slice(0, POPULAR_COUNT);
 }
 
 /** Bakery storefront: the home screen, laid out like a shop page in a food-ordering app. */
@@ -33,17 +34,16 @@ export class HomeScene extends Phaser.Scene {
     this.drawServices();
     this.drawCountdown();
     this.drawPopular();
-    button(this, GAME_WIDTH / 2, GAME_HEIGHT - TAB_BAR_HEIGHT - 56, 420, 68, t('home.orderNow'), () =>
-      this.scene.start(SCENES.game),
-    );
+    button(this, GAME_WIDTH / 2, GAME_HEIGHT - TAB_BAR_HEIGHT - 56, 420, 68, t('home.orderNow'), () => startOrder(this));
     tabBar(this, 'store');
   }
 
-  /** App header and key-art banner: deliver-to line, language button, search bar, app name. Banner art is a placeholder. */
+  /** App header and key-art banner: deliver-to line (opens settings), language button, search bar, app name. Banner art is a placeholder. */
   private drawBanner(): void {
     this.add.rectangle(0, 0, GAME_WIDTH, 230, COLORS.primary).setOrigin(0);
     this.add.rectangle(0, 200, GAME_WIDTH, 30, COLORS.primaryDark).setOrigin(0).setAlpha(0.25);
     label(this, 20, 12, `${t('app.deliverTo')}  ${t('app.currentLocation')}  ▾`, { size: 15, color: COLORS.onPrimary, bold: true });
+    hitArea(this, 10, 6, 260, 32, () => openSettings(this));
     languageButton(this, GAME_WIDTH - 20, 12);
 
     roundedBox(this, 20, 42, GAME_WIDTH - 40, 44, COLORS.surface, 22);
@@ -51,7 +51,7 @@ export class HomeScene extends Phaser.Scene {
     label(this, 72, 53, t('app.searchHint'), { size: 15, color: COLORS.muted });
     hitArea(this, 20, 42, GAME_WIDTH - 40, 44, () => this.scene.start(SCENES.menu));
 
-    label(this, GAME_WIDTH / 2, 124, `🐝 ${APP.name} 🐶`, { size: 42, color: COLORS.onPrimary, bold: true }).setOrigin(0.5);
+    label(this, GAME_WIDTH / 2, 124, `🐶 ${APP.name} 🐝`, { size: 42, color: COLORS.onPrimary, bold: true }).setOrigin(0.5);
     label(this, GAME_WIDTH / 2, 162, t('app.tagline'), { size: 16, color: COLORS.onPrimary }).setOrigin(0.5);
   }
 
@@ -72,20 +72,20 @@ export class HomeScene extends Phaser.Scene {
             this.scene.start(SCENES.promos);
             break;
           case 'pilot':
-            watchPilot();
+            this.scene.start(SCENES.promos);
             break;
           case 'official':
             openLink(profileUrl('x', OFFICIAL.handles.x));
             break;
           case 'play':
-            this.scene.start(SCENES.game);
+            startOrder(this);
             break;
         }
       });
     });
   }
 
-  /** Under the tiles: the countdown once an air date is set, otherwise a link to the Bake Love Feeling page (where the pilot plays). */
+  /** Under the tiles: the countdown once an air date is set, otherwise a link that opens the pilot on YouTube. */
   private drawCountdown(): void {
     roundedBox(this, 20, 294, GAME_WIDTH - 40, 48, 0xffecb3, 24);
     const hasAirDate = SHOW.airDate !== null;
@@ -99,7 +99,7 @@ export class HomeScene extends Phaser.Scene {
       this.add.image(startX + ICON / 2, 318, 'icon-youtube').setDisplaySize(ICON, ICON);
       txt.setOrigin(0, 0.5).setX(startX + ICON + GAP);
     }
-    if (!hasAirDate) hitArea(this, 20, 294, GAME_WIDTH - 40, 48, () => this.scene.start(SCENES.promos));
+    if (!hasAirDate) hitArea(this, 20, 294, GAME_WIDTH - 40, 48, () => openLink(PILOT.url));
   }
 
   private drawPopular(): void {
