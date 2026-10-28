@@ -90,8 +90,15 @@ function openWelcome(scene: Phaser.Scene): void {
   place();
   window.addEventListener('resize', place);
 
+  // Phones keep the keyboard up until the field loses focus, and the canvas doesn't take focus on tap.
+  const dismissKeyboard = (e: Event): void => {
+    if (e.target !== input) input.blur();
+  };
+  document.addEventListener('pointerdown', dismissKeyboard);
+
   const close = (): void => {
     window.removeEventListener('resize', place);
+    document.removeEventListener('pointerdown', dismissKeyboard);
     input.remove();
     items.forEach((o) => o.destroy());
   };
@@ -106,7 +113,10 @@ function openWelcome(scene: Phaser.Scene): void {
   };
   input.addEventListener('input', () => (input.style.borderColor = hex(COLORS.primary)));
   input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') submit();
+    if (e.key === 'Enter') {
+      input.blur();
+      submit();
+    }
     else if (e.key === 'Escape') close();
   });
   scene.events.once(Phaser.Scenes.Events.SHUTDOWN, close);
