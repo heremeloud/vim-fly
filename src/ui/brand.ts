@@ -27,5 +27,5 @@ export const SERVICES: readonly Service[] = [
   { icon: '🍞', labelKey: 'svc.food', target: 'menu' }, // what falls from the sky
   { icon: '🛒', labelKey: 'svc.mart', target: 'promos' }, // the show's page: cast, links
   { icon: '📦', labelKey: 'svc.express', target: 'official' }, // the show, delivered fast: the official X account
-  { icon: '🛵', labelKey: 'svc.ride', target: 'viewmim' }, // opens viewmim.info in a new tab
+  { icon: '🛵', labelKey: 'svc.ride', target: 'viewmim' }, // opens the Bake Love Feeling page on viewmim.info in a new tab
 ];
