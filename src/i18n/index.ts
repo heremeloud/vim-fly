@@ -13,15 +13,17 @@ export interface LocaleInfo {
   name: string;
   /** BCP 47 tag for dates and numbers. Thai uses the Thai (Buddhist-era) calendar by design. */
   dateLocale: string;
+  /** Set to 'h23' to show times on the 24-hour clock; leave out to use the language's usual clock. */
+  hourCycle?: 'h23';
 }
 
 /** Ordered ascending by language code: en, ja, th, zh, zh-Hant. */
 export const LOCALES: readonly LocaleInfo[] = [
-  { id: 'en', name: 'English', dateLocale: 'en-GB' },
+  { id: 'en', name: 'English', dateLocale: 'en-US' },
   { id: 'ja', name: '日本語', dateLocale: 'ja-JP' },
   { id: 'th', name: 'ไทย', dateLocale: 'th-TH' },
   { id: 'zh', name: '简体中文', dateLocale: 'zh-CN' },
-  { id: 'zh-Hant', name: '繁體中文', dateLocale: 'zh-TW' },
+  { id: 'zh-Hant', name: '繁體中文', dateLocale: 'zh-TW', hourCycle: 'h23' },
 ];
 
 const TABLES: Record<Locale, Record<StringKey, string>> = { en, th, ja, zh, 'zh-Hant': zhHant };

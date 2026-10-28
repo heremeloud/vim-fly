@@ -47,7 +47,7 @@ export const ja: Record<StringKey, string> = {
   'receipt.orderAgain': 'もう一度注文する',
   'receipt.backToStore': 'お店に戻る',
   'receipt.newBest': 'ベスト更新! やったね!',
-  'receipt.thanks': 'ありがとう',
+  'receipt.thanks': 'まいど!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': 'シェア',
   'receipt.shareText': 'Vimmy Flyで{score}ポイントゲット!私のスコアを超えられるかな?🐶🐝\nパン屋さんがオープン!🍞🧀🧈\nドラマ #BakeLoveFeeling をお楽しみに!NoeyCheese役のViewMimもぜひ応援してね!💕\n🎮: {url}\n\n#ViewMim #วิวมิ้ม #VIMMY',

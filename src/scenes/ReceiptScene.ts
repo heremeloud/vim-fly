@@ -125,7 +125,7 @@ export class ReceiptScene extends Phaser.Scene {
     this.add.rectangle(SHEET.x0, SHEET.top + SHEET.depth, SHEET.x1 - SHEET.x0, LIST_TOP - SHEET.top - SHEET.depth, PAPER).setOrigin(0);
     const small = { fontFamily: mono.fontFamily, fontSize: '11px', color: '#8d6e63', padding: { top: 2, bottom: 2 } };
     if (orderNo !== null) this.add.text(X, 13, t('orders.orderNo', { n: orderNo }), small);
-    const when = new Date().toLocaleString(localeInfo().dateLocale, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const when = new Date().toLocaleString(localeInfo().dateLocale, { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hourCycle: localeInfo().hourCycle });
     this.add.text(GAME_WIDTH - X, 13, when, small).setOrigin(1, 0);
     this.add.text(GAME_WIDTH / 2, 40, t('receipt.title'), { ...mono, fontSize: '22px' }).setOrigin(0.5);
     dashed(LIST_TOP - 6);

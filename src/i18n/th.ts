@@ -47,7 +47,7 @@ export const th: Record<StringKey, string> = {
   'receipt.orderAgain': 'สั่งอีกครั้ง',
   'receipt.backToStore': 'กลับไปที่ร้าน',
   'receipt.newBest': 'ทำสถิติใหม่แล้ว!',
-  'receipt.thanks': 'ขอบคุณ',
+  'receipt.thanks': 'ขอบคุณนะ!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': 'แชร์',
   'receipt.shareText': 'เล่น Vimmy Fly ได้ {score} แต้มแล้ว! ใครจะทำได้มากกว่าเราบ้าง? 🐶🐝\nร้านขนมปังเปิดแล้ว! 🍞🧀🧈\nฝากติดตามซีรีส์ #BakeLoveFeeling และเป็นกำลังใจให้ ViewMim ในบทเนยชีสด้วยนะ! 💕\n🎮: {url}\n\n#ViewMim #วิวมิ้ม #VIMMY',
