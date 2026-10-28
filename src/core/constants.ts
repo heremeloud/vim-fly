@@ -12,6 +12,10 @@ export const PHYSICS = {
   wallKick: 400, // minimum speed away from the wall after a hit, so tapping into it can't hold you there
   wallStunMs: 600, // brief stagger on a wall hit (taps ignored), so hugging a wall costs climb
   maxFallSpeed: 700,
+  swipeDashSpeed: 1800, // px/s of the emergency swipe dash, a straight horizontal run to the far wall
+  swipeDashExitLift: -250, // upward speed when the dash ends, so Vimmy doesn't drop
+  swipeDashesPerRun: 3,
+  swipeMinPx: 60, // minimum horizontal travel (layout px) to count as a swipe
   pixelsPerMeter: 10, // converts climbed pixels to the height score
 } as const;
 

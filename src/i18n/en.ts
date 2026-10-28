@@ -51,6 +51,7 @@ export const en = {
 
   'hud.shield': 'SHIELD',
   'hud.dash': 'DASH',
+  'hud.swipeHint': 'Swipe left or right to dash!',
   'hud.stunned': 'STUNNED',
   'hud.power': 'POWER',
   'hud.dizzy': 'DIZZY',
@@ -60,7 +61,7 @@ export const en = {
 
   'zone.ruralRoad': 'Rural Road',
   'zone.bakery': 'Heartwarming Bakery',
-  'zone.cafes': 'Suburban Cafés',
+  'zone.cafes': 'Cafe',
   'zone.mall': 'Shopping Mall',
   'zone.lawOffice': 'CC Law Office',
   'zone.gym': 'Gym',
@@ -97,6 +98,16 @@ export const en = {
   'item.rollingPin': 'Rolling Pin',
   'item.planner': 'Planner',
   'item.helicopter': 'Helicopter',
+  'buff.oyster': 'Double points!',
+  'buff.lawyerSuit': 'Shield!',
+  'buff.handkerchief': 'Cleansed!',
+  'buff.rollingPin': 'Power flaps!',
+  'buff.helicopter': 'Helicopter!',
+  'debuff.cilantroBread': 'Dizzy!',
+  'debuff.fishSauceBread': 'Slowed!',
+  'debuff.planner': 'Overloaded! -100',
+  'debuff.gavelHammer': 'Stunned!',
+  'debuff.carCrash': 'Crash! -50',
   'item.gavelHammer': 'Gavel Hammer',
   'item.carCrash': 'Car Crash',
 

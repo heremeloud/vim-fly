@@ -36,7 +36,7 @@ type ZoneDef = Omit<Zone, 'fromMeters'>;
 const ZONE_DEFS: readonly ZoneDef[] = [
   { id: 'ruralRoad', label: 'Rural Road', stage: 1, base: 0xf4f1d6, accent: 0xd9c46a },
   { id: 'bakery', label: 'Heartwarming Bakery', stage: 1, base: 0xfaf0e2, accent: 0xe6c79c },
-  { id: 'cafes', label: 'Suburban Cafés', stage: 2, base: 0xeaf1e8, accent: 0xb4cfb0 },
+  { id: 'cafes', label: 'Cafe', stage: 2, base: 0xeaf1e8, accent: 0xb4cfb0 },
   { id: 'mall', label: 'Shopping Mall', stage: 2, base: 0xf1eaf3, accent: 0xcdb4d6 },
   { id: 'lawOffice', label: 'CC Law Office', stage: 3, base: 0xeceff1, accent: 0xa3b1ba },
   { id: 'gym', label: 'Gym', stage: 3, base: 0xf6e3da, accent: 0xe3a58f },

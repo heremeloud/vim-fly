@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '../core/constants';
 import { bindSteering } from '../core/input';
-import { t } from '../i18n';
-import { FONT } from '../ui/theme';
+import { itemName, t, tDynamic } from '../i18n';
+import { COLORS, FONT } from '../ui/theme';
 import { RunState } from '../core/RunState';
 import { difficulty, ramp } from '../core/difficulty';
 import { zoneAt, zoneBannerText, zoneTextureKey, ZONES, type Zone } from '../core/zones';
@@ -26,6 +26,7 @@ const PLAYER_HITBOX_SIZE = 40;
 const PLAYER_SPRITE_SIZE = 64;
 /** Native 32x32 sprites are displayed at 48x48 with nearest-neighbour filtering for clarity. */
 const ITEM_SPRITE_SIZE = 48;
+const BANNER_Y = 120;
 const START_Y = GAME_HEIGHT - 200;
 const VIMMY_FLY_ANIM = 'vimmy-fly';
 const VIMMY_FLIP_ANIM = 'vimmy-helicopter-flip';
@@ -35,6 +36,14 @@ const BUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
   handkerchief: 'vimmy-buff-handkerchief',
   rollingPin: 'vimmy-buff-rollingPin',
   helicopter: 'vimmy-buff-helicopter',
+};
+const DASH_TEXTURE = { '-1': 'vimmy-dash-left', '1': 'vimmy-dash-right' } as const;
+const DEBUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
+  cilantroBread: 'vimmy-debuff-queasy',
+  fishSauceBread: 'vimmy-debuff-queasy',
+  planner: 'vimmy-debuff-stunned',
+  gavelHammer: 'vimmy-debuff-stunned',
+  carCrash: 'vimmy-debuff-crash',
 };
 
 /**
@@ -46,9 +55,19 @@ export class GameScene extends Phaser.Scene {
   private player!: Phaser.GameObjects.Sprite;
   private bg!: Phaser.GameObjects.TileSprite;
   private zone: Zone = zoneAt(0);
-  private banner!: Phaser.GameObjects.Text;
-  private hud!: Phaser.GameObjects.Text;
-  private status!: Phaser.GameObjects.Text;
+  private banner!: Phaser.GameObjects.Container;
+  private bannerBg!: Phaser.GameObjects.Graphics;
+  private bannerStage!: Phaser.GameObjects.Text;
+  private bannerName!: Phaser.GameObjects.Text;
+  private hudPanel!: Phaser.GameObjects.Graphics;
+  private scoreText!: Phaser.GameObjects.Text;
+  private metersText!: Phaser.GameObjects.Text;
+  private lastScore = 0;
+  private progressGfx!: Phaser.GameObjects.Graphics;
+  private chipGfx!: Phaser.GameObjects.Graphics;
+  private chipTexts: Phaser.GameObjects.Text[] = [];
+  private dizzyOverlay!: Phaser.GameObjects.Rectangle;
+  private dizzyStars: Phaser.GameObjects.Text[] = [];
   private run = new RunState();
   private items: FallingItem[] = [];
   private spawnTimerMs = 0;
@@ -56,6 +75,10 @@ export class GameScene extends Phaser.Scene {
   private vy = 0;
   private startY = START_Y;
   private ended = false;
+  private swipesLeft = PHYSICS.swipeDashesPerRun;
+  /** Direction of the dash in progress (0 = none). While dashing Vimmy flies level and ignores debuffs. */
+  private swipeDashDir: -1 | 0 | 1 = 0;
+  private swipeBreads: Phaser.GameObjects.Image[] = [];
   private isFlipping = false;
   private reactionTimer?: Phaser.Time.TimerEvent;
 
@@ -68,6 +91,8 @@ export class GameScene extends Phaser.Scene {
     this.items = [];
     this.spawnTimerMs = 0;
     this.ended = false;
+    this.swipesLeft = PHYSICS.swipeDashesPerRun;
+    this.swipeDashDir = 0;
     this.vx = 0;
     this.vy = PHYSICS.flapVelocity;
     this.startY = START_Y;
@@ -92,30 +117,90 @@ export class GameScene extends Phaser.Scene {
     this.player = this.add.sprite(GAME_WIDTH / 2, START_Y, 'vimmy-fly-0').setDisplaySize(PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE).setDepth(5);
     this.player.play(VIMMY_FLY_ANIM);
 
-    this.hud = this.add
-      .text(12, 10, '', { fontFamily: FONT.family, fontSize: '22px', color: '#5d4037' })
+    // Top-left panel: score big, climbed meters small, and a row of status chips below it.
+    this.hudPanel = this.add.graphics().setScrollFactor(0).setDepth(19);
+    this.hudPanel.fillStyle(0x000000, 0.15).fillRoundedRect(10, 12, 164, 70, 16);
+    this.hudPanel.fillStyle(0xffffff, 0.95).fillRoundedRect(8, 8, 164, 70, 16);
+    this.hudPanel.lineStyle(3, 0xffb300, 1).strokeRoundedRect(8, 8, 164, 70, 16);
+    // The dash breads get their own pill so they never blend into the backdrop.
+    const breadsW = PHYSICS.swipeDashesPerRun * 32 + 12;
+    this.hudPanel.fillStyle(0x000000, 0.15).fillRoundedRect(GAME_WIDTH - breadsW - 6, 12, breadsW, 44, 16);
+    this.hudPanel.fillStyle(0xffffff, 0.95).fillRoundedRect(GAME_WIDTH - breadsW - 8, 8, breadsW, 44, 16);
+    this.hudPanel.lineStyle(3, 0xffb300, 1).strokeRoundedRect(GAME_WIDTH - breadsW - 8, 8, breadsW, 44, 16);
+    this.progressGfx = this.add.graphics().setScrollFactor(0).setDepth(20);
+    this.scoreText = this.add
+      .text(20, 8, '0', { fontFamily: FONT.family, fontSize: '34px', fontStyle: 'bold', color: '#4e342e' })
       .setScrollFactor(0)
       .setDepth(20);
-    this.status = this.add
-      .text(12, 40, '', { fontFamily: FONT.family, fontSize: '16px', color: '#8d6e63' })
+    this.metersText = this.add
+      .text(20, 48, '▲ 0 m', { fontFamily: FONT.family, fontSize: '14px', fontStyle: 'bold', color: '#8d6e63' })
       .setScrollFactor(0)
       .setDepth(20);
+    this.lastScore = 0;
+    this.chipGfx = this.add.graphics().setScrollFactor(0).setDepth(19);
+    this.chipTexts = Array.from({ length: 7 }, () =>
+      this.add.text(0, 0, '', { fontFamily: FONT.family, fontSize: '13px', fontStyle: 'bold', color: '#ffffff' }).setScrollFactor(0).setDepth(20).setVisible(false),
+    );
 
-    this.banner = this.add
-      .text(GAME_WIDTH / 2, 120, '', { fontFamily: FONT.family, fontSize: '26px', align: 'center', color: '#4e342e', backgroundColor: '#ffffffcc', padding: { x: 14, y: 8 } })
-      .setOrigin(0.5)
-      .setScrollFactor(0)
-      .setDepth(25)
-      .setAlpha(0);
+    // Dizzy: a pulsing purple wash over the screen and stars circling Vimmy's head.
+    this.dizzyOverlay = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x8e24aa, 0).setOrigin(0).setScrollFactor(0).setDepth(18);
+    this.dizzyStars = Array.from({ length: 3 }, () =>
+      this.add.text(0, 0, '★', { fontFamily: FONT.family, fontSize: '18px', color: '#ffeb3b', stroke: '#f57f17', strokeThickness: 3 }).setOrigin(0.5).setDepth(6).setVisible(false),
+    );
+
+    // One bread per sideways dash left; spent ones dim.
+    this.swipeBreads = Array.from({ length: PHYSICS.swipeDashesPerRun }, (_, i) =>
+      addItemSprite(this, GAME_WIDTH - 28 - i * 32, 30, { id: 'cheeseButterBread', color: 0xffca28 }, 28).setScrollFactor(0).setDepth(20),
+    ).reverse();
+
+    // Location card: a rounded white panel with a honey border; the stage sits on a small pill above the name.
+    this.bannerBg = this.add.graphics();
+    this.bannerStage = this.add.text(0, 0, '', { fontFamily: FONT.family, fontSize: '14px', fontStyle: 'bold', color: '#3e2723' }).setOrigin(0.5);
+    this.bannerName = this.add.text(0, 0, '', { fontFamily: FONT.family, fontSize: '28px', fontStyle: 'bold', color: '#4e342e', align: 'center' }).setOrigin(0.5);
+    this.banner = this.add.container(GAME_WIDTH / 2, BANNER_Y, [this.bannerBg, this.bannerStage, this.bannerName]).setScrollFactor(0).setDepth(25).setAlpha(0);
     this.showBanner(zoneBannerText(this.zone));
 
-    bindSteering(this, (dir) => this.flap(dir));
+    const hint = this.add
+      .text(GAME_WIDTH / 2, GAME_HEIGHT - 60, t('hud.swipeHint'), { fontFamily: FONT.family, fontSize: '18px', color: '#4e342e', backgroundColor: '#ffffffcc', padding: { x: 10, y: 6 } })
+      .setOrigin(0.5)
+      .setScrollFactor(0)
+      .setDepth(25);
+    this.tweens.add({ targets: hint, alpha: 0, delay: 3500, duration: 600, onComplete: () => hint.destroy() });
+
+    bindSteering(this, (dir) => this.flap(dir), (dir) => this.swipeDash(dir));
   }
 
   private showBanner(text: string): void {
     this.tweens.killTweensOf(this.banner);
-    this.banner.setText(text).setAlpha(1);
-    this.tweens.add({ targets: this.banner, alpha: 0, delay: 1400, duration: 600 });
+    // Drop in from above, overshoot and settle, then fade out.
+    this.layoutBanner(text);
+    this.banner.setAlpha(0).setScale(0.4).setY(BANNER_Y - 50);
+    this.tweens.add({ targets: this.banner, alpha: 1, scale: 1, y: BANNER_Y, duration: 450, ease: 'Back.easeOut' });
+    this.tweens.add({ targets: this.banner, alpha: 0, scale: 1.08, delay: 1800, duration: 600 });
+    this.cameras.main.flash(250, 255, 255, 255, true);
+  }
+
+  /** Banner text is "stage\nname" (or just the name). Lays out the card around it. */
+  private layoutBanner(text: string): void {
+    const lines = text.split('\n');
+    const name = lines[lines.length - 1];
+    const stage = lines.length > 1 ? lines[0] : '';
+    this.bannerName.setText(name);
+    this.bannerStage.setText(stage).setVisible(!!stage);
+    const w = Math.min(GAME_WIDTH - 24, Math.max(this.bannerName.width, this.bannerStage.width + 24) + 56);
+    const h = stage ? 84 : 56;
+    const top = -h / 2;
+    this.bannerName.setPosition(0, stage ? top + 56 : 0);
+    this.bannerStage.setPosition(0, top + 22);
+    const g = this.bannerBg;
+    g.clear();
+    g.fillStyle(0x000000, 0.18).fillRoundedRect(-w / 2 + 2, top + 5, w, h, 20);
+    g.fillStyle(0xffffff, 0.96).fillRoundedRect(-w / 2, top, w, h, 20);
+    g.lineStyle(4, 0xffb300, 1).strokeRoundedRect(-w / 2, top, w, h, 20);
+    if (stage) {
+      const pw = this.bannerStage.width + 24;
+      g.fillStyle(0xffb300, 1).fillRoundedRect(-pw / 2, top + 10, pw, 24, 12);
+    }
   }
 
   private createVimmyAnimations(): void {
@@ -149,10 +234,28 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
+  /** A pop-up that bounces in above Vimmy, floats up and fades. Big ones are larger and linger. */
+  private showPopup(message: string, stroke: string, big = false): void {
+    const text = this.add
+      .text(this.player.x, this.player.y - 50, message, {
+        fontFamily: FONT.family,
+        fontSize: big ? '34px' : '22px',
+        color: '#ffffff',
+        stroke,
+        strokeThickness: big ? 7 : 5,
+      })
+      .setOrigin(0.5)
+      .setDepth(30)
+      .setScale(0.3);
+    text.x = Phaser.Math.Clamp(text.x, text.width / 2 + 8, GAME_WIDTH - text.width / 2 - 8);
+    this.tweens.add({ targets: text, scale: big ? 1.3 : 1.15, duration: big ? 260 : 220, ease: 'Back.easeOut' });
+    this.tweens.add({ targets: text, y: text.y - (big ? 90 : 70), alpha: 0, delay: big ? 800 : 500, duration: 700, onComplete: () => text.destroy() });
+  }
+
   /** Briefly turn Vimmy toward the player when she collects one of the five buffs. */
   private playBuffReaction(item: ItemDef): void {
     const texture = BUFF_REACTION_TEXTURE[item.id];
-    if (!texture || this.isFlipping) return;
+    if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
 
     this.reactionTimer?.remove(false);
     this.player.stop().setTexture(texture);
@@ -161,6 +264,19 @@ export class GameScene extends Phaser.Scene {
       if (!this.player.active || this.ended) return;
       if (item.id === 'helicopter') this.playHelicopterFlip();
       else this.player.play(VIMMY_FLY_ANIM);
+    });
+  }
+
+  /** Three compact negative faces cover queasy, stunned and crash effects. */
+  private playDebuffReaction(item: ItemDef): void {
+    const texture = DEBUFF_REACTION_TEXTURE[item.id];
+    if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
+
+    this.reactionTimer?.remove(false);
+    this.player.stop().setTexture(texture);
+    this.reactionTimer = this.time.delayedCall(item.id === 'carCrash' ? 700 : 560, () => {
+      this.reactionTimer = undefined;
+      if (this.player.active && !this.ended) this.player.play(VIMMY_FLY_ANIM);
     });
   }
 
@@ -174,8 +290,23 @@ export class GameScene extends Phaser.Scene {
     this.showBanner(zoneBannerText(zone, previous));
   }
 
+  /** Emergency sideways dash on a swipe; limited uses per run. */
+  private swipeDash(dir: -1 | 1): void {
+    if (this.ended || this.run.isStunned || this.isFlipping || this.swipeDashDir !== 0 || this.swipesLeft <= 0) return;
+    this.swipesLeft--;
+    const spent = this.swipeBreads[this.swipesLeft];
+    this.tweens.add({ targets: spent, scale: spent.scale * 1.6, duration: 120, yoyo: true });
+    const steer = this.run.isDisoriented ? -dir : dir;
+    this.swipeDashDir = steer as -1 | 1;
+    this.reactionTimer?.remove(false);
+    this.reactionTimer = undefined;
+    this.player.stop().setTexture(DASH_TEXTURE[String(steer) as '-1' | '1']);
+    this.vx = 0;
+    this.vy = 0;
+  }
+
   private flap(dir: -1 | 1): void {
-    if (this.ended || this.run.isStunned) return;
+    if (this.ended || this.run.isStunned || this.swipeDashDir !== 0) return;
     const power = this.run.strongFlapMs > 0 ? this.run.strongFlapFactor : 1;
     const slow = this.run.slowMs > 0 ? this.run.slowFactor : 1; // fish sauce bread: slower flaps and drift
     this.vy = PHYSICS.flapVelocity * power * slow;
@@ -200,6 +331,20 @@ export class GameScene extends Phaser.Scene {
   }
 
   private movePlayer(dt: number): void {
+    if (this.swipeDashDir !== 0) {
+      // Straight, level run to the far wall: no gravity, no wall stun.
+      const half = PLAYER_SPRITE_SIZE / 2;
+      const target = this.swipeDashDir < 0 ? half : GAME_WIDTH - half;
+      const step = PHYSICS.swipeDashSpeed * dt;
+      this.player.x = this.swipeDashDir < 0 ? Math.max(target, this.player.x - step) : Math.min(target, this.player.x + step);
+      if (this.player.x === target) {
+        this.swipeDashDir = 0;
+        this.player.play(VIMMY_FLY_ANIM);
+        this.vx = 0;
+        this.vy = PHYSICS.swipeDashExitLift;
+      }
+      return;
+    }
     if (this.run.pendingKnockback > 0) {
       this.vy = this.run.pendingKnockback;
       this.run.pendingKnockback = 0;
@@ -276,8 +421,17 @@ export class GameScene extends Phaser.Scene {
 
       const reach = (PLAYER_HITBOX_SIZE + Math.max(ITEM_RULES.size, it.visualSize * 0.75)) / 2;
       if (Math.abs(s.x - this.player.x) < reach && Math.abs(s.y - this.player.y) < reach) {
-        if (it.def.kind === 'buff') this.playBuffReaction(it.def);
-        this.run.collect(it.def);
+        if (it.def.kind === 'debuff' && this.swipeDashDir !== 0) continue; // dashing: pass through harmlessly
+        if (it.def.kind === 'buff') {
+          this.playBuffReaction(it.def);
+          this.showPopup(tDynamic(`buff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#2e7d32');
+        } else if (it.def.kind === 'debuff') {
+          const big = it.def.id === 'carCrash' || it.def.id === 'planner';
+          this.showPopup(tDynamic(`debuff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#b71c1c', big);
+          if (big) this.cameras.main.shake(300, 0.012);
+        }
+        const applied = this.run.collect(it.def);
+        if (it.def.kind === 'debuff' && applied) this.playDebuffReaction(it.def);
         this.remove(it);
       } else if (s.y > cam.scrollY + GAME_HEIGHT + 60) {
         this.remove(it);
@@ -292,18 +446,64 @@ export class GameScene extends Phaser.Scene {
   }
 
   private updateHud(): void {
-    this.hud.setText(`${this.run.score}   (${Math.floor(this.run.heightMeters)} m)`);
-    const bits: string[] = [];
-    if (this.run.shield) bits.push(t('hud.shield'));
-    if (this.run.dashMs > 0) bits.push(t('hud.dash'));
-    if (this.run.isStunned) bits.push(t('hud.stunned'));
-    if (this.run.strongFlapMs > 0) bits.push(t('hud.power'));
-    if (this.run.isDisoriented) bits.push(t('hud.dizzy'));
-    if (this.run.slowMs > 0) bits.push(t('hud.slow'));
-    if (this.run.doublePointsMs > 0) bits.push(t('hud.x2'));
-    this.status.setText(bits.join('  '));
+    const score = this.run.score;
+    this.scoreText.setText(`${score}`);
+    this.metersText.setText(`▲ ${Math.floor(this.run.heightMeters)} m`);
+    // Bar showing progress toward the next location.
+    const next = ZONES[ZONES.indexOf(this.zone) + 1];
+    const fraction = next ? Phaser.Math.Clamp((this.run.heightMeters - this.zone.fromMeters) / (next.fromMeters - this.zone.fromMeters), 0, 1) : 1;
+    this.progressGfx.clear();
+    this.progressGfx.fillStyle(0xf0dcc3, 1).fillRoundedRect(92, 55, 70, 8, 4);
+    if (fraction > 0) this.progressGfx.fillStyle(0xffb300, 1).fillRoundedRect(92, 55, Math.max(8, 70 * fraction), 8, 4);
+    if (score !== this.lastScore) {
+      // Pop and flash green on a gain, red on a loss.
+      this.scoreText.setColor(score > this.lastScore ? '#2e7d32' : '#b71c1c');
+      this.tweens.killTweensOf(this.scoreText);
+      this.scoreText.setScale(1.3);
+      this.tweens.add({ targets: this.scoreText, scale: 1, duration: 250, ease: 'Back.easeOut', onComplete: () => this.scoreText.setColor('#4e342e') });
+      this.lastScore = score;
+    }
+    this.swipeBreads.forEach((b, i) => b.setAlpha(i < this.swipesLeft ? 1 : 0.2));
+
+    const secs = (ms: number) => `${(ms / 1000).toFixed(1)}s`;
+    const chips: { label: string; color: number }[] = [];
+    if (this.run.shield) chips.push({ label: `🛡 ${t('hud.shield')}`, color: COLORS.buff });
+    if (this.run.dashMs > 0) chips.push({ label: `🚁 ${t('hud.dash')} ${secs(this.run.dashMs)}`, color: COLORS.buff });
+    if (this.run.strongFlapMs > 0) chips.push({ label: `💪 ${t('hud.power')} ${secs(this.run.strongFlapMs)}`, color: COLORS.buff });
+    if (this.run.doublePointsMs > 0) chips.push({ label: `✨ ${t('hud.x2')} ${secs(this.run.doublePointsMs)}`, color: COLORS.buff });
+    if (this.run.isStunned) chips.push({ label: `💫 ${t('hud.stunned')} ${secs(this.run.stunMs)}`, color: COLORS.debuff });
+    if (this.run.isDisoriented) chips.push({ label: `😵 ${t('hud.dizzy')} ${secs(this.run.disorientMs)}`, color: COLORS.debuff });
+    if (this.run.slowMs > 0) chips.push({ label: `🐌 ${t('hud.slow')} ${secs(this.run.slowMs)}`, color: COLORS.debuff });
+
+    this.chipGfx.clear();
+    let y = 88;
+    this.chipTexts.forEach((txt, i) => {
+      const chip = chips[i];
+      txt.setVisible(!!chip);
+      if (!chip) return;
+      txt.setText(chip.label).setPosition(18, y + 3);
+      this.chipGfx.fillStyle(chip.color, 0.92).fillRoundedRect(8, y, txt.width + 20, 22, 11);
+      y += 26;
+    });
+
     if (this.run.isStunned) this.player.setTint(0xb0bec5);
     else this.player.clearTint();
+    this.updateDizzyEffect();
+  }
+
+  private updateDizzyEffect(): void {
+    const dizzy = this.run.isDisoriented;
+    const now = this.time.now / 1000;
+    this.dizzyOverlay.setFillStyle(0x8e24aa, dizzy ? 0.1 + 0.07 * Math.sin(now * 6) : 0);
+    this.dizzyStars.forEach((star, i) => {
+      star.setVisible(dizzy);
+      if (!dizzy) return;
+      const a = now * 5 + (i * Math.PI * 2) / this.dizzyStars.length;
+      star.setPosition(this.player.x + Math.cos(a) * 26, this.player.y - 34 + Math.sin(a) * 8);
+      star.setDepth(Math.sin(a) > 0 ? 7 : 4); // pass in front of and behind the head
+    });
+    // Vimmy wobbles side to side while dizzy.
+    this.player.setAngle(dizzy ? Math.sin(now * 9) * 14 : 0);
   }
 
   private endRun(): void {

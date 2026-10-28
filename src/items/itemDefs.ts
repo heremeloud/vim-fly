@@ -47,7 +47,7 @@ export const ITEMS: readonly ItemDef[] = [
   { id: 'lawyerSuit', label: 'Lawyer Suit', kind: 'buff', weight: 3, effect: { type: 'shield' }, color: 0x37474f },
   { id: 'handkerchief', label: 'Handkerchief', kind: 'buff', weight: 3, effect: { type: 'cleanse' }, color: 0xe3f2fd },
   { id: 'rollingPin', label: 'Rolling Pin', kind: 'buff', weight: 3, effect: { type: 'strongFlap', durationMs: 5000, factor: 1.5 }, color: 0xd7ccc8 },
-  { id: 'planner', label: 'Planner', kind: 'debuff', weight: 2, effect: { type: 'stun', durationMs: 1500, points: -150 }, color: 0x7b1fa2 },
+  { id: 'planner', label: 'Planner', kind: 'debuff', weight: 2, effect: { type: 'stun', durationMs: 1500, points: -100 }, color: 0x7b1fa2 },
   { id: 'helicopter', label: 'Helicopter', kind: 'buff', weight: 2, effect: { type: 'dash', durationMs: 3000, velocity: -700 }, color: 0x26c6da },
   { id: 'gavelHammer', label: 'Gavel Hammer', kind: 'debuff', weight: 6, effect: { type: 'stun', durationMs: 1000 }, color: 0xd32f2f },
   { id: 'carCrash', label: 'Car Crash', kind: 'debuff', weight: 2, effect: { type: 'crash', stunMs: 1800, knockback: 500, points: -50 }, color: 0xff6f00 },

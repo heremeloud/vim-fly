@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { t } from '../i18n';
-import { displayName, getItem, priceLabel } from '../items/itemDefs';
+import { displayName, ITEMS, priceLabel, type ItemDef } from '../items/itemDefs';
 import { addItemSprite, itemDisplaySize } from '../items/itemSprite';
 import { SHOW, countdownText } from '../promo/config';
 import { watchPilot } from '../promo/pilot';
@@ -9,8 +9,12 @@ import { APP, SERVICES } from '../ui/brand';
 import { COLORS } from '../ui/theme';
 import { TAB_BAR_HEIGHT, button, hitArea, label, languageButton, roundedBox, tabBar } from '../ui/widgets';
 
-// Items shown as "popular" on the storefront.
-const POPULAR = ['goldenRetriever', 'shrimpFriedRiceBox', 'pandanCustardBread'];
+const POPULAR_COUNT = 3;
+
+/** Three different priced items (points items only, no buffs or debuffs), picked at random each time the home screen opens. */
+function pickPopular(): ItemDef[] {
+  return Phaser.Utils.Array.Shuffle(ITEMS.filter((i) => i.kind === 'points')).slice(0, POPULAR_COUNT);
+}
 
 /** Bakery storefront: the home screen, laid out like a shop page in a food-ordering app. */
 export class HomeScene extends Phaser.Scene {
@@ -86,9 +90,7 @@ export class HomeScene extends Phaser.Scene {
     label(this, GAME_WIDTH - 20, 370, `★ 4.9  ·  ${t('home.open')}`, { size: 14, color: COLORS.muted }).setOrigin(1, 0);
     const cardW = 138;
     const gap = 13;
-    POPULAR.forEach((id, i) => {
-      const item = getItem(id);
-      if (!item) return;
+    pickPopular().forEach((item, i) => {
       const x = 20 + i * (cardW + gap);
       const y = 402;
       roundedBox(this, x, y, cardW, 160, COLORS.surface, 14, COLORS.border);

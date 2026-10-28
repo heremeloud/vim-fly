@@ -41,7 +41,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Gavel Hammer | `gavelHammer` | Stun | 1 s, taps ignored | 6 | The courtroom gavel |
 | Cilantro Bread | `cilantroBread` | Disoriented | 3 s, left/right swapped | 4 | No points |
 | Fish Sauce Bread | `fishSauceBread` | Slows flying | 5 s, flaps and drift at 60% speed (40% slower) | 3 | No points |
-| Planner | `planner` | Stun and huge point loss | Stun 1.5 s, taps ignored, and -150 points | 2 | Stuns and costs points, with no knock-back |
+| Planner | `planner` | Stun and huge point loss | Stun 1.5 s, taps ignored, and -100 points | 2 | Stuns and costs points, with no knock-back |
 | **Car crash** | `carCrash` | **Big debuff** | Stun 1.8 s, knocked down 500 px/s, -50 points, cancels any active dash | 2 | Nod to how the leads met: Cheese swerves for a kitten and crashes into Noey's Benz |
 
 ## Rules that apply to every item

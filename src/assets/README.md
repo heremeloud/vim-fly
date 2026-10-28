@@ -40,7 +40,7 @@ The in-game delivery app is a parody of LINE MAN and Grab called VIMMY (see `src
 
 ## Character
 
-The playable cocker spaniel in a bee costume is implemented in `vimmy-v1/`. Four back-view normal-flight frames animate her large fluffy ears and tiny water-blue wings. Five brief front-view buff reactions use her approved star-eyed face, with only subtle pixel-level expression changes. Four helicopter-contact frames perform a backward somersault before returning to normal flight. Full-resolution sheet masters are in `vimmy-v1-sources/`.
+The playable cocker spaniel in a bee costume is implemented in `vimmy-v1/`. Four back-view normal-flight frames animate her large fluffy ears and tiny water-blue wings. Five brief front-view buff reactions use her approved star-eyed face, two side-view poses face the direction of an emergency dash, and three compact negative faces cover queasy, stunned and crash effects. Four helicopter-contact frames perform a backward somersault before returning to normal flight. Full-resolution sheet masters are in `vimmy-v1-sources/`.
 
 ## Fonts for Thai, Japanese and Chinese
 
