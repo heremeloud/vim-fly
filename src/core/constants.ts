@@ -32,14 +32,14 @@ export const DIFFICULTY = {
 // (camera moves only when the dog passes the lead line).
 export const CAMERA = {
   leadPx: 350, // dog is pulled to at most this far below the top of the screen
-  speed: [70, 220] as const,
+  speed: [105, 220] as const,
 } as const;
 
 // Item spawning. All [start, end] pairs run from difficulty 0 to 1.
 export const ITEM_RULES = {
   size: 36,
-  spawnMs: [900, 300] as const, // time between spawns
-  fallSpeed: [110, 340] as const, // px/s
+  spawnMs: [750, 300] as const, // time between spawns
+  fallSpeed: [140, 340] as const, // px/s
   doubleSpawnChance: [0, 0.35] as const, // chance a spawn drops a second item at once
   debuffSway: [0, 80] as const, // debuffs swerve side to side by up to this many px
   swayRate: 2.2, // radians/s of the swerve

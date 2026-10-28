@@ -231,6 +231,16 @@ export function initSfx(game: Phaser.Game): void {
   if (!manager) return; // no Web Audio (very old browser): the game stays silent
   applyAudioSession(enabled);
   for (const [key, build] of Object.entries(BUILDERS)) game.cache.audio.add(key, build(manager.context));
+
+  // The browser can suspend the audio context behind Phaser's back (a page that lost focus, an iOS interruption, a
+  // browser prompt after a language change). Phaser only unlocks it once, so wake it on any tap, key or return to the page.
+  const wake = (): void => {
+    if (manager.context.state !== 'running') void manager.context.resume().catch(() => undefined);
+  };
+  for (const type of ['pointerdown', 'touchend', 'keydown']) document.addEventListener(type, wake, { passive: true });
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) wake();
+  });
 }
 
 type AudioSession = { type: string };
