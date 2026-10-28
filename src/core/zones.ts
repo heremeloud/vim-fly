@@ -34,16 +34,16 @@ export const ZONE_SPACING_METERS = 200;
 type ZoneDef = Omit<Zone, 'fromMeters'>;
 
 const ZONE_DEFS: readonly ZoneDef[] = [
-  { id: 'ruralRoad', label: 'Rural Road', stage: 1, base: 0xfff59d, accent: 0xf9a825 },
-  { id: 'bakery', label: 'Heartwarming Bakery', stage: 1, base: 0xfff3e0, accent: 0xffcc80 },
-  { id: 'cafes', label: 'Suburban Cafés', stage: 2, base: 0xe8f5e9, accent: 0xa5d6a7 },
-  { id: 'mall', label: 'Shopping Mall', stage: 2, base: 0xf3e5f5, accent: 0xce93d8 },
-  { id: 'lawOffice', label: 'CC Law Office', stage: 3, base: 0xeceff1, accent: 0x90a4ae },
-  { id: 'gym', label: 'Fitness Second Gym', stage: 3, base: 0xffccbc, accent: 0xff8a65 },
-  { id: 'courtroom', label: 'The Courtroom', stage: 4, base: 0xd7ccc8, accent: 0x8d6e63 },
-  { id: 'beach', label: 'Sweet Sea Beach', stage: 4, base: 0xe0f7fa, accent: 0x4dd0e1 },
-  { id: 'residence', label: "Noey's Residence", stage: 5, base: 0xe8eaf6, accent: 0x9fa8da },
-  { id: 'bakeLove', label: 'Bake Love Bakery', stage: 5, base: 0xfce4ec, accent: 0xf48fb1 },
+  { id: 'ruralRoad', label: 'Rural Road', stage: 1, base: 0xf4f1d6, accent: 0xd9c46a },
+  { id: 'bakery', label: 'Heartwarming Bakery', stage: 1, base: 0xfaf0e2, accent: 0xe6c79c },
+  { id: 'cafes', label: 'Suburban Cafés', stage: 2, base: 0xeaf1e8, accent: 0xb4cfb0 },
+  { id: 'mall', label: 'Shopping Mall', stage: 2, base: 0xf1eaf3, accent: 0xcdb4d6 },
+  { id: 'lawOffice', label: 'CC Law Office', stage: 3, base: 0xeceff1, accent: 0xa3b1ba },
+  { id: 'gym', label: 'Gym', stage: 3, base: 0xf6e3da, accent: 0xe3a58f },
+  { id: 'courtroom', label: 'The Courtroom', stage: 4, base: 0xe4dcd7, accent: 0xa08a7d },
+  { id: 'beach', label: 'Beach', stage: 4, base: 0xe6f2f4, accent: 0x8fcdd6 },
+  { id: 'residence', label: "Noey's Apartment", stage: 5, base: 0xe9eaf3, accent: 0xaab0d4 },
+  { id: 'bakeLove', label: 'Bake Love Bakery', stage: 5, base: 0xf8e9ee, accent: 0xe8a9bf },
 ];
 
 export const ZONES: readonly Zone[] = ZONE_DEFS.map((z, i) => ({ ...z, fromMeters: i * ZONE_SPACING_METERS }));

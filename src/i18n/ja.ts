@@ -62,10 +62,10 @@ export const ja: Record<StringKey, string> = {
   'zone.cafes': '郊外のカフェ',
   'zone.mall': 'ショッピングモール',
   'zone.lawOffice': 'CC法律事務所',
-  'zone.gym': 'フィットネス・セカンド・ジム',
+  'zone.gym': 'ジム',
   'zone.courtroom': '法廷',
-  'zone.beach': 'スイートシー・ビーチ',
-  'zone.residence': 'ノイの家',
+  'zone.beach': 'ビーチ',
+  'zone.residence': 'ノイのアパート',
   'zone.bakeLove': 'Bake Love ベーカリー',
 
   'effect.points.gain': '{n}ポイント獲得',

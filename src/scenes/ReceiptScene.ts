@@ -20,7 +20,7 @@ const FOOTER_TOP = 341;
 /** The pilot player: 16:9, centered, under the total. */
 const VIDEO = { x: 50, y: 429, w: 380, h: 214 };
 const ROW_MIN = 32;
-/** Item icon beside each receipt line: the 16px sprite at 2x. */
+/** Native-size item icon beside each receipt line. */
 const ICON = 32;
 
 /** Game-over receipt: collected items as line items, total = score. Also saves the run to the order history. */

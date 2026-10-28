@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { t } from '../i18n';
 import { displayName, getItem, priceLabel } from '../items/itemDefs';
-import { addItemSprite } from '../items/itemSprite';
+import { addItemSprite, itemDisplaySize } from '../items/itemSprite';
 import { SHOW, countdownText } from '../promo/config';
 import { watchPilot } from '../promo/pilot';
 import { APP, SERVICES } from '../ui/brand';
@@ -93,7 +93,7 @@ export class HomeScene extends Phaser.Scene {
       const y = 402;
       roundedBox(this, x, y, cardW, 160, COLORS.surface, 14, COLORS.border);
       this.add.circle(x + cardW / 2, y + 44, 36, COLORS.background).setStrokeStyle(3, COLORS.points);
-      addItemSprite(this, x + cardW / 2, y + 44, item, 48);
+      addItemSprite(this, x + cardW / 2, y + 44, item, itemDisplaySize(item.id, 48));
       label(this, x + cardW / 2, y + 92, displayName(item), { size: 14, bold: true, wrap: cardW - 16, align: 'center' }).setOrigin(0.5, 0);
       label(this, x + cardW / 2, y + 144, priceLabel(item), { size: 18, bold: true, color: COLORS.accent }).setOrigin(0.5);
     });

@@ -45,6 +45,6 @@ Add a file like `ko.ts`, add it to `TABLES` and `LOCALES` in `index.ts` (with a 
 
 - the jokes and puns (the tagline),
 - food and item names (for example 鱼露面包 for fish sauce bread, ナンプラーパン, ขนมปังสังขยาใบเตย),
-- the location and character names. Transliterations like ノイの家 (Noey's Residence) and บ้านของเนย are guesses; use the show's official names where they exist.
+- the location and character names. Transliterations like ノイのアパート (Noey's Apartment) and อพาร์ตเมนต์ของเนย are guesses; use the show's official names where they exist.
 
 Which Chinese to ship (Simplified or Traditional) is an open decision.

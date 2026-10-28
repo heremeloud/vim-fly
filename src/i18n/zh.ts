@@ -63,10 +63,10 @@ export const zh: Record<StringKey, string> = {
   'zone.cafes': '郊区咖啡馆',
   'zone.mall': '购物中心',
   'zone.lawOffice': 'CC律师事务所',
-  'zone.gym': 'Fitness Second 健身房',
+  'zone.gym': '健身房',
   'zone.courtroom': '法庭',
-  'zone.beach': '甜海海滩',
-  'zone.residence': '诺伊的家',
+  'zone.beach': '海滩',
+  'zone.residence': '诺伊的公寓',
   'zone.bakeLove': 'Bake Love 面包店',
 
   'effect.points.gain': '增加 {n} 分',

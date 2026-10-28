@@ -7,13 +7,14 @@ import { RunState } from '../core/RunState';
 import { difficulty, ramp } from '../core/difficulty';
 import { zoneAt, zoneBannerText, zoneTextureKey, ZONES, type Zone } from '../core/zones';
 import { pickItem, type ItemDef } from '../items/itemDefs';
-import { addItemSprite } from '../items/itemSprite';
+import { addItemSprite, itemDisplaySize } from '../items/itemSprite';
 
 interface FallingItem {
   def: ItemDef;
   shape: Phaser.GameObjects.Image;
   /** Soft disc in the kind's color behind the sprite, so good and bad items read at a glance. */
   halo: Phaser.GameObjects.Arc;
+  visualSize: number;
   baseX: number;
   swayPhase: number;
 }
@@ -22,7 +23,7 @@ interface FallingItem {
 const OUTLINE = { points: 0xf9a825, buff: 0x2e7d32, debuff: 0xb71c1c } as const;
 
 const PLAYER_SIZE = 40;
-/** Items are 16x16 pixel art drawn at 3x. The hit box stays ITEM_RULES.size. */
+/** Native 32x32 sprites are displayed at 48x48 with nearest-neighbour filtering for clarity. */
 const ITEM_SPRITE_SIZE = 48;
 const START_Y = GAME_HEIGHT - 200;
 
@@ -187,9 +188,10 @@ export class GameScene extends Phaser.Scene {
     const cam = this.cameras.main;
     const x = Phaser.Math.Between(40, GAME_WIDTH - 40);
     const y = cam.scrollY - 40 - row * 70;
-    const halo = this.add.circle(x, y, ITEM_SPRITE_SIZE * 0.55, OUTLINE[def.kind], 0.35).setStrokeStyle(2, OUTLINE[def.kind], 0.8).setDepth(2.9);
-    const shape = addItemSprite(this, x, y, def, ITEM_SPRITE_SIZE).setDepth(3);
-    this.items.push({ def, shape, halo, baseX: x, swayPhase: Math.random() * Math.PI * 2 });
+    const visualSize = itemDisplaySize(def.id, ITEM_SPRITE_SIZE);
+    const halo = this.add.circle(x, y, visualSize * 0.55, OUTLINE[def.kind], 0.35).setStrokeStyle(2, OUTLINE[def.kind], 0.8).setDepth(2.9);
+    const shape = addItemSprite(this, x, y, def, visualSize).setDepth(3);
+    this.items.push({ def, shape, halo, visualSize, baseX: x, swayPhase: Math.random() * Math.PI * 2 });
   }
 
   private updateItems(dt: number): void {
@@ -197,7 +199,6 @@ export class GameScene extends Phaser.Scene {
     const d = difficulty(this.run.heightMeters);
     const fall = ramp(ITEM_RULES.fallSpeed, d);
     const sway = ramp(ITEM_RULES.debuffSway, d);
-    const reach = (PLAYER_SIZE + ITEM_RULES.size) / 2;
 
     for (const it of [...this.items]) {
       const s = it.shape;
@@ -210,6 +211,7 @@ export class GameScene extends Phaser.Scene {
 
       it.halo.setPosition(s.x, s.y);
 
+      const reach = (PLAYER_SIZE + Math.max(ITEM_RULES.size, it.visualSize * 0.75)) / 2;
       if (Math.abs(s.x - this.player.x) < reach && Math.abs(s.y - this.player.y) < reach) {
         this.run.collect(it.def);
         this.remove(it);

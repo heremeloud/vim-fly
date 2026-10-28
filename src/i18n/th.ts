@@ -62,10 +62,10 @@ export const th: Record<StringKey, string> = {
   'zone.cafes': 'คาเฟ่ชานเมือง',
   'zone.mall': 'ห้างสรรพสินค้า',
   'zone.lawOffice': 'สำนักงานกฎหมาย CC',
-  'zone.gym': 'ฟิตเนส เซคันด์ ยิม',
+  'zone.gym': 'ยิม',
   'zone.courtroom': 'ห้องพิจารณาคดี',
-  'zone.beach': 'หาดสวีทซี',
-  'zone.residence': 'บ้านของเนย',
+  'zone.beach': 'ชายหาด',
+  'zone.residence': 'อพาร์ตเมนต์ของเนย',
   'zone.bakeLove': 'Bake Love เบเกอรี่',
 
   'effect.points.gain': 'เพิ่ม {n} คะแนน',

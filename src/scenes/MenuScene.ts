@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { t, type StringKey } from '../i18n';
 import { ITEMS, describeEffect, displayName, priceLabel, type ItemKind } from '../items/itemDefs';
-import { addItemSprite } from '../items/itemSprite';
+import { addItemSprite, itemDisplaySize } from '../items/itemSprite';
 import { ScrollList } from '../ui/ScrollList';
 import { COLORS, hex } from '../ui/theme';
 import { TAB_BAR_HEIGHT, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
@@ -91,7 +91,7 @@ export class MenuScene extends Phaser.Scene {
       const row = [
         roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, 14, COLORS.border),
         this.add.rectangle(62, y + ROW_H / 2, 60, 60, COLORS.background).setStrokeStyle(3, CATEGORIES.find((c) => c.kind === item.kind)!.color),
-        addItemSprite(this, 62, y + ROW_H / 2, item, 48),
+        addItemSprite(this, 62, y + ROW_H / 2, item, itemDisplaySize(item.id, 48)),
         name,
         desc,
         label(this, GAME_WIDTH - 36, y + ROW_H / 2, priceLabel(item), {

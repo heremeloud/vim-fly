@@ -1,6 +1,6 @@
 # assets
 
-Art, animation and sound. The active 19 item sprites are original 16x16 pixel art in `items-v2/`, drawn from story-specific text grids by `scripts/make-item-sprites.mjs` (edit the v2 grid, rerun `node scripts/make-item-sprites.mjs --v2`). The ten active zone tiles are original 480x200 pixel scenes in `zones-v2/`, composed at 120x50 and enlarged without smoothing by `scripts/make-zone-backgrounds.mjs`. The earlier `items/` art and procedural zone renderer remain as fallbacks.
+Art, animation and sound. The active item set is the complete 32x32, palette-limited collection in `items-v5/`. It is derived from the v4 art but intentionally reduced to a maximum of 20 colors per sprite so it feels less polished and more like native game pixel art. Phaser displays the sprites at 48x48 in gameplay and primary item cards using nearest-neighbour filtering, keeping them larger and crisp without increasing the source resolution. The Thai courtroom lawyer item keeps its black gown and yellow/white ceremonial ribbon but has no tie. `items-v4/` and `items-v4-sources/` remain as the previous pass and editable masters. Zone backdrops are not image files: each is a flat color, a seam line and two emoji drawn in code (`src/core/zoneIcons.ts`).
 
 ## Approach
 
@@ -14,6 +14,9 @@ Add a row for every third-party file or pack you use.
 | --- | --- | --- | --- | --- |
 | X, Instagram and TikTok icons (`src/assets/icons`) | Simple Icons (simpleicons.org) | CC0 1.0 for the shapes; the logos belong to the platforms | No; used only to link to the platforms' own pages | Social buttons on the Promos page |
 | Noto Sans Thai (Thai glyphs, weights 400 and 700) | `@fontsource/noto-sans-thai` (npm) | SIL Open Font License 1.1 | No (keep the license with the font files) | Thai text everywhere |
+| Pixel Mart | [ghostpixxells on itch.io](https://ghostpixxells.itch.io/pixel-mart) | CC0 1.0 | No | Active white-wine and rolling-pin sprites |
+
+The item-production record and free-resource links are in [RESOURCES.md](RESOURCES.md).
 
 ## Where to look
 
@@ -29,7 +32,7 @@ Add a row for every third-party file or pack you use.
 
 ## Backdrops
 
-One tileable (vertically repeating) image per height zone, ten in all, one per location in the novel (rural road, heartwarming bakery, suburban cafés, shopping mall, CC law office, fitness gym, courtroom, beach, Noey's residence, Bake Love Bakery). The current hand-authored set is in `zones-v2/`. See `src/core/ZONES.md`.
+One tileable (vertically repeating) image per height zone, ten in all, one per location in the novel (rural road, heartwarming bakery, suburban cafés, shopping mall, CC law office, fitness gym, courtroom, beach, Noey's residence, Bake Love Bakery). They are generated at startup from a flat color plus themed emoji (`src/core/zoneIcons.ts`). See `src/core/ZONES.md`.
 
 ## Branding
 

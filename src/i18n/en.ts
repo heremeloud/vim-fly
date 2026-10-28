@@ -63,10 +63,10 @@ export const en = {
   'zone.cafes': 'Suburban Cafés',
   'zone.mall': 'Shopping Mall',
   'zone.lawOffice': 'CC Law Office',
-  'zone.gym': 'Fitness Second Gym',
+  'zone.gym': 'Gym',
   'zone.courtroom': 'The Courtroom',
-  'zone.beach': 'Sweet Sea Beach',
-  'zone.residence': "Noey's Residence",
+  'zone.beach': 'Beach',
+  'zone.residence': "Noey's Apartment",
   'zone.bakeLove': 'Bake Love Bakery',
 
   'effect.points.gain': 'Adds {n} points',

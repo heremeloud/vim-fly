@@ -22,7 +22,10 @@ function computeScale(): number {
   }
   const density = window.devicePixelRatio || 1;
   const shownAt = Math.min(window.innerWidth / GAME_WIDTH, window.innerHeight / GAME_HEIGHT);
-  return Math.min(3, Math.max(1, Math.round(density * shownAt)));
+  // The backing canvas must have at least as many pixels as the browser uses to display it.
+  // Rounding down makes even a small enlargement (for example 480px to 489px) upscale a
+  // 1x canvas and soften the entire UI. Round up so Phaser always renders enough pixels.
+  return Math.min(3, Math.max(1, Math.ceil(density * shownAt)));
 }
 
 /** Make every Text object render at RENDER_SCALE resolution, so text is sharp too. Call once before the game starts. */
