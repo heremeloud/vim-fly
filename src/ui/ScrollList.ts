@@ -6,6 +6,7 @@ import { COLORS } from './theme';
 const BAR_W = 6;
 const BAR_GRAB = 28; // touch-friendly width of the draggable strip at the right edge
 const BAR_MIN_THUMB = 36;
+const NEAR_FIT = 8; // px of overflow that is ignored
 
 /**
  * A vertically scrolling list between `top` and `bottom` (screen y). Add rows to `container`,
@@ -74,7 +75,9 @@ export class ScrollList {
   }
 
   setContentHeight(h: number): void {
-    this.contentH = h;
+    // A few pixels of overflow only makes the page wiggle under a finger, so treat it as fitting.
+    const viewH = this.bottom - this.top;
+    this.contentH = h > viewH && h - viewH <= NEAR_FIT ? viewH : h;
     this.drawBar();
   }
 

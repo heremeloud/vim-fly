@@ -19,10 +19,12 @@ export const PHYSICS = {
   pixelsPerMeter: 10, // converts climbed pixels to the height score
 } as const;
 
-// Difficulty rises linearly from 0 at the start to 1 at this height, then stays at 1.
-// Every [start, end] pair below is interpolated by it (see src/core/difficulty.ts).
+// Difficulty rises from 0 at the start to 1 at this height, then stays at 1. `curve` bends the rise:
+// 1 is linear, 2 is gentle at first and steep near the top. Every [start, end] pair below is
+// interpolated by it (see src/core/difficulty.ts).
 export const DIFFICULTY = {
   fullAtMeters: 1000,
+  curve: 2,
 } as const;
 
 // Camera climb. The screen always scrolls up at `speed` px/s (faster with height); it also

@@ -51,13 +51,13 @@ All layout uses a 480x800 coordinate space, but the canvas is drawn `RENDER_SCAL
 
 ## Height zones
 
-The backdrops are the locations from the series' original novel: five story stages, two locations each, 200 m apart (`ZONE_SPACING_METERS`) (Rural Road, Heartwarming Bakery, Suburban Cafés, Shopping Mall, CC Law Office, Gym, The Courtroom, Beach, Noey's Apartment, Bake Love Bakery). Passing a milestone swaps the background and shows a banner with the stage and location; the Receipt lists the last location reached.
+The backdrops are the locations from the series' original novel: five story stages, two locations each, 500 m apart (`ZONE_SPACING_METERS`) (Rural Road, Heartwarming Bakery, Suburban Cafés, Shopping Mall, CC Law Office, Gym, The Courtroom, Beach, Noey's Apartment, Bake Love Bakery). Passing a milestone swaps the background and shows a banner with the stage and location; the Receipt lists the last location reached.
 
 The full list, story context and vibes are in [ZONES.md](ZONES.md). The code is `zones.ts`. Backdrops are generated in `BootScene.makeBackdrop`: a flat color, the seam line, and two themed emoji per location from `zoneIcons.ts`. In dev, open `/?zone=<id>` to start a run inside a zone.
 
 ## Difficulty curve
 
-One number drives it all: `difficulty(height)` in `difficulty.ts` goes from 0 at the start to 1 at `DIFFICULTY.fullAtMeters` (1000 m), then stays at 1. Everything below is a `[start, end]` pair in `constants.ts` interpolated by it, so it is easy to retune in one place.
+One number drives it all: `difficulty(height)` in `difficulty.ts` goes from 0 at the start to 1 at `DIFFICULTY.fullAtMeters` (1000 m), then stays at 1. The rise is bent by `DIFFICULTY.curve` (2 = gentle early, steep near the top; 1 = linear). Everything below is a `[start, end]` pair in `constants.ts` interpolated by it, so it is easy to retune in one place.
 
 | What | At 0 m | At full difficulty |
 | --- | --- | --- |

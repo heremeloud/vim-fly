@@ -5,8 +5,8 @@ export const itemTextureKey = (id: string): string => `item-${id}`;
 
 /** Some wide or mechanically complex silhouettes need more screen space than compact food icons. */
 const DISPLAY_SCALE: Readonly<Record<string, number>> = {
-  carCrash: 4 / 3,
-  helicopter: 1.25,
+  carCrash: 1.6,
+  helicopter: 1.6,
   goldenRetriever: 1.6,
 };
 

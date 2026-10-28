@@ -42,8 +42,10 @@ export class HomeScene extends Phaser.Scene {
   private drawBanner(): void {
     this.add.rectangle(0, 0, GAME_WIDTH, 230, COLORS.primary).setOrigin(0);
     this.add.rectangle(0, 200, GAME_WIDTH, 30, COLORS.primaryDark).setOrigin(0).setAlpha(0.25);
-    label(this, 20, 12, `${t('app.deliverTo')}  ${t('app.currentLocation')}  ▾`, { size: 15, color: COLORS.onPrimary, bold: true });
-    hitArea(this, 10, 6, 260, 32, () => openSettings(this));
+    const deliverTo = label(this, 20, 12, t('app.deliverTo'), { size: 15, color: COLORS.onPrimary, bold: true });
+    const gear = label(this, deliverTo.x + deliverTo.width + 8, 6, '⚙', { size: 24, color: COLORS.onPrimary, bold: true });
+    label(this, gear.x + gear.width + 4, 12, '▾', { size: 15, color: COLORS.onPrimary, bold: true });
+    hitArea(this, 10, 6, 150, 32, () => openSettings(this));
     languageButton(this, GAME_WIDTH - 20, 12);
 
     roundedBox(this, 20, 42, GAME_WIDTH - 40, 44, COLORS.surface, 22);

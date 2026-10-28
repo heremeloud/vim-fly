@@ -60,7 +60,7 @@ export class BootScene extends Phaser.Scene {
     this.scene.start(SCENES.home);
   }
 
-  /** A 480x200 tile that repeats vertically: flat color, a seam line, and two staggered rows of the location's emoji. */
+  /** A 480x200 tile that repeats vertically: flat color, a seam line, and seven of the location's emoji (three above, four below). */
   private makeBackdrop(zone: Zone): void {
     const hex = (n: number): string => `#${n.toString(16).padStart(6, '0')}`;
     const tex = this.textures.createCanvas(zoneTextureKey(zone), TILE_W, TILE_H)!;
@@ -77,11 +77,12 @@ export class BootScene extends Phaser.Scene {
       if (!this.textures.exists(key)) return;
       ctx.drawImage(this.textures.get(key).getSourceImage() as CanvasImageSource, x - ICON_SIZE / 2, y - ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
     };
-    const row = (icons: string[], xs3: number[], xs2: number[], y: number): void => {
-      (icons.length === 2 ? xs2 : xs3).forEach((x, i) => draw(icons[i], x, y));
+    const row = (icons: string[], y: number): void => {
+      const gap = TILE_W / icons.length;
+      icons.forEach((emoji, i) => draw(emoji, gap * (i + 0.5), y));
     };
-    row(upper, [70, 230, 390], [110, 350], 56);
-    row(lower, [150, 310, 430], [190, 390], 142);
+    row(upper, 56); // three
+    row(lower, 142); // four
     tex.refresh();
   }
 }

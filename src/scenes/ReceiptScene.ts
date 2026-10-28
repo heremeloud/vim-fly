@@ -20,10 +20,25 @@ const X = 50;
 const LIST_TOP = 118;
 const FOOTER_TOP = 300;
 /** The pilot player: 16:9, centered, under the total. */
-const VIDEO = { x: 20, y: 408, w: 440, h: 248 };
+const VIDEO = { x: 20, y: 424, w: 440, h: 248 };
 const ROW_MIN = 30;
 /** Native-size item icon beside each receipt line. */
 const ICON = 32;
+
+/** Native share sheet where there is one (lists Instagram, TikTok, X...); otherwise a pre-filled X post. */
+async function shareScore(score: number): Promise<void> {
+  const text = t('receipt.shareText', { score });
+  const url = window.location.origin + window.location.pathname;
+  if (navigator.share) {
+    try {
+      await navigator.share({ text, url });
+    } catch {
+      // Closed without sharing.
+    }
+    return;
+  }
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank', 'noopener');
+}
 
 /** Game-over receipt: collected items as line items, total = score. Also saves the run to the order history. */
 export class ReceiptScene extends Phaser.Scene {
@@ -91,10 +106,11 @@ export class ReceiptScene extends Phaser.Scene {
     if (isBest) {
       label(this, GAME_WIDTH / 2, FOOTER_TOP + 20, `★ ${t('receipt.newBest')}`, { size: 16, bold: true, color: COLORS.accent }).setOrigin(0.5, 0);
     }
+    button(this, GAME_WIDTH / 2, FOOTER_TOP + 64, 110, 30, t('receipt.share'), () => void shareScore(r.total), 'secondary', 14);
     // Send the score to the worldwide ranking (the run is already saved on this device either way).
     const name = getPlayerName();
     if (data.result && name && leaderboardConfigured) {
-      const status = label(this, GAME_WIDTH / 2, FOOTER_TOP + 68, t('receipt.sending'), { size: 12, color: COLORS.muted }).setOrigin(0.5, 0);
+      const status = label(this, GAME_WIDTH / 2, FOOTER_TOP + 84, t('receipt.sending'), { size: 12, color: COLORS.muted }).setOrigin(0.5, 0);
       void submitFinishedRun(name, r.total).then((ok) => {
         if (!status.active) return; // the player already left the receipt
         if (ok) status.setText('');

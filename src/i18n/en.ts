@@ -10,7 +10,7 @@ export const en = {
   'tab.orders': 'Orders',
   'tab.promos': 'Promos',
 
-  'app.tagline': 'Delivered by a very good bee dog',
+  'app.tagline': 'Delivery powered by the best bee dog',
   'app.deliverTo': 'Deliver to',
   'app.searchHint': 'Search bread, lunch box, golden retriever...',
 
@@ -50,6 +50,8 @@ export const en = {
   'receipt.newBest': 'New Best Order!',
   'receipt.thanks': 'Thank you for playing!',
   'receipt.tagline': "Let's baking · loving · feeling",
+  'receipt.share': 'Share',
+  'receipt.shareText': 'I just scored ฿{score} in Vimmy Fly! Can you beat me?',
 
   'hud.shield': 'SHIELD',
   'hud.dash': 'DASH',
@@ -116,7 +118,6 @@ export const en = {
   'debuff.gavelHammer': 'Stunned!',
   'debuff.carCrash': 'Crash! -50',
 
-  'app.currentLocation': 'Current Location',
   'svc.food': 'Food',
   'svc.mart': 'Mart',
   'svc.express': 'Express',

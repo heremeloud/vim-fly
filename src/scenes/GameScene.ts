@@ -1,5 +1,6 @@
 import { beginRun } from '../leaderboard/client';
 import Phaser from 'phaser';
+import { devFlag, devParam } from '../core/devTools';
 import { itemSfx, loopSfx, playSfx } from '../audio/sfx';
 import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '../core/constants';
 import { bindSteering } from '../core/input';
@@ -15,7 +16,7 @@ interface FallingItem {
   def: ItemDef;
   shape: Phaser.GameObjects.Image;
   /** Soft disc in the kind's color behind the sprite, so good and bad items read at a glance. */
-  halo: Phaser.GameObjects.Arc;
+  halo?: Phaser.GameObjects.Arc; // admin only: circles each item
   visualSize: number;
   baseX: number;
   swayPhase: number;
@@ -33,7 +34,7 @@ const ITEM_SPRITE_SIZE = 48;
  * screen instead of falling out, and debuffs pass through. Press N to jump to the next location and look through
  * every backdrop; `&zone=beach` starts the run at a given location.
  */
-const ADMIN = import.meta.env.DEV && new URLSearchParams(location.search).has('admin');
+const ADMIN = devFlag('admin');
 const BANNER_Y = 190; // below the HUD panel; small and see-through so it never hides the play area
 const BANNER_ALPHA = 0.7;
 const START_Y = GAME_HEIGHT - 200;
@@ -113,7 +114,7 @@ export class GameScene extends Phaser.Scene {
     this.copter = null;
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.stopLoops());
     // Dev only: open http://localhost:5173/?zone=courtroom to start the run inside a zone.
-    const devZone = import.meta.env.DEV ? ZONES.find((z) => z.id === new URLSearchParams(location.search).get('zone')) : undefined;
+    const devZone = ZONES.find((z) => z.id === devParam('zone'));
     if (devZone) {
       this.startY = START_Y + devZone.fromMeters * PHYSICS.pixelsPerMeter;
       this.run.heightMeters = devZone.fromMeters;
@@ -184,10 +185,17 @@ export class GameScene extends Phaser.Scene {
 
     if (ADMIN) {
       const onNext = () => this.jumpToNextZone();
+      const onEnd = () => {
+        if (!this.ended) this.endRun();
+      };
       this.input.keyboard?.on('keydown-N', onNext);
-      this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.input.keyboard?.off('keydown-N', onNext));
+      this.input.keyboard?.on('keydown-E', onEnd);
+      this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+        this.input.keyboard?.off('keydown-N', onNext);
+        this.input.keyboard?.off('keydown-E', onEnd);
+      });
       this.add
-        .text(GAME_WIDTH / 2, GAME_HEIGHT - 20, 'ADMIN: press N for the next location', { fontFamily: FONT.family, fontSize: '13px', color: '#ffffff', backgroundColor: '#000000aa', padding: { x: 8, y: 3 } })
+        .text(GAME_WIDTH / 2, GAME_HEIGHT - 20, 'ADMIN: N = next location, E = end the run', { fontFamily: FONT.family, fontSize: '13px', color: '#ffffff', backgroundColor: '#000000aa', padding: { x: 8, y: 3 } })
         .setOrigin(0.5)
         .setScrollFactor(0)
         .setDepth(30);
@@ -423,7 +431,7 @@ export class GameScene extends Phaser.Scene {
     const x = Phaser.Math.Between(40, GAME_WIDTH - 40);
     const y = cam.scrollY - 40 - row * 70;
     const visualSize = itemDisplaySize(def.id, ITEM_SPRITE_SIZE);
-    const halo = this.add.circle(x, y, visualSize * 0.55, OUTLINE[def.kind], 0.35).setStrokeStyle(2, OUTLINE[def.kind], 0.8).setDepth(2.9);
+    const halo = !ADMIN ? undefined : this.add.circle(x, y, visualSize * 0.55, OUTLINE[def.kind], 0.35).setStrokeStyle(2, OUTLINE[def.kind], 0.8).setDepth(2.9);
     const shape = addItemSprite(this, x, y, def, visualSize).setDepth(3);
     this.items.push({ def, shape, halo, visualSize, baseX: x, swayPhase: Math.random() * Math.PI * 2 });
   }
@@ -443,7 +451,7 @@ export class GameScene extends Phaser.Scene {
         s.x = Phaser.Math.Clamp(it.baseX + wobble, ITEM_RULES.size / 2, GAME_WIDTH - ITEM_RULES.size / 2);
       }
 
-      it.halo.setPosition(s.x, s.y);
+      it.halo?.setPosition(s.x, s.y);
 
       const reach = (PLAYER_HITBOX_SIZE + Math.max(ITEM_RULES.size, it.visualSize * 0.75)) / 2;
       if (Math.abs(s.x - this.player.x) < reach && Math.abs(s.y - this.player.y) < reach) {
@@ -493,7 +501,7 @@ export class GameScene extends Phaser.Scene {
 
   private remove(it: FallingItem): void {
     it.shape.destroy();
-    it.halo.destroy();
+    it.halo?.destroy();
     this.items.splice(this.items.indexOf(it), 1);
   }
 

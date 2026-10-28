@@ -49,6 +49,8 @@ export const ja: Record<StringKey, string> = {
   'receipt.newBest': 'ベスト更新!',
   'receipt.thanks': 'Thank you for playing!',
   'receipt.tagline': "Let's baking · loving · feeling",
+  'receipt.share': 'シェア',
+  'receipt.shareText': 'Vimmy Flyで฿{score}を獲得!私を超えられる?',
 
   'hud.shield': 'シールド',
   'hud.dash': 'ダッシュ',
@@ -115,7 +117,6 @@ export const ja: Record<StringKey, string> = {
   'debuff.gavelHammer': 'スタン!',
   'debuff.carCrash': '衝突! -50',
 
-  'app.currentLocation': '現在地',
   'svc.food': 'フード',
   'svc.mart': 'マート',
   'svc.express': 'エクスプレス',

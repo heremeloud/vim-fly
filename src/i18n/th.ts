@@ -49,6 +49,8 @@ export const th: Record<StringKey, string> = {
   'receipt.newBest': 'ออเดอร์ที่ดีที่สุดครั้งใหม่!',
   'receipt.thanks': 'Thank you for playing!',
   'receipt.tagline': "Let's baking · loving · feeling",
+  'receipt.share': 'แชร์',
+  'receipt.shareText': 'ฉันได้ ฿{score} ใน Vimmy Fly! มาลองเอาชนะฉันสิ',
 
   'hud.shield': 'โล่',
   'hud.dash': 'พุ่ง',
@@ -115,7 +117,6 @@ export const th: Record<StringKey, string> = {
   'debuff.gavelHammer': 'ติดสตัน!',
   'debuff.carCrash': 'รถชน! -50',
 
-  'app.currentLocation': 'ตำแหน่งปัจจุบัน',
   'svc.food': 'อาหาร',
   'svc.mart': 'มาร์ท',
   'svc.express': 'ส่งด่วน',

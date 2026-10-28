@@ -49,6 +49,8 @@ export const zhHant: Record<StringKey, string> = {
   'receipt.newBest': '訂單新紀錄!',
   'receipt.thanks': 'Thank you for playing!',
   'receipt.tagline': "Let's baking · loving · feeling",
+  'receipt.share': '分享',
+  'receipt.shareText': '我在 Vimmy Fly 拿到了 ฿{score}!你能超過我嗎?',
 
   'hud.shield': '護盾',
   'hud.dash': '衝刺',
@@ -115,7 +117,6 @@ export const zhHant: Record<StringKey, string> = {
   'debuff.gavelHammer': '暈眩!',
   'debuff.carCrash': '撞車! -50',
 
-  'app.currentLocation': '目前位置',
   'svc.food': '餐飲',
   'svc.mart': '商城',
   'svc.express': '快遞',

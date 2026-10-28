@@ -11,22 +11,22 @@ The game's backdrops are the locations of the series' original novel. The climb 
 
 ## Zones
 
-Each location is `ZONE_SPACING_METERS` (200 m) apart, so a stage is 400 m and the last location starts at 1800 m. Change the one constant in `zones.ts` to spread the story out more or less.
+Each location is `ZONE_SPACING_METERS` (500 m) apart, so a stage is 1000 m and the last location starts at 4500 m. Change the one constant in `zones.ts` to spread the story out more or less.
 
-Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1000 m, in `constants.ts`), which is now partway through stage 3 (CC Law Office to the Gym). Everything after that stays at full difficulty. This is deliberate: reaching full difficulty sooner keeps the game harder. Raising `fullAtMeters` toward 1800 would spread the ramp across the whole story but make the middle easier.
+Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1000 m, in `constants.ts`), which is now the start of stage 2 (Suburban Cafés). Everything after that stays at full difficulty. This is deliberate: reaching full difficulty sooner keeps the game harder. Raising `fullAtMeters` toward 1800 would spread the ramp across the whole story but make the middle easier.
 
 | Stage | From | Location | Vibe | Placeholder backdrop |
 | --- | --- | --- | --- | --- |
 | **Stage 1** | 0 m | Rural Road (near rice fields) | Quiet road through golden fields; where the inciting crash happens | Gold with rice stalks and road edges |
-| | 200 m | Heartwarming Bakery | Cheese's inherited two-story shop, the cozy starting hub, under her father's shadow | Cream with shelves and loaves |
-| **Stage 2** | 400 m | Suburban Cafés | Local spots where Cheese delivers bread samples and builds her reputation | Pale green with coffee cups |
-| | 600 m | Shopping Mall and Popcorn Shop | Busy downtown spot to relax, meet other characters, boost morale (the cheese popcorn counter) | Lavender with popcorn dots and shop frames |
-| **Stage 3** | 800 m | CC Law Office | Sharp corporate setting: legal help, bread peace offerings, Cheese and Noey grow closer | Grey-blue with a window grid |
-| | 1000 m | Gym | Where Lal works and Cheese secretly trains for fitness and confidence | Peach with dumbbells |
-| **Stage 4** | 1200 m | The Courtroom | Tense, formal arena where the forged-signature fight is won | Brown with wooden pillars |
-| | 1400 m | Beach and Seaside Restaurant | Coastal getaway: Cheese opens up about her past and the romance is sealed | Aqua with waves |
-| **Stage 5** | 1600 m | Noey's Apartment (YZ Village) | Gated community house: late-night recipe tests, a shared domestic future | Lavender-blue with gate bars |
-| | 1800 m | Bake Love Bakery | Cheese's own shop, free of her father's shadow; home of the Cheese-Noey Bread | Pink with hearts |
+| | 500 m | Heartwarming Bakery | Cheese's inherited two-story shop, the cozy starting hub, under her father's shadow | Cream with shelves and loaves |
+| **Stage 2** | 1000 m | Suburban Cafés | Local spots where Cheese delivers bread samples and builds her reputation | Pale green with coffee cups |
+| | 1500 m | Shopping Mall and Popcorn Shop | Busy downtown spot to relax, meet other characters, boost morale (the cheese popcorn counter) | Lavender with popcorn dots and shop frames |
+| **Stage 3** | 2000 m | CC Law Office | Sharp corporate setting: legal help, bread peace offerings, Cheese and Noey grow closer | Grey-blue with a window grid |
+| | 2500 m | Gym | Where Lal works and Cheese secretly trains for fitness and confidence | Peach with dumbbells |
+| **Stage 4** | 3000 m | The Courtroom | Tense, formal arena where the forged-signature fight is won | Brown with wooden pillars |
+| | 3500 m | Beach and Seaside Restaurant | Coastal getaway: Cheese opens up about her past and the romance is sealed | Aqua with waves |
+| **Stage 5** | 4000 m | Noey's Apartment (YZ Village) | Gated community house: late-night recipe tests, a shared domestic future | Lavender-blue with gate bars |
+| | 4500 m | Bake Love Bakery | Cheese's own shop, free of her father's shadow; home of the Cheese-Noey Bread | Pink with hearts |
 
 The banner shows the stage number and the location (for example "Stage 3 / CC Law Office"). Stages have no names of their own. The receipt lists the last location reached.
 

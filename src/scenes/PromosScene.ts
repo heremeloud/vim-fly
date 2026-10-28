@@ -77,9 +77,9 @@ export class PromosScene extends Phaser.Scene {
     const c = list.container;
     let y = PAD;
 
-    y = this.pilotCard(c, y) + 12;
+    y = this.pilotCard(c, y) + 10;
     y = this.section(c, y, t('promos.official'));
-    y = this.wideCard(c, y, OFFICIAL) + 12;
+    y = this.wideCard(c, y, OFFICIAL) + 10;
     y = this.section(c, y, t('promos.leads'));
     y = this.leadsRow(c, y) + 10;
     y = this.compactCard(c, y, VIMMY);
