@@ -29,7 +29,7 @@ export interface Zone {
 }
 
 /** Distance climbed per location. Raise it to spread the story out. */
-export const ZONE_SPACING_METERS = 500;
+export const ZONE_SPACING_METERS = 400;
 
 type ZoneDef = Omit<Zone, 'fromMeters'>;
 

@@ -343,7 +343,7 @@ export class GameScene extends Phaser.Scene {
 
   update(_time: number, deltaMs: number): void {
     if (this.ended) return;
-    const dt = Math.min(deltaMs, 50) / 1000; // clamp so a tab switch can't teleport the player
+    const dt = Math.min(deltaMs, 66) / 1000; // clamp so a tab switch can't teleport the player; high enough that 30 fps (Low Power Mode) stays at full speed
     this.run.tick(dt * 1000);
 
     this.movePlayer(dt);

@@ -27,18 +27,18 @@ const ICON = 32;
 
 /** Native share sheet where there is one (lists Instagram, TikTok, X...); otherwise a pre-filled X post. */
 async function shareScore(score: number): Promise<void> {
-  const text = t('receipt.shareText', { score });
   const url = window.location.origin + window.location.pathname;
+  const shareText = t('receipt.shareText', { score, url });
   if (navigator.share) {
     try {
       // Link inside the text: iOS share targets often drop `text` when a separate `url` is given.
-      await navigator.share({ text: `${text}\n${url}` });
+      await navigator.share({ text: shareText });
     } catch {
       // Closed without sharing.
     }
     return;
   }
-  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank', 'noopener');
+  window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`, '_blank', 'noopener');
 }
 
 /** Game-over receipt: collected items as line items, total = score. Also saves the run to the order history. */

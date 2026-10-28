@@ -50,7 +50,7 @@ export const ja: Record<StringKey, string> = {
   'receipt.thanks': 'Thank you for playing!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': 'シェア',
-  'receipt.shareText': 'Vimmy Flyで฿{score}ゲット！私のスコアを超えられるかな？🐶🐝\nパン屋さんがオープン！🍞🧀🧈\nドラマ #BakeLoveFeeling をお楽しみに！NoeyCheese役のViewMimもぜひ応援してね！💕\n\n#ViewMim #วิวมิ้ม #VIMMY',
+  'receipt.shareText': 'Vimmy Flyで{score}ポイントゲット！私のスコアを超えられるかな？🐶🐝\nパン屋さんがオープン！🍞🧀🧈\nドラマ #BakeLoveFeeling をお楽しみに！NoeyCheese役のViewMimもぜひ応援してね！💕\n🎮: {url}\n\n#ViewMim #วิวมิ้ม #VIMMY',
 
   'hud.shield': 'シールド',
   'hud.dash': 'ダッシュ',

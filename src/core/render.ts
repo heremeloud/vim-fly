@@ -25,7 +25,10 @@ function computeScale(): number {
   // The backing canvas must have at least as many pixels as the browser uses to display it.
   // Rounding down makes even a small enlargement (for example 480px to 489px) upscale a
   // 1x canvas and soften the entire UI. Round up so Phaser always renders enough pixels.
-  return Math.min(3, Math.max(1, Math.ceil(density * shownAt)));
+  // Phones cap at 2: 3x means a 1440x2400 canvas, too heavy for iPhones (especially in Low Power Mode,
+  // which limits them to 30 fps). Tablets and desktops keep up to 3.
+  const phone = window.matchMedia('(pointer: coarse)').matches && Math.min(window.screen.width, window.screen.height) < 600;
+  return Math.min(phone ? 2 : 3, Math.max(1, Math.ceil(density * shownAt)));
 }
 
 /** Make every Text object render at RENDER_SCALE resolution, so text is sharp too. Call once before the game starts. */

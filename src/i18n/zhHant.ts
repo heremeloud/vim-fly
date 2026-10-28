@@ -50,7 +50,7 @@ export const zhHant: Record<StringKey, string> = {
   'receipt.thanks': 'Thank you for playing!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': '分享',
-  'receipt.shareText': '我在 Vimmy Fly 拿到了 ฿{score}！你能打破我的紀錄嗎？🐶🐝\n麵包店開張啦！🍞🧀🧈\n敬請期待新劇 #BakeLoveFeeling，也要多多支持飾演 NoeyCheese 的 ViewMim 喔！💕\n\n#ViewMim #วิวมิ้ม #VIMMY',
+  'receipt.shareText': '我在 Vimmy Fly 拿到了 {score} 分！你能打破我的紀錄嗎？🐶🐝\n麵包店開張啦！🍞🧀🧈\n敬請期待新劇 #BakeLoveFeeling，也要多多支持飾演 NoeyCheese 的 ViewMim 喔！💕\n🎮: {url}\n\n#ViewMim #วิวมิ้ม #VIMMY',
 
   'hud.shield': '護盾',
   'hud.dash': '衝刺',
