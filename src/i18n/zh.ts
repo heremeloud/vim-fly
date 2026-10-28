@@ -12,7 +12,7 @@ export const zh: Record<StringKey, string> = {
 
   'app.tagline': '由超乖乖的蜜蜂狗狗为你送货上门',
   'app.deliverTo': '配送至',
-  'app.searchHint': '面包, 便当, 金毛寻回犬...',
+  'app.searchHint': '面包, 便当, 咖啡...',
 
   'home.orderNow': '立即下单',
   'home.open': '营业中',
@@ -38,7 +38,7 @@ export const zh: Record<StringKey, string> = {
   'orders.bestBadge': '最佳',
   'orders.empty': '还没有订单。快来下第一单吧!',
   'orders.topNote': '全球顶级顾客。',
-  'orders.offline': '无法连接全球排行榜,显示你在此设备上的最佳记录。',
+  'orders.offline': '无法连接全球排行榜, 显示你在此设备上的最佳记录。',
   'orders.loading': '加载中…',
 
   'receipt.title': '收据',
@@ -51,7 +51,7 @@ export const zh: Record<StringKey, string> = {
   'receipt.thanks': 'Thank you for playing!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': '分享',
-  'receipt.shareText': '我在 Vimmy Fly 拿到了 {score} 分！你能打破我的纪录吗？🐶🐝\n面包店开张啦！🍞🧀🧈\n敬请期待新剧 #BakeLoveFeeling，也要多多支持饰演 NoeyCheese 的 ViewMim 哦！💕\n🎮: {url}\n\n#ViewMim #วิวมิ้ม #VIMMY',
+  'receipt.shareText': '我在 Vimmy Fly 拿到了 {score} 分!你能打破我的纪录吗?🐶🐝\n面包店开张啦!🍞🧀🧈\n敬请期待新剧 #BakeLoveFeeling, 也要多多支持饰演 NoeyCheese 的 ViewMim 哦!💕\n🎮: {url}\n\n#ViewMim #วิวมิ้ม #VIMMY',
 
   'hud.shield': '护盾',
   'hud.dash': '冲刺',
@@ -114,7 +114,7 @@ export const zh: Record<StringKey, string> = {
 
   'debuff.cilantroBread': '头晕!',
   'debuff.fishSauceBread': '减速!',
-  'debuff.planner': '任务过载! -100',
+  'debuff.planner': '失望! -100',
   'debuff.gavelHammer': '击晕!',
   'debuff.carCrash': '撞车! -50',
 
@@ -140,19 +140,19 @@ export const zh: Record<StringKey, string> = {
   'video.openYoutube': '在 YouTube 打开',
   'video.loading': '正在加载试播集...',
 
-  'onboard.title': '欢迎光临，新顾客！',
+  'onboard.title': '欢迎光临, 新顾客!',
   'onboard.nameLabel': '你的名字',
   'onboard.namePlaceholder': '请输入名字',
   'onboard.howTitle': '游戏玩法',
-  'onboard.tap': '点击屏幕左侧或右侧（或按A/D键），一边向上飞，一边朝对应方向移动！',
-  'onboard.catch': '接住食物赚取积分，努力飞得更高！记得躲开危险道具哦！',
-  'onboard.swipe': '遇到危险？向左或向右滑动（或按住Shift + A/D）即可快速冲刺！每局限用3次。',
-  'onboard.start': '开始下单！',
+  'onboard.tap': '点击屏幕左侧或右侧(或按A/D键), 一边向上飞, 一边朝对应方向移动!',
+  'onboard.catch': '接住食物赚取积分, 努力飞得更高!记得躲开危险道具哦!',
+  'onboard.swipe': '遇到危险? 向左或向右滑动(或按住Shift + A/D)即可快速冲刺! 每局限用3次。',
+  'onboard.start': '开始下单!',
   'settings.title': '设置',
   'settings.close': '关闭',
   'settings.sound': '声音',
   'settings.on': '开启',
   'settings.off': '关闭',
   'receipt.sending': '正在上传分数…',
-  'receipt.sendFailed': '暂时无法连接排行榜，分数已保存在本设备上。',
+  'receipt.sendFailed': '暂时无法连接排行榜, 分数已保存在本设备上。',
 };

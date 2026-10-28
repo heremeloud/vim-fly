@@ -11,7 +11,7 @@ export const th: Record<StringKey, string> = {
 
   'app.tagline': 'น้องหมาผึ้งสุดน่ารักพร้อมส่งถึงที่เลยน้า',
   'app.deliverTo': 'จัดส่งที่',
-  'app.searchHint': 'ค้นหาขนมปัง ข้าวกล่อง โกลเด้น รีทรีฟเวอร์...',
+  'app.searchHint': 'ค้นหาขนมปัง ข้าวกล่อง กาแฟ...',
 
   'home.orderNow': 'สั่งเลย',
   'home.open': 'OPEN',
@@ -113,7 +113,7 @@ export const th: Record<StringKey, string> = {
 
   'debuff.cilantroBread': 'เวียนหัว!',
   'debuff.fishSauceBread': 'ช้าลง!',
-  'debuff.planner': 'งานท่วมหัว! -100',
+  'debuff.planner': 'ผิดหวัง! -100',
   'debuff.gavelHammer': 'ติดสตัน!',
   'debuff.carCrash': 'รถชน! -50',
 

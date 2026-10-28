@@ -11,7 +11,7 @@ export const ja: Record<StringKey, string> = {
 
   'app.tagline': '世界一かわいいハチイヌがお届けするブーン',
   'app.deliverTo': 'お届け先',
-  'app.searchHint': 'パン、お弁当、ゴールデンレトリバーを検索…',
+  'app.searchHint': 'パン、お弁当、コーヒーを検索…',
 
   'home.orderNow': '今すぐ注文',
   'home.open': '営業中',
@@ -50,7 +50,7 @@ export const ja: Record<StringKey, string> = {
   'receipt.thanks': 'Thank you for playing!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': 'シェア',
-  'receipt.shareText': 'Vimmy Flyで{score}ポイントゲット！私のスコアを超えられるかな？🐶🐝\nパン屋さんがオープン！🍞🧀🧈\nドラマ #BakeLoveFeeling をお楽しみに！NoeyCheese役のViewMimもぜひ応援してね！💕\n🎮: {url}\n\n#ViewMim #วิวมิ้ม #VIMMY',
+  'receipt.shareText': 'Vimmy Flyで{score}ポイントゲット!私のスコアを超えられるかな?🐶🐝\nパン屋さんがオープン!🍞🧀🧈\nドラマ #BakeLoveFeeling をお楽しみに!NoeyCheese役のViewMimもぜひ応援してね!💕\n🎮: {url}\n\n#ViewMim #วิวมิ้ม #VIMMY',
 
   'hud.shield': 'シールド',
   'hud.dash': 'ダッシュ',
@@ -113,7 +113,7 @@ export const ja: Record<StringKey, string> = {
 
   'debuff.cilantroBread': 'めまい!',
   'debuff.fishSauceBread': 'スロー!',
-  'debuff.planner': '仕事過多! -100',
+  'debuff.planner': 'ガッカリ! -100',
   'debuff.gavelHammer': 'スタン!',
   'debuff.carCrash': '衝突! -50',
 
@@ -139,14 +139,14 @@ export const ja: Record<StringKey, string> = {
   'video.openYoutube': 'YouTubeで開く',
   'video.loading': 'Pilotを読み込み中…',
 
-  'onboard.title': 'いらっしゃいませ！',
+  'onboard.title': 'いらっしゃいませ!',
   'onboard.nameLabel': 'お名前',
   'onboard.namePlaceholder': '名前を入力',
   'onboard.howTitle': 'あそびかた',
-  'onboard.tap': '画面の左側か右側をタップ（またはA/Dキー）して、上に飛びながらその方向に移動しよう！',
-  'onboard.catch': '食べ物をキャッチしてスコアをゲット！危険なアイテムをよけながら、どこまで高く飛べるかな？',
-  'onboard.swipe': 'ピンチのときは左右にスワイプ（またはShift + A/Dを長押し）でダッシュ！1プレイにつき3回まで使えるよ。',
-  'onboard.start': '注文スタート！',
+  'onboard.tap': '画面の左側か右側をタップ(またはA/Dキー)して、上に飛びながらその方向に移動しよう!',
+  'onboard.catch': '食べ物をキャッチしてスコアをゲット! 危険なアイテムをよけながら、どこまで高く飛べるかな?',
+  'onboard.swipe': 'ピンチのときは左右にスワイプ(またはShift + A/Dを長押し)でダッシュ! 1プレイにつき3回まで使えるよ。',
+  'onboard.start': '注文スタート!',
   'settings.title': '設定',
   'settings.close': '閉じる',
   'settings.sound': 'サウンド',

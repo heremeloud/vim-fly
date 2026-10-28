@@ -12,7 +12,7 @@ export const en = {
 
   'app.tagline': 'Delivery powered by the best bee dog',
   'app.deliverTo': 'Deliver to',
-  'app.searchHint': 'Search bread, lunch box, golden retriever...',
+  'app.searchHint': 'Search bread, lunch box, coffee...',
 
   'home.orderNow': 'Order Now',
   'home.open': 'Open Now',
@@ -114,7 +114,7 @@ export const en = {
 
   'debuff.cilantroBread': 'Dizzy!',
   'debuff.fishSauceBread': 'Slowed!',
-  'debuff.planner': 'Overloaded! -100',
+  'debuff.planner': 'Disappointed! -100',
   'debuff.gavelHammer': 'Stunned!',
   'debuff.carCrash': 'Crash! -50',
 

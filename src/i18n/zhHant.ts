@@ -12,7 +12,7 @@ export const zhHant: Record<StringKey, string> = {
 
   'app.tagline': '超乖的蜜蜂狗狗來給你送東西啦',
   'app.deliverTo': '配送至',
-  'app.searchHint': '麵包, 便當, 黃金獵犬...',
+  'app.searchHint': '麵包, 便當, 咖啡...',
 
   'home.orderNow': '立即下單',
   'home.open': '營業中',
@@ -37,7 +37,7 @@ export const zhHant: Record<StringKey, string> = {
   'orders.bestBadge': '最佳',
   'orders.empty': '尚無訂單, 立即下第一筆訂單吧!',
   'orders.topNote': '全球頂級顧客。',
-  'orders.offline': '無法連線至全球排行榜,顯示你在此裝置上的最佳紀錄。',
+  'orders.offline': '無法連線至全球排行榜, 顯示你在此裝置上的最佳紀錄。',
   'orders.loading': '載入中…',
 
   'receipt.title': '收據',
@@ -50,7 +50,7 @@ export const zhHant: Record<StringKey, string> = {
   'receipt.thanks': 'Thank you for playing!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': '分享',
-  'receipt.shareText': '我在 Vimmy Fly 拿到了 {score} 分！你能打破我的紀錄嗎？🐶🐝\n麵包店開張啦！🍞🧀🧈\n敬請期待新劇 #BakeLoveFeeling，也要多多支持飾演 NoeyCheese 的 ViewMim 喔！💕\n🎮: {url}\n\n#ViewMim #วิวมิ้ม #VIMMY',
+  'receipt.shareText': '我在 Vimmy Fly 拿到了 {score} 分!你能打破我的紀錄嗎?🐶🐝\n麵包店開張啦!🍞🧀🧈\n敬請期待新劇 #BakeLoveFeeling, 也要多多支持飾演 NoeyCheese 的 ViewMim 喔!💕\n🎮: {url}\n\n#ViewMim #วิวมิ้ม #VIMMY',
 
   'hud.shield': '護盾',
   'hud.dash': '衝刺',
@@ -113,7 +113,7 @@ export const zhHant: Record<StringKey, string> = {
 
   'debuff.cilantroBread': '頭暈!',
   'debuff.fishSauceBread': '減速!',
-  'debuff.planner': '工作超載! -100',
+  'debuff.planner': '失望! -100',
   'debuff.gavelHammer': '暈眩!',
   'debuff.carCrash': '撞車! -50',
 
@@ -139,19 +139,19 @@ export const zhHant: Record<StringKey, string> = {
   'video.openYoutube': '在 YouTube 開啟',
   'video.loading': '正在載入試播集...',
 
-  'onboard.title': '歡迎光臨，新客人！',
+  'onboard.title': '歡迎光臨, 新客人!',
   'onboard.nameLabel': '你的名字',
   'onboard.namePlaceholder': '請輸入名字',
   'onboard.howTitle': '遊戲玩法',
-  'onboard.tap': '點擊畫面左側或右側（或按A/D鍵），一邊往上飛，一邊朝對應方向移動！',
-  'onboard.catch': '接住食物賺取分數，努力飛得更高！記得閃開危險道具喔！',
-  'onboard.swipe': '遇到危險？向左或向右滑動（或按住Shift + A/D）就能快速衝刺！每局最多使用3次。',
-  'onboard.start': '開始點餐！',
+  'onboard.tap': '點擊畫面左側或右側(或按A/D鍵), 一邊往上飛, 一邊朝對應方向移動!',
+  'onboard.catch': '接住食物賺取分數, 努力飛得更高! 記得閃開危險道具喔!',
+  'onboard.swipe': '遇到危險? 向左或向右滑動(或按住Shift + A/D)就能快速衝刺! 每局最多使用3次。',
+  'onboard.start': '開始點餐!',
   'settings.title': '設定',
   'settings.close': '關閉',
   'settings.sound': '聲音',
   'settings.on': '開啟',
   'settings.off': '關閉',
   'receipt.sending': '正在上傳分數…',
-  'receipt.sendFailed': '暫時無法連上排行榜，分數已儲存在這台裝置上。',
+  'receipt.sendFailed': '暫時無法連上排行榜, 分數已儲存在這台裝置上。',
 };
