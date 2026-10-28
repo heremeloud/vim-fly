@@ -15,6 +15,11 @@ const HEADER_H = 150;
 const ROW_H = 58;
 const ROW_GAP = 10;
 const LIST_PAD = 14;
+
+/** A tilted crown perched on the rank badge of the world champion (rank 1). */
+function addCrown(scene: Phaser.Scene, c: Phaser.GameObjects.Container, x: number, y: number): void {
+  c.add(scene.add.text(x - 6, y - 19, '👑', { fontSize: '27px', padding: { top: 4, bottom: 4 } }).setOrigin(0.5).setRotation(-0.3));
+}
 /** Foods shown on the history rows in turn (by order number), instead of a plain number badge. */
 const ORDER_FOODS = ['pandanCustardBread', 'coffee', 'shiopan', 'pasta', 'sandwich', 'tomYum', 'cheeseButterBread', 'shrimpFriedRiceBox', 'cilantroBread', 'wine', 'fishSauceBread'];
 /** Text on the left of a row must end before this x, where the score and best badge begin. */
@@ -127,6 +132,7 @@ export class OrdersScene extends Phaser.Scene {
       c.add(roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, 14, me !== null && row.name === me ? COLORS.primary : COLORS.border));
       c.add(this.add.circle(52, y + ROW_H / 2, 18, rank === 1 ? COLORS.primary : COLORS.background));
       c.add(label(this, 52, y + ROW_H / 2, `${rank}`, { size: 17, bold: true }).setOrigin(0.5));
+      if (rank === 1) addCrown(this, c, 52, y + ROW_H / 2);
       c.add(label(this, 84, y + 8, row.name, { size: 17, bold: true, maxWidth: 230 }));
       const when = new Date(row.createdAt).toLocaleDateString(localeInfo().dateLocale, { day: 'numeric', month: 'short', year: 'numeric' });
       c.add(label(this, 84, y + 34, when, { size: 12, color: COLORS.muted }));
@@ -169,6 +175,7 @@ export class OrdersScene extends Phaser.Scene {
     c.add(this.add.circle(52, y + ROW_H / 2, 20, rank === 1 ? COLORS.primary : COLORS.background));
     if (rank !== null) {
       c.add(label(this, 52, y + ROW_H / 2, `${rank}`, { size: 17, bold: true, color: COLORS.text }).setOrigin(0.5));
+      if (rank === 1) addCrown(this, c, 52, y + ROW_H / 2);
     } else {
       const food = ORDER_FOODS[(run.no - 1 + ORDER_FOODS.length) % ORDER_FOODS.length];
       c.add(addItemSprite(this, 52, y + ROW_H / 2, { id: food, color: 0xd7ccc8 }, 28));
