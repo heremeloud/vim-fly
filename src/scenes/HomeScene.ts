@@ -79,6 +79,9 @@ export class HomeScene extends Phaser.Scene {
           case 'official':
             openLink(profileUrl('x', OFFICIAL.handles.x));
             break;
+          case 'viewmim':
+            openLink('https://viewmim.info');
+            break;
           case 'play':
             startOrder(this);
             break;

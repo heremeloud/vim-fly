@@ -64,6 +64,8 @@ const DEBUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.GameObjects.Sprite;
   private bg!: Phaser.GameObjects.TileSprite;
+  /** The previous location's backdrop, fading out on top of `bg` after a zone change. */
+  private bgFade: Phaser.GameObjects.TileSprite | null = null;
   private zone: Zone = zoneAt(0);
   private banner!: Phaser.GameObjects.Container;
   private bannerBg!: Phaser.GameObjects.Graphics;
@@ -101,6 +103,7 @@ export class GameScene extends Phaser.Scene {
     beginRun(); // asks the server for a run token in the background; the receipt submits the score with it
     this.run = new RunState();
     this.items = [];
+    this.bgFade = null;
     this.spawnTimerMs = 0;
     this.ended = false;
     this.swipesLeft = PHYSICS.swipeDashesPerRun;
@@ -302,7 +305,16 @@ export class GameScene extends Phaser.Scene {
     if (zone.id === this.zone.id) return;
     const previous = this.zone;
     this.zone = zone;
+    // Crossfade: keep the old backdrop on top, scrolling in step, and fade it out over the new one.
+    this.bgFade?.destroy();
+    this.bgFade = this.add
+      .tileSprite(0, 0, GAME_WIDTH, GAME_HEIGHT, zoneTextureKey(previous))
+      .setOrigin(0)
+      .setScrollFactor(0)
+      .setDepth(-9);
     this.bg.setTexture(zoneTextureKey(zone));
+    const fade = this.bgFade;
+    this.tweens.add({ targets: fade, alpha: 0, duration: 1200, ease: 'Sine.easeInOut', onComplete: () => { fade.destroy(); if (this.bgFade === fade) this.bgFade = null; } });
     this.showBanner(zoneBannerText(zone, previous));
   }
 
@@ -411,6 +423,7 @@ export class GameScene extends Phaser.Scene {
     const speed = ramp(CAMERA.speed, difficulty(this.run.heightMeters));
     cam.scrollY = Math.min(cam.scrollY - speed * dt, this.player.y - CAMERA.leadPx);
     this.bg.tilePositionY = cam.scrollY;
+    if (this.bgFade) this.bgFade.tilePositionY = cam.scrollY;
     this.run.heightMeters = Math.max(this.run.heightMeters, (this.startY - this.player.y) / PHYSICS.pixelsPerMeter);
   }
 

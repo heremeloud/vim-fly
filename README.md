@@ -4,8 +4,8 @@ A tap-to-fly web game for the series *Bake Love Feeling*. A dog in a bee costume
 
 ## How to play
 
-- **Tap the left half** of the screen to flap up and drift left.
-- **Tap the right half** to flap up and drift right.
+- **Tap the left half** of the screen to fly up and drift left.
+- **Tap the right half** to fly up and drift right.
 - On desktop, use the **left/right arrow keys** or **A / D**.
 - Stop tapping and you fall. Drop off the bottom and the run ends.
 - Climb as high as you can. The game is endless and gets harder the higher you go.
@@ -30,7 +30,7 @@ Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
 | Oyster | Double points for a few seconds |
 | Lawyer suit | Shield: blocks the next debuff |
 | Handkerchief | Clears stun and disorientation |
-| Rolling pin | Stronger flaps for a few seconds |
+| Rolling pin | Stronger fly-ups for a few seconds |
 | Helicopter | Upward dash |
 
 **Debuffs** (dodge these)

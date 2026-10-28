@@ -15,8 +15,8 @@ export const APP = {
 export interface Service {
   icon: string;
   labelKey: StringKey;
-  /** Where the tile goes: the item guide, the Bake Love Feeling page, the pilot (opens on YouTube in a new tab; no tile uses it now), the official X account (opens in a new tab), or straight into a run. */
-  target: 'menu' | 'promos' | 'pilot' | 'official' | 'play';
+  /** Where the tile goes: the item guide, the Bake Love Feeling page, the pilot (opens on YouTube in a new tab; no tile uses it now), the official X account (opens in a new tab), the ViewMim site (opens in a new tab), or straight into a run. */
+  target: 'menu' | 'promos' | 'pilot' | 'official' | 'viewmim' | 'play';
 }
 
 /**
@@ -27,5 +27,5 @@ export const SERVICES: readonly Service[] = [
   { icon: '🍞', labelKey: 'svc.food', target: 'menu' }, // what falls from the sky
   { icon: '🛒', labelKey: 'svc.mart', target: 'promos' }, // the show's page: cast, links
   { icon: '📦', labelKey: 'svc.express', target: 'official' }, // the show, delivered fast: the official X account
-  { icon: '🛵', labelKey: 'svc.ride', target: 'promos' }, // ride along with the show: its page
+  { icon: '🛵', labelKey: 'svc.ride', target: 'viewmim' }, // opens viewmim.info in a new tab
 ];
