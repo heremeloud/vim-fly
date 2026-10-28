@@ -81,6 +81,8 @@ export class GameScene extends Phaser.Scene {
   private bgFade: Phaser.GameObjects.TileSprite | null = null;
   /** 0 = sharp backdrop, 1 = fully blurred. Eases toward the target so the blur never pops. */
   private bgBlurLevel = 0;
+  /** Frames left in which the blur filter stays on (barely visible) so its shader compiles while the run starts, not on the first speed-up. */
+  private blurWarmFrames = 0;
   /** The location whose finale (its last stretch) is under way, so its banner shows only once per run. */
   private finaleZone: string | null = null;
   /** How many of the finale's guaranteed items have been dropped so far. */
@@ -124,6 +126,7 @@ export class GameScene extends Phaser.Scene {
     this.items = [];
     this.bgFade = null;
     this.bgBlurLevel = 0;
+    this.blurWarmFrames = 4;
     this.finaleZone = null;
     this.finaleGiven = 0;
     this.spawnTimerMs = 0;
@@ -538,13 +541,14 @@ export class GameScene extends Phaser.Scene {
   private updateBackdropBlur(dt: number, d: number): void {
     const target = this.run.dashMs > 0 ? 1 : d * BG_BLUR_SPEED_SHARE;
     this.bgBlurLevel += (target - this.bgBlurLevel) * (1 - Math.exp(-BG_BLUR_EASE * dt));
+    if (this.blurWarmFrames > 0) this.blurWarmFrames--;
     this.applyBackdropBlur(this.bg);
     if (this.bgFade) this.applyBackdropBlur(this.bgFade);
   }
 
   private applyBackdropBlur(sprite: Phaser.GameObjects.TileSprite): void {
     const level = this.bgBlurLevel;
-    sprite.renderFilters = level > 0.01;
+    sprite.renderFilters = level > 0.01 || this.blurWarmFrames > 0;
     if (!sprite.renderFilters) return;
     const blur = sprite.filters!.internal.list[0] as Phaser.Filters.Blur;
     blur.x = BG_BLUR_MAX.x * level;

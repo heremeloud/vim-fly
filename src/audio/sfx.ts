@@ -238,7 +238,16 @@ export function initSfx(game: Phaser.Game): void {
   const manager = webAudio(game);
   if (!manager) return; // no Web Audio (very old browser): the game stays silent
   applyAudioSession(enabled);
-  for (const [key, build] of Object.entries(BUILDERS)) game.cache.audio.add(key, build(manager.context));
+  // Synthesising every sound takes a noticeable moment on a phone, so it is spread over idle time after the first
+  // screen is up, one sound per slice, instead of freezing the first load. playSfx skips a sound that is not ready yet.
+  const pending = Object.entries(BUILDERS);
+  const buildNext = (): void => {
+    const next = pending.shift();
+    if (!next) return;
+    game.cache.audio.add(next[0], next[1](manager.context));
+    window.setTimeout(buildNext, 0);
+  };
+  window.setTimeout(buildNext, 300);
 
   // The browser can suspend the audio context behind Phaser's back (a page that lost focus, an iOS interruption, a
   // browser prompt after a language change). Phaser only unlocks it once, so wake it on any tap, key or return to the page.
