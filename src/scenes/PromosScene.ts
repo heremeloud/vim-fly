@@ -32,8 +32,8 @@ const iconKey = (p: Platform) => `icon-${p}`;
  *
  * Accounts are cards with an avatar, a name and a role. A card only shows round icon buttons (X,
  * Instagram, TikTok) for the platforms that are really set up (src/promo/links.json); an account with
- * nothing set yet shows a single quiet "soon" tag instead of a row of placeholders. The official account and Vimmy are wide
- * cards; the two main leads sit side by side.
+ * nothing set yet shows a single quiet "soon" tag instead of a row of placeholders. The official account is a wide
+ * card, the two main leads sit side by side, and Vimmy (a mascot, not the focus here) is a small one-line row.
  */
 export class PromosScene extends Phaser.Scene {
   constructor() {
@@ -56,9 +56,8 @@ export class PromosScene extends Phaser.Scene {
     y = this.section(c, y, t('promos.official'));
     y = this.wideCard(c, y, OFFICIAL) + 18;
     y = this.section(c, y, t('promos.leads'));
-    y = this.leadsRow(c, y) + 18;
-    y = this.section(c, y, VIMMY.name);
-    y = this.wideCard(c, y, VIMMY);
+    y = this.leadsRow(c, y) + 14;
+    y = this.compactCard(c, y, VIMMY);
     list.setContentHeight(y + PAD);
 
     // Opaque header (and interactive, so taps don't reach rows scrolled underneath).
@@ -130,6 +129,24 @@ export class PromosScene extends Phaser.Scene {
     return y + h;
   }
 
+  /**
+   * A small one-line card for a character that is not the focus (Vimmy): a small avatar, the name and one short
+   * line, with icon buttons on the right if there are any. No "soon" tag, so it stays quiet.
+   */
+  private compactCard(c: Phaser.GameObjects.Container, y: number, account: Account): number {
+    const h = 64;
+    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.surface, 14, COLORS.border));
+    this.avatar(c, 20 + 14 + 20, y + h / 2, 20, account.avatar);
+
+    const x = 20 + 14 + 40 + 12;
+    const room = CARD_W - (x - 20) - 16 - 3 * (BUTTON + ICON_GAP);
+    const name = label(this, x, y + 10, account.name, { size: 17, bold: true, wrap: room });
+    c.add(name);
+    if (account.roleKey) c.add(label(this, x, y + 10 + name.height, t(account.roleKey), { size: 12, color: COLORS.muted, wrap: room }));
+    this.buttonRow(c, 20 + CARD_W - 16, y + (h - BUTTON) / 2, account, 'right', false);
+    return y + h;
+  }
+
   private avatar(c: Phaser.GameObjects.Container, cx: number, cy: number, radius: number, emoji: string): void {
     c.add(this.add.circle(cx, cy, radius, COLORS.background).setStrokeStyle(2, COLORS.border));
     c.add(label(this, cx, cy, emoji, { size: Math.round(radius * 0.95) }).setOrigin(0.5));
@@ -139,18 +156,25 @@ export class PromosScene extends Phaser.Scene {
    * One round icon button per platform that has a handle. If the account has platforms but none are set
    * up yet, a single quiet "soon" tag instead. `anchor` is the left edge (align 'left') or the center ('center').
    */
-  private buttonRow(c: Phaser.GameObjects.Container, anchor: number, y: number, account: Account, align: 'left' | 'center'): void {
+  private buttonRow(
+    c: Phaser.GameObjects.Container,
+    anchor: number,
+    y: number,
+    account: Account,
+    align: 'left' | 'center' | 'right',
+    showSoon = true,
+  ): void {
     const live = PLATFORMS.map((p) => ({ p, url: profileUrl(p.id, account.handles[p.id]) })).filter((a) => a.url !== null);
     const hasAny = PLATFORMS.some((p) => p.id in account.handles);
 
     if (live.length === 0) {
-      if (!hasAny) return;
+      if (!hasAny || !showSoon) return;
       // Nothing set up yet: one quiet tag.
       const text = t('promos.soon');
       const probe = label(this, 0, 0, text, { size: 13 });
       const w = probe.width + 24;
       probe.destroy();
-      const x = align === 'center' ? anchor - w / 2 : anchor;
+      const x = align === 'center' ? anchor - w / 2 : align === 'right' ? anchor - w : anchor;
       const top = y + (BUTTON - 28) / 2;
       c.add(roundedBox(this, x, top, w, 28, COLORS.background, 14, COLORS.border));
       c.add(label(this, x + w / 2, top + 14, text, { size: 13, color: COLORS.muted }).setOrigin(0.5));
@@ -159,7 +183,7 @@ export class PromosScene extends Phaser.Scene {
 
     const gap = ICON_GAP;
     const total = live.length * BUTTON + gap * (live.length - 1);
-    let x = align === 'center' ? anchor - total / 2 : anchor;
+    let x = align === 'center' ? anchor - total / 2 : align === 'right' ? anchor - total : anchor;
     for (const { p, url } of live) {
       const cx = x + BUTTON / 2;
       const cy = y + BUTTON / 2;

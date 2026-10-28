@@ -41,7 +41,9 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Promos accounts redesigned: avatar cards (wide for official and Vimmy, side by side for the leads); only real platforms get buttons, otherwise one "soon" tag; wording says "the pilot" (Episode 1 is not out yet)
 - [x] Links live in one editable file, `src/promo/links.json`, with `npm run check:links`; the official X account (https://x.com/BakeLoveFeeling) is set; Promos header tightened; pilot card says "Ep1 coming soon"
 - [x] The social buttons are round X / Instagram / TikTok icons (SVGs in `src/assets/icons`, CC0 shapes from Simple Icons)
+- [x] Vimmy is a small one-line row on the Promos page with one short phrase ("Mascot of the View-Mim fans"); the official Vimmy text is saved in `src/promo/README.md`
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
+- [x] Story-specific pixel-art pass: all 19 items redrawn on exact 16x16 grids; all 10 locations drawn as restrained 480x200 tiles from the novel descriptions; old procedural art retained as fallback
 
 ## Next up (do these in order)
 

@@ -8,7 +8,7 @@ The hooks that tie the game to the series.
   - the **pilot** (YouTube, https://www.youtube.com/watch?v=NFFWV0X4i_c), played inside the game in two ways (`src/promo/pilot.ts`, `src/ui/videoPlayer.ts`):
     - **on the receipt**, the pilot window is built into the screen and shows its poster with a play button; it waits for a tap (no autoplay), so it never competes with the game's sound or streams on every game over. It disappears when you leave the receipt. When the game gets sound, pause or lower it while the pilot plays. To start by itself instead, use `autoplay: true, muted: true` in `embedPilot` (browsers only allow muted autoplay);
     - **in a pop-up window** from the Promos tab's big button and the Express tile on the home screen (with a Close button, and an "Open on YouTube" link in case embedding is ever turned off). The home "Watch the pilot now" strip opens the Promos page;
-  - the **accounts**, shown as cards with an avatar, a name and a role: the **official account** (X only) and **Vimmy** (the playable dog) as wide cards, and the **two main leads** side by side. The social buttons are round **icons** (X, Instagram, TikTok; see `src/assets/icons`). A card only shows an icon for a platform that has a handle set; an account with nothing set yet shows a single quiet "soon" tag instead of a row of placeholders.
+  - the **accounts**, shown as cards with an avatar, a name and a role: the **official account** (X only) as a wide card, the **two main leads** side by side, and **Vimmy** as a small one-line row (a mascot, not the focus of this page, so it gets one very short phrase). The social buttons are round **icons** (X, Instagram, TikTok; see `src/assets/icons`). A card only shows an icon for a platform that has a handle set; an account with nothing set yet shows a single quiet "soon" tag instead of a row of placeholders.
 
 - `links.json`: **the file you edit**: the show's title, air date and hashtag, the pilot link, and every account (name, avatar, role, handles). See "Editing the links" below.
 - `config.ts`: reads and checks `links.json`, and provides it to the screens (plus `countdownText()` for the home screen).
@@ -70,3 +70,15 @@ npm run check:links
 ```
 
 It checks the file and prints exactly what every button will open (for example `X -> https://x.com/BakeLoveFeeling`), and stops with a clear message if something is wrong. In dev (`npm run dev`) mistakes are also reported in the browser console.
+
+## Vimmy (official description)
+
+Vimmy (วิมมี่) is the character that represents the **fans of View-Mim** (the two leads). The name is **View + Mim**. Vimmy is a long-eared **Cocker Spaniel** (View's charm) with the sweet little-bee spirit of Mim: bright, cheerful, always ready to spread her wings and sprinkle sweetness and brightness everywhere. This is why the playable character is a dog in a bee costume, and why Vimmy is always the playable character.
+
+The official text, kept here for reference:
+
+> VIMMY (วิมมี่) คาแรกเตอร์ตัวแทนแฟนคลับของ วิว - มิ้ม น้องสุนัขหูยาวสายพันธุ์ค็อกเกอร์ สแปเนียล ที่มาพร้อมความสดใสและพลังความร่าเริงเต็มร้อย ถ่ายทอดเสน่ห์ของวิวที่ผสมผสานเข้ากับผึ้งน้อยแสนหวานละมุนในแบบของมิ้ม จนกลายเป็นน้อง "VIMMY" สุดน่ารัก ที่พร้อมกางปีกแจกความหวาน และโปรยความสดใสให้ฟุ้งกระจายไปทุกพื้นที่ที่ได้เจอ
+>
+> VIMMY — a character representing the fans of View-Mim. Introducing a long-eared Cocker Spaniel brimming with brightness and 100% cheery energy, a perfect combination of View's charm and Mim's sweet, little-bee spirit, coming together as the adorable "VIMMY" who's always ready to spread her wings to sprinkle brightness wherever she goes.
+
+On the Promos page this becomes one short line in each language (`promos.vimmy.role` in `src/i18n`): "Mascot of the View-Mim fans". For art: a Cocker Spaniel with long ears and little bee wings.

@@ -111,7 +111,7 @@ export const th: Record<StringKey, string> = {
   'promos.leads': 'นักแสดงนำ',
   'promos.role.cheese': 'รับบทชีส เจ้าของร้านเบเกอรี่',
   'promos.role.noey': 'รับบทเนย ทนายความ',
-  'promos.vimmy.role': 'น้องหมาผึ้งแสนดี และตัวละครที่คุณเล่น',
+  'promos.vimmy.role': 'ตัวแทนแฟนคลับ วิว-มิ้ม',
   'promos.soon': 'เร็วๆ นี้',
   'hud.slow': 'ช้า',
   'effect.slow': 'บินช้าลง {p}% นาน {s} วินาที',
