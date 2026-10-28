@@ -112,7 +112,7 @@ export class ReceiptScene extends Phaser.Scene {
       g.fillStyle(0x8d6e63, 1);
       for (let x = X; x < GAME_WIDTH - X; x += 8) g.fillRect(x, y, 4, 1.5);
     };
-    const list = new ScrollList(this, LIST_TOP, FOOTER_TOP);
+    const list = new ScrollList(this, LIST_TOP, FOOTER_TOP, false, true);
     list.container.setDepth(-1);
     let listY = 0;
     for (const l of r.lines) {

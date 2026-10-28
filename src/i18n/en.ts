@@ -47,7 +47,7 @@ export const en = {
   'receipt.total': 'TOTAL',
   'receipt.orderAgain': 'Order Another',
   'receipt.backToStore': 'Back to Store',
-  'receipt.newBest': 'New Best Order! You did it!',
+  'receipt.newBest': 'New Best Order!',
   'receipt.thanks': 'THANK YOU!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': 'Share',

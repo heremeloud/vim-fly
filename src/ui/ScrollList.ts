@@ -13,6 +13,8 @@ const NEAR_FIT = 8; // px of overflow that is ignored
  * tell it the content height, and drag or use the wheel to scroll. The scene should draw an
  * opaque header and tab bar above it (higher depth) to hide rows scrolled underneath.
  * With `scrollbar`, a slim bar shows at the right edge when the content overflows; drag it to scroll fast.
+ * With `hideOutside`, rows that are completely outside `top`..`bottom` are hidden, for lists whose header and footer
+ * panels don't cover everything above and below them (such as the receipt's torn paper edge).
  */
 export class ScrollList {
   readonly container: Phaser.GameObjects.Container;
@@ -27,6 +29,7 @@ export class ScrollList {
     private readonly top: number,
     private readonly bottom: number,
     scrollbar = false,
+    private readonly hideOutside = false,
   ) {
     this.container = scene.add.container(0, top).setDepth(1);
     this.bar = scrollbar ? scene.add.graphics().setDepth(2) : null;
@@ -79,6 +82,7 @@ export class ScrollList {
     const viewH = this.bottom - this.top;
     this.contentH = h > viewH && h - viewH <= NEAR_FIT ? viewH : h;
     this.drawBar();
+    this.hideRowsOutside();
   }
 
   private scrollTo(y: number): void {
@@ -86,6 +90,15 @@ export class ScrollList {
     const minY = this.top - Math.max(0, this.contentH - viewH);
     this.container.y = Phaser.Math.Clamp(y, minY, this.top);
     this.drawBar();
+    this.hideRowsOutside();
+  }
+
+  private hideRowsOutside(): void {
+    if (!this.hideOutside) return;
+    for (const child of this.container.list) {
+      const bounds = (child as Phaser.GameObjects.Image).getBounds();
+      (child as Phaser.GameObjects.Image).setVisible(bounds.bottom > this.top && bounds.top < this.bottom);
+    }
   }
 
   private overflow(): number {

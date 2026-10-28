@@ -46,7 +46,7 @@ export const ja: Record<StringKey, string> = {
   'receipt.total': '合計',
   'receipt.orderAgain': 'もう一度注文する',
   'receipt.backToStore': 'お店に戻る',
-  'receipt.newBest': 'ベスト更新! やったね!',
+  'receipt.newBest': 'ベスト更新!',
   'receipt.thanks': 'まいど!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': 'シェア',
