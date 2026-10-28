@@ -31,9 +31,9 @@ export const en = {
 
 
   'orders.title': 'Orders',
-  'orders.subtitle': 'Leaderboard',
+  'orders.subtitle': '🌍 World Leaderboard',
   'orders.tab.mine': 'My Orders',
-  'orders.tab.top': 'Top Customers',
+  'orders.tab.top': 'World Top Customers',
   'orders.orderNo': 'Order #{n}',
   'orders.bestBadge': 'Best',
   'orders.empty': 'No orders yet. Place your first order!',

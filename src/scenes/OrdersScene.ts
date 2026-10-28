@@ -102,7 +102,7 @@ export class OrdersScene extends Phaser.Scene {
     this.list.container.add(label(this, GAME_WIDTH / 2, 120, t('orders.loading'), { size: 18, color: COLORS.muted }).setOrigin(0.5, 0));
     const seq = this.loadSeq;
     const stale = () => seq !== this.loadSeq || this.view !== 'top' || !this.sys.isActive();
-    fetchTopScores(50).then(
+    fetchTopScores(100).then(
       (rows) => !stale() && this.showLadder(rows),
       () => !stale() && this.buildLocal('top', t('orders.offline')),
     );

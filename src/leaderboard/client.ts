@@ -45,7 +45,26 @@ export async function submitScore(session: RunSession, name: string, score: numb
   await request('/functions/v1/submit-score', { method: 'POST', body: JSON.stringify({ token: session.token, name, score }) });
 }
 
+/** Made-up players for testing the Top Customers list on a dev server, where the real ladder is switched off. */
+function dummyScores(limit: number): ScoreEntry[] {
+  const names = [
+    'Vimmy', 'Cheese', 'Bread Baron', 'Pan de Luna', 'Toastmaster', 'Crumb', 'Baguette Betty', 'Dough Re Mi', 'Sourdough Sam',
+    'Croissant King', 'ขนมปังกรอบ', 'พี่หมาส่งของ', 'パンの妖精', 'メロンパン', '面包超人', '小蜜蜂', 'Butter Fly', 'Honey Bee 🐝',
+    'Loaf Lord', 'Rye Guy', 'Flour Power', 'Yeast Mode', 'Muffin Man', 'Bagel Bandit', 'Pretzel Twist', 'Brioche Boss',
+    'A very long customer name', 'Waffle', 'Donut Panic', 'Pita Pal', 'Scone Zone', 'Ciabatta Cat', 'Naan Stop', 'Rolly Polly',
+    'Bun Voyage', 'Knead for Speed', 'Crust Issues', 'Gluten Tag', 'Pastry Pilot', 'Sprinkles', 'Cocoa', 'Mochi', 'Pudding',
+    'Tart Attack', 'Eclair', 'Cinnamon Roll', 'Danish', 'Focaccia', 'Churro', 'Macaron',
+  ];
+  const now = Date.now();
+  return names.slice(0, limit).map((name, i) => ({
+    name,
+    score: Math.max(12, Math.round(2400 * Math.pow(0.93, i)) + ((i * 37) % 11)),
+    createdAt: new Date(now - i * 31 * 3_600_000).toISOString(),
+  }));
+}
+
 export async function fetchTopScores(limit = 100): Promise<ScoreEntry[]> {
+  if (import.meta.env.DEV && isLocalHost) return dummyScores(limit);
   // Reads go straight to the table: row-level security allows select for everyone and nothing else.
   const res = await request(`/rest/v1/scores?select=name,score,created_at&order=score.desc,created_at.asc&limit=${limit}`);
   const rows = (await res.json()) as { name: string; score: number; created_at: string }[];
