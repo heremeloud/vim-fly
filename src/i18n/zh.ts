@@ -70,7 +70,7 @@ export const zh: Record<StringKey, string> = {
   'zone.lawOffice': 'CC律师事务所',
   'zone.gym': '健身房',
   'zone.courtroom': '法庭',
-  'zone.beach': '海滩',
+  'zone.aquarium': '水族馆',
   'zone.residence': 'Noey的家',
   'zone.bakeLove': '恋恋香气烘焙坊',
 

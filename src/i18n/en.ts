@@ -70,7 +70,7 @@ export const en = {
   'zone.lawOffice': 'CC Law Office',
   'zone.gym': 'Gym',
   'zone.courtroom': 'The Courtroom',
-  'zone.beach': 'Beach',
+  'zone.aquarium': 'Aquarium',
   'zone.residence': "Noey's Apartment",
   'zone.bakeLove': 'Heart Baked Love Bakery',
 

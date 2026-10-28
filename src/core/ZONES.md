@@ -24,7 +24,7 @@ Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1
 | **Stage 3** | 1400 m | CC Law Office | Sharp corporate setting: legal help, bread peace offerings, Cheese and Noey grow closer | Grey-blue with a window grid |
 | | 1750 m | Gym | Where Lal works and Cheese secretly trains for fitness and confidence | Peach with dumbbells |
 | **Stage 4** | 2100 m | The Courtroom | Tense, formal arena where the forged-signature fight is won | Brown with wooden pillars |
-| | 2450 m | Beach and Seaside Restaurant | Coastal getaway: Cheese opens up about her past and the romance is sealed | Aqua with waves |
+| | 2450 m | Aquarium | A day out among the fish tanks: Cheese opens up about her past and the romance is sealed (draft; adjust to the story) | Aqua with fish and bubbles |
 | **Stage 5** | 2800 m | Noey's Apartment (YZ Village) | Gated community house: late-night recipe tests, a shared domestic future | Lavender-blue with gate bars |
 | | 3150 m | Bake Love Bakery | Cheese's own shop, free of her father's shadow; home of the Cheese-Noey Bread | Pink with hearts |
 
@@ -40,10 +40,10 @@ Edit `ZONE_DEFS` in `zones.ts` (id, label, stage, fallback colors); start height
 
 ## Testing a zone quickly
 
-In dev (`npm run dev`), open the game with `?zone=<id>`, for example `http://localhost:5173/?zone=courtroom`, then press "Order now". The run starts at that zone's height with its difficulty. Ids: `ruralRoad`, `bakery`, `cafes`, `mall`, `lawOffice`, `gym`, `courtroom`, `beach`, `residence`, `bakeLove`. This only works in dev builds.
+In dev (`npm run dev`), open the game with `?zone=<id>`, for example `http://localhost:5173/?zone=courtroom`, then press "Order now". The run starts at that zone's height with its difficulty. Ids: `ruralRoad`, `bakery`, `cafes`, `mall`, `lawOffice`, `gym`, `courtroom`, `aquarium`, `residence`, `bakeLove`. This only works in dev builds.
 
 ## Ideas this suggests (not built)
 
 - Items drawn from the story: a kitten, a Benz, cheese popcorn, the Cheese-Noey Bread as a top points item, Lal's gym gear.
-- Zone-specific hazards or items (courtroom gavels, gym weights, beach waves).
+- Zone-specific hazards or items (courtroom gavels, gym weights, aquarium tanks).
 - Zone-specific music and a short story line on each banner.

@@ -69,7 +69,7 @@ export const ja: Record<StringKey, string> = {
   'zone.lawOffice': 'CC法律事務所',
   'zone.gym': 'ジム',
   'zone.courtroom': '法廷',
-  'zone.beach': 'ビーチ',
+  'zone.aquarium': '水族館',
   'zone.residence': 'Noeyの家',
   'zone.bakeLove': 'ハート・ベイクド・ラブ ベーカリー',
 

@@ -4,7 +4,7 @@ const onLocalhost = ['localhost', '127.0.0.1', '[::1]'].includes(location.hostna
 
 export const DEV_TOOLS = import.meta.env.DEV && onLocalhost;
 
-/** A dev switch from the URL (for example `?zone=beach`), or null when dev tools are off. */
+/** A dev switch from the URL (for example `?zone=aquarium`), or null when dev tools are off. */
 export function devParam(name: string): string | null {
   return DEV_TOOLS ? new URLSearchParams(location.search).get(name) : null;
 }

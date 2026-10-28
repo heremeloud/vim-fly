@@ -69,7 +69,7 @@ export const th: Record<StringKey, string> = {
   'zone.lawOffice': 'สำนักงานกฎหมาย CC',
   'zone.gym': 'ฟิตเนส',
   'zone.courtroom': 'ห้องพิจารณาคดี',
-  'zone.beach': 'ชายหาด',
+  'zone.aquarium': 'อะแควเรียม',
   'zone.residence': 'บ้านของเนย',
   'zone.bakeLove': 'ร้านขนมปัง​อบอวล​รัก​',
 

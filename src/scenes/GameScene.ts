@@ -32,7 +32,7 @@ const ITEM_SPRITE_SIZE = 48;
 /**
  * Dev only: open http://localhost:5173/?admin to test without losing. Vimmy bounces off the bottom of the
  * screen instead of falling out, and debuffs pass through. Press N to jump to the next location and look through
- * every backdrop; `&zone=beach` starts the run at a given location.
+ * every backdrop; `&zone=aquarium` starts the run at a given location.
  */
 const ADMIN = devFlag('admin');
 const BANNER_Y = 190; // below the HUD panel; small and see-through so it never hides the play area

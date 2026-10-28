@@ -13,7 +13,7 @@ export type ZoneId =
   | 'lawOffice'
   | 'gym'
   | 'courtroom'
-  | 'beach'
+  | 'aquarium'
   | 'residence'
   | 'bakeLove';
 
@@ -41,7 +41,7 @@ const ZONE_DEFS: readonly ZoneDef[] = [
   { id: 'lawOffice', label: 'CC Law Office', stage: 3, base: 0xeceff1, accent: 0xa3b1ba },
   { id: 'gym', label: 'Gym', stage: 3, base: 0xf6e3da, accent: 0xe3a58f },
   { id: 'courtroom', label: 'The Courtroom', stage: 4, base: 0xe4dcd7, accent: 0xa08a7d },
-  { id: 'beach', label: 'Beach', stage: 4, base: 0xe6f2f4, accent: 0x8fcdd6 },
+  { id: 'aquarium', label: 'Aquarium', stage: 4, base: 0xe6f2f4, accent: 0x8fcdd6 },
   { id: 'residence', label: "Noey's Apartment", stage: 5, base: 0xe9eaf3, accent: 0xaab0d4 },
   { id: 'bakeLove', label: 'Bake Love Bakery', stage: 5, base: 0xf8e9ee, accent: 0xe8a9bf },
 ];
