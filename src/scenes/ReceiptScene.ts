@@ -3,6 +3,7 @@ import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import type { RunResult } from '../core/RunState';
 import { ZONES, zoneLabel } from '../core/zones';
 import { itemName, t } from '../i18n';
+import { addItemSprite } from '../items/itemSprite';
 import { runStore } from '../leaderboard/runStore';
 import { embedPilot } from '../promo/pilot';
 import { ScrollList } from '../ui/ScrollList';
@@ -19,6 +20,8 @@ const FOOTER_TOP = 341;
 /** The pilot player: 16:9, centered, under the total. */
 const VIDEO = { x: 50, y: 429, w: 380, h: 214 };
 const ROW_MIN = 32;
+/** Item icon beside each receipt line: the 16px sprite at 2x. */
+const ICON = 32;
 
 /** Game-over receipt: collected items as line items, total = score. Also saves the run to the order history. */
 export class ReceiptScene extends Phaser.Scene {
@@ -44,12 +47,15 @@ export class ReceiptScene extends Phaser.Scene {
     }
 
     /** One receipt line: the name on the left (wrapping if long), the amount on the right. Returns its height. */
-    const addRow = (y: number, left: string, right: string, into?: Phaser.GameObjects.Container): number => {
+    const addRow = (y: number, left: string, right: string, into?: Phaser.GameObjects.Container, itemId?: string): number => {
       const rightText = this.add.text(GAME_WIDTH - X, y, right, mono).setOrigin(1, 0);
-      const room = GAME_WIDTH - X * 2 - rightText.width - 14;
-      const leftText = this.add.text(X, y, left, { ...mono, wordWrap: { width: room, useAdvancedWrap: true } });
+      const indent = itemId ? ICON + 8 : 0;
+      const room = GAME_WIDTH - X * 2 - rightText.width - 14 - indent;
+      const leftText = this.add.text(X + indent, y, left, { ...mono, wordWrap: { width: room, useAdvancedWrap: true } });
+      const height = Math.max(ROW_MIN, Math.ceil(leftText.height) + 4);
       if (into) into.add([leftText, rightText]);
-      return Math.max(ROW_MIN, Math.ceil(leftText.height) + 4);
+      if (itemId && into) into.add(addItemSprite(this, X + ICON / 2, y + height / 2 - 2, { id: itemId, color: 0xd7ccc8 }, ICON));
+      return height;
     };
 
     // The item lines scroll behind opaque header and footer panels: the list sits at depth -1 and everything
@@ -59,7 +65,7 @@ export class ReceiptScene extends Phaser.Scene {
     let listY = 0;
     for (const l of r.lines) {
       const points = l.points === 0 ? '-' : `${l.points > 0 ? '+' : ''}${l.points}`;
-      listY += addRow(listY, `${itemName(l.id, l.label)} x${l.count}`, points, list.container);
+      listY += addRow(listY, `${itemName(l.id, l.label)} x${l.count}`, points, list.container, l.id);
     }
     list.setContentHeight(listY + 8);
 

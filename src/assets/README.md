@@ -1,6 +1,6 @@
 # assets
 
-Art, animation and sound. Empty for now: the base uses placeholder shapes.
+Art, animation and sound. The 19 item sprites are original 16x16 pixel art in `items/`, drawn from text grids by `scripts/make-item-sprites.mjs` (edit the grid, rerun `node scripts/make-item-sprites.mjs`; the PNGs are overwritten). Everything else still uses placeholder shapes.
 
 ## Approach
 

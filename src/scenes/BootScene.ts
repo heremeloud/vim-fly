@@ -2,6 +2,10 @@ import Phaser from 'phaser';
 import { SCENES } from '../core/constants';
 import { applyRenderScale } from '../core/render';
 import { ZONES, zoneTextureKey, type Zone } from '../core/zones';
+import { itemTextureKey } from '../items/itemSprite';
+
+// Item sprites: every PNG in src/assets/items becomes the texture `item-<id>` (see scripts/make-item-sprites.mjs).
+const ITEM_PNGS = import.meta.glob('../assets/items/*.png', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 
 const TILE_W = 480;
 const TILE_H = 200;
@@ -20,10 +24,17 @@ export class BootScene extends Phaser.Scene {
   }
 
   preload(): void {
-    // Real art/audio loads here later. See src/assets/README.md.
+    for (const [path, url] of Object.entries(ITEM_PNGS)) {
+      const id = path.split('/').pop()!.replace('.png', '');
+      if (!id.startsWith('_')) this.load.image(itemTextureKey(id), url);
+    }
   }
 
   create(): void {
+    // Pixel art stays crisp (no smoothing) without turning smoothing off for text, which shares the canvas.
+    for (const key of this.textures.getTextureKeys()) {
+      if (key.startsWith('item-')) this.textures.get(key).setFilter(Phaser.Textures.FilterMode.NEAREST);
+    }
     for (const zone of ZONES) this.makeBackdrop(zone);
     this.scene.start(SCENES.home);
   }

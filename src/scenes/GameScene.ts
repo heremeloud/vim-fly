@@ -7,18 +7,23 @@ import { RunState } from '../core/RunState';
 import { difficulty, ramp } from '../core/difficulty';
 import { zoneAt, zoneBannerText, zoneTextureKey, ZONES, type Zone } from '../core/zones';
 import { pickItem, type ItemDef } from '../items/itemDefs';
+import { addItemSprite } from '../items/itemSprite';
 
 interface FallingItem {
   def: ItemDef;
-  shape: Phaser.GameObjects.Rectangle;
+  shape: Phaser.GameObjects.Image;
+  /** Soft disc in the kind's color behind the sprite, so good and bad items read at a glance. */
+  halo: Phaser.GameObjects.Arc;
   baseX: number;
   swayPhase: number;
 }
 
-// Placeholder outlines so item types read at a glance: gold points, green buff, red debuff.
+// Halo colors so item types read at a glance: gold points, green buff, red debuff.
 const OUTLINE = { points: 0xf9a825, buff: 0x2e7d32, debuff: 0xb71c1c } as const;
 
 const PLAYER_SIZE = 40;
+/** Items are 16x16 pixel art drawn at 3x. The hit box stays ITEM_RULES.size. */
+const ITEM_SPRITE_SIZE = 48;
 const START_Y = GAME_HEIGHT - 200;
 
 /**
@@ -181,11 +186,10 @@ export class GameScene extends Phaser.Scene {
     const def = pickItem(heightMeters);
     const cam = this.cameras.main;
     const x = Phaser.Math.Between(40, GAME_WIDTH - 40);
-    const shape = this.add
-      .rectangle(x, cam.scrollY - 40 - row * 70, ITEM_RULES.size, ITEM_RULES.size, def.color)
-      .setStrokeStyle(3, OUTLINE[def.kind])
-      .setDepth(3);
-    this.items.push({ def, shape, baseX: x, swayPhase: Math.random() * Math.PI * 2 });
+    const y = cam.scrollY - 40 - row * 70;
+    const halo = this.add.circle(x, y, ITEM_SPRITE_SIZE * 0.55, OUTLINE[def.kind], 0.35).setStrokeStyle(2, OUTLINE[def.kind], 0.8).setDepth(2.9);
+    const shape = addItemSprite(this, x, y, def, ITEM_SPRITE_SIZE).setDepth(3);
+    this.items.push({ def, shape, halo, baseX: x, swayPhase: Math.random() * Math.PI * 2 });
   }
 
   private updateItems(dt: number): void {
@@ -204,6 +208,8 @@ export class GameScene extends Phaser.Scene {
         s.x = Phaser.Math.Clamp(it.baseX + wobble, ITEM_RULES.size / 2, GAME_WIDTH - ITEM_RULES.size / 2);
       }
 
+      it.halo.setPosition(s.x, s.y);
+
       if (Math.abs(s.x - this.player.x) < reach && Math.abs(s.y - this.player.y) < reach) {
         this.run.collect(it.def);
         this.remove(it);
@@ -215,6 +221,7 @@ export class GameScene extends Phaser.Scene {
 
   private remove(it: FallingItem): void {
     it.shape.destroy();
+    it.halo.destroy();
     this.items.splice(this.items.indexOf(it), 1);
   }
 
