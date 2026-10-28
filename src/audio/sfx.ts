@@ -229,7 +229,44 @@ export function initSfx(game: Phaser.Game): void {
   game.sound.mute = !enabled;
   const manager = webAudio(game);
   if (!manager) return; // no Web Audio (very old browser): the game stays silent
+  allowSoundOnSilentSwitch();
   for (const [key, build] of Object.entries(BUILDERS)) game.cache.audio.add(key, build(manager.context));
+}
+
+/**
+ * iPhones silence Web Audio while the ringer switch is on silent, unless the page is in the "playback"
+ * audio category. Newer iOS lets us ask for it directly; older iOS switches category when an HTML
+ * audio element plays, so a silent clip is started on the first touch.
+ */
+function allowSoundOnSilentSwitch(): void {
+  try {
+    const session = (navigator as unknown as { audioSession?: { type: string } }).audioSession;
+    if (session) session.type = 'playback';
+  } catch {
+    // Not supported.
+  }
+  const unlock = (): void => {
+    window.removeEventListener('touchend', unlock);
+    window.removeEventListener('click', unlock);
+    try {
+      // 0.1 s of silence: 8-bit mono WAV, 8 kHz.
+      const samples = 800;
+      const bytes = new Uint8Array(44 + samples).fill(128);
+      const view = new DataView(bytes.buffer);
+      const text = (at: number, str: string): void => [...str].forEach((c, i) => view.setUint8(at + i, c.charCodeAt(0)));
+      text(0, 'RIFF'); view.setUint32(4, 36 + samples, true); text(8, 'WAVEfmt ');
+      view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+      view.setUint32(24, 8000, true); view.setUint32(28, 8000, true); view.setUint16(32, 1, true); view.setUint16(34, 8, true);
+      text(36, 'data'); view.setUint32(40, samples, true);
+      const el = new Audio(URL.createObjectURL(new Blob([bytes], { type: 'audio/wav' })));
+      el.loop = true;
+      void el.play().catch(() => undefined);
+    } catch {
+      // Silent clip unavailable; sound still works with the ringer on.
+    }
+  };
+  window.addEventListener('touchend', unlock);
+  window.addEventListener('click', unlock);
 }
 
 export function soundEnabled(): boolean {
@@ -239,6 +276,7 @@ export function soundEnabled(): boolean {
 export function setSoundEnabled(game: Phaser.Game, on: boolean): void {
   enabled = on;
   game.sound.mute = !on;
+  if (on) void webAudio(game)?.context.resume(); // this tap is a user gesture, which iOS requires
   try {
     localStorage.setItem(KEY, on ? 'on' : 'off');
   } catch {
