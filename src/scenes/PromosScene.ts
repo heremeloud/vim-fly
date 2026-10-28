@@ -16,9 +16,14 @@ const CARD_W = GAME_WIDTH - 40;
 const GAP = 12;
 const HALF_W = (CARD_W - GAP) / 2;
 
-/** Round icon buttons: the button is BUTTON px across, the icon inside is ICON px. */
-const BUTTON = 36;
-const ICON = 20;
+/**
+ * Round icon buttons: the visible circle is BUTTON px across and the icon inside is ICON px. They are
+ * small on purpose (the names are what people look for); the tappable area is bigger than the circle.
+ */
+const BUTTON = 28;
+const ICON = 15;
+const ICON_GAP = 8;
+const TAP_H = 44;
 const ICON_URLS: Record<Platform, string> = { x: xIcon, instagram: instagramIcon, tiktok: tiktokIcon };
 const iconKey = (p: Platform) => `icon-${p}`;
 
@@ -80,33 +85,47 @@ export class PromosScene extends Phaser.Scene {
 
   /** A full-width card: avatar on the left; name, role and buttons to its right. */
   private wideCard(c: Phaser.GameObjects.Container, y: number, account: Account): number {
-    const h = account.roleKey ? 112 : 96;
-    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.surface, 16, COLORS.border));
-    this.avatar(c, 20 + 16 + 30, y + h / 2, 30, account.avatar);
-
     const x = 20 + 16 + 60 + 14;
     const room = CARD_W - (x - 20) - 16;
-    const name = label(this, x, y + 12, account.name, { size: 19, bold: true, wrap: room });
+    // Build the texts first so the card is exactly as tall as it needs to be.
+    const name = label(this, x, y + 12, account.name, { size: 22, bold: true, wrap: room });
+    const role = account.roleKey ? label(this, x, y + 12 + name.height, t(account.roleKey), { size: 14, color: COLORS.muted, wrap: room }) : null;
+    const textH = name.height + (role ? role.height : 0);
+    const h = Math.max(96, 12 + textH + 10 + BUTTON + 12);
+
+    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.surface, 16, COLORS.border));
     c.add(name);
-    if (account.roleKey) c.add(label(this, x, y + 12 + name.height, t(account.roleKey), { size: 13, color: COLORS.muted, wrap: room }));
+    if (role) c.add(role);
+    this.avatar(c, 20 + 16 + 30, y + h / 2, 30, account.avatar);
     this.buttonRow(c, x, y + h - 12 - BUTTON, account, 'left');
     return y + h;
   }
 
-  /** The two main leads, side by side: avatar on top, then name, role and buttons, centered. */
+  /** The two main leads, side by side: avatar on top, then a large name, the role and small icon buttons, centered. */
   private leadsRow(c: Phaser.GameObjects.Container, y: number): number {
-    const h = 182;
+    const room = HALF_W - 20;
+    // Both cards are as tall as the taller one needs.
+    const textHeight = (lead: Account): number => {
+      const n = label(this, 0, 0, lead.name, { size: 20, bold: true, wrap: room, align: 'center' });
+      const r = lead.roleKey ? label(this, 0, 0, t(lead.roleKey), { size: 13, wrap: room, align: 'center' }) : null;
+      const h = n.height + (r ? r.height + 2 : 0);
+      n.destroy();
+      r?.destroy();
+      return h;
+    };
+    const h = 76 + Math.max(...LEADS.map(textHeight)) + 12 + BUTTON + 14;
+
     LEADS.forEach((lead, i) => {
       const x = 20 + i * (HALF_W + GAP);
       const cx = x + HALF_W / 2;
       c.add(roundedBox(this, x, y, HALF_W, h, COLORS.surface, 16, COLORS.border));
       this.avatar(c, cx, y + 40, 28, lead.avatar);
-      const name = label(this, cx, y + 76, lead.name, { size: 16, bold: true, wrap: HALF_W - 20, align: 'center' }).setOrigin(0.5, 0);
+      const name = label(this, cx, y + 76, lead.name, { size: 20, bold: true, wrap: room, align: 'center' }).setOrigin(0.5, 0);
       c.add(name);
       if (lead.roleKey) {
-        c.add(label(this, cx, y + 76 + name.height + 2, t(lead.roleKey), { size: 12, color: COLORS.muted, wrap: HALF_W - 20, align: 'center' }).setOrigin(0.5, 0));
+        c.add(label(this, cx, y + 76 + name.height + 2, t(lead.roleKey), { size: 13, color: COLORS.muted, wrap: room, align: 'center' }).setOrigin(0.5, 0));
       }
-      this.buttonRow(c, cx, y + h - 12 - BUTTON, lead, 'center');
+      this.buttonRow(c, cx, y + h - 14 - BUTTON, lead, 'center');
     });
     return y + h;
   }
@@ -138,7 +157,7 @@ export class PromosScene extends Phaser.Scene {
       return;
     }
 
-    const gap = 10;
+    const gap = ICON_GAP;
     const total = live.length * BUTTON + gap * (live.length - 1);
     let x = align === 'center' ? anchor - total / 2 : anchor;
     for (const { p, url } of live) {
@@ -151,7 +170,8 @@ export class PromosScene extends Phaser.Scene {
         // The icon file did not load: fall back to the platform's name.
         c.add(label(this, cx, cy, p.name.slice(0, 2), { size: 12, bold: true, color: COLORS.onPrimary }).setOrigin(0.5));
       }
-      c.add(hitArea(this, x, y, BUTTON, BUTTON, () => openLink(url)));
+      // The tappable area is bigger than the small circle, and neighbours share the gap between them.
+      c.add(hitArea(this, x - gap / 2, y + BUTTON / 2 - TAP_H / 2, BUTTON + gap, TAP_H, () => openLink(url)));
       x += BUTTON + gap;
     }
   }
