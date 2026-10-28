@@ -111,7 +111,7 @@ export const ja: Record<StringKey, string> = {
   'promos.leads': '主演',
   'promos.role.cheese': 'ベーカリー店主チーズ役',
   'promos.role.noey': '弁護士ノイ役',
-  'promos.vimmy.role': 'View-Mimファンの代表キャラ',
+  'promos.vimmy.role': 'View Mimファンの代表キャラ',
   'promos.soon': '準備中',
   'hud.slow': 'スロー',
   'effect.slow': '{s}秒間、飛ぶ速度が{p}%ダウン',

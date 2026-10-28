@@ -41,14 +41,16 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Promos accounts redesigned: avatar cards (wide for official and Vimmy, side by side for the leads); only real platforms get buttons, otherwise one "soon" tag; wording says "the pilot" (Episode 1 is not out yet)
 - [x] Links live in one editable file, `src/promo/links.json`, with `npm run check:links`; the official X account (https://x.com/BakeLoveFeeling) is set; Promos header tightened; pilot card says "Ep1 coming soon"
 - [x] The social buttons are round X / Instagram / TikTok icons (SVGs in `src/assets/icons`, CC0 shapes from Simple Icons)
-- [x] Vimmy is a small one-line row on the Promos page with one short phrase ("Mascot of the View-Mim fans"); the official Vimmy text is saved in `src/promo/README.md`
+- [x] Vimmy is a small one-line row on the Promos page with one short phrase ("Mascot of the View Mim fans"); the official Vimmy text is saved in `src/promo/README.md`
+- [x] Avatars can be real photos: drop the file in `src/assets/avatars/` and write its name as `avatar` in `links.json` (circle-cropped; missing file falls back to a placeholder; checked by `npm run check:links`)
+- [x] Vimmy phrase has no hyphen in any language ("View Mim")
 - [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
 - [x] Story-specific pixel-art pass: all 19 items redrawn on exact 16x16 grids; all 10 locations drawn as restrained 480x200 tiles from the novel descriptions; old procedural art retained as fallback
 
 ## Next up (do these in order)
 
 1. **Play it by hand and tune the feel.** Edit `PHYSICS` and `ITEM_RULES` in `src/core/constants.ts`. Not yet judged by a human; a bot climbs ~150 m in 5 s, so check pacing against 30-90 s runs.
-2. **Fill in the Promos links** in `src/promo/links.json` (see decisions below), then story-driven items and real art.
+2. **Add the real photos** for View, Mim and Vimmy to `src/assets/avatars/` and **fill in the Promos links** in `src/promo/links.json` (see decisions below), then story-driven items and real art.
 3. **Real art, animation and sound.** Dog-in-bee-costume character, Kenney packs for items; log licenses in `src/assets/README.md`.
 4. **Local best runs** (order history) using localStorage.
 5. **Leaderboard.** Supabase project, server functions with run tokens, name entry, top-scores screen.

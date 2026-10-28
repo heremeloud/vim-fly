@@ -112,7 +112,7 @@ export const en = {
   'promos.leads': 'Main leads',
   'promos.role.cheese': 'Plays Cheese, the baker',
   'promos.role.noey': 'Plays Noey, the lawyer',
-  'promos.vimmy.role': 'Mascot of the View-Mim fans',
+  'promos.vimmy.role': 'Mascot of the View Mim fans',
   'promos.soon': 'soon',
   'hud.slow': 'SLOW',
   'effect.slow': 'Flying {p}% slower for {s}s',

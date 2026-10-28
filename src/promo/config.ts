@@ -85,7 +85,7 @@ export interface Account {
   id: string;
   /** Display name. Not translated. */
   name: string;
-  /** Shown in the avatar circle: an emoji for now. A photo can replace it later. */
+  /** Shown in the avatar circle: an emoji, or the file name of a photo in src/assets/avatars (for example "view.jpg"). */
   avatar: string;
   /** Optional line under the name, translated. */
   roleKey?: StringKey;

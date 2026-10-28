@@ -1,6 +1,6 @@
 // Checks src/promo/links.json and prints what every button will open.
 // Run with: npm run check:links
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { en } from '../src/i18n/en.ts';
 
 const links = JSON.parse(readFileSync('src/promo/links.json', 'utf8'));
@@ -48,6 +48,11 @@ for (const [where, a] of accounts) {
   }
   if (!a.name?.trim()) fail(`${where}: name is empty`);
   if (!a.avatar) fail(`${where}: avatar is empty`);
+  else if (/\.(png|jpe?g|webp)$/i.test(a.avatar)) {
+    // A photo: the file must be in src/assets/avatars.
+    if (!existsSync(`src/assets/avatars/${a.avatar}`)) fail(`${where}: photo "${a.avatar}" is not in src/assets/avatars/`);
+    else console.log(`  (${where}: photo ${a.avatar}, ${Math.round(statSync(`src/assets/avatars/${a.avatar}`).size / 1024)} KB)`);
+  }
   if (a.roleKey && !(a.roleKey in en)) fail(`${where}: roleKey "${a.roleKey}" is not a known text key`);
   const parts = [];
   for (const [platform, value] of Object.entries(a.handles ?? {})) {

@@ -112,7 +112,7 @@ export const zh: Record<StringKey, string> = {
   'promos.leads': '主演',
   'promos.role.cheese': '饰演芝士，面包店主',
   'promos.role.noey': '饰演诺伊，律师',
-  'promos.vimmy.role': 'View-Mim 粉丝的代表角色',
+  'promos.vimmy.role': 'View Mim 粉丝的代表角色',
   'promos.soon': '即将开放',
   'hud.slow': '减速',
   'effect.slow': '{s} 秒内飞行速度降低 {p}%',

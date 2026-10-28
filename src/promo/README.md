@@ -59,7 +59,7 @@ Everything is in **`src/promo/links.json`**. You never need to touch the code.
 - **Which buttons show:** an account only shows icons for the platforms listed in its `handles`, and only the ones with a value get an icon button. If it lists platforms but none has a value yet, it shows one quiet "soon" tag. The official account lists only `x`; add `"instagram": null` to it later if it gets one.
 - **Pilot:** paste any normal YouTube link (watch, youtu.be or embed).
 - **Air date:** an ISO date with timezone, for example `"2026-12-01T20:00:00+07:00"`. Once it is set, the home screen shows a countdown to Episode 1 instead of "Watch the pilot now".
-- **avatar:** an emoji for now; a photo can replace it later.
+- **avatar:** an emoji, **or the file name of a photo** you put in `src/assets/avatars/` (for example `"view.jpg"`). Photos are cropped to a circle. See `src/assets/avatars/README.md` for sizes and tips; `npm run check:links` checks the file exists.
 - **roleKey:** points at a line of text in `src/i18n` (so it is translated). Leave it out to show no role line. Use a new text key only after adding it to all four languages.
 - **name:** shown as written, in every language (the leads' names are placeholders until you set them).
 
@@ -73,7 +73,7 @@ It checks the file and prints exactly what every button will open (for example `
 
 ## Vimmy (official description)
 
-Vimmy (วิมมี่) is the character that represents the **fans of View-Mim** (the two leads). The name is **View + Mim**. Vimmy is a long-eared **Cocker Spaniel** (View's charm) with the sweet little-bee spirit of Mim: bright, cheerful, always ready to spread her wings and sprinkle sweetness and brightness everywhere. This is why the playable character is a dog in a bee costume, and why Vimmy is always the playable character.
+Vimmy (วิมมี่) is the character that represents the **fans of View Mim** (the two leads). The name is **View + Mim**. Vimmy is a long-eared **Cocker Spaniel** (View's charm) with the sweet little-bee spirit of Mim: bright, cheerful, always ready to spread her wings and sprinkle sweetness and brightness everywhere. This is why the playable character is a dog in a bee costume, and why Vimmy is always the playable character.
 
 The official text, kept here for reference:
 
@@ -81,4 +81,4 @@ The official text, kept here for reference:
 >
 > VIMMY — a character representing the fans of View-Mim. Introducing a long-eared Cocker Spaniel brimming with brightness and 100% cheery energy, a perfect combination of View's charm and Mim's sweet, little-bee spirit, coming together as the adorable "VIMMY" who's always ready to spread her wings to sprinkle brightness wherever she goes.
 
-On the Promos page this becomes one short line in each language (`promos.vimmy.role` in `src/i18n`): "Mascot of the View-Mim fans". For art: a Cocker Spaniel with long ears and little bee wings.
+On the Promos page this becomes one short line in each language (`promos.vimmy.role` in `src/i18n`): "Mascot of the View Mim fans" (no hyphen in any language, by choice). For art: a Cocker Spaniel with long ears and little bee wings.

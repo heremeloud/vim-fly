@@ -25,6 +25,17 @@ const ICON = 15;
 const ICON_GAP = 8;
 const TAP_H = 44;
 const ICON_URLS: Record<Platform, string> = { x: xIcon, instagram: instagramIcon, tiktok: tiktokIcon };
+
+/**
+ * Avatar photos: any image dropped in src/assets/avatars/ can be used by writing its file name as the
+ * "avatar" in src/promo/links.json (for example "view.jpg"). Anything else is shown as text (an emoji).
+ */
+const PHOTO_URLS = import.meta.glob<string>('../assets/avatars/*.{png,jpg,jpeg,webp}', { eager: true, query: '?no-inline', import: 'default' });
+const isPhoto = (avatar: string) => /\.(png|jpe?g|webp)$/i.test(avatar);
+const photoUrl = (avatar: string): string | undefined => PHOTO_URLS[`../assets/avatars/${avatar}`];
+const photoKey = (avatar: string) => `avatar-src-${avatar}`;
+const circleKey = (avatar: string) => `avatar-circle-${avatar}`;
+const CIRCLE_PX = 256;
 const iconKey = (p: Platform) => `icon-${p}`;
 
 /**
@@ -44,6 +55,15 @@ export class PromosScene extends Phaser.Scene {
   preload(): void {
     for (const p of PLATFORMS) {
       if (!this.textures.exists(iconKey(p.id))) this.load.svg(iconKey(p.id), ICON_URLS[p.id], { width: 128, height: 128 });
+    }
+    for (const account of [OFFICIAL, ...LEADS, VIMMY]) {
+      if (!isPhoto(account.avatar)) continue;
+      const url = photoUrl(account.avatar);
+      if (!url) {
+        if (import.meta.env.DEV) console.warn(`[links.json] avatar "${account.avatar}" is not in src/assets/avatars/`);
+        continue;
+      }
+      if (!this.textures.exists(photoKey(account.avatar))) this.load.image(photoKey(account.avatar), url);
     }
   }
 
@@ -147,9 +167,40 @@ export class PromosScene extends Phaser.Scene {
     return y + h;
   }
 
-  private avatar(c: Phaser.GameObjects.Container, cx: number, cy: number, radius: number, emoji: string): void {
+  /** The round avatar: a photo (cropped to a circle) if `avatar` is an image file name, otherwise the text/emoji. */
+  private avatar(c: Phaser.GameObjects.Container, cx: number, cy: number, radius: number, avatar: string): void {
     c.add(this.add.circle(cx, cy, radius, COLORS.background).setStrokeStyle(2, COLORS.border));
-    c.add(label(this, cx, cy, emoji, { size: Math.round(radius * 0.95) }).setOrigin(0.5));
+    if (isPhoto(avatar)) {
+      const key = this.circlePhoto(avatar);
+      if (key) {
+        c.add(this.add.image(cx, cy, key).setDisplaySize(radius * 2 - 2, radius * 2 - 2));
+        return;
+      }
+      avatar = '🙂'; // the photo is missing or did not load
+    }
+    c.add(label(this, cx, cy, avatar, { size: Math.round(radius * 0.95) }).setOrigin(0.5));
+  }
+
+  /** A round version of a loaded photo (cropped to fill the circle, keeping the top where faces usually are). */
+  private circlePhoto(avatar: string): string | null {
+    const out = circleKey(avatar);
+    if (this.textures.exists(out)) return out;
+    if (!this.textures.exists(photoKey(avatar))) return null;
+
+    const img = this.textures.get(photoKey(avatar)).getSourceImage() as HTMLImageElement;
+    const texture = this.textures.createCanvas(out, CIRCLE_PX, CIRCLE_PX);
+    if (!texture) return null;
+    const ctx = texture.getContext();
+    ctx.beginPath();
+    ctx.arc(CIRCLE_PX / 2, CIRCLE_PX / 2, CIRCLE_PX / 2, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.clip();
+    const scale = Math.max(CIRCLE_PX / img.width, CIRCLE_PX / img.height);
+    const w = img.width * scale;
+    const h = img.height * scale;
+    ctx.drawImage(img, (CIRCLE_PX - w) / 2, (CIRCLE_PX - h) * 0.25, w, h);
+    texture.refresh();
+    return out;
   }
 
   /**
