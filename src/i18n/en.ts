@@ -143,10 +143,10 @@ export const en = {
   'onboard.title': 'Welcome, new customer!',
   'onboard.nameLabel': 'Your name',
   'onboard.namePlaceholder': 'Enter your name',
-  'onboard.howTitle': 'How to play',
-  'onboard.tap': 'Tap the left or right side of the screen (or press A / D) to fly up and drift that way.',
-  'onboard.catch': 'Catch food for points and fly as high as you can. Dodge the bad stuff.',
-  'onboard.swipe': 'In trouble? Swipe left or right (or hold Shift + A / D) to dash (3 per run).',
+  'onboard.howTitle': 'How to Play',
+  'onboard.tap': 'Tap the left or right side of the screen (or press A/D) to fly up and move in that direction.',
+  'onboard.catch': 'Catch food to earn points, fly as high as you can, and dodge dangerous items!',
+  'onboard.swipe': 'In trouble? Swipe left or right (or hold Shift + A/D) to dash! You get 3 dashes per run.',
   'onboard.start': 'Start Order',
   'settings.title': 'Settings',
   'settings.close': 'Close',
@@ -154,7 +154,7 @@ export const en = {
   'settings.on': 'On',
   'settings.off': 'Off',
   'receipt.sending': 'Sending your score…',
-  'receipt.sendFailed': "Couldn't reach the ranking. Saved on this device.",
+  'receipt.sendFailed': "Couldn't connect to the leaderboard. Your score was saved on this device.",
 };
 
 export type StringKey = keyof typeof en;

@@ -9,7 +9,7 @@ export const th: Record<StringKey, string> = {
   'tab.orders': 'ออเดอร์',
   'tab.promos': 'โปรโมชัน',
 
-  'app.tagline': 'ส่งโดยน้องหมาผึ้งแสนน่ารัก',
+  'app.tagline': 'น้องหมาผึ้งสุดน่ารักพร้อมส่งถึงที่เลยน้า',
   'app.deliverTo': 'จัดส่งที่',
   'app.searchHint': 'ค้นหาขนมปัง ข้าวกล่อง โกลเด้น รีทรีฟเวอร์...',
 
@@ -141,17 +141,17 @@ export const th: Record<StringKey, string> = {
 
   'onboard.title': 'ยินดีต้อนรับลูกค้าใหม่!',
   'onboard.nameLabel': 'ชื่อของคุณ',
-  'onboard.namePlaceholder': 'ใส่ชื่อของคุณ',
+  'onboard.namePlaceholder': 'กรอกชื่อของคุณ',
   'onboard.howTitle': 'วิธีเล่น',
-  'onboard.tap': 'แตะด้านซ้ายหรือขวาของหน้าจอ (หรือกด A / D) เพื่อกระพือปีกขึ้นและเลื่อนไปทางนั้น',
-  'onboard.catch': 'รับอาหารเพื่อเก็บแต้มและบินให้สูงที่สุด หลบของไม่ดีด้วยนะ',
-  'onboard.swipe': 'ติดปัญหา? ปัดซ้ายหรือขวา (หรือกด Shift + A / D) เพื่อพุ่ง (3 ครั้งต่อรอบ)',
-  'onboard.start': 'เริ่มสั่ง',
-  'settings.title': 'การตั้งค่า',
+  'onboard.tap': 'แตะหน้าจอด้านซ้ายหรือขวา (หรือกด A/D) เพื่อบินขึ้นและเคลื่อนที่ไปทางนั้น',
+  'onboard.catch': 'เก็บอาหารเพิ่มคะแนน บินให้สูงที่สุด แล้วคอยหลบไอเทมอันตรายด้วยนะ!',
+  'onboard.swipe': 'แย่แล้ว! ปัดหน้าจอไปทางซ้ายหรือขวา (หรือกด Shift + A/D ค้างไว้) เพื่อพุ่งตัวอย่างรวดเร็ว (ใช้ได้ 3 ครั้งต่อเกม)',
+  'onboard.start': 'เริ่มสั่งเลย!',
+  'settings.title': 'ตั้งค่า',
   'settings.close': 'ปิด',
   'settings.sound': 'เสียง',
   'settings.on': 'เปิด',
   'settings.off': 'ปิด',
   'receipt.sending': 'กำลังส่งคะแนน…',
-  'receipt.sendFailed': 'เชื่อมต่ออันดับไม่ได้ บันทึกไว้บนอุปกรณ์นี้แล้ว',
+  'receipt.sendFailed': 'เชื่อมต่อกับตารางคะแนนไม่ได้ บันทึกคะแนนไว้ในเครื่องแล้ว',
 };
