@@ -74,6 +74,8 @@ const DEBUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
  */
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.GameObjects.Sprite;
+  /** Soft bubble around Vimmy while the lawyer-suit shield is up. */
+  private shieldAura!: Phaser.GameObjects.Arc;
   private bg!: Phaser.GameObjects.TileSprite;
   /** The previous location's backdrop, fading out on top of `bg` after a zone change. */
   private bgFade: Phaser.GameObjects.TileSprite | null = null;
@@ -150,6 +152,7 @@ export class GameScene extends Phaser.Scene {
     this.createVimmyAnimations();
     this.player = this.add.sprite(GAME_WIDTH / 2, START_Y, 'vimmy-fly-0').setDisplaySize(PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE).setDepth(5);
     this.player.play(VIMMY_FLY_ANIM);
+    this.shieldAura = this.add.circle(this.player.x, this.player.y, PLAYER_SPRITE_SIZE * 0.72, 0x4fc3f7, 0.18).setStrokeStyle(3, 0xb3e5fc, 0.9).setDepth(4).setVisible(false);
 
     // Top-left panel: score big, climbed meters small, and a row of status chips below it.
     this.hudPanel = this.add.graphics().setScrollFactor(0).setDepth(19);
@@ -450,7 +453,7 @@ export class GameScene extends Phaser.Scene {
     this.vx = steer * PHYSICS.driftVelocity * slow;
   }
 
-  update(_time: number, deltaMs: number): void {
+  update(time: number, deltaMs: number): void {
     if (this.ended) return;
     const dt = Math.min(deltaMs, 66) / 1000; // clamp so a tab switch can't teleport the player; high enough that 30 fps (Low Power Mode) stays at full speed
     this.run.tick(dt * 1000);
@@ -462,6 +465,7 @@ export class GameScene extends Phaser.Scene {
     this.updateItems(dt);
     this.updateHud();
     this.updateCopterSound();
+    this.updateShieldAura(time);
 
     const cam = this.cameras.main;
     if (ADMIN) {
@@ -610,6 +614,11 @@ export class GameScene extends Phaser.Scene {
           playSfx(this, itemSfx(it.def.id, 'buff'), 0.8);
           playSfx(this, 'yips', 0.7, 0.08);
           this.showPopup(tDynamic(`buff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#2e7d32');
+        } else if (it.def.kind === 'debuff' && this.run.shield) {
+          // The lawyer suit takes the hit: say so instead of announcing the debuff.
+          this.showPopup(t('shield.blocked'), '#1565c0', true);
+          playSfx(this, 'block', 0.9);
+          this.burstShield();
         } else if (it.def.kind === 'debuff') {
           const big = it.def.id === 'carCrash' || it.def.id === 'planner';
           this.showPopup(tDynamic(`debuff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#b71c1c', big);
@@ -630,6 +639,38 @@ export class GameScene extends Phaser.Scene {
         this.remove(it);
       }
     }
+  }
+
+  /** Keeps the shield bubble on Vimmy, gently pulsing, for as long as the shield lasts. */
+  private updateShieldAura(timeMs: number): void {
+    const on = this.run.shield;
+    this.shieldAura.setVisible(on);
+    if (!on) return;
+    const pulse = Math.sin(timeMs / 220);
+    this.shieldAura.setPosition(this.player.x, this.player.y).setScale(1 + 0.05 * pulse).setAlpha(0.8 + 0.2 * pulse);
+  }
+
+  /** The bubble pops outward when the shield takes a hit. */
+  private burstShield(): void {
+    const ring = this.add.circle(this.player.x, this.player.y, PLAYER_SPRITE_SIZE * 0.72, 0x4fc3f7, 0.3).setStrokeStyle(4, 0xffffff, 1).setDepth(6);
+    this.tweens.add({ targets: ring, scale: 2, alpha: 0, duration: 450, ease: 'Cubic.easeOut', onComplete: () => ring.destroy() });
+    // A ring of sparks flies off the bubble, as if the hit glanced away.
+    const sparks = 10;
+    for (let i = 0; i < sparks; i++) {
+      const angle = (i / sparks) * Math.PI * 2 + Math.random() * 0.3;
+      const spark = this.add.circle(this.player.x, this.player.y, 4, i % 2 ? 0xffffff : 0xffeb3b).setDepth(7);
+      this.tweens.add({
+        targets: spark,
+        x: this.player.x + Math.cos(angle) * 85,
+        y: this.player.y + Math.sin(angle) * 85,
+        alpha: 0,
+        scale: 0.2,
+        duration: 420,
+        ease: 'Cubic.easeOut',
+        onComplete: () => spark.destroy(),
+      });
+    }
+    this.cameras.main.flash(120, 79, 195, 247, false); // a quick pale-blue flash
   }
 
   /** The rotor chop plays only while the helicopter dash is running. */

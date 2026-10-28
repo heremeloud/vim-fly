@@ -118,6 +118,7 @@ export const th: Record<StringKey, string> = {
 
   'buff.oyster': 'แต้มคูณสอง!',
   'buff.lawyerSuit': 'โล่ป้องกัน!',
+  'shield.blocked': 'กันได้แล้ว!',
   'buff.handkerchief': 'สดชื่นแล้ว!',
   'buff.rollingPin': 'กระพือปีกแรงขึ้น!',
   'buff.helicopter': 'เฮลิคอปเตอร์!',

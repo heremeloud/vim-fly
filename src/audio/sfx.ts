@@ -7,7 +7,7 @@ import Phaser from 'phaser';
 export type Sfx =
   | 'flap' | 'point' | 'buff' | 'yips' | 'debuff' | 'hammer' | 'crash' | 'dash'
   | 'munch' | 'sip' | 'slurp' | 'jackpot' | 'bark' | 'shield' | 'sparkle' | 'power' | 'spool'
-  | 'warble' | 'sag' | 'thud';
+  | 'warble' | 'sag' | 'thud' | 'block';
 export type SfxLoop = 'buzz' | 'copter';
 
 const KEY = 'vimmy-fly.sound';
@@ -152,6 +152,14 @@ const BUILDERS: Record<Sfx | SfxLoop, (ctx: BaseAudioContext) => AudioBuffer> = 
     const b = oscillator(() => 1580, sine);
     const c = oscillator(() => 2310, sine);
     return render(ctx, 0.5, (t) => (a(t) * 0.5 + b(t) * 0.35 + c(t) * 0.2) * decay(t, 0.5, 2) * 0.45);
+  },
+  // Sharp "ting" as the suit deflects a debuff: a hard knock, then a bright ring that bends up.
+  block: (ctx) => {
+    const knock = noise(() => 0.7);
+    const a = oscillator((t) => 880 + 260 * Math.min(1, t / 0.06), sine);
+    const b = oscillator(() => 1980, sine);
+    const c = oscillator(() => 3150, sine);
+    return render(ctx, 0.45, (t) => (knock(t) * decay(t, 0.03, 2) * 0.6 + (a(t) * 0.5 + b(t) * 0.3 + c(t) * 0.18) * decay(t, 0.45, 2.2)) * 0.5);
   },
   // Twinkling chime for cleansing.
   sparkle: (ctx) => {

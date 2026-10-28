@@ -118,6 +118,7 @@ export const ja: Record<StringKey, string> = {
 
   'buff.oyster': 'ポイント2倍!',
   'buff.lawyerSuit': 'シールド!',
+  'shield.blocked': 'ガード!',
   'buff.handkerchief': 'スッキリ!',
   'buff.rollingPin': 'パワーはばたき!',
   'buff.helicopter': 'ヘリコプター!',

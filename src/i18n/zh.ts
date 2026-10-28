@@ -119,6 +119,7 @@ export const zh: Record<StringKey, string> = {
 
   'buff.oyster': '双倍得分!',
   'buff.lawyerSuit': '护盾!',
+  'shield.blocked': '挡住了!',
   'buff.handkerchief': '恢复清醒!',
   'buff.rollingPin': '强力振翅!',
   'buff.helicopter': '直升机!',

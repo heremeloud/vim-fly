@@ -118,6 +118,7 @@ export const zhHant: Record<StringKey, string> = {
 
   'buff.oyster': '點數加倍!',
   'buff.lawyerSuit': '護盾!',
+  'shield.blocked': '擋住了!',
   'buff.handkerchief': '恢復清醒!',
   'buff.rollingPin': '強力拍翅!',
   'buff.helicopter': '直升機!',

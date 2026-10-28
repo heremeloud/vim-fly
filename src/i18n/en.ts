@@ -119,6 +119,7 @@ export const en = {
 
   'buff.oyster': 'Double points!',
   'buff.lawyerSuit': 'Shield!',
+  'shield.blocked': 'Blocked!',
   'buff.handkerchief': 'All better!',
   'buff.rollingPin': 'Power fly!',
   'buff.helicopter': 'Helicopter!',
