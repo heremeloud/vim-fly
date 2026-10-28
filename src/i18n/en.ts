@@ -75,6 +75,7 @@ export const en = {
   'zone.bakeLove': 'Heart Baked Love Bakery',
 
   // The last stretch of each location (see src/core/finales.ts).
+  'finale.warning': 'WARNING!',
   'finale.ruralRoad': 'Car crash hour!',
   'finale.bakery': 'Fresh from the oven!',
   'finale.cafes': 'Coffee rush!',
@@ -83,7 +84,7 @@ export const en = {
   'finale.gym': 'Pump it up!',
   'finale.courtroom': 'Order in the court!',
   'finale.residence': 'Cozy night in!',
-  'finale.aquarium': 'Noey, you like Wan, don\'t you?!',
+  'finale.aquarium': '"Noey, you like Wan, don\'t you?!"',
 
   'effect.points.gain': '+{n} points',
   'effect.points.loss': '-{n} points',

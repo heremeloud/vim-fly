@@ -240,6 +240,58 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
+  /**
+   * The warning for a location's finale: a big hazard-style sign with a red "WARNING!" tag, the name of the rush in large
+   * type and the location's icon either side. It drops in with a bounce, shakes, holds for a moment and slides away.
+   */
+  private showFinaleWarning(icon: string, text: string): void {
+    const title = this.add
+      .text(0, 6, text, { fontFamily: FONT.family, fontSize: '28px', fontStyle: 'bold', color: '#4a2a14', align: 'center', padding: { top: 4, bottom: 4 } })
+      .setOrigin(0.5);
+    fitWidth(title, GAME_WIDTH - 24 - 130);
+    const w = Math.min(GAME_WIDTH - 24, Math.max(title.displayWidth + 130, 280));
+    const h = 88;
+
+    const bg = this.add.graphics();
+    bg.fillStyle(0x000000, 0.18).fillRoundedRect(-w / 2, -h / 2 + 5, w, h, 20); // soft shadow
+    bg.fillStyle(COLORS.primary, 0.97).fillRoundedRect(-w / 2, -h / 2, w, h, 20);
+    bg.lineStyle(4, COLORS.onPrimary, 1).strokeRoundedRect(-w / 2, -h / 2, w, h, 20);
+    // Hazard stripes along the bottom edge, clear of the rounded corners.
+    bg.fillStyle(COLORS.onPrimary, 1);
+    for (let x = -w / 2 + 26; x < w / 2 - 34; x += 18) {
+      bg.fillTriangle(x, h / 2 - 6, x + 9, h / 2 - 6, x + 3, h / 2 - 14);
+      bg.fillTriangle(x, h / 2 - 6, x + 3, h / 2 - 14, x - 6, h / 2 - 14);
+    }
+
+    const tag = this.add.container(0, -h / 2);
+    const tagText = this.add
+      .text(0, 0, `⚠ ${t('finale.warning')}`, { fontFamily: FONT.family, fontSize: '15px', fontStyle: 'bold', color: '#ffffff', padding: { top: 3, bottom: 3 } })
+      .setOrigin(0.5);
+    const tagW = tagText.displayWidth + 26;
+    tag.add([this.add.graphics().fillStyle(COLORS.accent, 1).fillRoundedRect(-tagW / 2, -13, tagW, 26, 13).lineStyle(3, COLORS.onPrimary, 1).strokeRoundedRect(-tagW / 2, -13, tagW, 26, 13), tagText]);
+
+    const iconStyle = { fontFamily: FONT.family, fontSize: '34px', padding: { top: 4, bottom: 4 } };
+    const left = this.add.text(-w / 2 + 38, 4, icon, iconStyle).setOrigin(0.5);
+    const right = this.add.text(w / 2 - 38, 4, icon, iconStyle).setOrigin(0.5);
+
+    const sign = this.add.container(GAME_WIDTH / 2, 150, [bg, title, tag, left, right]).setScrollFactor(0).setDepth(26).setAlpha(0).setScale(0.4);
+    this.tweens.add({ targets: sign, alpha: 1, scale: 1, y: 170, duration: 420, ease: 'Back.easeOut' });
+    this.tweens.add({ targets: sign, x: GAME_WIDTH / 2 + 5, duration: 55, yoyo: true, repeat: 5, delay: 430 }); // a short shake as it lands
+    this.tweens.add({ targets: [left, right], y: -2, duration: 260, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }); // the icons bounce
+    this.tweens.add({
+      targets: sign,
+      alpha: 0,
+      y: 140,
+      delay: 3000,
+      duration: 450,
+      ease: 'Cubic.easeIn',
+      onComplete: () => {
+        this.tweens.killTweensOf([left, right]);
+        sign.destroy();
+      },
+    });
+  }
+
   private showBanner(text: string): void {
     this.tweens.killTweensOf(this.banner);
     // Drop in from above, overshoot and settle, then fade out.
@@ -338,7 +390,7 @@ export class GameScene extends Phaser.Scene {
   private updateZone(): void {
     const finale = finaleAt(this.run.heightMeters);
     if (finale && finale.zoneId !== this.finaleZone) {
-      this.showBanner(tDynamic(`finale.${finale.zoneId}`, ''));
+      this.showFinaleWarning(finale.icon, tDynamic(`finale.${finale.zoneId}`, ''));
       this.finaleGiven = 0;
     }
     this.finaleZone = finale?.zoneId ?? null;

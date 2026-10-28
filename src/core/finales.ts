@@ -9,6 +9,8 @@ import { ZONES, zoneAt, type ZoneId } from './zones';
 export const FINALE_METERS = 100;
 
 export interface Finale {
+  /** Emoji shown either side of the warning banner. */
+  icon: string;
   /** Spawn weight multipliers by item id (1 when not listed). An item listed above 1 can fall even before its `minStage`. */
   items: Readonly<Record<string, number>>;
   /** Items that must fall during the finale (not left to chance): `count` of them, spread evenly across its length. */
@@ -20,15 +22,15 @@ export interface Finale {
 }
 
 const FINALES: Partial<Record<ZoneId, Finale>> = {
-  ruralRoad: { items: {}, guaranteed: { id: 'carCrash', count: 2 } }, // car crash hour: two cars, for sure
-  bakery: { items: { pandanCustardBread: 3, shiopan: 3, cheeseButterBread: 3, cilantroBread: 2, fishSauceBread: 2 } }, // fresh from the oven: every kind of bread, the bad ones too
-  cafes: { items: { coffee: 8, sandwich: 2, goldenRetriever: 12 }, flapScale: 1.08 }, // caffeine, and the golden retriever visits
-  mall: { items: {} }, // shopping spree: just the banner
-  lawOffice: { items: { planner: 3 }, flapScale: 0.95 }, // paperwork
-  gym: { items: { rollingPin: 8 }, flapScale: 1.08 }, // pump it up
-  courtroom: { items: { gavelHammer: 2 } }, // order in the court
-  residence: { items: { wine: 6, pasta: 4, handkerchief: 4 } }, // cozy night in
-  aquarium: { items: { fishSauceBread: 3, planner: 4 }, wind: 60 }, // strong current, and the notebooks float by
+  ruralRoad: { icon: '🚗', items: {}, guaranteed: { id: 'carCrash', count: 2 } }, // car crash hour: two cars, for sure
+  bakery: { icon: '🥐', items: { pandanCustardBread: 3, shiopan: 3, cheeseButterBread: 3, cilantroBread: 2, fishSauceBread: 2 } }, // fresh from the oven: every kind of bread, the bad ones too
+  cafes: { icon: '☕', items: { coffee: 8, sandwich: 2, goldenRetriever: 12 }, flapScale: 1.08 }, // caffeine, and the golden retriever visits
+  mall: { icon: '🛍️', items: {} }, // shopping spree: just the banner
+  lawOffice: { icon: '📓', items: { planner: 3 }, flapScale: 0.95 }, // paperwork
+  gym: { icon: '💪', items: { rollingPin: 8 }, flapScale: 1.08 }, // pump it up
+  courtroom: { icon: '⚖️', items: { gavelHammer: 2 } }, // order in the court
+  residence: { icon: '🛋️', items: { wine: 6, pasta: 4, handkerchief: 4 } }, // cozy night in
+  aquarium: { icon: '🌊', items: { fishSauceBread: 3, planner: 4 }, wind: 60 }, // strong current, and the notebooks float by
 };
 
 /** The finale the climber is in at this height, with the location it belongs to, or null. */

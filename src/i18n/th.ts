@@ -74,6 +74,7 @@ export const th: Record<StringKey, string> = {
   'zone.bakeLove': 'ร้านขนมปัง​อบอวล​รัก​',
 
   // The last stretch of each location (see src/core/finales.ts).
+  'finale.warning': 'ระวัง!',
   'finale.ruralRoad': 'ระวังชนท้าย!',
   'finale.bakery': 'ขนมอบใหม่ ๆ จากเตา!',
   'finale.cafes': 'กาแฟมาแล้ว!',
@@ -82,7 +83,7 @@ export const th: Record<StringKey, string> = {
   'finale.gym': 'ออกกำลังกายกัน!',
   'finale.courtroom': 'โปรดอยู่ในความสงบ!',
   'finale.residence': 'พักผ่อนสบาย ๆ ที่บ้าน!',
-  'finale.aquarium': 'เนยชอบวาฬใช่ไหม?!',
+  'finale.aquarium': '"เนยชอบวาฬใช่ไหม?!"',
 
   'effect.points.gain': 'ได้ {n} แต้ม',
   'effect.points.loss': 'เสียไป {n} แต้ม',
