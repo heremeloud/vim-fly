@@ -10,7 +10,7 @@ import { runStore } from '../leaderboard/runStore';
 import { embedPilot } from '../promo/pilot';
 import { ScrollList } from '../ui/ScrollList';
 import { COLORS } from '../ui/theme';
-import { button, label } from '../ui/widgets';
+import { button, fitWidth, label } from '../ui/widgets';
 
 // The receipt has three zones, so it can never overlap itself however many items there are:
 //   fixed header  (title, height, location)      y 0 .. LIST_TOP
@@ -18,7 +18,7 @@ import { button, label } from '../ui/widgets';
 //   fixed footer  (total, new best, the pilot player, thanks, buttons)  y FOOTER_TOP .. bottom
 const X = 50;
 const LIST_TOP = 126;
-const FOOTER_TOP = 350;
+const FOOTER_TOP = 372;
 /** The pilot player: 16:9, centered, under the total. */
 const VIDEO = { x: 40, y: 461, w: 400, h: 225 };
 const ROW_MIN = 27;
@@ -153,7 +153,7 @@ export class ReceiptScene extends Phaser.Scene {
       });
     }
     // The pilot, right here: poster with a play button (no autoplay, so it never clashes with the game's sound).
-    label(this, GAME_WIDTH / 2, VIDEO.y - 12, t('receipt.thanks'), { size: 13, color: COLORS.muted }).setOrigin(0.5);
+    this.addStamp(t('receipt.thanks'));
     embedPilot(this, VIDEO);
     this.add
       .text(GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 22, t('receipt.tagline'), {
@@ -168,5 +168,21 @@ export class ReceiptScene extends Phaser.Scene {
     const by = GAME_HEIGHT - 40;
     button(this, 130, by, 190, 50, t('receipt.orderAgain'), () => this.scene.start(SCENES.game), 'primary', 18);
     button(this, 350, by, 190, 50, t('receipt.backToStore'), () => this.scene.start(SCENES.home), 'secondary', 18);
+  }
+
+  /** A rubber-stamp "thank you", slightly crooked and see-through, that thumps onto the paper over the item lines. */
+  private addStamp(text: string): void {
+    const ink = COLORS.accent;
+    const word = this.add
+      .text(0, 0, text, { fontFamily: '"Noto Sans Thai", ui-monospace, Menlo, monospace', fontSize: '19px', fontStyle: 'bold', color: '#b83c3c', padding: { top: 2, bottom: 2 } })
+      .setOrigin(0.5);
+    fitWidth(word, 100);
+    const w = Math.max(word.displayWidth + 22, 70);
+    const h = word.displayHeight + 12;
+    const box = this.add.graphics();
+    box.lineStyle(3, ink, 1).strokeRoundedRect(-w / 2, -h / 2, w, h, 6);
+    box.lineStyle(1, ink, 1).strokeRoundedRect(-w / 2 + 4, -h / 2 + 4, w - 8, h - 8, 3);
+    const stamp = this.add.container(GAME_WIDTH - 118, LIST_TOP + 104, [box, word]).setRotation(-0.2).setAlpha(0).setScale(1.7);
+    this.tweens.add({ targets: stamp, alpha: 0.78, scale: 1, duration: 220, delay: 350, ease: 'Cubic.easeIn' });
   }
 }

@@ -5,6 +5,7 @@ import { localeInfo, t } from '../i18n';
 import { fetchTopScores, type ScoreEntry } from '../leaderboard/client';
 import { getPlayerName } from '../leaderboard/playerName';
 import { runStore, type RunRecord } from '../leaderboard/runStore';
+import { addItemSprite } from '../items/itemSprite';
 import { startOrder } from '../ui/onboarding';
 import { ScrollList } from '../ui/ScrollList';
 import { COLORS, hex } from '../ui/theme';
@@ -14,6 +15,8 @@ const HEADER_H = 150;
 const ROW_H = 58;
 const ROW_GAP = 10;
 const LIST_PAD = 14;
+/** Foods shown on the history rows in turn (by order number), instead of a plain number badge. */
+const ORDER_FOODS = ['pandanCustardBread', 'coffee', 'shiopan', 'pasta', 'sandwich', 'tomYum', 'cheeseButterBread', 'shrimpFriedRiceBox', 'cilantroBread', 'wine', 'fishSauceBread'];
 /** Text on the left of a row must end before this x, where the score and best badge begin. */
 const SCORE_LEFT = 360;
 
@@ -162,10 +165,14 @@ export class OrdersScene extends Phaser.Scene {
   private addRow(c: Phaser.GameObjects.Container, y: number, run: RunRecord, rank: number | null, isBest: boolean): void {
     c.add(roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, 14, isBest ? COLORS.primary : COLORS.border));
 
-    // Left badge: the rank on the ladder, or the order number in the history.
-    const badge = rank !== null ? `${rank}` : '#' + run.no;
-    c.add(this.add.circle(52, y + ROW_H / 2, 18, rank === 1 ? COLORS.primary : COLORS.background));
-    c.add(label(this, 52, y + ROW_H / 2, badge, { size: rank !== null ? 17 : 13, bold: true, color: COLORS.text }).setOrigin(0.5));
+    // Left badge: the rank on the ladder, or a food picture in the history (the order number is in the text).
+    c.add(this.add.circle(52, y + ROW_H / 2, 20, rank === 1 ? COLORS.primary : COLORS.background));
+    if (rank !== null) {
+      c.add(label(this, 52, y + ROW_H / 2, `${rank}`, { size: 17, bold: true, color: COLORS.text }).setOrigin(0.5));
+    } else {
+      const food = ORDER_FOODS[(run.no - 1 + ORDER_FOODS.length) % ORDER_FOODS.length];
+      c.add(addItemSprite(this, 52, y + ROW_H / 2, { id: food, color: 0xd7ccc8 }, 28));
+    }
 
     const zone = zoneAt(ZONES.find((z) => z.id === run.zoneId)?.fromMeters ?? 0);
     // Line 1: order number and date. Line 2: location and height. Each stays on one line, so a long

@@ -48,7 +48,7 @@ export const en = {
   'receipt.orderAgain': 'Order Another',
   'receipt.backToStore': 'Back to Store',
   'receipt.newBest': 'New Best Order! You did it!',
-  'receipt.thanks': 'Thank you for playing!',
+  'receipt.thanks': 'THANK YOU',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': 'Share',
   'receipt.shareText': 'I just scored {score} points in Vimmy Fly! Can you beat me? 🐶🐝\nThe bakery is open! 🍞🧀🧈\nStay tuned for the series #BakeLoveFeeling and support ViewMim as NoeyCheese! 💕\n🎮: {url}\n\n#ViewMim #วิวมิ้ม #VIMMY',
