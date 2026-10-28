@@ -41,7 +41,7 @@ export const en = {
 
   'receipt.title': 'RECEIPT',
   'receipt.height': 'Height',
-  'receipt.reached': 'Location Reached',
+  'receipt.reached': 'Location',
   'receipt.total': 'TOTAL',
   'receipt.orderAgain': 'Order Again',
   'receipt.backToStore': 'Back to Store',

@@ -15,7 +15,7 @@ import { button, label } from '../ui/widgets';
 //   scrolling item lines                          y LIST_TOP .. FOOTER_TOP
 //   fixed footer  (total, new best, the pilot player, thanks, buttons)  y FOOTER_TOP .. bottom
 const X = 50;
-const LIST_TOP = 130;
+const LIST_TOP = 144;
 const FOOTER_TOP = 377;
 /** The pilot player: 16:9, centered, under the total. */
 const VIDEO = { x: 70, y: 486, w: 340, h: 191 };
@@ -52,6 +52,11 @@ export class ReceiptScene extends Phaser.Scene {
       const indent = itemId ? ICON + 8 : 0;
       const room = GAME_WIDTH - X * 2 - rightText.width - 14 - indent;
       const leftText = this.add.text(X + indent, y, left, { ...mono, wordWrap: { width: room, useAdvancedWrap: true } });
+      // Header rows must stay one line (they sit above the list), so shrink a label that would wrap on a wider phone font.
+      if (!into) {
+        let size = 26;
+        while (size > 14 && leftText.setFontSize(size).height > size * 1.6) size -= 2; // 1.6 em: more than one line
+      }
       const height = Math.max(ROW_MIN, Math.ceil(leftText.height) + 4);
       if (into) into.add([leftText, rightText]);
       if (itemId && into) into.add(addItemSprite(this, X + ICON / 2, y + height / 2 - 2, { id: itemId, color: 0xd7ccc8 }, ICON));
