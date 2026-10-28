@@ -6,12 +6,13 @@ import raw from './links.json';
 
 // ---- What links.json contains ----
 
-type Platform = 'x' | 'instagram' | 'tiktok';
+type Platform = 'x' | 'instagram' | 'tiktok' | 'youtube' | 'website';
 type Handles = Partial<Record<Platform, string | null>>;
 
 interface RawAccount {
   name?: string;
   avatar?: string;
+  banner?: string;
   roleKey?: string;
   handles?: Handles;
 }
@@ -79,6 +80,8 @@ export const PLATFORMS: readonly { id: Platform; name: string }[] = [
   { id: 'x', name: 'X' },
   { id: 'instagram', name: 'Instagram' },
   { id: 'tiktok', name: 'TikTok' },
+  { id: 'youtube', name: 'YouTube' },
+  { id: 'website', name: 'Website' },
 ];
 
 export interface Account {
@@ -87,6 +90,8 @@ export interface Account {
   name: string;
   /** Shown in the avatar circle: an emoji, or the file name of a photo in src/assets/avatars (for example "view.jpg"). */
   avatar: string;
+  /** Optional header photo (file name in src/assets/avatars) shown across the top of a wide card. */
+  banner?: string;
   /** Optional line under the name, translated. */
   roleKey?: StringKey;
   /**
@@ -110,6 +115,7 @@ function toAccount(id: string, a: RawAccount | undefined, fallbackName: string):
     id,
     name: a?.name?.trim() || fallbackName,
     avatar: a?.avatar || '🙂',
+    banner: a?.banner || undefined,
     roleKey: roleKey && hasKey(roleKey) ? roleKey : undefined,
     handles,
   };
@@ -128,6 +134,8 @@ const HOSTS: Record<Platform, string[]> = {
   x: ['x.com', 'twitter.com'],
   instagram: ['instagram.com'],
   tiktok: ['tiktok.com'],
+  youtube: ['youtube.com', 'm.youtube.com'],
+  website: [], // any site: only a full https link is accepted
 };
 
 /**
@@ -141,12 +149,13 @@ export function profileUrl(platform: Platform, value: string | null | undefined)
   if (v.startsWith('https://')) {
     try {
       const url = new URL(v);
-      return HOSTS[platform].includes(url.hostname.replace(/^www\./, '')) ? url.toString() : null;
+      return platform === 'website' || HOSTS[platform].includes(url.hostname.replace(/^www\./, '')) ? url.toString() : null;
     } catch {
       return null;
     }
   }
 
+  if (platform === 'website') return null;
   const h = v.replace(/^@/, '');
   if (!/^[A-Za-z0-9._]{1,40}$/.test(h)) return null;
   switch (platform) {
@@ -156,6 +165,8 @@ export function profileUrl(platform: Platform, value: string | null | undefined)
       return `https://www.instagram.com/${h}`;
     case 'tiktok':
       return `https://www.tiktok.com/@${h}`;
+    case 'youtube':
+      return `https://www.youtube.com/@${h}`;
   }
 }
 

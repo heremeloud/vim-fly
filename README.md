@@ -1,6 +1,6 @@
 # Bake Love Feeling: the game
 
-A tap-to-fly web game for the series *Bake Love Feeling*. A dog in a bee costume climbs an endless sky, steering left and right to catch food and dodge gavel hammers. The menus are a parody of a Thai delivery app ("VIMMY", named after the dog). Available in English, Thai, Japanese and Chinese.
+A tap-to-fly web game for the series *Bake Love Feeling*. A dog in a bee costume climbs an endless sky, steering left and right to catch food and dodge gavel hammers. The menus are a parody of a Thai delivery app ("VIMMY FLY", named after the dog). Available in English, Thai, Japanese, Simplified Chinese and Traditional Chinese.
 
 ## How to play
 

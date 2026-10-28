@@ -1,18 +1,22 @@
 // Visual theme for the ordering-app menus: a bee-themed parody of a Thai delivery app
-// (honey yellow and dark brown, to match the dog in a bee costume). Placeholder until the
-// show's own colors and logo are decided: change them here and every menu follows.
+// (butter yellow and chocolate brown, taken from the show's poster, with its lavender as the signature
+// accent). Change them here and every menu follows.
 // Do not copy any real delivery app's logo, mascot, exact colors or icons (see README).
 
 export const COLORS = {
-  primary: 0xffb300, // honey yellow: buttons, banner, filled chips
-  primaryDark: 0xc68400, // button shadow
-  onPrimary: 0x3e2723, // text on top of the primary color
-  accent: 0xe65100, // readable highlight on white: prices, active tab
-  background: 0xfff3e0,
+  primary: 0xf7bd3b, // butter yellow (the show's title letters): buttons, banner, filled chips
+  primaryDark: 0xb98022, // button shadow (caramel wood)
+  onPrimary: 0x4a2a14, // text on top of the primary color (the title's chocolate outline)
+  accent: 0xb83c3c, // readable highlight on white: prices, active tab (gingham red)
+  highlight: 0x9f93f0, // the show's lavender (poster header): used on the Promos page
+  highlightDark: 0x7b6ed6, // shadow for the lavender
+  pink: 0xf7b4c6, // the "LOVE" pink: small touches
+  mint: 0xbfdccb, // the sage kitchen utensils: small touches
+  background: 0xfff6e8,
   surface: 0xffffff,
-  border: 0xf0dcc3,
-  text: 0x4e342e,
-  muted: 0x8d6e63,
+  border: 0xecd9bd,
+  text: 0x553219,
+  muted: 0x8a6a55,
   points: 0xf9a825, // item kinds, matching the in-game outlines
   buff: 0x2e7d32,
   debuff: 0xb71c1c,

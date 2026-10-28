@@ -32,16 +32,16 @@ export interface ItemDef {
 }
 
 export const ITEMS: readonly ItemDef[] = [
-  { id: 'pandanCustardBread', label: 'Pandan Custard Bread', kind: 'points', weight: 6, effect: { type: 'points', amount: 10 }, color: 0x8bc34a },
-  { id: 'cheeseButterBread', label: 'Cheese Butter Bread', kind: 'points', weight: 2, effect: { type: 'points', amount: 100 }, color: 0xffca28 },
+  { id: 'pandanCustardBread', label: 'Pandan Custard Bread', kind: 'points', weight: 6, effect: { type: 'points', amount: 20 }, color: 0x8bc34a },
+  { id: 'cheeseButterBread', label: 'Cheese Butter Bread', kind: 'points', weight: 2, effect: { type: 'points', amount: 75 }, color: 0xffca28 },
   { id: 'cilantroBread', label: 'Cilantro Bread', kind: 'debuff', weight: 4, effect: { type: 'disorient', durationMs: 3000 }, color: 0x66bb6a },
-  { id: 'shiopan', label: 'Shiopan', kind: 'points', weight: 5, effect: { type: 'points', amount: 10 }, color: 0xd7a86e },
+  { id: 'shiopan', label: 'Shiopan', kind: 'points', weight: 5, effect: { type: 'points', amount: 15 }, color: 0xd7a86e },
   { id: 'fishSauceBread', label: 'Fish Sauce Bread', kind: 'debuff', weight: 3, effect: { type: 'slow', durationMs: 5000, factor: 0.6 }, color: 0xa1887f },
   { id: 'oyster', label: 'Oyster', kind: 'buff', weight: 3, effect: { type: 'doublePoints', durationMs: 5000 }, color: 0xb0bec5 },
   { id: 'sandwich', label: 'Sandwich', kind: 'points', weight: 6, effect: { type: 'points', amount: 10 }, color: 0xffe0b2 },
-  { id: 'pasta', label: 'Pasta', kind: 'points', weight: 4, effect: { type: 'points', amount: 20 }, color: 0xef5350 },
-  { id: 'coffee', label: 'Coffee', kind: 'points', weight: 4, effect: { type: 'points', amount: 20 }, color: 0x6d4c41 },
-  { id: 'wine', label: 'Wine', kind: 'points', weight: 2, effect: { type: 'points', amount: 30 }, color: 0x8e24aa },
+  { id: 'pasta', label: 'Pasta', kind: 'points', weight: 4, effect: { type: 'points', amount: 30 }, color: 0xef5350 },
+  { id: 'coffee', label: 'Coffee', kind: 'points', weight: 4, effect: { type: 'points', amount: 25 }, color: 0x6d4c41 },
+  { id: 'wine', label: 'Wine', kind: 'points', weight: 2, effect: { type: 'points', amount: 50 }, color: 0x8e24aa },
   { id: 'shrimpFriedRiceBox', label: 'Shrimp Fried Rice Lunch Box', kind: 'points', weight: 2, effect: { type: 'points', amount: 100 }, color: 0xff8a65 },
   { id: 'goldenRetriever', label: 'Golden Retriever', kind: 'points', weight: 1, effect: { type: 'points', amount: 150 }, color: 0xffc107 },
   { id: 'lawyerSuit', label: 'Lawyer Suit', kind: 'buff', weight: 3, effect: { type: 'shield' }, color: 0x37474f },

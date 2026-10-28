@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { embedVideo, openVideo, type LayoutBox } from '../ui/videoPlayer';
 import { PILOT } from './config';
 
-/** Play the pilot in a window over the game. Used by the Promos tab and the Express tile. */
+/** Play the pilot in a window over the game. Used by the Promos tab and the Ride tile. */
 export function watchPilot(): void {
   openVideo({ videoId: PILOT.videoId, watchUrl: PILOT.url });
 }

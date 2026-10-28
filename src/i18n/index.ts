@@ -2,8 +2,9 @@ import { en, type StringKey } from './en';
 import { th } from './th';
 import { ja } from './ja';
 import { zh } from './zh';
+import { zhHant } from './zhHant';
 
-export type Locale = 'en' | 'th' | 'ja' | 'zh';
+export type Locale = 'en' | 'th' | 'ja' | 'zh' | 'zh-Hant';
 export type { StringKey };
 
 export interface LocaleInfo {
@@ -18,10 +19,11 @@ export const LOCALES: readonly LocaleInfo[] = [
   { id: 'en', name: 'English', dateLocale: 'en-GB' },
   { id: 'th', name: 'ไทย', dateLocale: 'th-TH' },
   { id: 'ja', name: '日本語', dateLocale: 'ja-JP' },
-  { id: 'zh', name: '中文', dateLocale: 'zh-CN' },
+  { id: 'zh', name: '简体中文', dateLocale: 'zh-CN' },
+  { id: 'zh-Hant', name: '繁體中文', dateLocale: 'zh-TW' },
 ];
 
-const TABLES: Record<Locale, Record<StringKey, string>> = { en, th, ja, zh };
+const TABLES: Record<Locale, Record<StringKey, string>> = { en, th, ja, zh, 'zh-Hant': zhHant };
 const STORAGE_KEY = 'vimmy-fly.locale';
 
 function detect(): Locale {
@@ -34,6 +36,7 @@ function detect(): Locale {
   const lang = (typeof navigator !== 'undefined' ? navigator.language : 'en').toLowerCase();
   if (lang.startsWith('th')) return 'th';
   if (lang.startsWith('ja')) return 'ja';
+  if (/^zh(?:-(?:hant|tw|hk|mo))(?:-|$)/.test(lang)) return 'zh-Hant';
   if (lang.startsWith('zh')) return 'zh';
   return 'en';
 }

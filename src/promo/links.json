@@ -9,7 +9,8 @@
   },
   "official": {
     "name": "Bake Love Feeling",
-    "avatar": "🍞",
+    "avatar": "blf.jpg",
+    "banner": "blf_header.jpg",
     "handles": {
       "x": "BakeLoveFeeling"
     }
@@ -33,6 +34,6 @@
     "name": "Vimmy",
     "avatar": "vimmy.jpg",
     "roleKey": "promos.vimmy.role",
-    "handles": { "x": null, "instagram": null, "tiktok": null }
+    "handles": { "x": "https://x.com/vimmy_gmmtv", "instagram": "https://www.instagram.com/vimmy__gmmtv/", "tiktok": "https://www.tiktok.com/@vimmy_gmmtv" }
   }
 }

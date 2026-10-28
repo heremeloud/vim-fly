@@ -8,7 +8,7 @@ import { runStore } from '../leaderboard/runStore';
 import { embedPilot } from '../promo/pilot';
 import { ScrollList } from '../ui/ScrollList';
 import { COLORS } from '../ui/theme';
-import { button, hitArea, label } from '../ui/widgets';
+import { button, label } from '../ui/widgets';
 
 // The receipt has three zones, so it can never overlap itself however many items there are:
 //   fixed header  (title, height, location)      y 0 .. LIST_TOP
@@ -16,9 +16,9 @@ import { button, hitArea, label } from '../ui/widgets';
 //   fixed footer  (total, new best, the pilot player, thanks, buttons)  y FOOTER_TOP .. bottom
 const X = 50;
 const LIST_TOP = 130;
-const FOOTER_TOP = 341;
+const FOOTER_TOP = 377;
 /** The pilot player: 16:9, centered, under the total. */
-const VIDEO = { x: 50, y: 429, w: 380, h: 214 };
+const VIDEO = { x: 50, y: 465, w: 380, h: 214 };
 const ROW_MIN = 32;
 /** Native-size item icon beside each receipt line. */
 const ICON = 32;
@@ -88,11 +88,9 @@ export class ReceiptScene extends Phaser.Scene {
     embedPilot(this, VIDEO);
     label(this, GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 22, t('receipt.thanks'), { size: 16, color: COLORS.muted }).setOrigin(0.5);
 
-    // Two buttons side by side: play again, or go back to the menu (item guide).
-    const by = GAME_HEIGHT - 82;
+    // Two buttons side by side: play again, or go back to the store.
+    const by = GAME_HEIGHT - 46;
     button(this, 130, by, 200, 64, t('receipt.orderAgain'), () => this.scene.start(SCENES.game));
-    button(this, 350, by, 200, 64, t('receipt.menu'), () => this.scene.start(SCENES.menu), 'secondary');
-    label(this, GAME_WIDTH / 2, GAME_HEIGHT - 26, t('receipt.backToStore'), { size: 18, color: COLORS.muted }).setOrigin(0.5);
-    hitArea(this, GAME_WIDTH / 2 - 80, GAME_HEIGHT - 44, 160, 36, () => this.scene.start(SCENES.home));
+    button(this, 350, by, 200, 64, t('receipt.backToStore'), () => this.scene.start(SCENES.home), 'secondary');
   }
 }

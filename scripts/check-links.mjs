@@ -10,8 +10,8 @@ const fail = (msg) => {
   console.error('✗ ' + msg);
 };
 
-const PLATFORMS = { x: ['x.com', 'twitter.com'], instagram: ['instagram.com'], tiktok: ['tiktok.com'] };
-const NAMES = { x: 'X', instagram: 'Instagram', tiktok: 'TikTok' };
+const PLATFORMS = { x: ['x.com', 'twitter.com'], instagram: ['instagram.com'], tiktok: ['tiktok.com'], youtube: ['youtube.com', 'm.youtube.com'], website: null };
+const NAMES = { x: 'X', instagram: 'Instagram', tiktok: 'TikTok', youtube: 'YouTube', website: 'Website' };
 
 function profileUrl(platform, value) {
   const v = (value ?? '').trim();
@@ -19,14 +19,15 @@ function profileUrl(platform, value) {
   if (v.startsWith('https://')) {
     try {
       const u = new URL(v);
-      return PLATFORMS[platform].includes(u.hostname.replace(/^www\./, '')) ? u.toString() : null;
+      return PLATFORMS[platform] === null || PLATFORMS[platform].includes(u.hostname.replace(/^www\./, '')) ? u.toString() : null;
     } catch {
       return null;
     }
   }
+  if (platform === 'website') return null;
   const h = v.replace(/^@/, '');
   if (!/^[A-Za-z0-9._]{1,40}$/.test(h)) return null;
-  return { x: `https://x.com/${h}`, instagram: `https://www.instagram.com/${h}`, tiktok: `https://www.tiktok.com/@${h}` }[platform];
+  return { x: `https://x.com/${h}`, instagram: `https://www.instagram.com/${h}`, tiktok: `https://www.tiktok.com/@${h}`, youtube: `https://www.youtube.com/@${h}` }[platform];
 }
 
 // Show
@@ -53,11 +54,12 @@ for (const [where, a] of accounts) {
     if (!existsSync(`src/assets/avatars/${a.avatar}`)) fail(`${where}: photo "${a.avatar}" is not in src/assets/avatars/`);
     else console.log(`  (${where}: photo ${a.avatar}, ${Math.round(statSync(`src/assets/avatars/${a.avatar}`).size / 1024)} KB)`);
   }
+  if (a.banner && !existsSync(`src/assets/avatars/${a.banner}`)) fail(`${where}: banner "${a.banner}" is not in src/assets/avatars/`);
   if (a.roleKey && !(a.roleKey in en)) fail(`${where}: roleKey "${a.roleKey}" is not a known text key`);
   const parts = [];
   for (const [platform, value] of Object.entries(a.handles ?? {})) {
     if (!(platform in PLATFORMS)) {
-      fail(`${where}: unknown platform "${platform}" (use x, instagram or tiktok)`);
+      fail(`${where}: unknown platform "${platform}" (use x, instagram, tiktok, youtube or website)`);
       continue;
     }
     if (value == null || value === '') parts.push(`${NAMES[platform]}: not set`);

@@ -3,8 +3,9 @@ import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { t } from '../i18n';
 import { displayName, ITEMS, priceLabel, type ItemDef } from '../items/itemDefs';
 import { addItemSprite, itemDisplaySize } from '../items/itemSprite';
-import { SHOW, countdownText } from '../promo/config';
+import { OFFICIAL, SHOW, countdownText, openLink, profileUrl } from '../promo/config';
 import { watchPilot } from '../promo/pilot';
+import youtubeIcon from '../assets/icons/youtube.svg?no-inline';
 import { APP, SERVICES } from '../ui/brand';
 import { COLORS } from '../ui/theme';
 import { TAB_BAR_HEIGHT, button, hitArea, label, languageButton, roundedBox, tabBar } from '../ui/widgets';
@@ -18,6 +19,11 @@ function pickPopular(): ItemDef[] {
 
 /** Bakery storefront: the home screen, laid out like a shop page in a food-ordering app. */
 export class HomeScene extends Phaser.Scene {
+  /** The YouTube icon (shared with the Promos page, which loads the same texture key). */
+  preload(): void {
+    if (!this.textures.exists('icon-youtube')) this.load.svg('icon-youtube', youtubeIcon, { width: 128, height: 128 });
+  }
+
   constructor() {
     super(SCENES.home);
   }
@@ -68,6 +74,9 @@ export class HomeScene extends Phaser.Scene {
           case 'pilot':
             watchPilot();
             break;
+          case 'official':
+            openLink(profileUrl('x', OFFICIAL.handles.x));
+            break;
           case 'play':
             this.scene.start(SCENES.game);
             break;
@@ -81,7 +90,15 @@ export class HomeScene extends Phaser.Scene {
     roundedBox(this, 20, 294, GAME_WIDTH - 40, 48, 0xffecb3, 24);
     const hasAirDate = SHOW.airDate !== null;
     const text = hasAirDate ? countdownText() : t('home.watchPilot');
-    label(this, GAME_WIDTH / 2, 318, text, { size: 18, bold: true, color: COLORS.accent }).setOrigin(0.5);
+    const txt = label(this, GAME_WIDTH / 2, 318, text, { size: 18, bold: true, color: COLORS.accent }).setOrigin(0.5);
+    if (!hasAirDate && this.textures.exists('icon-youtube')) {
+      // YouTube icon to the left of the text, the pair centred in the pill.
+      const ICON = 24;
+      const GAP = 8;
+      const startX = GAME_WIDTH / 2 - (ICON + GAP + txt.width) / 2;
+      this.add.image(startX + ICON / 2, 318, 'icon-youtube').setDisplaySize(ICON, ICON);
+      txt.setOrigin(0, 0.5).setX(startX + ICON + GAP);
+    }
     if (!hasAirDate) hitArea(this, 20, 294, GAME_WIDTH - 40, 48, () => this.scene.start(SCENES.promos));
   }
 

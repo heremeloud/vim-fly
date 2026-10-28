@@ -27,8 +27,6 @@ The original photos are references only and are not bundled into the game.
 
 The regular front reactions last 560 ms, while the stronger crash face lasts 700 ms. The helicopter reaction lasts 280 ms and flows directly into the existing somersault. The dash pose remains visible for the full sideways movement and faces its travel direction. All frames use nearest-neighbour filtering. Gameplay displays the 64x64 frames at native size while collision remains a smaller 40px hit box.
 
-## Generation
+## Reactions
 
-Built-in ImageGen created two transparent 2x2 animation sheets using both supplied photos as identity/costume references. The normal-flight sheet was also used as the character anchor for the flip sheet. Each quadrant was cropped, palette-limited to 24 colors without dithering and exported as a 64x64 PNG.
-
-The added reactions are deliberately not AI-redrawn. `scripts/make-vimmy-reactions.py` rotates or mirrors approved frames from the flip animation and changes only a few face pixels, preserving the exact proportions, palette and star-eyed face.
+`scripts/make-vimmy-reactions.py` builds the added reactions by rotating or mirroring approved frames from the flip animation and changing only a few face pixels, preserving the exact proportions, palette and star-eyed face.

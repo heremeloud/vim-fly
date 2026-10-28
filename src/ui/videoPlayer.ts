@@ -44,7 +44,7 @@ function createPlayer(videoId: string, { autoplay, muted }: { autoplay: boolean;
     origin: window.location.origin,
   });
   frame.src = `${YOUTUBE}/embed/${videoId}?${params}`;
-  frame.title = 'Video';
+  frame.title = t('video.title');
   frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
   frame.referrerPolicy = 'strict-origin-when-cross-origin'; // YouTube embeds need a referrer
   Object.assign(frame.style, { position: 'absolute', inset: '0', width: '100%', height: '100%', border: '0', background: 'transparent' } satisfies Partial<CSSStyleDeclaration>);

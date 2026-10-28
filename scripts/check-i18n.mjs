@@ -5,9 +5,10 @@ import { en } from '../src/i18n/en.ts';
 import { th } from '../src/i18n/th.ts';
 import { ja } from '../src/i18n/ja.ts';
 import { zh } from '../src/i18n/zh.ts';
+import { zhHant } from '../src/i18n/zhHant.ts';
 import { readFileSync } from 'node:fs';
 
-const tables = { th, ja, zh };
+const tables = { th, ja, zh, zhHant };
 const placeholders = (s) => [...s.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort().join(',');
 let problems = 0;
 const fail = (msg) => {
@@ -35,4 +36,4 @@ if (problems) {
   console.error(`\n${problems} problem(s).`);
   process.exit(1);
 }
-console.log(`✓ i18n OK: ${Object.keys(en).length} strings in 4 languages, ${itemIds.length} items, ${zoneIds.length} zones.`);
+console.log(`✓ i18n OK: ${Object.keys(en).length} strings in ${Object.keys(tables).length + 1} languages, ${itemIds.length} items, ${zoneIds.length} zones.`);

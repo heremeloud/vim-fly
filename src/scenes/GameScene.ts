@@ -26,7 +26,14 @@ const PLAYER_HITBOX_SIZE = 40;
 const PLAYER_SPRITE_SIZE = 64;
 /** Native 32x32 sprites are displayed at 48x48 with nearest-neighbour filtering for clarity. */
 const ITEM_SPRITE_SIZE = 48;
-const BANNER_Y = 120;
+/**
+ * Dev only: open http://localhost:5173/?admin to test without losing. Vimmy bounces off the bottom of the
+ * screen instead of falling out, and debuffs pass through. Press N to jump to the next location and look through
+ * every backdrop; `&zone=beach` starts the run at a given location.
+ */
+const ADMIN = import.meta.env.DEV && new URLSearchParams(location.search).has('admin');
+const BANNER_Y = 190; // below the HUD panel; small and see-through so it never hides the play area
+const BANNER_ALPHA = 0.7;
 const START_Y = GAME_HEIGHT - 200;
 const VIMMY_FLY_ANIM = 'vimmy-fly';
 const VIMMY_FLIP_ANIM = 'vimmy-helicopter-flip';
@@ -57,7 +64,6 @@ export class GameScene extends Phaser.Scene {
   private zone: Zone = zoneAt(0);
   private banner!: Phaser.GameObjects.Container;
   private bannerBg!: Phaser.GameObjects.Graphics;
-  private bannerStage!: Phaser.GameObjects.Text;
   private bannerName!: Phaser.GameObjects.Text;
   private hudPanel!: Phaser.GameObjects.Graphics;
   private scoreText!: Phaser.GameObjects.Text;
@@ -153,11 +159,10 @@ export class GameScene extends Phaser.Scene {
       addItemSprite(this, GAME_WIDTH - 28 - i * 32, 30, { id: 'cheeseButterBread', color: 0xffca28 }, 28).setScrollFactor(0).setDepth(20),
     ).reverse();
 
-    // Location card: a rounded white panel with a honey border; the stage sits on a small pill above the name.
+    // Location banner: one small, see-through line, "Stage N · Location" (or just the location within the same stage).
     this.bannerBg = this.add.graphics();
-    this.bannerStage = this.add.text(0, 0, '', { fontFamily: FONT.family, fontSize: '14px', fontStyle: 'bold', color: '#3e2723' }).setOrigin(0.5);
-    this.bannerName = this.add.text(0, 0, '', { fontFamily: FONT.family, fontSize: '28px', fontStyle: 'bold', color: '#4e342e', align: 'center' }).setOrigin(0.5);
-    this.banner = this.add.container(GAME_WIDTH / 2, BANNER_Y, [this.bannerBg, this.bannerStage, this.bannerName]).setScrollFactor(0).setDepth(25).setAlpha(0);
+    this.bannerName = this.add.text(0, 0, '', { fontFamily: FONT.family, fontSize: '17px', fontStyle: 'bold', color: '#4e342e', align: 'center' }).setOrigin(0.5);
+    this.banner = this.add.container(GAME_WIDTH / 2, BANNER_Y, [this.bannerBg, this.bannerName]).setScrollFactor(0).setDepth(25).setAlpha(0);
     this.showBanner(zoneBannerText(this.zone));
 
     const hint = this.add
@@ -168,39 +173,34 @@ export class GameScene extends Phaser.Scene {
     this.tweens.add({ targets: hint, alpha: 0, delay: 3500, duration: 600, onComplete: () => hint.destroy() });
 
     bindSteering(this, (dir) => this.flap(dir), (dir) => this.swipeDash(dir));
+
+    if (ADMIN) {
+      const onNext = () => this.jumpToNextZone();
+      this.input.keyboard?.on('keydown-N', onNext);
+      this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.input.keyboard?.off('keydown-N', onNext));
+      this.add
+        .text(GAME_WIDTH / 2, GAME_HEIGHT - 20, 'ADMIN: press N for the next location', { fontFamily: FONT.family, fontSize: '13px', color: '#ffffff', backgroundColor: '#000000aa', padding: { x: 8, y: 3 } })
+        .setOrigin(0.5)
+        .setScrollFactor(0)
+        .setDepth(30);
+    }
   }
 
   private showBanner(text: string): void {
     this.tweens.killTweensOf(this.banner);
     // Drop in from above, overshoot and settle, then fade out.
     this.layoutBanner(text);
-    this.banner.setAlpha(0).setScale(0.4).setY(BANNER_Y - 50);
-    this.tweens.add({ targets: this.banner, alpha: 1, scale: 1, y: BANNER_Y, duration: 450, ease: 'Back.easeOut' });
-    this.tweens.add({ targets: this.banner, alpha: 0, scale: 1.08, delay: 1800, duration: 600 });
-    this.cameras.main.flash(250, 255, 255, 255, true);
+    this.banner.setAlpha(0).setScale(0.6).setY(BANNER_Y - 24);
+    this.tweens.add({ targets: this.banner, alpha: BANNER_ALPHA, scale: 1, y: BANNER_Y, duration: 350, ease: 'Back.easeOut' });
+    this.tweens.add({ targets: this.banner, alpha: 0, scale: 1.08, delay: 1300, duration: 500 });
   }
 
-  /** Banner text is "stage\nname" (or just the name). Lays out the card around it. */
+  /** Banner text is "stage\nname" (or just the name). Lays out one compact line with a see-through pill. */
   private layoutBanner(text: string): void {
-    const lines = text.split('\n');
-    const name = lines[lines.length - 1];
-    const stage = lines.length > 1 ? lines[0] : '';
-    this.bannerName.setText(name);
-    this.bannerStage.setText(stage).setVisible(!!stage);
-    const w = Math.min(GAME_WIDTH - 24, Math.max(this.bannerName.width, this.bannerStage.width + 24) + 56);
-    const h = stage ? 84 : 56;
-    const top = -h / 2;
-    this.bannerName.setPosition(0, stage ? top + 56 : 0);
-    this.bannerStage.setPosition(0, top + 22);
-    const g = this.bannerBg;
-    g.clear();
-    g.fillStyle(0x000000, 0.18).fillRoundedRect(-w / 2 + 2, top + 5, w, h, 20);
-    g.fillStyle(0xffffff, 0.96).fillRoundedRect(-w / 2, top, w, h, 20);
-    g.lineStyle(4, 0xffb300, 1).strokeRoundedRect(-w / 2, top, w, h, 20);
-    if (stage) {
-      const pw = this.bannerStage.width + 24;
-      g.fillStyle(0xffb300, 1).fillRoundedRect(-pw / 2, top + 10, pw, 24, 12);
-    }
+    this.bannerName.setText(text.replace('\n', '  ·  '));
+    const w = Math.min(GAME_WIDTH - 24, this.bannerName.width + 28);
+    const h = 32;
+    this.bannerBg.clear().fillStyle(0xffffff, 1).fillRoundedRect(-w / 2, -h / 2, w, h, 16);
   }
 
   private createVimmyAnimations(): void {
@@ -305,6 +305,15 @@ export class GameScene extends Phaser.Scene {
     this.vy = 0;
   }
 
+  /** Admin only: teleport Vimmy (and the camera) up to the start of the next location. */
+  private jumpToNextZone(): void {
+    const next = ZONES[ZONES.indexOf(this.zone) + 1];
+    if (!next) return;
+    const dy = (next.fromMeters - this.run.heightMeters) * PHYSICS.pixelsPerMeter + 1;
+    this.player.y -= dy;
+    this.cameras.main.scrollY -= dy;
+  }
+
   private flap(dir: -1 | 1): void {
     if (this.ended || this.run.isStunned || this.swipeDashDir !== 0) return;
     const power = this.run.strongFlapMs > 0 ? this.run.strongFlapFactor : 1;
@@ -327,7 +336,13 @@ export class GameScene extends Phaser.Scene {
     this.updateHud();
 
     const cam = this.cameras.main;
-    if (this.player.y > cam.scrollY + GAME_HEIGHT + PLAYER_SPRITE_SIZE) this.endRun();
+    if (ADMIN) {
+      const floor = cam.scrollY + GAME_HEIGHT - PLAYER_SPRITE_SIZE;
+      if (this.player.y > floor) {
+        this.player.y = floor;
+        this.vy = PHYSICS.flapVelocity;
+      }
+    } else if (this.player.y > cam.scrollY + GAME_HEIGHT + PLAYER_SPRITE_SIZE) this.endRun();
   }
 
   private movePlayer(dt: number): void {
@@ -363,7 +378,7 @@ export class GameScene extends Phaser.Scene {
     if (this.player.x !== nextX) {
       const away = nextX < half ? 1 : -1;
       this.vx = away * Math.max(PHYSICS.wallKick, Math.abs(this.vx) * PHYSICS.wallBounce);
-      this.run.stun(PHYSICS.wallStunMs);
+      if (!ADMIN) this.run.stun(PHYSICS.wallStunMs);
     }
     this.player.y += this.vy * dt;
   }
@@ -421,7 +436,7 @@ export class GameScene extends Phaser.Scene {
 
       const reach = (PLAYER_HITBOX_SIZE + Math.max(ITEM_RULES.size, it.visualSize * 0.75)) / 2;
       if (Math.abs(s.x - this.player.x) < reach && Math.abs(s.y - this.player.y) < reach) {
-        if (it.def.kind === 'debuff' && this.swipeDashDir !== 0) continue; // dashing: pass through harmlessly
+        if (it.def.kind === 'debuff' && (ADMIN || this.swipeDashDir !== 0 || this.run.dashMs > 0)) continue; // swipe dash or helicopter: debuffs pass through harmlessly
         if (it.def.kind === 'buff') {
           this.playBuffReaction(it.def);
           this.showPopup(tDynamic(`buff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#2e7d32');
@@ -430,7 +445,10 @@ export class GameScene extends Phaser.Scene {
           this.showPopup(tDynamic(`debuff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#b71c1c', big);
           if (big) this.cameras.main.shake(300, 0.012);
         }
+        const pointsBefore = this.run.itemPoints;
         const applied = this.run.collect(it.def);
+        const gained = this.run.itemPoints - pointsBefore;
+        if (it.def.kind === 'points' && gained !== 0) this.showPopup(`${gained > 0 ? '+' : ''}${gained}`, gained > 0 ? '#e65100' : '#b71c1c', gained >= 100);
         if (it.def.kind === 'debuff' && applied) this.playDebuffReaction(it.def);
         this.remove(it);
       } else if (s.y > cam.scrollY + GAME_HEIGHT + 60) {

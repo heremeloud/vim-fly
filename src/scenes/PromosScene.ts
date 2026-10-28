@@ -3,6 +3,8 @@ import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { t } from '../i18n';
 import instagramIcon from '../assets/icons/instagram.svg?no-inline';
 import tiktokIcon from '../assets/icons/tiktok.svg?no-inline';
+import websiteIcon from '../assets/icons/website.svg?no-inline';
+import youtubeIcon from '../assets/icons/youtube.svg?no-inline';
 import xIcon from '../assets/icons/x.svg?no-inline';
 import { LEADS, OFFICIAL, PLATFORMS, SHOW, VIMMY, openLink, profileUrl, type Account, type Platform } from '../promo/config';
 import { watchPilot } from '../promo/pilot';
@@ -10,8 +12,8 @@ import { ScrollList } from '../ui/ScrollList';
 import { COLORS } from '../ui/theme';
 import { TAB_BAR_HEIGHT, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
 
-const HEADER_H = 72;
-const PAD = 8;
+const HEADER_H = 58;
+const PAD = 4;
 const CARD_W = GAME_WIDTH - 40;
 const GAP = 12;
 const HALF_W = (CARD_W - GAP) / 2;
@@ -24,7 +26,7 @@ const BUTTON = 28;
 const ICON = 15;
 const ICON_GAP = 8;
 const TAP_H = 44;
-const ICON_URLS: Record<Platform, string> = { x: xIcon, instagram: instagramIcon, tiktok: tiktokIcon };
+const ICON_URLS: Record<Platform, string> = { x: xIcon, instagram: instagramIcon, tiktok: tiktokIcon, youtube: youtubeIcon, website: websiteIcon };
 
 /**
  * Avatar photos: any image dropped in src/assets/avatars/ can be used by writing its file name as the
@@ -36,6 +38,8 @@ const photoUrl = (avatar: string): string | undefined => PHOTO_URLS[`../assets/a
 const photoKey = (avatar: string) => `avatar-src-${avatar}`;
 const circleKey = (avatar: string) => `avatar-circle-${avatar}`;
 const CIRCLE_PX = 256;
+/** Height of the header photo on the official card (the photo is cropped to fit, keeping the middle). */
+const BANNER_H = 112;
 const iconKey = (p: Platform) => `icon-${p}`;
 
 /**
@@ -56,6 +60,7 @@ export class PromosScene extends Phaser.Scene {
     for (const p of PLATFORMS) {
       if (!this.textures.exists(iconKey(p.id))) this.load.svg(iconKey(p.id), ICON_URLS[p.id], { width: 128, height: 128 });
     }
+    if (OFFICIAL.banner && photoUrl(OFFICIAL.banner) && !this.textures.exists(photoKey(OFFICIAL.banner))) this.load.image(photoKey(OFFICIAL.banner), photoUrl(OFFICIAL.banner)!);
     for (const account of [OFFICIAL, ...LEADS, VIMMY]) {
       if (!isPhoto(account.avatar)) continue;
       const url = photoUrl(account.avatar);
@@ -72,13 +77,14 @@ export class PromosScene extends Phaser.Scene {
     const c = list.container;
     let y = PAD;
 
-    y = this.pilotCard(c, y) + 18;
+    y = this.pilotCard(c, y) + 12;
     y = this.section(c, y, t('promos.official'));
-    y = this.wideCard(c, y, OFFICIAL) + 18;
+    y = this.wideCard(c, y, OFFICIAL) + 12;
     y = this.section(c, y, t('promos.leads'));
-    y = this.leadsRow(c, y) + 14;
+    y = this.leadsRow(c, y) + 10;
     y = this.compactCard(c, y, VIMMY);
     list.setContentHeight(y + PAD);
+    if (import.meta.env.DEV) console.info(`[promos] content ${Math.round(y + PAD)} of ${GAME_HEIGHT - TAB_BAR_HEIGHT - HEADER_H}`);
 
     // Opaque header (and interactive, so taps don't reach rows scrolled underneath).
     this.add.rectangle(0, 0, GAME_WIDTH, HEADER_H, COLORS.background).setOrigin(0).setDepth(40).setInteractive();
@@ -88,22 +94,25 @@ export class PromosScene extends Phaser.Scene {
 
   private section(c: Phaser.GameObjects.Container, y: number, text: string): number {
     c.add(label(this, 20, y, text, { size: 20, bold: true }));
-    return y + 34;
+    return y + 30;
   }
 
   /** The big "Watch the pilot" button. */
   private pilotCard(c: Phaser.GameObjects.Container, y: number): number {
-    const h = 96;
-    c.add(roundedBox(this, 20, y + 4, CARD_W, h, COLORS.primaryDark, 20));
-    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.primary, 20));
-    c.add(label(this, 44, y + 20, `▶  ${t('promos.pilot.title')}`, { size: 26, bold: true, color: COLORS.onPrimary }));
-    c.add(label(this, 44, y + 58, t('promos.pilot.sub'), { size: 15, color: COLORS.onPrimary }));
+    const h = 60;
+    c.add(roundedBox(this, 20, y + 4, CARD_W, h, COLORS.primaryDark, 18));
+    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.primary, 18));
+    if (this.textures.exists(iconKey('youtube'))) c.add(this.add.image(44 + 14, y + 10 + 14, iconKey('youtube')).setDisplaySize(28, 28));
+    c.add(label(this, 44 + 40, y + 8, t('promos.pilot.title'), { size: 22, bold: true, color: COLORS.onPrimary }));
+    c.add(label(this, 44 + 40, y + 36, t('promos.pilot.sub'), { size: 13, color: COLORS.onPrimary }));
     c.add(hitArea(this, 20, y, CARD_W, h, () => watchPilot()));
     return y + h;
   }
 
   /** A full-width card: avatar on the left; name, role and buttons to its right. */
   private wideCard(c: Phaser.GameObjects.Container, y: number, account: Account): number {
+    const banner = account.banner ? this.bannerImage(account.banner) : null;
+    if (banner) return this.bannerCard(c, y, account, banner);
     const x = 20 + 16 + 60 + 14;
     const room = CARD_W - (x - 20) - 16;
     // Build the texts first so the card is exactly as tall as it needs to be.
@@ -120,31 +129,84 @@ export class PromosScene extends Phaser.Scene {
     return y + h;
   }
 
+  /** A wide card with a header photo across the top (like an X profile): the avatar overlaps its bottom edge; name, role and buttons below. */
+  private bannerCard(c: Phaser.GameObjects.Container, y: number, account: Account, bannerKey: string): number {
+    const bannerH = BANNER_H;
+    const x = 20 + 16;
+    const textX = x + 72 + 12;
+    const rowH = 52;
+    const h = bannerH + rowH;
+    const room = CARD_W - (textX - 20) - 16 - 3 * (BUTTON + ICON_GAP);
+    const name = label(this, textX, y + bannerH + 6, account.name, { size: 20, bold: true, wrap: room });
+    const role = account.roleKey ? label(this, textX, y + bannerH + 6 + name.height, t(account.roleKey), { size: 14, color: COLORS.muted, wrap: room }) : null;
+
+    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.surface, 16, COLORS.border));
+    c.add(this.add.image(21, y + 1, bannerKey).setOrigin(0).setDisplaySize(CARD_W - 2, bannerH - 1));
+    c.add(this.add.circle(x + 36, y + bannerH, 36, COLORS.surface)); // a ring in the card colour so the avatar sits cleanly on the photo
+    this.avatar(c, x + 36, y + bannerH, 32, account.avatar);
+    c.add(name);
+    if (role) c.add(role);
+    // Name beside the avatar, buttons at the right end of the same row.
+    this.buttonRow(c, 20 + CARD_W - 16, y + bannerH + (rowH - BUTTON) / 2, account, 'right');
+    return y + h;
+  }
+
+  /** The header photo with rounded top corners (to match the card), made once from the loaded image. */
+  private bannerImage(file: string): string | null {
+    const out = `banner-${file}`;
+    if (this.textures.exists(out)) return out;
+    if (!this.textures.exists(photoKey(file))) return null;
+    const img = this.textures.get(photoKey(file)).getSourceImage() as HTMLImageElement;
+    const W = CARD_W * 2;
+    const H = BANNER_H * 2;
+    const R = 30;
+    const texture = this.textures.createCanvas(out, W, H);
+    if (!texture) return null;
+    const ctx = texture.getContext();
+    ctx.beginPath();
+    ctx.moveTo(0, H);
+    ctx.lineTo(0, R);
+    ctx.arcTo(0, 0, R, 0, R);
+    ctx.lineTo(W - R, 0);
+    ctx.arcTo(W, 0, W, R, R);
+    ctx.lineTo(W, H);
+    ctx.closePath();
+    ctx.clip();
+    const scale = Math.max(W / img.width, H / img.height);
+    ctx.drawImage(img, (W - img.width * scale) / 2, (H - img.height * scale) / 2, img.width * scale, img.height * scale);
+    texture.refresh();
+    return out;
+  }
+
   /** The two main leads, side by side: avatar on top, then a large name, the role and small icon buttons, centered. */
   private leadsRow(c: Phaser.GameObjects.Container, y: number): number {
     const room = HALF_W - 20;
+    const LEAD_BUTTON = 30;
+    const LEAD_ICON = 17;
+    // The first name and the surname each get their own line.
+    const twoLines = (name: string) => name.replace(' ', '\n');
     // Both cards are as tall as the taller one needs.
     const textHeight = (lead: Account): number => {
-      const n = label(this, 0, 0, lead.name, { size: 20, bold: true, wrap: room, align: 'center' });
-      const r = lead.roleKey ? label(this, 0, 0, t(lead.roleKey), { size: 13, wrap: room, align: 'center' }) : null;
+      const n = label(this, 0, 0, twoLines(lead.name), { size: 21, bold: true, wrap: room, align: 'center' });
+      const r = lead.roleKey ? label(this, 0, 0, t(lead.roleKey), { size: 15, wrap: room, align: 'center' }) : null;
       const h = n.height + (r ? r.height + 2 : 0);
       n.destroy();
       r?.destroy();
       return h;
     };
-    const h = 76 + Math.max(...LEADS.map(textHeight)) + 12 + BUTTON + 14;
+    const h = 108 + Math.max(...LEADS.map(textHeight)) + 10 + LEAD_BUTTON + 14;
 
     LEADS.forEach((lead, i) => {
       const x = 20 + i * (HALF_W + GAP);
       const cx = x + HALF_W / 2;
       c.add(roundedBox(this, x, y, HALF_W, h, COLORS.surface, 16, COLORS.border));
-      this.avatar(c, cx, y + 40, 28, lead.avatar);
-      const name = label(this, cx, y + 76, lead.name, { size: 20, bold: true, wrap: room, align: 'center' }).setOrigin(0.5, 0);
+      this.avatar(c, cx, y + 52, 46, lead.avatar);
+      const name = label(this, cx, y + 108, twoLines(lead.name), { size: 21, bold: true, wrap: room, align: 'center' }).setOrigin(0.5, 0);
       c.add(name);
       if (lead.roleKey) {
-        c.add(label(this, cx, y + 76 + name.height + 2, t(lead.roleKey), { size: 13, color: COLORS.muted, wrap: room, align: 'center' }).setOrigin(0.5, 0));
+        c.add(label(this, cx, y + 108 + name.height + 2, t(lead.roleKey), { size: 15, color: COLORS.muted, wrap: room, align: 'center' }).setOrigin(0.5, 0));
       }
-      this.buttonRow(c, cx, y + h - 14 - BUTTON, lead, 'center');
+      this.buttonRow(c, cx, y + h - 14 - LEAD_BUTTON, lead, 'center', true, LEAD_BUTTON, LEAD_ICON);
     });
     return y + h;
   }
@@ -154,15 +216,20 @@ export class PromosScene extends Phaser.Scene {
    * line, with icon buttons on the right if there are any. No "soon" tag, so it stays quiet.
    */
   private compactCard(c: Phaser.GameObjects.Container, y: number, account: Account): number {
-    const h = 64;
+    const h = 72;
     c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.surface, 14, COLORS.border));
-    this.avatar(c, 20 + 14 + 20, y + h / 2, 20, account.avatar);
+    this.avatar(c, 20 + 14 + 26, y + h / 2, 26, account.avatar);
 
-    const x = 20 + 14 + 40 + 12;
+    const x = 20 + 14 + 52 + 14;
     const room = CARD_W - (x - 20) - 16 - 3 * (BUTTON + ICON_GAP);
-    const name = label(this, x, y + 10, account.name, { size: 17, bold: true, wrap: room });
+    const name = label(this, x, y, account.name, { size: 20, bold: true, wrap: room });
+    const role = account.roleKey ? label(this, x, y, t(account.roleKey), { size: 14, color: COLORS.muted, wrap: room }) : null;
+    // Centre the two lines vertically in the card.
+    const top = y + (h - name.height - (role?.height ?? 0)) / 2;
+    name.setY(top);
+    role?.setY(top + name.height);
     c.add(name);
-    if (account.roleKey) c.add(label(this, x, y + 10 + name.height, t(account.roleKey), { size: 12, color: COLORS.muted, wrap: room }));
+    if (role) c.add(role);
     this.buttonRow(c, 20 + CARD_W - 16, y + (h - BUTTON) / 2, account, 'right', false);
     return y + h;
   }
@@ -214,6 +281,8 @@ export class PromosScene extends Phaser.Scene {
     account: Account,
     align: 'left' | 'center' | 'right',
     showSoon = true,
+    button = BUTTON,
+    icon = ICON,
   ): void {
     const live = PLATFORMS.map((p) => ({ p, url: profileUrl(p.id, account.handles[p.id]) })).filter((a) => a.url !== null);
     const hasAny = PLATFORMS.some((p) => p.id in account.handles);
@@ -233,21 +302,21 @@ export class PromosScene extends Phaser.Scene {
     }
 
     const gap = ICON_GAP;
-    const total = live.length * BUTTON + gap * (live.length - 1);
+    const total = live.length * button + gap * (live.length - 1);
     let x = align === 'center' ? anchor - total / 2 : align === 'right' ? anchor - total : anchor;
     for (const { p, url } of live) {
-      const cx = x + BUTTON / 2;
-      const cy = y + BUTTON / 2;
-      c.add(this.add.circle(cx, cy, BUTTON / 2, COLORS.primary));
+      const cx = x + button / 2;
+      const cy = y + button / 2;
+      c.add(this.add.circle(cx, cy, button / 2, COLORS.primary));
       if (this.textures.exists(iconKey(p.id))) {
-        c.add(this.add.image(cx, cy, iconKey(p.id)).setDisplaySize(ICON, ICON));
+        c.add(this.add.image(cx, cy, iconKey(p.id)).setDisplaySize(icon, icon));
       } else {
         // The icon file did not load: fall back to the platform's name.
         c.add(label(this, cx, cy, p.name.slice(0, 2), { size: 12, bold: true, color: COLORS.onPrimary }).setOrigin(0.5));
       }
       // The tappable area is bigger than the small circle, and neighbours share the gap between them.
-      c.add(hitArea(this, x - gap / 2, y + BUTTON / 2 - TAP_H / 2, BUTTON + gap, TAP_H, () => openLink(url)));
-      x += BUTTON + gap;
+      c.add(hitArea(this, x - gap / 2, y + button / 2 - TAP_H / 2, button + gap, TAP_H, () => openLink(url)));
+      x += button + gap;
     }
   }
 }

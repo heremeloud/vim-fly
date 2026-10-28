@@ -6,8 +6,8 @@
 import type { StringKey } from '../i18n';
 
 export const APP = {
-  /** The app is named after Vimmy, the dog who delivers. Placeholder; change it here. */
-  name: 'VIMMY',
+  /** The app is named after Vimmy, the dog who delivers. */
+  name: 'VIMMY FLY',
   /** The bakery the app is delivering from; also the last location of the story. */
   shopName: 'Bake Love Bakery',
 } as const;
@@ -15,8 +15,8 @@ export const APP = {
 export interface Service {
   icon: string;
   labelKey: StringKey;
-  /** Where the tile goes: the item guide, the Bake Love Feeling page, the pilot (plays in a window), or straight into a run. */
-  target: 'menu' | 'promos' | 'pilot' | 'play';
+  /** Where the tile goes: the item guide, the Bake Love Feeling page, the pilot (plays in a window), the official X account (opens in a new tab), or straight into a run. */
+  target: 'menu' | 'promos' | 'pilot' | 'official' | 'play';
 }
 
 /**
@@ -26,6 +26,6 @@ export interface Service {
 export const SERVICES: readonly Service[] = [
   { icon: '🍞', labelKey: 'svc.food', target: 'menu' }, // what falls from the sky
   { icon: '🛒', labelKey: 'svc.mart', target: 'promos' }, // the show's page: cast, links
-  { icon: '📦', labelKey: 'svc.express', target: 'pilot' }, // the show, delivered fast: plays the pilot
-  { icon: '🛵', labelKey: 'svc.ride', target: 'play' }, // ride Vimmy up into the sky: start a run
+  { icon: '📦', labelKey: 'svc.express', target: 'official' }, // the show, delivered fast: the official X account
+  { icon: '🛵', labelKey: 'svc.ride', target: 'pilot' }, // ride along with the show: plays the pilot (for now)
 ];
