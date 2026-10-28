@@ -34,6 +34,18 @@ function startGame(): void {
     scene: [BootScene, HomeScene, MenuScene, OrdersScene, PromosScene, GameScene, ReceiptScene],
   });
   initSfx(game);
+  // Tapping into the YouTube player (or coming back from a page it opened) takes keyboard focus away from the
+  // window, and Phaser stops running the game until the window regains it. Keep the game running in those cases.
+  const resume = (): void => {
+    game.events.emit(Phaser.Core.Events.FOCUS);
+  };
+  game.events.on(Phaser.Core.Events.BLUR, () => {
+    if (document.activeElement instanceof HTMLIFrameElement) resume();
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) resume();
+  });
+  window.addEventListener('pageshow', resume);
   // Dev only: lets you poke at the game from the browser console (window.__game).
   if (import.meta.env.DEV) (window as unknown as { __game: Phaser.Game }).__game = game;
 }
