@@ -27,6 +27,13 @@ interface FallingItem {
 // Halo colors so item types read at a glance: gold points, green buff, red debuff.
 const OUTLINE = { points: 0xf9a825, buff: 0x2e7d32, debuff: 0xb71c1c } as const;
 
+/** The backdrop is drawn this much past each screen edge so the blur has no bare fringe. */
+const BG_BLEED = 32;
+/** Backdrop blur at full effect (the helicopter, or the fastest climb): offsets in px, softened by a few steps. */
+const BG_BLUR_MAX = { x: 3, y: 9 } as const;
+/** Climb speed alone only blurs the backdrop up to this fraction of the full effect. */
+const BG_BLUR_SPEED_SHARE = 0.6;
+
 const PLAYER_HITBOX_SIZE = 44;
 const PLAYER_SPRITE_SIZE = 80;
 /** Native 32x32 sprites are displayed at 48x48 with nearest-neighbour filtering for clarity. */
@@ -68,6 +75,8 @@ export class GameScene extends Phaser.Scene {
   private bg!: Phaser.GameObjects.TileSprite;
   /** The previous location's backdrop, fading out on top of `bg` after a zone change. */
   private bgFade: Phaser.GameObjects.TileSprite | null = null;
+  /** 0 = sharp backdrop, 1 = fully blurred. Eases toward the target so the blur never pops. */
+  private bgBlurLevel = 0;
   /** The location whose finale (its last stretch) is under way, so its banner shows only once per run. */
   private finaleZone: string | null = null;
   /** How many of the finale's guaranteed items have been dropped so far. */
@@ -110,6 +119,7 @@ export class GameScene extends Phaser.Scene {
     this.run = new RunState();
     this.items = [];
     this.bgFade = null;
+    this.bgBlurLevel = 0;
     this.finaleZone = null;
     this.finaleGiven = 0;
     this.spawnTimerMs = 0;
@@ -133,11 +143,7 @@ export class GameScene extends Phaser.Scene {
     this.zone = zoneAt(this.run.heightMeters);
 
     this.cameras.main.setScroll(0, 0);
-    this.bg = this.add
-      .tileSprite(0, 0, GAME_WIDTH, GAME_HEIGHT, zoneTextureKey(this.zone))
-      .setOrigin(0)
-      .setScrollFactor(0)
-      .setDepth(-10);
+    this.bg = this.makeBackdrop(zoneTextureKey(this.zone), -10);
 
     this.createVimmyAnimations();
     this.player = this.add.sprite(GAME_WIDTH / 2, START_Y, 'vimmy-fly-0').setDisplaySize(PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE).setDepth(5);
@@ -399,11 +405,7 @@ export class GameScene extends Phaser.Scene {
     this.zone = zone;
     // Crossfade: keep the old backdrop on top, scrolling in step, and fade it out over the new one.
     this.bgFade?.destroy();
-    this.bgFade = this.add
-      .tileSprite(0, 0, GAME_WIDTH, GAME_HEIGHT, zoneTextureKey(previous))
-      .setOrigin(0)
-      .setScrollFactor(0)
-      .setDepth(-9);
+    this.bgFade = this.makeBackdrop(zoneTextureKey(previous), -9);
     this.bg.setTexture(zoneTextureKey(zone));
     const fade = this.bgFade;
     this.tweens.add({ targets: fade, alpha: 0, duration: 1200, ease: 'Sine.easeInOut', onComplete: () => { fade.destroy(); if (this.bgFade === fade) this.bgFade = null; } });
@@ -509,6 +511,38 @@ export class GameScene extends Phaser.Scene {
     this.player.y += this.vy * dt;
   }
 
+  /** A scrolling backdrop tile, a little bigger than the screen, with a blur filter that starts switched off. */
+  private makeBackdrop(textureKey: string, depth: number): Phaser.GameObjects.TileSprite {
+    const sprite = this.add
+      .tileSprite(-BG_BLEED, -BG_BLEED, GAME_WIDTH + BG_BLEED * 2, GAME_HEIGHT + BG_BLEED * 2, textureKey)
+      .setOrigin(0)
+      .setScrollFactor(0)
+      .setDepth(depth);
+    sprite.tilePositionX = -BG_BLEED; // keeps the pattern where it was before the bleed
+    sprite.enableFilters();
+    sprite.filters!.internal.addBlur(0, 0, 0, 1);
+    sprite.renderFilters = false;
+    return sprite;
+  }
+
+  /**
+   * The backdrop blurs more while the helicopter dash runs and as the climb speeds up, so the fast scroll
+   * is less dizzying. It eases in and out, and the filter is switched off when the backdrop is sharp.
+   */
+  private updateBackdropBlur(dt: number, d: number): void {
+    const target = this.run.dashMs > 0 ? 1 : d * BG_BLUR_SPEED_SHARE;
+    this.bgBlurLevel += (target - this.bgBlurLevel) * Math.min(1, dt * 4);
+    const level = this.bgBlurLevel;
+    for (const sprite of [this.bg, this.bgFade]) {
+      if (!sprite) continue;
+      sprite.renderFilters = level > 0.03;
+      if (!sprite.renderFilters) continue;
+      const blur = sprite.filters!.internal.list[0] as Phaser.Filters.Blur;
+      blur.x = BG_BLUR_MAX.x * level;
+      blur.y = BG_BLUR_MAX.y * level;
+    }
+  }
+
   /**
    * Camera only ever moves up. It scrolls steadily (faster with height) and jumps
    * ahead if the player flies above the lead line, so the player can never outrun it.
@@ -517,8 +551,9 @@ export class GameScene extends Phaser.Scene {
     const cam = this.cameras.main;
     const speed = ramp(CAMERA.speed, difficulty(this.run.heightMeters));
     cam.scrollY = Math.min(cam.scrollY - speed * dt, this.player.y - CAMERA.leadPx);
-    this.bg.tilePositionY = cam.scrollY;
-    if (this.bgFade) this.bgFade.tilePositionY = cam.scrollY;
+    this.bg.tilePositionY = cam.scrollY - BG_BLEED;
+    if (this.bgFade) this.bgFade.tilePositionY = cam.scrollY - BG_BLEED;
+    this.updateBackdropBlur(dt, difficulty(this.run.heightMeters));
     this.run.heightMeters = Math.max(this.run.heightMeters, (this.startY - this.player.y) / PHYSICS.pixelsPerMeter);
   }
 
