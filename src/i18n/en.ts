@@ -33,7 +33,7 @@ export const en = {
   'orders.title': 'Orders',
   'orders.subtitle': '🌍 World Leaderboard',
   'orders.tab.mine': 'My Orders',
-  'orders.tab.top': 'World Top Customers',
+  'orders.tab.top': 'World’s Top Customers',
   'orders.orderNo': 'Order #{n}',
   'orders.bestBadge': 'Best',
   'orders.empty': 'No orders yet. Place your first order!',

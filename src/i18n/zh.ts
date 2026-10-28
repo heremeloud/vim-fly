@@ -33,7 +33,7 @@ export const zh: Record<StringKey, string> = {
   'orders.title': '订单',
   'orders.subtitle': '🌍 世界排行榜',
   'orders.tab.mine': '我的订单',
-  'orders.tab.top': '世界排行',
+  'orders.tab.top': '全球顾客排行榜',
   'orders.orderNo': '订单 #{n}',
   'orders.bestBadge': '最佳',
   'orders.empty': '还没有订单。快来下第一单吧!',

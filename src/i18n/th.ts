@@ -32,7 +32,7 @@ export const th: Record<StringKey, string> = {
   'orders.title': 'ออเดอร์',
   'orders.subtitle': '🌍 อันดับทั่วโลก',
   'orders.tab.mine': 'ออเดอร์',
-  'orders.tab.top': 'ท็อปทั่วโลก',
+  'orders.tab.top': 'Top Spender',
   'orders.orderNo': 'ออเดอร์ #{n}',
   'orders.bestBadge': 'ดีที่สุด',
   'orders.empty': 'ยังไม่มีออเดอร์ ลองสั่งครั้งแรกเลย!',

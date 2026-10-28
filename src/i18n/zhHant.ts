@@ -32,7 +32,7 @@ export const zhHant: Record<StringKey, string> = {
   'orders.title': '訂單',
   'orders.subtitle': '🌍 世界排行榜',
   'orders.tab.mine': '我的訂單',
-  'orders.tab.top': '世界排行',
+  'orders.tab.top': '全球顧客排行榜',
   'orders.orderNo': '訂單 #{n}',
   'orders.bestBadge': '最佳',
   'orders.empty': '尚無訂單, 立即下第一筆訂單吧!',
