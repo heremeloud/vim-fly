@@ -13,7 +13,7 @@ The game's backdrops are the locations of the series' original novel. The climb 
 
 Each location is `ZONE_SPACING_METERS` (350 m) apart, so a stage is 700 m and the last location starts at 3150 m. Change the one constant in `zones.ts` to spread the story out more or less.
 
-Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1800 m, in `constants.ts`), which is the start of the Gym's last stretch (Gym starts at 1750 m). Everything after that stays at full difficulty. The ramp is meant to stay demanding but let skilled players reach the later locations, the Aquarium included. Lower `fullAtMeters` to make the middle of the climb harder, raise it to make it easier.
+Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1500 m, in `constants.ts`). Everything after that stays at full difficulty. The ramp is meant to stay demanding but let skilled players reach the later locations, the Aquarium included. Lower `fullAtMeters` to make the middle of the climb harder, raise it to make it easier.
 
 | Stage | From | Location | Vibe | Placeholder backdrop |
 | --- | --- | --- | --- | --- |
