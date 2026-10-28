@@ -67,11 +67,12 @@ export class BootScene extends Phaser.Scene {
     const ctx = tex.getContext();
     ctx.fillStyle = hex(zone.base);
     ctx.fillRect(0, 0, TILE_W, TILE_H);
+    ctx.globalAlpha = 0.25; // faint, so the seam doesn't strobe as the tile scrolls by
     ctx.fillStyle = hex(zone.accent);
     ctx.fillRect(0, 0, TILE_W, 4); // tile seam line
 
     const [upper, lower] = ZONE_ICONS[zone.id];
-    ctx.globalAlpha = 0.6; // soft, so the backdrop stays behind the dog and items
+    ctx.globalAlpha = 0.25; // faint, so the backdrop stays behind the dog and items and doesn't flicker while scrolling
     const draw = (emoji: string, x: number, y: number): void => {
       const key = emojiTextureKey(emoji);
       if (!this.textures.exists(key)) return;
