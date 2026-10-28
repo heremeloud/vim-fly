@@ -44,7 +44,7 @@ Every location except the last (Bake Love Bakery, which never ends) finishes wit
 | Gym | Pump it up! | Rolling pins (x8) | Flaps 8% stronger |
 | The Courtroom | Order in the court! | Gavels (x2, already common) | |
 | Noey's Apartment | Cozy night in! | Wine (x6), pasta (x4), handkerchief (x4) | |
-| Aquarium | Strong current! | Fish sauce bread (x3) | Sideways current, up to about 60 px/s |
+| Aquarium | Noey, you like Wan, don't you?! | Fish sauce bread (x3), planners (x4) | Sideways current, up to about 60 px/s |
 
 The banner texts are `finale.<zoneId>` in `src/i18n` (drafts, like the location names).
 

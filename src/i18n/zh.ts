@@ -75,7 +75,7 @@ export const zh: Record<StringKey, string> = {
   'zone.bakeLove': '恋恋香气烘焙坊',
 
   // The last stretch of each location (see src/core/finales.ts).
-  'finale.ruralRoad': '小心撞车!',
+  'finale.ruralRoad': '小心追尾!',
   'finale.bakery': '新鲜出炉!',
   'finale.cafes': '咖啡时间!',
   'finale.mall': '疯狂购物!',
@@ -83,7 +83,7 @@ export const zh: Record<StringKey, string> = {
   'finale.gym': '燃脂时间!',
   'finale.courtroom': '肃静!',
   'finale.residence': '温馨的夜晚!',
-  'finale.aquarium': '水流好急!',
+  'finale.aquarium': 'Noey, 你喜欢 Wan, 对不对?!',
 
   'effect.points.gain': '获得 {n} 分',
   'effect.points.loss': '少了 {n} 分',

@@ -74,7 +74,7 @@ export const ja: Record<StringKey, string> = {
   'zone.bakeLove': 'ハート・ベイクド・ラブ ベーカリー',
 
   // The last stretch of each location (see src/core/finales.ts).
-  'finale.ruralRoad': 'クラッシュ注意!',
+  'finale.ruralRoad': '追突注意!',
   'finale.bakery': '焼きたてパン!',
   'finale.cafes': 'コーヒータイム!',
   'finale.mall': 'お買い物タイム!',
@@ -82,7 +82,7 @@ export const ja: Record<StringKey, string> = {
   'finale.gym': 'パワーアップ!',
   'finale.courtroom': '静粛に!',
   'finale.residence': 'おうちでまったり!',
-  'finale.aquarium': '流れが強いよ!',
+  'finale.aquarium': 'Noey, Wanのことが好きなんでしょ?!',
 
   'effect.points.gain': '{n}ポイントゲット',
   'effect.points.loss': '{n}ポイントダウン',

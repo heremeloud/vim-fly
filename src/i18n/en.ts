@@ -83,7 +83,7 @@ export const en = {
   'finale.gym': 'Pump it up!',
   'finale.courtroom': 'Order in the court!',
   'finale.residence': 'Cozy night in!',
-  'finale.aquarium': 'Strong current!',
+  'finale.aquarium': 'Noey, you like Wan, don\'t you?!',
 
   'effect.points.gain': '+{n} points',
   'effect.points.loss': '-{n} points',

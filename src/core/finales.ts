@@ -28,7 +28,7 @@ const FINALES: Partial<Record<ZoneId, Finale>> = {
   gym: { items: { rollingPin: 8 }, flapScale: 1.08 }, // pump it up
   courtroom: { items: { gavelHammer: 2 } }, // order in the court
   residence: { items: { wine: 6, pasta: 4, handkerchief: 4 } }, // cozy night in
-  aquarium: { items: { fishSauceBread: 3 }, wind: 60 }, // strong current
+  aquarium: { items: { fishSauceBread: 3, planner: 4 }, wind: 60 }, // strong current, and the notebooks float by
 };
 
 /** The finale the climber is in at this height, with the location it belongs to, or null. */
