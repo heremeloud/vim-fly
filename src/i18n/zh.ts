@@ -5,14 +5,14 @@ import type { StringKey } from './en';
 export const zh: Record<StringKey, string> = {
   'lang.title': '语言',
 
-  'tab.store': '商店',
+  'tab.store': '首页',
   'tab.menu': '菜单',
   'tab.orders': '订单',
   'tab.promos': '活动',
 
   'app.tagline': '由超乖的蜜蜂狗狗送达',
   'app.deliverTo': '配送至',
-  'app.searchHint': '搜索面包、便当、金毛寻回犬…',
+  'app.searchHint': '面包、便当、金毛寻回犬…',
 
   'home.orderNow': '立即下单',
   'home.open': '营业中',
@@ -22,7 +22,7 @@ export const zh: Record<StringKey, string> = {
   'countdown.hours': '第1集 {h}小时后播出',
 
   'menu.title': '菜单',
-  'menu.subtitle': '“真倒霉……”',
+  'menu.subtitle': '“我的人生怎么会这么糟糕啊……”',
   'kind.points': '积分',
   'kind.buff': '增益',
   'kind.debuff': '减益',
@@ -41,12 +41,13 @@ export const zh: Record<StringKey, string> = {
 
   'receipt.title': '收据',
   'receipt.height': '高度',
-  'receipt.reached': '到达',
+  'receipt.reached': '到达地点',
   'receipt.total': '合计',
   'receipt.orderAgain': '再来一单',
   'receipt.backToStore': '返回商店',
   'receipt.newBest': '新纪录！',
-  'receipt.thanks': 'Thank you for baking loving feeling',
+  'receipt.thanks': 'Thank you for playing!',
+  'receipt.tagline': "Let's baking · loving · feeling",
 
   'hud.shield': '护盾',
   'hud.dash': '冲刺',

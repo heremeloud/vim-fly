@@ -18,7 +18,7 @@ const X = 50;
 const LIST_TOP = 130;
 const FOOTER_TOP = 377;
 /** The pilot player: 16:9, centered, under the total. */
-const VIDEO = { x: 50, y: 465, w: 380, h: 214 };
+const VIDEO = { x: 70, y: 486, w: 340, h: 191 };
 const ROW_MIN = 32;
 /** Native-size item icon beside each receipt line. */
 const ICON = 32;
@@ -31,7 +31,7 @@ export class ReceiptScene extends Phaser.Scene {
 
   create(data: { result?: RunResult }): void {
     const r = data.result ?? { heightMeters: 0, lines: [], total: 0, durationMs: 0 };
-    const mono = { fontFamily: '"Noto Sans Thai", ui-monospace, Menlo, monospace', fontSize: '20px', color: '#4e342e', padding: { top: 3, bottom: 3 } };
+    const mono = { fontFamily: '"Noto Sans Thai", ui-monospace, Menlo, monospace', fontSize: '26px', color: '#4e342e', padding: { top: 3, bottom: 3 } };
 
     // Save once per run. The receipt is only opened with a result right after a run ends.
     let isBest = false;
@@ -85,8 +85,16 @@ export class ReceiptScene extends Phaser.Scene {
       label(this, GAME_WIDTH / 2, FOOTER_TOP + 52, `★ ${t('receipt.newBest')}`, { size: 22, bold: true, color: COLORS.accent }).setOrigin(0.5, 0);
     }
     // The pilot, right here: poster with a play button (no autoplay, so it never clashes with the game's sound).
+    label(this, GAME_WIDTH / 2, VIDEO.y - 16, t('receipt.thanks'), { size: 16, color: COLORS.muted }).setOrigin(0.5);
     embedPilot(this, VIDEO);
-    label(this, GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 22, t('receipt.thanks'), { size: 16, color: COLORS.muted }).setOrigin(0.5);
+    this.add
+      .text(GAME_WIDTH / 2, VIDEO.y + VIDEO.h + 20, t('receipt.tagline'), {
+        fontFamily: 'Sacramento, "Brush Script MT", cursive',
+        fontSize: '26px',
+        color: '#8d6e63',
+        padding: { top: 3, bottom: 3 },
+      })
+      .setOrigin(0.5);
 
     // Two buttons side by side: play again, or go back to the store.
     const by = GAME_HEIGHT - 46;

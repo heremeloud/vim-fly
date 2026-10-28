@@ -31,7 +31,7 @@ Last updated: 2026-10-27 (core loop session)
 - [x] Planner now stuns (1.5 s) and costs 150 points; fish sauce bread slows flying 40% for 5 s
 - [x] Sharper rendering: canvas drawn up to 3x bigger with the same layout (`src/core/render.ts`); bundled Noto Sans Thai font for Thai text
 - [x] "Tier" is now "Stage" everywhere (banner: "Stage 3" over the location; no stage names), in all four languages
-- [x] The pilot plays inside the game in a window (Promos tab, receipt); the home strip opens the Promos page; official account is X only; receipt line is "Thank you for baking loving feeling" in all four languages
+- [x] The pilot plays inside the game in a window (Promos tab, receipt); the home strip opens the Promos page; official account is X only; receipt line is "Thank you for baking・loving・feeling" in all five languages
 - [x] Cheese butter bread is now a high-points item (+100, rare)
 - [x] The Store tab always returns to the home page (also when another page is showing under a lit Store tab)
 - [x] Receipt rebuilt: fixed header and footer with a scrolling item list, long names wrap, nothing overlaps however long it gets

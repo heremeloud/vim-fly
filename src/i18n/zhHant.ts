@@ -5,14 +5,14 @@ import type { StringKey } from './en';
 export const zhHant: Record<StringKey, string> = {
   'lang.title': '語言',
 
-  'tab.store': '商店',
+  'tab.store': '首頁',
   'tab.menu': '菜單',
   'tab.orders': '訂單',
   'tab.promos': '活動',
 
   'app.tagline': '由一隻超乖的蜜蜂狗狗為你送達',
   'app.deliverTo': '配送至',
-  'app.searchHint': '搜尋麵包、便當、黃金獵犬…',
+  'app.searchHint': '麵包、便當、黃金獵犬…',
 
   'home.orderNow': '立即下單',
   'home.open': '營業中',
@@ -22,7 +22,7 @@ export const zhHant: Record<StringKey, string> = {
   'countdown.hours': '第1集將於 {h}小時後播出',
 
   'menu.title': '菜單',
-  'menu.subtitle': '「真倒楣……」',
+  'menu.subtitle': '「我的人生怎麼會這麼糟糕啊……」',
   'kind.points': '點數',
   'kind.buff': '增益',
   'kind.debuff': '減益',
@@ -40,12 +40,13 @@ export const zhHant: Record<StringKey, string> = {
 
   'receipt.title': '收據',
   'receipt.height': '高度',
-  'receipt.reached': '到達',
+  'receipt.reached': '抵達地點',
   'receipt.total': '總計',
   'receipt.orderAgain': '再次下單',
   'receipt.backToStore': '返回商店',
   'receipt.newBest': '訂單新紀錄！',
-  'receipt.thanks': 'Thank you for baking loving feeling',
+  'receipt.thanks': 'Thank you for playing!',
+  'receipt.tagline': "Let's baking · loving · feeling",
 
   'hud.shield': '護盾',
   'hud.dash': '衝刺',

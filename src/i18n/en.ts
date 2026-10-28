@@ -5,7 +5,7 @@
 export const en = {
   'lang.title': 'Language',
 
-  'tab.store': 'Store',
+  'tab.store': 'Home',
   'tab.menu': 'Menu',
   'tab.orders': 'Orders',
   'tab.promos': 'Promos',
@@ -22,7 +22,7 @@ export const en = {
   'countdown.hours': 'Episode 1 airs in {h}h',
 
   'menu.title': 'Menu',
-  'menu.subtitle': '"Just my luck..."',
+  'menu.subtitle': '“Why does my life have to be such a mess...?”',
   'kind.points': 'Points',
   'kind.buff': 'Buffs',
   'kind.debuff': 'Debuffs',
@@ -41,12 +41,13 @@ export const en = {
 
   'receipt.title': 'RECEIPT',
   'receipt.height': 'Height',
-  'receipt.reached': 'Reached',
+  'receipt.reached': 'Location Reached',
   'receipt.total': 'TOTAL',
   'receipt.orderAgain': 'Order Again',
   'receipt.backToStore': 'Back to Store',
   'receipt.newBest': 'New Best Order!',
-  'receipt.thanks': 'Thank you for baking loving feeling',
+  'receipt.thanks': 'Thank you for playing!',
+  'receipt.tagline': "Let's baking · loving · feeling",
 
   'hud.shield': 'SHIELD',
   'hud.dash': 'DASH',
@@ -67,7 +68,7 @@ export const en = {
   'zone.courtroom': 'The Courtroom',
   'zone.beach': 'Beach',
   'zone.residence': "Noey's Apartment",
-  'zone.bakeLove': 'Bake Love Bakery',
+  'zone.bakeLove': 'Heart Baked Love Bakery',
 
   'effect.points.gain': 'Adds {n} points',
   'effect.points.loss': 'Costs you {n} points',

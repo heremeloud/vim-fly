@@ -4,9 +4,9 @@ import type { StringKey } from './en';
 export const ja: Record<StringKey, string> = {
   'lang.title': '言語',
 
-  'tab.store': 'ストア',
+  'tab.store': 'ホーム',
   'tab.menu': 'メニュー',
-  'tab.orders': '注文',
+  'tab.orders': '注文履歴',
   'tab.promos': 'プロモ',
 
   'app.tagline': 'とってもかわいいハチイヌがお届け',
@@ -21,7 +21,7 @@ export const ja: Record<StringKey, string> = {
   'countdown.hours': '第1話まであと{h}時間',
 
   'menu.title': 'メニュー',
-  'menu.subtitle': '「ついてないな…」',
+  'menu.subtitle': '「なんで私の人生、こんなに最悪なの…」',
   'kind.points': 'ポイント',
   'kind.buff': 'バフ',
   'kind.debuff': 'デバフ',
@@ -40,12 +40,13 @@ export const ja: Record<StringKey, string> = {
 
   'receipt.title': 'レシート',
   'receipt.height': '高さ',
-  'receipt.reached': '到達',
+  'receipt.reached': '到達地点',
   'receipt.total': '合計',
   'receipt.orderAgain': 'もう一度注文',
   'receipt.backToStore': 'ストアに戻る',
   'receipt.newBest': 'ベスト更新！',
-  'receipt.thanks': 'Thank you for baking loving feeling',
+  'receipt.thanks': 'Thank you for playing!',
+  'receipt.tagline': "Let's baking · loving · feeling",
 
   'hud.shield': 'シールド',
   'hud.dash': 'ダッシュ',
@@ -65,8 +66,8 @@ export const ja: Record<StringKey, string> = {
   'zone.gym': 'ジム',
   'zone.courtroom': '法廷',
   'zone.beach': 'ビーチ',
-  'zone.residence': 'Noeyのアパート',
-  'zone.bakeLove': 'Bake Love ベーカリー',
+  'zone.residence': 'Noeyの家',
+  'zone.bakeLove': 'Heart Baked Love ベーカリー',
 
   'effect.points.gain': '{n}ポイント獲得',
   'effect.points.loss': '{n}ポイント失う',

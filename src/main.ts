@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import '@fontsource/noto-sans-thai/thai-400.css';
 import '@fontsource/noto-sans-thai/thai-700.css';
+import '@fontsource/sacramento/latin-400.css';
 import { GAME_WIDTH, GAME_HEIGHT } from './core/constants';
 import { RENDER_SCALE, installTextResolution } from './core/render';
 import { BootScene } from './scenes/BootScene';
@@ -34,6 +35,9 @@ function startGame(): void {
 // Text on the canvas is drawn once, so the Thai font must be ready before the first scene draws it.
 // Don't wait forever: if the font is slow or fails, start anyway with the device font.
 const THAI_FONTS = ['400 16px "Noto Sans Thai"', '700 16px "Noto Sans Thai"'];
-const fontsReady = Promise.all(THAI_FONTS.map((f) => document.fonts.load(f, 'ก')));
+const fontsReady = Promise.all([
+  ...THAI_FONTS.map((f) => document.fonts.load(f, 'ก')),
+  document.fonts.load('400 16px "Sacramento"', 'a'), // receipt tagline
+]);
 const timeout = new Promise((resolve) => setTimeout(resolve, 3000));
 Promise.race([fontsReady, timeout]).then(startGame, startGame);
