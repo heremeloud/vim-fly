@@ -4,7 +4,10 @@ import Phaser from 'phaser';
 // so the game plays them through Phaser's own sound manager (this.sound) and ships no audio files.
 // Swap any of them for a real recording later by loading a file under the same key.
 
-export type Sfx = 'flap' | 'point' | 'buff' | 'yips' | 'debuff' | 'hammer' | 'crash' | 'dash';
+export type Sfx =
+  | 'flap' | 'point' | 'buff' | 'yips' | 'debuff' | 'hammer' | 'crash' | 'dash'
+  | 'munch' | 'sip' | 'slurp' | 'jackpot' | 'bark' | 'shield' | 'sparkle' | 'power' | 'spool'
+  | 'warble' | 'sag' | 'thud';
 export type SfxLoop = 'buzz' | 'copter';
 
 const KEY = 'vimmy-fly.sound';
@@ -112,6 +115,78 @@ const BUILDERS: Record<Sfx | SfxLoop, (ctx: BaseAudioContext) => AudioBuffer> = 
       return (s + hit) * 0.4;
     });
   },
+  // Crunchy bite for bread and sandwiches.
+  munch: (ctx) => {
+    const crunch = noise(() => 0.5);
+    return render(ctx, 0.2, (t) => {
+      const bite = t < 0.08 ? decay(t, 0.08, 2) : t > 0.1 ? decay(t - 0.1, 0.1, 2) : 0;
+      return crunch(t) * bite * 1.4 * 0.5;
+    });
+  },
+  // Bubbly gulp for drinks.
+  sip: (ctx) => {
+    const tone = oscillator((t) => 300 + 500 * Math.min(1, t / 0.12) - 200 * Math.max(0, (t - 0.12) / 0.1), sine);
+    return render(ctx, 0.26, (t) => tone(t) * (0.6 + 0.4 * sine(TAU * 28 * t)) * decay(t, 0.26, 1) * 0.5);
+  },
+  // Noodle slurp: a wet rising whistle.
+  slurp: (ctx) => {
+    const tone = oscillator((t) => 500 + 1100 * t * t * 6, triangle);
+    const spit = noise(() => 0.3);
+    return render(ctx, 0.3, (t) => (tone(t) * 0.5 + spit(t) * 0.25) * (0.7 + 0.3 * sine(TAU * 35 * t)) * decay(t, 0.3, 0.7) * 0.5);
+  },
+  // Big treat: a bright run up with a held top note.
+  jackpot: (ctx) => {
+    const notes = [784, 988, 1175, 1568, 1976];
+    const tone = oscillator((t) => notes[Math.min(4, Math.floor(t / 0.07))], square);
+    return render(ctx, 0.6, (t) => tone(t) * decay(t % 0.07, 0.12, 1) * decay(t, 0.65, 0.8) * 0.28);
+  },
+  // One deep woof for the golden retriever.
+  bark: (ctx) => {
+    const voice = oscillator((t) => 220 - 90 * Math.min(1, t / 0.18), saw);
+    const breath = noise(() => 0.2);
+    return render(ctx, 0.28, (t) => (voice(t) * 0.55 + breath(t) * 0.25) * Math.sin((Math.PI * Math.min(1, t / 0.22))) ** 0.5 * decay(t, 0.28, 1.2) * 0.8);
+  },
+  // Metallic clang as the suit goes on.
+  shield: (ctx) => {
+    const a = oscillator(() => 660, sine);
+    const b = oscillator(() => 1580, sine);
+    const c = oscillator(() => 2310, sine);
+    return render(ctx, 0.5, (t) => (a(t) * 0.5 + b(t) * 0.35 + c(t) * 0.2) * decay(t, 0.5, 2) * 0.45);
+  },
+  // Twinkling chime for cleansing.
+  sparkle: (ctx) => {
+    const tone = oscillator((t) => 1400 + 1400 * (Math.floor(t / 0.06) % 3) * 0.5, sine);
+    return render(ctx, 0.45, (t) => tone(t) * decay(t % 0.06, 0.1, 1) * decay(t, 0.45, 1) * 0.4);
+  },
+  // Chunky power-up sweep.
+  power: (ctx) => {
+    const tone = oscillator((t) => 180 + 900 * Math.min(1, t / 0.3), square);
+    return render(ctx, 0.45, (t) => tone(t) * Math.min(1, t / 0.02) * decay(t, 0.45, 0.8) * 0.26);
+  },
+  // Rotor spooling up.
+  spool: (ctx) => {
+    const air = noise(() => 0.15);
+    return render(ctx, 0.6, (t) => {
+      const rate = 6 + 26 * (t / 0.6);
+      return (air(t) * 3 + sine(TAU * 60 * t) * 0.4) * (0.5 + 0.5 * sine(TAU * rate * t)) * Math.min(1, t / 0.15) * 0.7;
+    });
+  },
+  // Dizzy wobble for disorientation.
+  warble: (ctx) => {
+    const tone = oscillator((t) => 420 + 160 * sine(TAU * 7 * t), triangle);
+    return render(ctx, 0.5, (t) => tone(t) * decay(t, 0.5, 1) * 0.45);
+  },
+  // Deflating slide for slowdowns.
+  sag: (ctx) => {
+    const tone = oscillator((t) => 500 * Math.pow(0.35, t / 0.4), saw);
+    return render(ctx, 0.45, (t) => tone(t) * decay(t, 0.45, 1.5) * 0.3);
+  },
+  // Heavy book-slam thud.
+  thud: (ctx) => {
+    const low = oscillator((t) => 110 - 60 * Math.min(1, t / 0.2), sine);
+    const slap = noise(() => 0.25);
+    return render(ctx, 0.45, (t) => (low(t) * 0.9 + slap(t) * 0.7 * decay(t, 0.05, 2)) * decay(t, 0.45, 1.5) * 0.6);
+  },
   // Air whoosh for the sideways dash.
   dash: (ctx) => {
     const air = noise((t) => 0.04 + 0.35 * Math.sin((Math.PI * t) / 0.4));
@@ -175,8 +250,22 @@ function available(scene: Phaser.Scene, key: string): boolean {
   return scene.cache.audio.exists(key);
 }
 
-export function playSfx(scene: Phaser.Scene, key: Sfx, volume = 1): void {
-  if (available(scene, key)) scene.sound.play(key, { volume });
+/** `vary` randomises pitch by up to that fraction either way so repeats don't sound identical. */
+export function playSfx(scene: Phaser.Scene, key: Sfx, volume = 1, vary = 0): void {
+  if (available(scene, key)) scene.sound.play(key, { volume, rate: 1 + (Math.random() * 2 - 1) * vary });
+}
+
+const BY_ID: Record<string, Sfx> = {
+  carCrash: 'crash', gavelHammer: 'hammer', planner: 'thud', cilantroBread: 'warble', fishSauceBread: 'sag',
+  lawyerSuit: 'shield', handkerchief: 'sparkle', rollingPin: 'power', helicopter: 'spool', oyster: 'buff',
+  goldenRetriever: 'bark', coffee: 'sip', wine: 'sip', pasta: 'slurp', tomYum: 'slurp',
+  pandanCustardBread: 'munch', cheeseButterBread: 'munch', shiopan: 'munch', sandwich: 'munch', shrimpFriedRiceBox: 'munch',
+};
+
+/** The sound for picking up an item: specific to the item, else generic for its kind. */
+export function itemSfx(id: string, kind: 'points' | 'buff' | 'debuff', amount = 0): Sfx {
+  if (kind === 'points' && amount >= 75 && id !== 'goldenRetriever') return 'jackpot';
+  return BY_ID[id] ?? (kind === 'debuff' ? 'debuff' : kind === 'buff' ? 'buff' : 'point');
 }
 
 /** A looping sound the caller starts and stops. Returns null when audio is unavailable. */

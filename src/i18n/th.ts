@@ -152,6 +152,5 @@ export const th: Record<StringKey, string> = {
   'settings.on': 'เปิด',
   'settings.off': 'ปิด',
   'receipt.sending': 'กำลังส่งคะแนน…',
-  'receipt.sent': 'เพิ่มในอันดับทั่วโลกแล้ว!',
   'receipt.sendFailed': 'เชื่อมต่ออันดับไม่ได้ บันทึกไว้บนอุปกรณ์นี้แล้ว',
 };

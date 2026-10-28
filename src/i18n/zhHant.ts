@@ -152,6 +152,5 @@ export const zhHant: Record<StringKey, string> = {
   'settings.on': '開',
   'settings.off': '關',
   'receipt.sending': '正在送出分數…',
-  'receipt.sent': '已加入全球排行榜!',
   'receipt.sendFailed': '無法連線至排行榜,已儲存在此裝置上。',
 };

@@ -89,7 +89,7 @@ export class ReceiptScene extends Phaser.Scene {
     this.add.rectangle(GAME_WIDTH / 2, FOOTER_TOP + 8, GAME_WIDTH - X * 2, 2, 0x4e342e);
     addRow(FOOTER_TOP + 18, t('receipt.total'), `฿${r.total}`);
     if (isBest) {
-      label(this, GAME_WIDTH / 2, FOOTER_TOP + 48, `★ ${t('receipt.newBest')}`, { size: 18, bold: true, color: COLORS.accent }).setOrigin(0.5, 0);
+      label(this, GAME_WIDTH / 2, FOOTER_TOP + 20, `★ ${t('receipt.newBest')}`, { size: 16, bold: true, color: COLORS.accent }).setOrigin(0.5, 0);
     }
     // Send the score to the worldwide ranking (the run is already saved on this device either way).
     const name = getPlayerName();
@@ -97,7 +97,8 @@ export class ReceiptScene extends Phaser.Scene {
       const status = label(this, GAME_WIDTH / 2, FOOTER_TOP + 68, t('receipt.sending'), { size: 12, color: COLORS.muted }).setOrigin(0.5, 0);
       void submitFinishedRun(name, r.total).then((ok) => {
         if (!status.active) return; // the player already left the receipt
-        status.setText(t(ok ? 'receipt.sent' : 'receipt.sendFailed'));
+        if (ok) status.setText('');
+        else status.setText(t('receipt.sendFailed'));
       });
     }
     // The pilot, right here: poster with a play button (no autoplay, so it never clashes with the game's sound).

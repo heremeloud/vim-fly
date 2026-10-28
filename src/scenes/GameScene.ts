@@ -1,6 +1,6 @@
 import { beginRun } from '../leaderboard/client';
 import Phaser from 'phaser';
-import { loopSfx, playSfx } from '../audio/sfx';
+import { itemSfx, loopSfx, playSfx } from '../audio/sfx';
 import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '../core/constants';
 import { bindSteering } from '../core/input';
 import { itemName, t, tDynamic } from '../i18n';
@@ -328,7 +328,7 @@ export class GameScene extends Phaser.Scene {
     const power = this.run.strongFlapMs > 0 ? this.run.strongFlapFactor : 1;
     const slow = this.run.slowMs > 0 ? this.run.slowFactor : 1; // fish sauce bread: slower flaps and drift
     this.vy = PHYSICS.flapVelocity * power * slow;
-    playSfx(this, 'flap', 0.5);
+    playSfx(this, 'flap', 0.5, 0.12);
     const steer = this.run.isDisoriented ? -dir : dir; // disoriented: left/right swapped
     this.vx = steer * PHYSICS.driftVelocity * slow;
   }
@@ -450,19 +450,22 @@ export class GameScene extends Phaser.Scene {
         if (it.def.kind === 'debuff' && (ADMIN || this.swipeDashDir !== 0 || this.run.dashMs > 0)) continue; // swipe dash or helicopter: debuffs pass through harmlessly
         if (it.def.kind === 'buff') {
           this.playBuffReaction(it.def);
-          playSfx(this, 'buff', 0.8);
-          playSfx(this, 'yips', 0.9);
+          playSfx(this, itemSfx(it.def.id, 'buff'), 0.8);
+          playSfx(this, 'yips', 0.7, 0.08);
           this.showPopup(tDynamic(`buff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#2e7d32');
         } else if (it.def.kind === 'debuff') {
           const big = it.def.id === 'carCrash' || it.def.id === 'planner';
           this.showPopup(tDynamic(`debuff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#b71c1c', big);
           if (big) this.cameras.main.shake(300, 0.012);
-          playSfx(this, it.def.id === 'carCrash' ? 'crash' : it.def.id === 'gavelHammer' ? 'hammer' : 'debuff', 0.8);
+          playSfx(this, itemSfx(it.def.id, 'debuff'), 0.8);
         }
         const pointsBefore = this.run.itemPoints;
         const applied = this.run.collect(it.def);
         const gained = this.run.itemPoints - pointsBefore;
-        if (it.def.kind === 'points' && gained > 0) playSfx(this, 'point', 0.6);
+        if (it.def.kind === 'points' && gained > 0) {
+          playSfx(this, itemSfx(it.def.id, 'points', gained), 0.7, 0.06);
+          if (itemSfx(it.def.id, 'points', gained) !== 'point') playSfx(this, 'point', 0.4, 0.1);
+        }
         if (it.def.kind === 'points' && gained !== 0) this.showPopup(`${gained > 0 ? '+' : ''}${gained}`, gained > 0 ? '#e65100' : '#b71c1c', gained >= 100);
         if (it.def.kind === 'debuff' && applied) this.playDebuffReaction(it.def);
         this.remove(it);

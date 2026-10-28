@@ -152,6 +152,5 @@ export const ja: Record<StringKey, string> = {
   'settings.on': 'オン',
   'settings.off': 'オフ',
   'receipt.sending': 'スコアを送信中…',
-  'receipt.sent': '世界ランキングに追加されました!',
   'receipt.sendFailed': 'ランキングに接続できません。この端末に保存しました。',
 };

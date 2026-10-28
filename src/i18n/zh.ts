@@ -153,6 +153,5 @@ export const zh: Record<StringKey, string> = {
   'settings.on': '开',
   'settings.off': '关',
   'receipt.sending': '正在提交分数…',
-  'receipt.sent': '已加入全球排行榜!',
   'receipt.sendFailed': '无法连接排行榜,已保存在此设备上。',
 };

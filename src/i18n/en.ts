@@ -153,7 +153,6 @@ export const en = {
   'settings.on': 'On',
   'settings.off': 'Off',
   'receipt.sending': 'Sending your score…',
-  'receipt.sent': 'Added to the worldwide ranking!',
   'receipt.sendFailed': "Couldn't reach the ranking. Saved on this device.",
 };
 
