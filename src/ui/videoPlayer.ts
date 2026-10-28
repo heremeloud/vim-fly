@@ -23,8 +23,12 @@ interface Player {
  * The YouTube player itself, with a "Loading..." message on top until the video reports it is
  * ready (so a slow connection never looks like nothing is playing). Shared by the pop-up window
  * and the player built into the receipt.
+ *
+ * With `facade`, nothing from YouTube is loaded up front: the box shows the video's thumbnail with a play
+ * button, which is always there at once, and the real player is created (and started) when it is tapped.
+ * That keeps game-over light and means a slow connection never leaves an empty black box.
  */
-function createPlayer(videoId: string, { autoplay, muted }: { autoplay: boolean; muted: boolean }): Player {
+function createPlayer(videoId: string, { autoplay, muted, facade = false }: { autoplay: boolean; muted: boolean; facade?: boolean }): Player {
   const box = document.createElement('div');
   Object.assign(box.style, {
     background: '#000',
@@ -33,21 +37,6 @@ function createPlayer(videoId: string, { autoplay, muted }: { autoplay: boolean;
     position: 'relative',
     aspectRatio: '16 / 9',
   } satisfies Partial<CSSStyleDeclaration>);
-
-  const frame = document.createElement('iframe');
-  const params = new URLSearchParams({
-    autoplay: autoplay ? '1' : '0',
-    mute: muted ? '1' : '0',
-    rel: '0',
-    playsinline: '1',
-    enablejsapi: '1',
-    origin: window.location.origin,
-  });
-  frame.src = `${YOUTUBE}/embed/${videoId}?${params}`;
-  frame.title = t('video.title');
-  frame.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
-  frame.referrerPolicy = 'strict-origin-when-cross-origin'; // YouTube embeds need a referrer
-  Object.assign(frame.style, { position: 'absolute', inset: '0', width: '100%', height: '100%', border: '0', background: 'transparent' } satisfies Partial<CSSStyleDeclaration>);
 
   const loading = document.createElement('div');
   loading.textContent = t('video.loading');
@@ -62,16 +51,45 @@ function createPlayer(videoId: string, { autoplay, muted }: { autoplay: boolean;
     textShadow: '0 1px 6px rgba(0, 0, 0, 0.9)',
     pointerEvents: 'none', // lets taps through to the player underneath
     fontFamily: FONT.family,
+    background: facade ? 'rgba(0, 0, 0, 0.4)' : 'transparent', // darkens the thumbnail so the message stays readable
   } satisfies Partial<CSSStyleDeclaration>);
-  const hideLoading = () => loading.remove();
-  const giveUp = window.setTimeout(hideLoading, 20000); // never leave it up forever
+  let giveUp = 0;
+  let frame: HTMLIFrameElement | null = null;
+  let poster: HTMLElement | null = null;
+  // When the player is ready (or we give up waiting), drop the loading message and thumbnail and show the player.
+  const hideLoading = (): void => {
+    loading.remove();
+    if (frame) frame.style.opacity = '1';
+    poster?.remove();
+  };
 
-  // Ask the player to report its state, and hide the loading message once it is playing, paused, ended or ready.
-  frame.addEventListener('load', () => {
-    frame.contentWindow?.postMessage(JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }), YOUTUBE);
-  });
+  const mountFrame = (autoplayNow: boolean): void => {
+    const f = document.createElement('iframe');
+    const params = new URLSearchParams({
+      autoplay: autoplayNow ? '1' : '0',
+      mute: muted ? '1' : '0',
+      rel: '0',
+      playsinline: '1',
+      enablejsapi: '1',
+      origin: window.location.origin,
+    });
+    f.src = `${YOUTUBE}/embed/${videoId}?${params}`;
+    f.title = t('video.title');
+    f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    f.referrerPolicy = 'strict-origin-when-cross-origin'; // YouTube embeds need a referrer
+    // With a thumbnail showing, keep the player invisible until it is ready so the box never flashes black.
+    Object.assign(f.style, { position: 'absolute', inset: '0', width: '100%', height: '100%', border: '0', background: 'transparent', opacity: facade ? '0' : '1' } satisfies Partial<CSSStyleDeclaration>);
+    // Ask the player to report its state, and hide the loading message once it is playing, paused, ended or ready.
+    f.addEventListener('load', () => {
+      f.contentWindow?.postMessage(JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }), YOUTUBE);
+    });
+    frame = f;
+    giveUp = window.setTimeout(hideLoading, 20000); // never leave it up forever
+    box.append(f, loading);
+  };
+
   const onMessage = (e: MessageEvent) => {
-    if (e.origin !== YOUTUBE || e.source !== frame.contentWindow) return;
+    if (!frame || e.origin !== YOUTUBE || e.source !== frame.contentWindow) return;
     let msg: { event?: string; info?: unknown };
     try {
       msg = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
@@ -84,7 +102,56 @@ function createPlayer(videoId: string, { autoplay, muted }: { autoplay: boolean;
   };
   window.addEventListener('message', onMessage);
 
-  box.append(frame, loading);
+  if (facade) {
+    poster = document.createElement('div');
+    poster.setAttribute('role', 'button');
+    poster.tabIndex = 0;
+    poster.setAttribute('aria-label', t('video.title'));
+    Object.assign(poster.style, {
+      position: 'absolute',
+      inset: '0',
+      cursor: 'pointer',
+      backgroundImage: `url(https://i.ytimg.com/vi/${videoId}/hqdefault.jpg)`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+    } satisfies Partial<CSSStyleDeclaration>);
+    const play = document.createElement('div');
+    Object.assign(play.style, {
+      position: 'absolute',
+      left: '50%',
+      top: '50%',
+      width: '68px',
+      height: '48px',
+      transform: 'translate(-50%, -50%)',
+      borderRadius: '14px',
+      background: 'rgba(255, 0, 0, 0.92)',
+      boxShadow: '0 2px 10px rgba(0, 0, 0, 0.4)',
+    } satisfies Partial<CSSStyleDeclaration>);
+    const triangle = document.createElement('div');
+    Object.assign(triangle.style, {
+      position: 'absolute',
+      left: '27px',
+      top: '14px',
+      borderStyle: 'solid',
+      borderWidth: '10px 0 10px 18px',
+      borderColor: 'transparent transparent transparent #ffffff',
+    } satisfies Partial<CSSStyleDeclaration>);
+    play.append(triangle);
+    poster.append(play);
+    const start = () => {
+      if (frame) return;
+      play.remove(); // the thumbnail stays up, under the loading message, until the player is ready
+      mountFrame(true); // created inside the tap, so the browser lets it start with sound
+    };
+    poster.addEventListener('click', start);
+    poster.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') start();
+    });
+    box.append(poster);
+  } else {
+    mountFrame(autoplay);
+  }
+
   return {
     element: box,
     dispose: () => {
@@ -185,10 +252,10 @@ export interface LayoutBox {
 export function embedVideo(
   scene: Phaser.Scene,
   box: LayoutBox,
-  { videoId, autoplay = true, muted = true }: { videoId: string; autoplay?: boolean; muted?: boolean },
+  { videoId, autoplay = true, muted = true, facade = false }: { videoId: string; autoplay?: boolean; muted?: boolean; facade?: boolean },
 ): void {
   if (!/^[\w-]{11}$/.test(videoId)) return;
-  const player = createPlayer(videoId, { autoplay, muted });
+  const player = createPlayer(videoId, { autoplay, muted, facade });
   const el = player.element;
   el.style.position = 'fixed';
   el.style.zIndex = '10';

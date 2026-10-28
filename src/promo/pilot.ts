@@ -8,11 +8,11 @@ export function watchPilot(): void {
 }
 
 /**
- * Build the pilot player into a scene (the receipt). It shows the poster with a play button and
- * waits for a tap, so it never competes with the game's own sound or streams on every game over.
- * The tap lets it play with sound. To start by itself instead, use `autoplay: true, muted: true`
+ * Build the pilot player into a scene (the receipt). It shows the video's thumbnail with a play button
+ * (always instant, and nothing from YouTube is loaded) and waits for a tap, so it never competes with
+ * the game's own sound or streams on every game over. The tap loads the player and starts it with sound. To start by itself instead, use `autoplay: true, muted: true`
  * (browsers only allow muted autoplay).
  */
 export function embedPilot(scene: Phaser.Scene, box: LayoutBox): void {
-  embedVideo(scene, box, { videoId: PILOT.videoId, autoplay: false, muted: false });
+  embedVideo(scene, box, { videoId: PILOT.videoId, autoplay: false, muted: false, facade: true });
 }
