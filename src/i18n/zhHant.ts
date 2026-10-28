@@ -74,7 +74,6 @@ export const zhHant: Record<StringKey, string> = {
   'zone.bakeLove': '戀戀香氣烘焙坊',
 
   // The last stretch of each location (see src/core/finales.ts).
-  'finale.warning': '注意!',
   'finale.ruralRoad': '小心追撞!',
   'finale.bakery': '剛出爐!',
   'finale.cafes': '咖啡時間!',

@@ -74,7 +74,6 @@ export const th: Record<StringKey, string> = {
   'zone.bakeLove': 'ร้านขนมปัง​อบอวล​รัก​',
 
   // The last stretch of each location (see src/core/finales.ts).
-  'finale.warning': 'ระวัง!',
   'finale.ruralRoad': 'ระวังชนท้าย!',
   'finale.bakery': 'ขนมอบใหม่ ๆ จากเตา!',
   'finale.cafes': 'กาแฟมาแล้ว!',

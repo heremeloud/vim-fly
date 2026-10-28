@@ -74,7 +74,6 @@ export const ja: Record<StringKey, string> = {
   'zone.bakeLove': 'ハート・ベイクド・ラブ ベーカリー',
 
   // The last stretch of each location (see src/core/finales.ts).
-  'finale.warning': '注意!',
   'finale.ruralRoad': '追突注意!',
   'finale.bakery': '焼きたてパン!',
   'finale.cafes': 'コーヒータイム!',
