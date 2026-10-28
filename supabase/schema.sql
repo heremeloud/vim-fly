@@ -10,6 +10,12 @@ create table if not exists public.scores (
 
 create index if not exists scores_score_idx on public.scores (score desc);
 
+-- One row per player: the best score under that name (case-insensitive). If the table already has repeat
+-- names, run this first to keep only each name's best row (ties keep the earliest):
+--   delete from public.scores s using public.scores b
+--   where lower(s.name) = lower(b.name) and (b.score > s.score or (b.score = s.score and b.id < s.id));
+create unique index if not exists scores_name_key on public.scores (lower(name));
+
 -- Lock the table down: browsers may only read. Inserts happen through a
 -- server function using the service role, after validating the run token.
 alter table public.scores enable row level security;
@@ -29,3 +35,18 @@ create table if not exists public.runs (
 );
 
 alter table public.runs enable row level security;
+
+-- Saves a finished run, keeping only the player's best. Called by `submit-score` with the service role.
+create or replace function public.submit_best_score(p_name text, p_score integer, p_run_ms integer)
+returns void
+language sql
+as $$
+  insert into public.scores (name, score, run_ms)
+  values (p_name, p_score, p_run_ms)
+  on conflict (lower(name)) do update
+    set score = excluded.score, run_ms = excluded.run_ms, created_at = now()
+    where excluded.score > public.scores.score;
+$$;
+
+revoke all on function public.submit_best_score(text, integer, integer) from public, anon, authenticated;
+grant execute on function public.submit_best_score(text, integer, integer) to service_role;

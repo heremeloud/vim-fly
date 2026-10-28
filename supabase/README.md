@@ -2,7 +2,7 @@
 
 Database definitions for the leaderboard.
 
-- `schema.sql`: the `scores` table, an index on score, and row-level security that allows public reads only. Inserts must come from a server function using the service role.
+- `schema.sql`: the `scores` table (one row per player name, best score only, saved through `submit_best_score`), an index on score, and row-level security that allows public reads only. Inserts must come from a server function using the service role.
 
 Apply it by pasting into the Supabase SQL editor. See `src/leaderboard/README.md` for the full flow and the anti-cheat reasoning.
 

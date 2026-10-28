@@ -45,7 +45,8 @@ Deno.serve(async (req) => {
   if (runMs < MIN_RUN_MS || runMs > MAX_RUN_MS) return json({ error: 'bad_duration' }, 422);
   if (score > SCORE_HEAD_ROOM + (runMs / 1000) * MAX_POINTS_PER_SECOND) return json({ error: 'implausible_score' }, 422);
 
-  const { error } = await db.from('scores').insert({ name, score, run_ms: Math.round(runMs) });
+  // Keeps only this player's best: a lower score than the one on file is accepted but changes nothing.
+  const { error } = await db.rpc('submit_best_score', { p_name: name, p_score: score, p_run_ms: Math.round(runMs) });
   if (error) return json({ error: 'could_not_save' }, 500);
   return json({ ok: true });
 });
