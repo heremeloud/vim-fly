@@ -96,7 +96,7 @@ export const zh: Record<StringKey, string> = {
   'effect.disorient': '{s} 秒内左右反过来',
   'effect.crash': '被撞落, 眩晕 {s} 秒并扣除 {n} 分',
 
-  'item.pandanCustardBread': '香兰卡仕达面包',
+  'item.pandanCustardBread': '斑斓卡仕达面包',
   'item.cheeseButterBread': '奶酪黄油面包',
   'item.cilantroBread': '香菜面包',
   'item.shiopan': '盐面包',
@@ -109,12 +109,12 @@ export const zh: Record<StringKey, string> = {
   'item.wine': '葡萄酒',
   'item.shrimpFriedRiceBox': '虾仁炒饭便当',
   'item.goldenRetriever': '金毛寻回犬',
-  'item.lawyerSuit': '律师西装',
+  'item.lawyerSuit': '律师袍',
   'item.handkerchief': '手帕',
   'item.rollingPin': '擀面杖',
-  'item.planner': '日程本',
+  'item.planner': '手账',
   'item.helicopter': '直升机',
-  'item.gavelHammer': '法槌',
+  'item.gavelHammer': '法官的法槌',
   'item.carCrash': '车祸',
 
   'buff.oyster': '双倍得分!',
@@ -150,7 +150,7 @@ export const zh: Record<StringKey, string> = {
   'video.close': '关闭',
   'video.title': '视频',
   'video.openYoutube': '在 YouTube 打开',
-  'video.loading': '试播集加载中…稍等一下哦',
+  'video.loading': '试播集加载中… 稍等一下哦',
 
   'onboard.title': '欢迎光临, 新顾客!',
   'onboard.nameLabel': '你的名字',
@@ -165,6 +165,6 @@ export const zh: Record<StringKey, string> = {
   'settings.sound': '声音',
   'settings.on': '开启',
   'settings.off': '关闭',
-  'receipt.sending': '正在上传分数…稍等一下哦',
+  'receipt.sending': '正在上传分数… 稍等一下哦',
   'receipt.sendFailed': '暂时连不上排行榜, 不过分数已经保存在这台设备上啦。',
 };

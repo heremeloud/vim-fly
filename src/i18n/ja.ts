@@ -32,11 +32,11 @@ export const ja: Record<StringKey, string> = {
   'orders.title': '注文',
   'orders.subtitle': '🌍 世界ランキング',
   'orders.tab.mine': 'マイ注文',
-  'orders.tab.top': 'お得意様ランキング',
+  'orders.tab.top': 'お得意さまランキング',
   'orders.orderNo': '注文 #{n}',
   'orders.bestBadge': 'ベスト',
-  'orders.empty': 'まだ注文がないよ。はじめての注文をしてみよう!',
-  'orders.topNote': '世界のお得意様たちだよ。',
+  'orders.empty': 'まだ注文がないよ! さっそく注文してみよう!',
+  'orders.topNote': 'お得意さまたち',
   'orders.offline': '世界ランキングにつながらないみたい。この端末のベスト記録を表示するね。',
   'orders.loading': '読み込み中… ちょっと待ってね',
 
@@ -50,7 +50,7 @@ export const ja: Record<StringKey, string> = {
   'receipt.thanks': 'まいど!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': 'シェア',
-  'receipt.shareText': 'Vimmy Flyで{score}ポイントゲット!私のスコアを超えられるかな?🐶🐝\nパン屋さんがもうすぐオープン!🍞🧀🧈\nドラマ Bake Love Feeling をお楽しみに!NoeyCheese役のViewMimもぜひ応援してね!💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
+  'receipt.shareText': 'Vimmy Flyで{score}ポイントゲット!私のスコアを超えられるかな?🐶🐝\nパン屋さんがもうすぐオープン!🍞🧀🧈\nドラマ Bake Love Feeling をお楽しみに! NoeyCheese役のViewMimもぜひ応援してね!💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
 
   'hud.shield': 'シールド',
   'hud.dash': 'ダッシュ',
@@ -76,7 +76,7 @@ export const ja: Record<StringKey, string> = {
   // The last stretch of each location (see src/core/finales.ts).
   'finale.ruralRoad': '追突注意!',
   'finale.bakery': '焼きたてパン!',
-  'finale.cafes': 'コーヒータイム!',
+  'finale.cafes': '午後のコーヒー!',
   'finale.mall': 'お買い物タイム!',
   'finale.lawOffice': '書類の山!',
   'finale.gym': 'パワーアップ!',
@@ -149,7 +149,7 @@ export const ja: Record<StringKey, string> = {
   'video.close': '閉じる',
   'video.title': '動画',
   'video.openYoutube': 'YouTubeで開く',
-  'video.loading': 'Pilotを読み込み中…ちょっと待ってね',
+  'video.loading': 'Pilotを読み込み中… ちょっと待ってね',
 
   'onboard.title': 'いらっしゃいませ!',
   'onboard.nameLabel': 'おなまえ',
@@ -161,9 +161,9 @@ export const ja: Record<StringKey, string> = {
   'onboard.start': '注文スタート!',
   'settings.title': '設定',
   'settings.close': '閉じる',
-  'settings.sound': 'サウンド',
+  'settings.sound': '効果音',
   'settings.on': 'オン',
   'settings.off': 'オフ',
-  'receipt.sending': 'スコアを送信中…ちょっと待ってね',
+  'receipt.sending': 'スコアを送信中… ちょっと待ってね',
   'receipt.sendFailed': 'ランキングにつながらなかったよ。スコアはこの端末に保存したから安心してね。',
 };

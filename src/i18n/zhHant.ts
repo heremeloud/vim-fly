@@ -96,7 +96,7 @@ export const zhHant: Record<StringKey, string> = {
   'effect.crash': '被撞落, 暈眩 {s} 秒並扣除 {n} 點',
 
   'item.pandanCustardBread': '香蘭卡士達麵包',
-  'item.cheeseButterBread': '奶油起司麵包',
+  'item.cheeseButterBread': '起司奶油麵包',
   'item.cilantroBread': '香菜麵包',
   'item.shiopan': '鹽麵包',
   'item.fishSauceBread': '魚露麵包',
@@ -108,12 +108,12 @@ export const zhHant: Record<StringKey, string> = {
   'item.wine': '葡萄酒',
   'item.shrimpFriedRiceBox': '蝦仁炒飯便當',
   'item.goldenRetriever': '黃金獵犬',
-  'item.lawyerSuit': '律師西裝',
+  'item.lawyerSuit': '法袍',
   'item.handkerchief': '手帕',
   'item.rollingPin': '擀麵棍',
-  'item.planner': '行事曆',
+  'item.planner': '手帳',
   'item.helicopter': '直升機',
-  'item.gavelHammer': '法槌',
+  'item.gavelHammer': '法官的法槌',
   'item.carCrash': '車禍',
 
   'buff.oyster': '點數加倍!',
@@ -149,7 +149,7 @@ export const zhHant: Record<StringKey, string> = {
   'video.close': '關閉',
   'video.title': '影片',
   'video.openYoutube': '在 YouTube 開啟',
-  'video.loading': '正在載入試播集…等一下下喔',
+  'video.loading': '正在載入試播集… 等一下下喔',
 
   'onboard.title': '歡迎光臨, 新客人!',
   'onboard.nameLabel': '你的名字',
@@ -164,6 +164,6 @@ export const zhHant: Record<StringKey, string> = {
   'settings.sound': '聲音',
   'settings.on': '開啟',
   'settings.off': '關閉',
-  'receipt.sending': '正在上傳分數…等一下下喔',
+  'receipt.sending': '正在上傳分數… 等一下下喔',
   'receipt.sendFailed': '暫時連不上排行榜, 不過分數已經存在這台裝置裡囉。',
 };
