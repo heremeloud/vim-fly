@@ -401,7 +401,7 @@ export function languageButton(scene: Phaser.Scene, rightX: number, y: number): 
   hitArea(scene, rightX - text.width - 36, y - 4, text.width + 44, text.height + 8, () => openLanguagePicker(scene)).setDepth(31);
 }
 
-function openLanguagePicker(scene: Phaser.Scene): void {
+export function openLanguagePicker(scene: Phaser.Scene): void {
   const depth = 100;
   const items: Phaser.GameObjects.GameObject[] = [];
   const close = () => items.forEach((o) => o.destroy());

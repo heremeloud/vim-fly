@@ -13,6 +13,7 @@ Every screen. The menus are a parody of a Thai delivery app: a bee-themed app ca
 | Promos | `PromosScene.ts` | The Bake Love Feeling page: watch the pilot (plays in a window), then account cards with avatars (the official account as a wide card, the two main leads side by side, and Vimmy as a small one-line row). Each card shows round X / Instagram / TikTok / YouTube icon buttons only for platforms that are set up, or one quiet \"soon\" tag |
 | Game | `GameScene.ts` | Complete loop with animated Vimmy, illustrated falling items, difficulty curve, location backdrops, themed rush finales, HUD and effects |
 | Receipt | `ReceiptScene.ts` | Zone reached, height, the item lines (a scrolling list, so a long receipt never overlaps), total, a \"new best\" star, **the pilot player right on the receipt** (poster with a play button, no autoplay), \"Order again\" and \"Menu\" buttons, and a \"Back to store\" link. Also saves the run to the order history |
+| Fx (admin) | `FxScene.ts` | Local-only effects page, open with `npm run dev` then `/?fx`: every finale board (drawn by `ui/boards.ts`), status badge, reaction picture, header blob face, the sideways dash and the pop-ups, all using the same code as the game. Has links to the sound page (`/?sfx`) |
 
 Scenes are registered in `src/main.ts`. Scene keys live in `SCENES` in `src/core/constants.ts`.
 

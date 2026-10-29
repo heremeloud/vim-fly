@@ -82,7 +82,7 @@ export const ja: Record<StringKey, string> = {
   'finale.gym': 'パワーアップ!',
   'finale.courtroom': '静粛に!',
   'finale.residence': 'おうちでまったり!',
-  'finale.aquarium': '"Noey, Wanのことが好きなんでしょ?!"',
+  'finale.aquarium': '「Noey, Wanのことが\n好きなんでしょ?!」',
 
   'effect.points.gain': '{n}ポイントゲット',
   'effect.points.loss': '{n}ポイントダウン',

@@ -39,7 +39,7 @@ const photoKey = (avatar: string) => `avatar-src-${avatar}`;
 const circleKey = (avatar: string) => `avatar-circle-${avatar}`;
 const CIRCLE_PX = 256;
 /** Height of the header photo on the official card (the photo is cropped to fit, keeping the middle). */
-const BANNER_H = 112;
+const BANNER_H = 84;
 const iconKey = (p: Platform) => `icon-${p}`;
 
 /**
@@ -148,7 +148,7 @@ export class PromosScene extends Phaser.Scene {
     const bannerH = BANNER_H;
     const x = 20 + 16;
     const textX = x + 72 + 12;
-    const rowH = 52;
+    const rowH = 46;
     const h = bannerH + rowH;
     const room = CARD_W - (textX - 20) - 16 - 3 * (BUTTON + ICON_GAP);
     const name = label(this, textX, y + bannerH + 6, account.name, { size: 20, bold: true, wrap: room });

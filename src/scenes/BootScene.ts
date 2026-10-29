@@ -58,7 +58,7 @@ export class BootScene extends Phaser.Scene {
       if (key.startsWith('item-') || key.startsWith('vimmy-')) this.textures.get(key).setFilter(Phaser.Textures.FilterMode.NEAREST);
     }
     for (const zone of ZONES) if (!this.textures.exists(zoneTextureKey(zone))) this.makeBackdrop(zone);
-    this.scene.start(devFlag('sfx') ? SCENES.sfx : SCENES.home);
+    this.scene.start(devFlag('sfx') ? SCENES.sfx : devFlag('fx') ? SCENES.fx : SCENES.home);
   }
 
   /** A 480x200 tile that repeats vertically: flat color, a seam line, and seven of the location's emoji (three above, four below). */

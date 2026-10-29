@@ -83,7 +83,7 @@ export const zh: Record<StringKey, string> = {
   'finale.gym': '燃脂时间!',
   'finale.courtroom': '肃静!',
   'finale.residence': '温馨的夜晚!',
-  'finale.aquarium': '"Noey, 你喜欢 Wan, 对不对?!"',
+  'finale.aquarium': '“Noey, 你喜欢 Wan, 对不对?!”',
 
   'effect.points.gain': '获得 {n} 分',
   'effect.points.loss': '扣除 {n} 分',

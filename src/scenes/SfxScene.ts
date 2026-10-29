@@ -64,6 +64,16 @@ export class SfxScene extends Phaser.Scene {
       history.replaceState({}, '', url);
       this.scene.start(SCENES.home);
     });
+    const fx = x - 10;
+    roundedBox(this, fx, 68, 108, 30, COLORS.surface, 15, COLORS.primary);
+    label(this, fx + 54, 83, 'Effects ›', { size: 14, bold: true, color: COLORS.onPrimary }).setOrigin(0.5);
+    hitArea(this, fx, 68, 108, 30, () => {
+      const url = new URL(location.href);
+      url.searchParams.delete('sfx');
+      url.searchParams.set('fx', '');
+      history.replaceState({}, '', url);
+      this.scene.start(SCENES.fx);
+    });
   }
 
   private addPreviewButton(x: number, y: number, width: number, height: number, key: string, loop: boolean): void {

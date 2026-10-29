@@ -14,6 +14,7 @@ import { PromosScene } from './scenes/PromosScene';
 import { GameScene } from './scenes/GameScene';
 import { ReceiptScene } from './scenes/ReceiptScene';
 import { SfxScene } from './scenes/SfxScene';
+import { FxScene } from './scenes/FxScene';
 
 installTextResolution();
 
@@ -37,7 +38,7 @@ function startGame(): void {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [BootScene, HomeScene, MenuScene, OrdersScene, PromosScene, SfxScene, GameScene, ReceiptScene],
+    scene: [BootScene, HomeScene, MenuScene, OrdersScene, PromosScene, SfxScene, FxScene, GameScene, ReceiptScene],
   });
   initSfx(game);
   // Tapping into the YouTube player (or coming back from a page it opened) takes keyboard focus away from the

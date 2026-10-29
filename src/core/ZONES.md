@@ -48,6 +48,8 @@ Every location except the last (Bake Love Bakery, which never ends) finishes wit
 
 The banner texts are `finale.<zoneId>` in `src/i18n` (drafts, like the location names).
 
+Each finale is announced on a board that suits its place, drawn by `src/ui/boards.ts` (`FINALE_BOARD` says which): a yellow road sign (Rural Road), a baguette (Bakery), a chalkboard (Cafe), a pink price tag (Mall), a memo sheet (Law Office), a treadmill console (Gym), a wooden nameplate (Courtroom), a night-blue cushion (Noey's Apartment) and a speech bubble (Aquarium, since it is a line from the series). A translation of the speech bubble can carry its own `\n` to choose where the two lines break. Preview all of them on the local Effects page (`/?fx`).
+
 ## Names in other languages
 
 Location names are in `src/i18n` (`zone.<id>`) in all five languages, and the "Stage {n}" label is `zone.stage`. They are drafts; use the show's official names where they exist.

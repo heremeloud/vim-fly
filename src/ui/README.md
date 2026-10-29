@@ -8,9 +8,11 @@ Shared building blocks for the ordering-app menus, so every screen looks like on
 - `brand.ts`: the in-game app's name, tagline, header text and the super-app service tiles (`VIMMY FLY`, Food/Mart/Express/Ride; text that changes with language is in `src/i18n`).
 - `videoPlayer.ts`: `embedVideo()` builds a player into a scene at a spot in the layout (used on the receipt); `openVideo()` plays a YouTube video in a window over the game (close button, tap outside or Escape closes it, with an "Open on YouTube" fallback link). It shows "Loading the pilot…" until the player reports it is ready, using YouTube's player messages.
 - `icons.ts`: `drawIcon` line icons (tabs, gear, globe, speaker, service tiles...).
+- `boards.ts`: the finale announcement boards (road sign, baguette, chalkboard, price tag, memo, treadmill console, nameplate, cushion, speech bubble) and `layoutBanner`, which sets the banner text and draws the board. The game and the `/?fx` page both use it.
+- `fx.ts`: the sideways-dash effects (`dashBurst`, `dashTrail`, `dashImpact`), the `popup` above Vimmy and `drawStatusChip` for the badges under the score.
 - `howToPlay.ts`, `soundToggle.ts`: pieces shared by the welcome card and settings.
 - `ScrollList.ts`: a drag/wheel scrolling list used by the Menu and Orders screens.
-- `widgets.ts`: `label` (text; pass `maxWidth` for any single-line text whose length depends on the language or the player, so it shrinks and ends in "…" instead of overflowing), `roundedBox`, `hitArea` (invisible tap target), `button` (pill button, `primary` filled or `secondary` outlined) `tabBar` (bottom navigation) and `languageButton` (the language picker, text only, no flags).
+- `widgets.ts`: `pageHeader` (title, gingham hem and the header blob with hanging baking tools), `paintChip`/`CHIP` (the filter chips), `iconButton`, `doughBlob` and `button` (puffy, with a crust outline), `label` (text; pass `maxWidth` for any single-line text whose length depends on the language or the player, so it shrinks and ends in "…" instead of overflowing), `roundedBox`, `hitArea` (invisible tap target), `button` (pill button, `primary` filled or `secondary` outlined) `tabBar` (bottom navigation) and `languageButton` (the language picker, text only, no flags).
 
 ## Design rules: a parody, not a copy
 
@@ -45,3 +47,7 @@ Thai is bundled and all items have pixel art. Japanese and Chinese currently use
 ## Look: the show's logo
 
 Shapes follow the Bake Love Feeling lettering: plump, bread-like, chocolate crust outline, butter fill, cream dough blobs, gingham pink. Buttons are puffy with a shine, page headers end in a gingham hem with a dough blob, and the active tab sits on a butter bun. Corner sizes come from `RADIUS` in `theme.ts`; dialogs use `scrim` and `RADIUS.sheet`.
+
+## Fonts
+
+Page titles, the app name, the score and the banners use **Sniglet** (`FONT.display`, pass `display: true` to `label`), drawn with a thin outline in the text color so it is neither too thin nor too fat. Everything else uses the system font.

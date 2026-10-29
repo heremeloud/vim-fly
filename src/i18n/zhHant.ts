@@ -82,7 +82,7 @@ export const zhHant: Record<StringKey, string> = {
   'finale.gym': '燃脂時間!',
   'finale.courtroom': '肅靜!',
   'finale.residence': '溫馨的夜晚!',
-  'finale.aquarium': '"Noey, 你喜歡 Wan, 對不對?!"',
+  'finale.aquarium': '「Noey, 你喜歡 Wan, 對不對?!」',
 
   'effect.points.gain': '獲得 {n} 點',
   'effect.points.loss': '扣除 {n} 點',

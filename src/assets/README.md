@@ -4,7 +4,7 @@ Art, animation and sound. The active item set is the complete 32x32 collection i
 
 ## Backdrops
 
-One tileable (vertically repeating) image per height zone, ten in all, one per location in the novel (rural road, heartwarming bakery, suburban cafés, shopping mall, CC law office, fitness gym, courtroom, beach, Noey's residence, Bake Love Bakery). A hand-made `backdrops/<zoneId>.png` (480x200, seamless) is used when present; any zone without one is generated at startup from a flat color plus themed emoji (`src/core/zoneIcons.ts`), drawn from Google (Noto) emoji PNGs in `emoji/` so they look the same on every device. After changing the emoji list run `npm run emoji` to copy the new images. See `src/core/ZONES.md`.
+One tileable (vertically repeating) image per height zone, ten in all, one per location in the novel (rural road, heartwarming bakery, suburban cafés, shopping mall, CC law office, fitness gym, courtroom, beach, Noey's residence, Bake Love Bakery). A hand-made `backdrops/<zoneId>.png` (480x200, seamless) is used when present; any zone without one is generated at startup from a flat color plus themed emoji (`src/core/zoneIcons.ts`), drawn from Google (Noto) emoji PNGs in `emoji/` so they look the same on every device. After changing the emoji list (`src/core/zoneIcons.ts`, or the effect emoji in `src/core/effectIcons.ts`) run `npm run emoji` to copy the new images. See `src/core/ZONES.md`.
 
 ## Branding
 
@@ -19,6 +19,7 @@ The playable cocker spaniel in a bee costume is implemented in `vimmy-v1/`. Four
 The game is in five languages (`src/i18n/README.md`).
 
 - **Thai:** **Noto Sans Thai** (weights 400 and 700) is bundled from the `@fontsource/noto-sans-thai` package (SIL OFL). Device fallback fonts for Thai can look odd, so it is listed first in `FONT.family` (`src/ui/theme.ts`); it only covers Thai characters, so Latin text still uses the device font. `main.ts` waits for it to load (up to 3 s) before the first screen draws, because text on the canvas is drawn once.
+- **Titles and numbers:** **Sniglet** (weight 400, from `@fontsource/sniglet`, SIL OFL) is the display font for page titles, the app name, the score and banners (`FONT.display`). Latin letters only; other scripts fall back to the normal stack.
 - **Japanese and Chinese:** these use the device's own fonts (Hiragino, PingFang, Noto and so on), with Noto Sans JP / SC as fallbacks. Bundling them is possible later, but CJK fonts are large.
 
 ## Animation scope

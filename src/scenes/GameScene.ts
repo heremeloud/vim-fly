@@ -6,6 +6,8 @@ import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '..
 import { bindSteering } from '../core/input';
 import { itemName, t, tDynamic } from '../i18n';
 import { REACTION_ICON, STATUS_ICON } from '../core/effectIcons';
+import { FINALE_BOARD, layoutBanner, type BannerBoard } from '../ui/boards';
+import { CHIP_ICON, dashBurst, dashImpact, dashTrail, drawStatusChip, popup } from '../ui/fx';
 import { emojiTextureKey } from '../core/emojiFile';
 import { COLORS, FONT, hex } from '../ui/theme';
 import { fitWidth } from '../ui/widgets';
@@ -70,7 +72,6 @@ const POINTS_REACTION_TEXTURE: Readonly<Record<string, string>> = {
   goldenRetriever: 'vimmy-points-goldenRetriever',
 };
 const REACTION_ICON_OFFSET = 78;
-const CHIP_ICON = 18; // status badge pictures, px
 const REACTION_ICON_SIZE = 40;
 const REACTION_ICON_SCALE = REACTION_ICON_SIZE / 64; // the emoji images are 64 px
 /** Each cut-in gets its own friendly comic accent instead of sharing one fixed ring color. */
@@ -160,6 +161,8 @@ export class GameScene extends Phaser.Scene {
   private swipesLeft = PHYSICS.swipeDashesPerRun;
   /** Direction of the dash in progress (0 = none). While dashing Vimmy flies level and ignores debuffs. */
   private swipeDashDir: -1 | 0 | 1 = 0;
+  /** Counts down between afterimages while dashing sideways. */
+  private dashTrailMs = 0;
   private swipeBreads: Phaser.GameObjects.Image[] = [];
   private isFlipping = false;
   private reactionTimer?: Phaser.Time.TimerEvent;
@@ -316,9 +319,9 @@ export class GameScene extends Phaser.Scene {
    * `big` is for the finale announcements: a larger butter-yellow pill that pops in with a wobble and a burst of stars,
    * then pops away. It stays up under two seconds so it never hides the play area for long.
    */
-  private showBanner(text: string, big = false): void {
+  private showBanner(text: string, big = false, board?: BannerBoard): void {
     this.tweens.killTweensOf(this.banner);
-    this.layoutBanner(text, big);
+    layoutBanner(this.bannerBg, this.bannerName, text, big, board);
     if (!big) {
       // Drop in from above, overshoot and settle, then fade out.
       this.banner.setRotation(0).setAlpha(0).setScale(0.6).setY(BANNER_Y - 24);
@@ -358,23 +361,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   /** Banner text is "stage\nname" (or just the name). Lays out one compact line in a pill (larger, yellow and outlined for finales). */
-  private layoutBanner(text: string, big: boolean): void {
-    const pad = big ? 56 : 28;
-    this.bannerName.setScale(1).setFontSize(big ? 32 : 17).setText(text.replace('\n', '  ·  '));
-    fitWidth(this.bannerName, GAME_WIDTH - 24 - pad, 0.6); // a long line shrinks to fit the pill
-    const w = Math.min(GAME_WIDTH - 24, this.bannerName.displayWidth + pad);
-    const h = big ? 60 : 32;
-    this.bannerBg.clear();
-    if (big) {
-      this.bannerBg.fillStyle(0x000000, 0.18).fillRoundedRect(-w / 2, -h / 2 + 4, w, h, h / 2); // soft shadow
-      this.bannerBg.fillStyle(COLORS.primary, 1).fillRoundedRect(-w / 2, -h / 2, w, h, h / 2);
-      this.bannerBg.lineStyle(4, COLORS.onPrimary, 1).strokeRoundedRect(-w / 2, -h / 2, w, h, h / 2);
-    } else {
-      this.bannerBg.fillStyle(COLORS.background, 1).fillRoundedRect(-w / 2, -h / 2, w, h, h / 2);
-      this.bannerBg.lineStyle(2.5, COLORS.onPrimary, 1).strokeRoundedRect(-w / 2, -h / 2, w, h, h / 2);
-    }
-  }
-
   private createVimmyAnimations(): void {
     if (!this.anims.exists(VIMMY_FLY_ANIM)) {
       this.anims.create({
@@ -406,22 +392,9 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  /** A pop-up that bounces in above Vimmy, floats up and fades. Big ones are larger and linger. */
+  /** A pop-up above Vimmy (see `popup` in ui/fx.ts). */
   private showPopup(message: string, stroke: string, big = false): void {
-    const text = this.add
-      .text(this.player.x, this.player.y - (big ? 96 : 84), message, {
-        fontFamily: FONT.display,
-        fontSize: big ? '34px' : '22px',
-        color: '#ffffff',
-        stroke,
-        strokeThickness: big ? 7 : 5,
-      })
-      .setOrigin(0.5)
-      .setDepth(30)
-      .setScale(0.3);
-    text.x = Phaser.Math.Clamp(text.x, text.width / 2 + 8, GAME_WIDTH - text.width / 2 - 8);
-    this.tweens.add({ targets: text, scale: big ? 1.3 : 1.15, duration: big ? 260 : 220, ease: 'Back.easeOut' });
-    this.tweens.add({ targets: text, y: text.y - (big ? 90 : 70), alpha: 0, delay: big ? 800 : 500, duration: 700, onComplete: () => text.destroy() });
+    popup(this, this.player.x, this.player.y, message, stroke, big);
   }
 
   /** Draw a light, friendly manga cut-in whose accent changes with the collected item. */
@@ -551,7 +524,7 @@ export class GameScene extends Phaser.Scene {
   private updateZone(): void {
     const finale = finaleAt(this.run.heightMeters);
     if (finale && finale.zoneId !== this.finaleZone) {
-      this.showBanner(tDynamic(`finale.${finale.zoneId}`, ''), true);
+      this.showBanner(tDynamic(`finale.${finale.zoneId}`, ''), true, FINALE_BOARD[finale.zoneId]); // some finales are announced on a signboard of their own
       playSfx(this, 'power', 0.75);
       this.cameras.main.flash(180, 247, 189, 59, false);
       this.finaleGiven = 0;
@@ -597,6 +570,8 @@ export class GameScene extends Phaser.Scene {
     this.player.stop().setTexture(DASH_TEXTURE[String(steer) as '-1' | '1']);
     this.vx = 0;
     this.vy = 0;
+    this.dashTrailMs = 0;
+    dashBurst(this, this.player.x, this.player.y, steer as -1 | 1);
   }
 
   /** Admin only: teleport Vimmy (and the camera) up to the start of the next location. */
@@ -651,8 +626,14 @@ export class GameScene extends Phaser.Scene {
       const half = PLAYER_SPRITE_SIZE / 2;
       const target = this.swipeDashDir < 0 ? half : GAME_WIDTH - half;
       const step = PHYSICS.swipeDashSpeed * dt;
+      this.dashTrailMs -= dt * 1000;
+      if (this.dashTrailMs <= 0) {
+        dashTrail(this, this.player.texture.key, this.player.x, this.player.y, this.swipeDashDir, PLAYER_SPRITE_SIZE);
+        this.dashTrailMs = 32;
+      }
       this.player.x = this.swipeDashDir < 0 ? Math.max(target, this.player.x - step) : Math.min(target, this.player.x + step);
       if (this.player.x === target) {
+        dashImpact(this, this.player.x, this.player.y, this.swipeDashDir, PLAYER_SPRITE_SIZE);
         this.swipeDashDir = 0;
         this.player.play(VIMMY_FLY_ANIM);
         this.vx = 0;
@@ -910,17 +891,10 @@ export class GameScene extends Phaser.Scene {
     let y = 88;
     this.chipTexts.forEach((txt, i) => {
       const chip = chips[i];
-      const icon = this.chipIcons[i];
-      txt.setVisible(!!chip);
-      icon.setVisible(false);
+      this.chipIcons[i].setVisible(false);
+      txt.setVisible(false);
       if (!chip) return;
-      const key = emojiTextureKey(chip.icon);
-      const hasIcon = this.textures.exists(key);
-      const textX = hasIcon ? 32 : 18;
-      txt.setText(chip.label).setPosition(textX, y + 4);
-      if (hasIcon) icon.setTexture(key).setDisplaySize(CHIP_ICON, CHIP_ICON).setPosition(22, y + 12).setVisible(true);
-      this.chipGfx.fillStyle(chip.color, 0.94).fillRoundedRect(8, y, txt.width + textX + 12, 24, 12);
-      this.chipGfx.lineStyle(2, COLORS.onPrimary, 0.9).strokeRoundedRect(8, y, txt.width + textX + 12, 24, 12);
+      drawStatusChip(this.chipGfx, this.chipIcons[i], txt, 8, y, chip);
       y += 28;
     });
 

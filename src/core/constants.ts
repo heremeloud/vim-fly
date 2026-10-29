@@ -57,6 +57,7 @@ export const SCENES = {
   orders: 'Orders',
   promos: 'Promos',
   sfx: 'Sfx',
+  fx: 'Fx',
   game: 'Game',
   receipt: 'Receipt',
 } as const;

@@ -54,7 +54,7 @@ npm run dev
 
 Then open the URL Vite prints (usually http://localhost:5173).
 
-To preview every synthesized sound effect, open `http://localhost:5173/?sfx` while the dev server is running.
+To preview every synthesized sound effect, open `http://localhost:5173/?sfx` while the dev server is running. To check every finale board, status badge, reaction picture, the sideways dash and the pop-ups (in any language), open `http://localhost:5173/?fx`. Both pages work only on a local dev server.
 
 Other commands:
 
