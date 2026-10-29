@@ -28,13 +28,20 @@ export class RunState {
   dashVelocity = 0;
   /** Downward speed (px/s) the scene should apply once, then reset to 0. Set by a car crash. */
   pendingKnockback = 0;
+  /** Sideways speed (px/s) the scene should apply once, away from the item, then reset to 0. Set by the kitten. */
+  pendingSwerve = 0;
   stunMs = 0;
   strongFlapMs = 0;
   strongFlapFactor = 1;
+  shyMs = 0;
+  shyLiftMin = 1;
+  shyLiftMax = 1;
   slowMs = 0;
   slowFactor = 1;
   disorientMs = 0;
   doublePointsMs = 0;
+  magnetMs = 0;
+  magnetRadius = 0;
   elapsedMs = 0;
   private lines = new Map<string, ReceiptLine>();
 
@@ -66,9 +73,11 @@ export class RunState {
     this.dashMs = Math.max(0, this.dashMs - dtMs);
     this.stunMs = Math.max(0, this.stunMs - dtMs);
     this.strongFlapMs = Math.max(0, this.strongFlapMs - dtMs);
+    this.shyMs = Math.max(0, this.shyMs - dtMs);
     this.slowMs = Math.max(0, this.slowMs - dtMs);
     this.disorientMs = Math.max(0, this.disorientMs - dtMs);
     this.doublePointsMs = Math.max(0, this.doublePointsMs - dtMs);
+    this.magnetMs = Math.max(0, this.magnetMs - dtMs);
   }
 
   /** Apply a collected item. Returns false if a shield blocked it. */
@@ -87,6 +96,11 @@ export class RunState {
       case 'dash':
         this.dashMs = e.durationMs;
         this.dashVelocity = e.velocity;
+        this.slowMs = 0; // a speed-up overrides any slowdown
+        break;
+      case 'magnet':
+        this.magnetMs = e.durationMs;
+        this.magnetRadius = e.radius;
         break;
       case 'shield':
         this.shield = true;
@@ -101,6 +115,11 @@ export class RunState {
         this.stunMs = e.durationMs;
         points = e.points ?? 0;
         break;
+      case 'shy':
+        this.shyMs = e.durationMs;
+        this.shyLiftMin = e.liftMin;
+        this.shyLiftMax = e.liftMax;
+        break;
       case 'slow':
         this.slowMs = e.durationMs;
         this.slowFactor = e.factor;
@@ -112,6 +131,10 @@ export class RunState {
       case 'strongFlap':
         this.strongFlapMs = e.durationMs;
         this.strongFlapFactor = e.factor;
+        this.slowMs = 0; // a speed-up overrides any slowdown
+        break;
+      case 'swerve':
+        this.pendingSwerve = e.speed;
         break;
       case 'crash':
         this.stunMs = e.stunMs;
@@ -120,6 +143,7 @@ export class RunState {
         points = e.points;
         break;
     }
+    if (item.bonusPoints) points += this.doublePointsMs > 0 ? item.bonusPoints * 2 : item.bonusPoints;
     const line = this.lines.get(item.id) ?? { id: item.id, label: item.label, count: 0, points: 0 };
     line.count += 1;
     line.points += points;

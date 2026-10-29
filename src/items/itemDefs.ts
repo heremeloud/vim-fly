@@ -1,7 +1,7 @@
 import { ITEM_RULES } from '../core/constants';
 import { difficulty, ramp } from '../core/difficulty';
 import { finaleAt } from '../core/finales';
-import { zoneAt } from '../core/zones';
+import { zoneAt, type ZoneId } from '../core/zones';
 import { itemName, t } from '../i18n';
 
 // Single source of truth for items. Values are starting points to tune.
@@ -16,10 +16,13 @@ export type ItemEffect =
   | { type: 'shield' } // blocks the next debuff
   | { type: 'cleanse' } // clears stun and disorient
   | { type: 'strongFlap'; durationMs: number; factor: number } // flap strength multiplier
+  | { type: 'magnet'; durationMs: number; radius: number } // pulls falling food and power-ups toward Vimmy
   | { type: 'doublePoints'; durationMs: number } // item points x2 while active
   | { type: 'disorient'; durationMs: number } // left/right controls reversed
   | { type: 'stun'; durationMs: number; points?: number } // optional point penalty on top of the stun
+  | { type: 'shy'; durationMs: number; liftMin: number; liftMax: number } // fumbled flaps: each one lifts by a random fraction of normal
   | { type: 'slow'; durationMs: number; factor: number } // flap and drift speed multiplier below 1
+  | { type: 'swerve'; speed: number } // a sideways shove away from the item, no stun
   | { type: 'crash'; stunMs: number; knockback: number; points: number }; // big debuff
 
 export interface ItemDef {
@@ -29,10 +32,14 @@ export interface ItemDef {
   /** Relative spawn weight; higher = more common. */
   weight: number;
   effect: ItemEffect;
+  /** Points added on top of a non-points effect (the golden retriever and the dog ears, so each is both a power-up or hazard and a prize). */
+  bonusPoints?: number;
   /** Extra weight multiplier reached at full difficulty (ramps in with height, on top of the kind's own scale): below 1 thins the item out as you climb, above 1 keeps it from thinning. */
   heightWeightScale?: number;
   /** Only falls from this story stage on (see `zones.ts`). */
   minStage?: number;
+  /** Only falls while the climber is in this location. */
+  onlyInZone?: ZoneId;
   /** Hidden from the Menu until the player has finished a run. */
   secret?: boolean;
   /** Placeholder rectangle color until real art exists. */
@@ -52,13 +59,17 @@ export const ITEMS: readonly ItemDef[] = [
   { id: 'pasta', label: 'Pasta', kind: 'points', weight: 4, effect: { type: 'points', amount: 90 }, color: 0xef5350 },
   { id: 'tomYum', label: 'Tom Yum', kind: 'points', weight: 2, effect: { type: 'points', amount: 180 }, color: 0xe8641e },
   { id: 'shrimpFriedRiceBox', label: 'Shrimp Fried Rice Lunch Box', kind: 'points', weight: 2, effect: { type: 'points', amount: 220 }, color: 0xff8a65 },
-  { id: 'goldenRetriever', label: 'Golden Retriever', kind: 'points', weight: 1, effect: { type: 'points', amount: 500 }, minStage: 3, secret: true, color: 0xffc107 },
+  { id: 'goldenRetriever', label: 'Golden Retriever', kind: 'buff', weight: 1, effect: { type: 'magnet', durationMs: 6000, radius: 200 }, bonusPoints: 300, minStage: 3, secret: true, color: 0xffc107 },
+  { id: 'iceCream', label: 'Ice Cream', kind: 'points', weight: 2, effect: { type: 'points', amount: 50 }, color: 0xf8bbd0 },
+  { id: 'dogEars', label: 'Dog Ears', kind: 'debuff', weight: 1, effect: { type: 'shy', durationMs: 6000, liftMin: 0.4, liftMax: 1.2 }, bonusPoints: 250, secret: true, color: 0xa1724a },
+  { id: 'cheesePopcorn', label: 'Cheese Popcorn', kind: 'points', weight: 4, effect: { type: 'points', amount: 70 }, color: 0xffd54f },
   { id: 'lawyerSuit', label: 'Lawyer Suit', kind: 'buff', weight: 3, effect: { type: 'shield' }, color: 0x37474f },
   { id: 'handkerchief', label: 'Handkerchief', kind: 'buff', weight: 3, effect: { type: 'cleanse' }, color: 0xe3f2fd },
   { id: 'rollingPin', label: 'Rolling Pin', kind: 'buff', weight: 3, effect: { type: 'strongFlap', durationMs: 5000, factor: 1.5 }, color: 0xd7ccc8 },
   { id: 'planner', label: 'Planner', kind: 'debuff', weight: 2, effect: { type: 'stun', durationMs: 1500, points: -300 }, color: 0x7b1fa2 },
   { id: 'helicopter', label: 'Helicopter', kind: 'buff', weight: 2, effect: { type: 'dash', durationMs: 3000, velocity: -700 }, heightWeightScale: 0.25, color: 0x26c6da },
   { id: 'gavelHammer', label: 'Gavel Hammer', kind: 'debuff', weight: 6, effect: { type: 'stun', durationMs: 1000 }, color: 0xd32f2f },
+  { id: 'kitten', label: 'Kitten', kind: 'debuff', weight: 3, effect: { type: 'swerve', speed: 700 }, color: 0xffb74d },
   { id: 'carCrash', label: 'Car Crash', kind: 'debuff', weight: 2, effect: { type: 'crash', stunMs: 1800, knockback: 500, points: -150 }, color: 0xff6f00 },
 ];
 
@@ -80,7 +91,8 @@ export function pickItem(heightMeters: number, rand: () => number = Math.random,
   const finale = finaleAt(heightMeters);
   const weightOf = (i: ItemDef) => i.weight * scale[i.kind] * ramp([1, i.heightWeightScale ?? 1], d) * (finale?.items[i.id] ?? 1);
   const stage = zoneAt(heightMeters).stage;
-  const pool = ITEMS.filter((i) => (stage >= (i.minStage ?? 1) || (finale?.items[i.id] ?? 1) > 1) && (!onlyKind || i.kind === onlyKind));
+  const zoneId = zoneAt(heightMeters).id;
+  const pool = ITEMS.filter((i) => (stage >= (i.minStage ?? 1) || (finale?.items[i.id] ?? 1) > 1) && (!i.onlyInZone || i.onlyInZone === zoneId) && (!onlyKind || i.kind === onlyKind));
   const total = pool.reduce((sum, i) => sum + weightOf(i), 0);
   let roll = rand() * total;
   for (const item of pool) {
@@ -99,6 +111,8 @@ export function describeEffect(item: ItemDef): string {
       return e.amount >= 0 ? t('effect.points.gain', { n: e.amount }) : t('effect.points.loss', { n: -e.amount });
     case 'dash':
       return t('effect.dash', { s: secs(e.durationMs) });
+    case 'magnet':
+      return t('effect.magnet', { s: secs(e.durationMs) });
     case 'shield':
       return t('effect.shield');
     case 'cleanse':
@@ -111,20 +125,24 @@ export function describeEffect(item: ItemDef): string {
       return e.points
         ? t('effect.stunPenalty', { s: secs(e.durationMs), n: -e.points })
         : t('effect.stun', { s: secs(e.durationMs) });
+    case 'shy':
+      return t('effect.shy', { s: secs(e.durationMs) });
     case 'slow':
       return t('effect.slow', { p: Math.round((1 - e.factor) * 100), s: secs(e.durationMs) });
     case 'disorient':
       return t('effect.disorient', { s: secs(e.durationMs) });
+    case 'swerve':
+      return t('effect.swerve');
     case 'crash':
       return t('effect.crash', { s: secs(e.stunMs), n: -e.points });
   }
 }
 
-/** The menu "price": the point value for points items and penalties, otherwise empty (the category chip already says buff or debuff). */
+/** The menu "price": the point value for points items and penalties, otherwise empty unless the item also carries bonus points (the category chip already says buff or debuff). */
 export function priceLabel(item: ItemDef): string {
   const e = item.effect;
   if (e.type === 'points') return e.amount >= 0 ? `฿${e.amount}` : `-฿${-e.amount}`;
-  return '';
+  return item.bonusPoints ? `฿${item.bonusPoints}` : '';
 }
 
 /** The item's name in the current language. */

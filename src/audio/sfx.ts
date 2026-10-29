@@ -7,9 +7,9 @@ import { SCENES } from '../core/constants';
 
 /** Public key lists also power the local `?sfx` soundboard, so every new effect appears there automatically. */
 export const SFX_KEYS = [
-  'flap', 'point', 'buff', 'yips', 'debuff', 'disappointed', 'hammer', 'crash', 'dash',
+  'flap', 'point', 'buff', 'yips', 'debuff', 'disappointed', 'shy', 'hammer', 'crash', 'dash',
   'munch', 'sip', 'slurp', 'jackpot', 'bark', 'shield', 'block', 'sparkle', 'power',
-  'spool', 'warble', 'sag', 'thud', 'sniff',
+  'spool', 'warble', 'sag', 'thud', 'sniff', 'meow',
 ] as const;
 export type Sfx = (typeof SFX_KEYS)[number];
 export const SFX_LOOP_KEYS = ['buzz', 'copter'] as const;
@@ -228,6 +228,33 @@ const BUILDERS: Record<Sfx | SfxLoop, (ctx: BaseAudioContext) => AudioBuffer> = 
       return tone(t) * envelope * 0.85;
     });
   },
+  // Two soft, rising nervous chirps for the dog-ear headband's manga embarrassment beat.
+  shy: (ctx) => {
+    const tone = oscillator((t) => {
+      const second = t >= 0.2;
+      const local = second ? t - 0.2 : t;
+      return (second ? 760 : 610) + 150 * Math.min(1, local / 0.13) + 12 * sine(TAU * 11 * t);
+    }, triangle);
+    const breath = noise(() => 0.12);
+    return render(ctx, 0.42, (t) => {
+      const local = t >= 0.2 ? t - 0.2 : t;
+      if (local > 0.15) return 0;
+      const envelope = Math.sin((Math.PI * local) / 0.15) ** 0.7 * decay(local, 0.15, 0.8);
+      return (tone(t) * 0.72 + breath(t) * 0.12) * envelope * 0.58;
+    });
+  },
+  // A cat's "mi-aow": a quick rise into the "mi", then a long slide down through the "aow", with a nasal buzz and a little wobble.
+  meow: (ctx) => {
+    const len = 0.55;
+    const pitch = (t: number) => (t < 0.14 ? 420 + 2800 * t : 810 - 780 * ((t - 0.14) / 0.41) ** 0.8) * (1 + 0.02 * Math.sin(TAU * 7 * t));
+    const voice = oscillator(pitch, saw);
+    const nasal = oscillator((t) => pitch(t) * 2, triangle);
+    return render(ctx, len, (t) => {
+      const env = Math.min(1, t / 0.03) * Math.sin((Math.PI * Math.min(1, t / len)) ** 0.9) ** 0.5;
+      const open = t < 0.14 ? 0.5 : 1; // the mouth opens from "mi" to "aow"
+      return (voice(t) * 0.45 * open + nasal(t) * 0.35) * env * 0.85;
+    });
+  },
   // Air whoosh for the sideways dash: bright rushing air over a quick downward swoop, loud enough to cut through the buzz.
   dash: (ctx) => {
     const air = noise((t) => 0.12 + 0.5 * Math.sin((Math.PI * t) / 0.35));
@@ -375,14 +402,15 @@ export function playSfx(scene: Phaser.Scene, key: Sfx, volume = 1, vary = 0): vo
 
 const BY_ID: Record<string, Sfx> = {
   carCrash: 'crash', gavelHammer: 'hammer', planner: 'thud', cilantroBread: 'warble', fishSauceBread: 'sag',
+  dogEars: 'shy',
   lawyerSuit: 'shield', handkerchief: 'sparkle', rollingPin: 'power', helicopter: 'spool', oyster: 'buff',
-  goldenRetriever: 'bark', coffee: 'sip', wine: 'sip', pasta: 'slurp', tomYum: 'slurp',
+  goldenRetriever: 'bark', kitten: 'meow', iceCream: 'slurp', coffee: 'sip', wine: 'sip', pasta: 'slurp', tomYum: 'slurp',
   pandanCustardBread: 'munch', cheeseButterBread: 'munch', shiopan: 'munch', sandwich: 'munch', shrimpFriedRiceBox: 'munch',
 };
 
 /** The sound for picking up an item: specific to the item, else generic for its kind. */
 export function itemSfx(id: string, kind: 'points' | 'buff' | 'debuff', amount = 0): Sfx {
-  if (kind === 'points' && amount >= 110 && id !== 'goldenRetriever') return 'jackpot';
+  if (kind === 'points' && amount >= 110) return 'jackpot';
   return BY_ID[id] ?? (kind === 'debuff' ? 'debuff' : kind === 'buff' ? 'buff' : 'point');
 }
 

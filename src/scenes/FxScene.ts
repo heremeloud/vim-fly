@@ -143,9 +143,11 @@ export class FxScene extends Phaser.Scene {
       { icon: STATUS_ICON.dash, label: 'Dash 2.4s', color: COLORS.buff },
       { icon: STATUS_ICON.power, label: 'Power 4.1s', color: COLORS.buff },
       { icon: STATUS_ICON.x2, label: 'x2 3.0s', color: COLORS.buff },
+      { icon: STATUS_ICON.magnet, label: 'Magnet 5.2s', color: COLORS.buff },
       { icon: STATUS_ICON.stunned, label: 'Stunned 0.8s', color: COLORS.debuff },
       { icon: STATUS_ICON.dizzy, label: 'Dizzy 2.2s', color: COLORS.debuff },
       { icon: STATUS_ICON.slow, label: 'Slow 3.5s', color: COLORS.debuff },
+      { icon: STATUS_ICON.shy, label: 'Shy 6s', color: COLORS.debuff },
     ];
     const gfx = add(this.add.graphics());
     let cx = 20;

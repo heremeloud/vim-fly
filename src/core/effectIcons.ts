@@ -16,6 +16,7 @@ export const REACTION_ICON: Readonly<Record<string, string>> = {
   cilantroBread: '💦',
   fishSauceBread: '💦',
   carCrash: '💥',
+  dogEars: '😳',
 };
 
 /** The picture on each status badge under the score. */
@@ -24,9 +25,11 @@ export const STATUS_ICON = {
   dash: '🚁',
   power: '💪🏻',
   x2: '✨',
+  magnet: '🧲',
   stunned: '💫',
   dizzy: '😵',
   slow: '🐌',
+  shy: '😳',
 } as const;
 
 export const EFFECT_EMOJI: readonly string[] = [...new Set([...Object.values(REACTION_ICON), ...Object.values(STATUS_ICON)])];

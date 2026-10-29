@@ -92,6 +92,12 @@ def add_blush(image: Image.Image) -> None:
     pts(image, [(22, 34), (23, 34), (35, 34), (36, 34)], PINK)
 
 
+def add_shy_blush(image: Image.Image) -> None:
+    """Three tiny diagonal cheek marks make embarrassment readable at game scale."""
+    left = [(19, 34), (20, 34), (20, 35), (21, 35), (22, 35), (21, 36), (22, 36)]
+    pts(image, left + [(58 - x, y) for x, y in left], PINK)
+
+
 def happy_closed_eyes(image: Image.Image) -> None:
     clear_eyes(image)
     pts(image, both([(21, 32), (22, 31), (23, 30), (24, 31), (25, 32)]))
@@ -100,6 +106,12 @@ def happy_closed_eyes(image: Image.Image) -> None:
 def soft_closed_eyes(image: Image.Image) -> None:
     clear_eyes(image)
     pts(image, both([(21, 31), (22, 30), (23, 30), (24, 30), (25, 31)]))
+
+
+def shy_downcast_eyes(image: Image.Image) -> None:
+    """Small downward crescents read as bashful without looking sad or hurt."""
+    clear_eyes(image)
+    pts(image, both([(20, 29), (21, 29), (22, 30), (23, 31), (24, 31), (25, 30)]))
 
 
 def wide_surprised_eyes(image: Image.Image) -> None:
@@ -193,11 +205,18 @@ def debuff_faces() -> dict[str, Image.Image]:
     pts(crash, [(20, 32), (20, 33), (38, 32), (38, 33)], BLUE)
     tiny_worry_line(crash)
     add_blush(crash)
+
+    # Dog ears: downcast crescent eyes, strong cheek marks and a nervous little mouth.
+    embarrassed = base_front()
+    shy_downcast_eyes(embarrassed)
+    tiny_wobble_line(embarrassed)
+    add_shy_blush(embarrassed)
     return {
         "debuff-stunned": stunned,
         "debuff-disappointed": disappointed,
         "debuff-queasy": queasy,
         "debuff-crash": crash,
+        "debuff-embarrassed": embarrassed,
     }
 
 
@@ -271,10 +290,11 @@ def make() -> None:
         optimize=True,
     )
 
-    action_preview = Image.new("RGBA", (64 * 3, 64 * 2), (255, 255, 255, 255))
+    action_rows = (len(actions) + 2) // 3
+    action_preview = Image.new("RGBA", (64 * 3, 64 * action_rows), (255, 255, 255, 255))
     for index, image in enumerate(actions.values()):
         action_preview.alpha_composite(image, ((index % 3) * 64, (index // 3) * 64))
-    action_preview.resize((64 * 3 * 4, 64 * 2 * 4), Image.Resampling.NEAREST).convert("RGB").save(
+    action_preview.resize((64 * 3 * 4, 64 * action_rows * 4), Image.Resampling.NEAREST).convert("RGB").save(
         ROOT / "src" / "assets" / "vimmy-v1-action-preview.png",
         optimize=True,
     )

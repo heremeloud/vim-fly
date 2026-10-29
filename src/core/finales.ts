@@ -8,10 +8,10 @@ import { ZONES, zoneAt, type ZoneId } from './zones';
  */
 export const FINALE_METERS = 100;
 
-/** Shared rush pacing: about 54% more spawn beats, with another 30% chance of a second item on each beat. */
+/** Shared rush pacing: about 25% more spawn beats, with another 20% chance of a second item on each beat. */
 export const FINALE_RUSH = {
-  spawnIntervalScale: 0.65,
-  extraDoubleSpawnChance: 0.3,
+  spawnIntervalScale: 0.8,
+  extraDoubleSpawnChance: 0.2,
 } as const;
 
 export interface Finale {
@@ -26,15 +26,15 @@ export interface Finale {
 }
 
 const FINALES: Partial<Record<ZoneId, Finale>> = {
-  ruralRoad: { items: {}, guaranteed: { id: 'carCrash', count: 2 } }, // car crash hour: two cars, for sure
+  ruralRoad: { items: { carCrash: 5, kitten: 4 }, guaranteed: { id: 'carCrash', count: 2 } }, // car crash hour: two cars, for sure
   bakery: { items: { pandanCustardBread: 6, shiopan: 6, cheeseButterBread: 6, cilantroBread: 4, fishSauceBread: 4 } }, // fresh from the oven: every kind of bread, the bad ones too
   cafes: { items: { coffee: 8, sandwich: 3, cilantroBread: 3, fishSauceBread: 3, goldenRetriever: 12 }, flapScale: 1.12 }, // caffeine and a sandwich (the bakery is the bread rush), and the golden retriever visits
-  mall: { items: { cheeseButterBread: 8, helicopter: 6, goldenRetriever: 5 } }, // a rush of premium finds and prizes
-  lawOffice: { items: { planner: 7 }, flapScale: 0.9 }, // paperwork
-  gym: { items: { rollingPin: 14 }, flapScale: 1.15 }, // pump it up
+  mall: { items: { cheesePopcorn: 6, cheeseButterBread: 8, helicopter: 6, goldenRetriever: 5 } }, // a rush of premium finds and prizes
+  lawOffice: { items: { planner: 4, shrimpFriedRiceBox: 6 }, flapScale: 0.9 }, // paperwork
+  gym: { items: { rollingPin: 14, iceCream: 8 }, flapScale: 1.15 }, // pump it up
   courtroom: { items: { gavelHammer: 5 } }, // order in the court
-  residence: { items: { wine: 10, pasta: 8, handkerchief: 8 } }, // cozy night in
-  aquarium: { items: { fishSauceBread: 7, planner: 8 }, wind: 90 }, // strong current, and the notebooks float by
+  residence: { items: { wine: 10, pasta: 8, tomYum: 8, handkerchief: 8, dogEars: 4 } }, // cozy night in
+  aquarium: { items: { fishSauceBread: 7, planner: 12 }, wind: 90 }, // strong current, and the notebooks float by
 };
 
 /** The finale the climber is in at this height, with the location it belongs to, or null. */

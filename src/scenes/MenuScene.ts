@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { t, type StringKey } from '../i18n';
-import { ITEMS, describeEffect, displayName, priceLabel, type ItemKind } from '../items/itemDefs';
+import { ITEMS, describeEffect, displayName, priceLabel, type ItemDef, type ItemKind } from '../items/itemDefs';
 import { addItemSprite, itemDisplaySize } from '../items/itemSprite';
 import { runStore } from '../leaderboard/runStore';
 import { ScrollList } from '../ui/ScrollList';
@@ -23,6 +23,20 @@ const CATEGORIES: { kind: ItemKind; key: StringKey; color: number }[] = [
  * The item guide, shown as a menu: every item with what it does and its "price"
  * (the point value). Read straight from ITEMS, so it always matches the game.
  */
+/** Power-ups from weakest to strongest and hazards from mildest to harshest; anything not listed (and every hidden item) goes last. */
+const EFFECT_RANK = ['handkerchief', 'lawyerSuit', 'oyster', 'rollingPin', 'helicopter', 'kitten', 'gavelHammer', 'cilantroBread', 'fishSauceBread', 'planner', 'carCrash'];
+
+/** Menu order: food cheapest first, power-ups and hazards by strength, hidden items last. */
+function menuOrder(a: ItemDef, b: ItemDef): number {
+  if (!!a.secret !== !!b.secret) return a.secret ? 1 : -1;
+  if (a.effect.type === 'points' && b.effect.type === 'points') return a.effect.amount - b.effect.amount;
+  const rank = (id: string): number => {
+    const r = EFFECT_RANK.indexOf(id);
+    return r < 0 ? EFFECT_RANK.length : r;
+  };
+  return rank(a.id) - rank(b.id);
+}
+
 export class MenuScene extends Phaser.Scene {
   private kind: ItemKind = 'points';
   private list!: ScrollList;
@@ -77,7 +91,7 @@ export class MenuScene extends Phaser.Scene {
 
   private buildList(): void {
     this.list.clear();
-    const items = ITEMS.filter((i) => i.kind === this.kind && (!i.secret || runStore.best() !== null));
+    const items = ITEMS.filter((i) => i.kind === this.kind && (!i.secret || runStore.best() !== null)).sort(menuOrder);
 
     items.forEach((item, i) => {
       const y = LIST_PAD + i * (ROW_H + ROW_GAP);

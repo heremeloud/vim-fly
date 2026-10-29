@@ -59,6 +59,7 @@ export const ja: Record<StringKey, string> = {
   'hud.power': 'パワー',
   'hud.dizzy': 'めまい',
   'hud.x2': 'x2',
+  'hud.magnet': 'マグネット',
 
   'zone.stage': 'ステージ{n}',
 
@@ -91,12 +92,17 @@ export const ja: Record<StringKey, string> = {
   'effect.cleanse': 'スタンとめまいがスッキリ',
   'effect.strongFlap': '{s}秒間、はばたきパワー{p}%アップ',
   'effect.doublePoints': '{s}秒間ポイント2倍',
+  'effect.magnet': '{s}秒間、近くの食べ物やパワーアップを引き寄せる',
   'effect.stun': '{s}秒間動けない',
   'effect.disorient': '{s}秒間、左右があべこべ',
   'effect.crash': '吹き飛ばされ、{s}秒スタン、{n}ポイントダウン',
+  'effect.swerve': '子ネコをよけて横に移動する',
 
   'item.pandanCustardBread': 'パンダンカスタードパン',
   'item.cheeseButterBread': 'チーズバターパン',
+  'item.cheesePopcorn': 'チーズポップコーン',
+  'item.dogEars': '犬耳カチューシャ',
+  'item.iceCream': 'アイスクリーム',
   'item.cilantroBread': 'パクチーパン',
   'item.shiopan': '塩パン',
   'item.fishSauceBread': 'ナンプラーパン',
@@ -115,6 +121,7 @@ export const ja: Record<StringKey, string> = {
   'item.helicopter': 'ヘリコプター',
   'item.gavelHammer': '裁判官の木槌',
   'item.carCrash': '交通事故',
+  'item.kitten': '子猫',
 
   'buff.oyster': 'ポイント2倍!',
   'buff.lawyerSuit': 'シールド!',
@@ -122,12 +129,15 @@ export const ja: Record<StringKey, string> = {
   'buff.handkerchief': 'スッキリ!',
   'buff.rollingPin': 'パワーはばたき!',
   'buff.helicopter': 'ヘリコプター!',
+  'buff.goldenRetriever': 'マグネット!',
+  'debuff.dogEars': 'はずかしい!',
 
   'debuff.cilantroBread': 'クラクラ!',
   'debuff.fishSauceBread': 'スロー!',
   'debuff.planner': 'ガッカリ! -300',
   'debuff.gavelHammer': 'スタン!',
   'debuff.carCrash': 'ドカーン! -150',
+  'debuff.kitten': 'よけて!',
 
   'svc.food': 'フード',
   'svc.mart': 'マート',
@@ -143,6 +153,8 @@ export const ja: Record<StringKey, string> = {
   'promos.role.noey': 'Noey役・弁護士',
   'promos.vimmy.role': 'Vimmyは、MamiとMumuのことがだーいすきなの!',
   'promos.soon': 'もうすぐだよ',
+  'hud.shy': 'はずかしい',
+  'effect.shy': '{s}秒間、はばたきがぎこちなくなり、毎回ランダムな高さになる',
   'hud.slow': 'スロー',
   'effect.slow': '{s}秒間、飛ぶ速度が{p}%ダウン',
   'effect.stunPenalty': '{s}秒間動けず、{n}ポイントダウン',

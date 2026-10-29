@@ -221,7 +221,21 @@ def draw_tomYum():
     return img
 
 
-DRAWN = {f.__name__[5:]: f for f in (draw_pasta, draw_shrimpFriedRiceBox, draw_goldenRetriever, draw_lawyerSuit, draw_handkerchief, draw_tomYum)}
+def draw_dogEars():
+    """Two pink-lined dog ears on a thin, shallow headband."""
+    img = Image.new('RGBA', (32, 32), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.line([(8, 9), (10, 6), (13, 5), (18, 5), (21, 6), (23, 9)], fill='#5c3412', width=2)   # thin band, barely arched
+    for sx in (1, -1):
+        def X(x):
+            return x if sx == 1 else 31 - x
+        d.polygon([(X(5), 8), (X(12), 9), (X(11), 17), (X(8), 25), (X(4), 22), (X(2), 15)], fill='#b8762c')   # ear
+        d.polygon([(X(6), 12), (X(10), 12), (X(9), 18), (X(7), 22), (X(5), 19)], fill='#f4b3c2')              # inner ear
+        d.polygon([(X(2), 15), (X(4), 22), (X(8), 25), (X(5), 18)], fill='#8a5420')                           # shaded tip
+    return img
+
+
+DRAWN = {f.__name__[5:]: f for f in (draw_pasta, draw_shrimpFriedRiceBox, draw_goldenRetriever, draw_lawyerSuit, draw_handkerchief, draw_tomYum, draw_dogEars)}
 
 
 def patch(name, img):

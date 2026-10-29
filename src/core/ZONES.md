@@ -32,19 +32,19 @@ The banner shows the stage number and the location (for example "Stage 3 / CC La
 
 ## Location rushes (the last 100 m)
 
-Every location except the last (Bake Love Bakery, which never ends) finishes with a short themed stretch, `FINALE_METERS` (100 m) long, defined in [finales.ts](finales.ts). A banner and pulsing frame announce it. Spawn beats run at 65% of their normal interval (about 54% more often), with another 30% chance of a double drop, and items that fit the place receive strong weight boosts. These are meant to feel like brief events, so tune them by hand if a later rush becomes unfair.
+Every location except the last (Bake Love Bakery, which never ends) finishes with a short themed stretch, `FINALE_METERS` (100 m) long, defined in [finales.ts](finales.ts). A banner and pulsing frame announce it. Spawn beats run at 80% of their normal interval (about 25% more often), with another 20% chance of a double drop, and items that fit the place receive strong weight boosts. These are meant to feel like brief events, so tune them by hand if a later rush becomes unfair.
 
 | Location | Banner (English) | More of | Effect |
 | --- | --- | --- | --- |
-| Rural Road | Don't crash! | Exactly two car crashes are guaranteed (a third and two thirds of the way through), on top of the normal chance | |
+| Rural Road | Don't crash! | Car crashes x5, kittens x4, and exactly two are guaranteed (a third and two thirds of the way through) on top of the normal chance | |
 | Heartwarming Bakery | Fresh from the oven! | Every bread: good breads x6, cilantro and fish sauce breads x4 | |
 | Cafe | Coffee rush! | Coffee x8, sandwich x3, cilantro and fish sauce breads x3, golden retriever x12 (even before stage 3) | Flaps 12% stronger |
-| Shopping Mall | Shopping spree! | Cheese butter bread x8, helicopter x6, golden retriever x5 | |
-| CC Law Office | Paperwork pile-up! | Planners x7 | Flaps 10% weaker |
-| Gym | Pump it up! | Rolling pins x14 | Flaps 15% stronger |
+| Shopping Mall | Shopping spree! | Cheese popcorn x6, cheese butter bread x8, helicopter x6, golden retriever x5 | |
+| CC Law Office | Paperwork pile-up! | Planners x4, shrimp fried rice lunch box x6 | Flaps 10% weaker |
+| Gym | Pump it up! | Rolling pins x14, ice cream x8 | Flaps 15% stronger |
 | The Courtroom | Order in the court! | Gavels x5 | |
 | Noey's Apartment | Cozy night in! | Wine x10, pasta x8, handkerchief x8 | |
-| Aquarium | "Noey, you like Wan, don't you?!" | Fish sauce bread x7, planners x8 | Sideways current, up to about 90 px/s |
+| Aquarium | "Noey, you like Wan, don't you?!" | Fish sauce bread x7, planners x12 | Sideways current, up to about 90 px/s |
 
 The banner texts are `finale.<zoneId>` in `src/i18n` (drafts, like the location names).
 

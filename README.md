@@ -19,9 +19,8 @@ Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
 | Item | Points |
 | --- | --- |
 | Pandan custard bread, shiopan, sandwich | Small |
-| Pasta, coffee, wine | Medium |
+| Pasta, coffee, wine, cheese popcorn, ice cream | Medium |
 | Shrimp fried rice lunch box, cheese butter bread, tom yum | Big |
-| Golden retriever | Biggest |
 
 **Buffs** (power-ups)
 
@@ -31,6 +30,7 @@ Full details in [src/items/ITEMS.md](src/items/ITEMS.md).
 | Lawyer suit | Shield: blocks the next debuff |
 | Handkerchief | Clears stun and disorientation |
 | Rolling pin | Stronger fly-ups for a few seconds |
+| Golden retriever (rare, hidden) | Magnet: pulls nearby food and power-ups to you, plus 300 points |
 | Helicopter | Upward dash |
 
 **Debuffs** (dodge these)

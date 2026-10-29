@@ -59,6 +59,7 @@ export const zhHant: Record<StringKey, string> = {
   'hud.power': '強力',
   'hud.dizzy': '頭暈',
   'hud.x2': 'x2',
+  'hud.magnet': '磁鐵',
 
   'zone.stage': '第{n}關',
 
@@ -91,12 +92,17 @@ export const zhHant: Record<StringKey, string> = {
   'effect.cleanse': '清除暈眩和頭暈狀態',
   'effect.strongFlap': '{s} 秒內拍翅力量提升 {p}%',
   'effect.doublePoints': '{s} 秒內點數加倍',
+  'effect.magnet': '持續 {s} 秒吸引附近的食物和強化道具',
   'effect.stun': '無法移動 {s} 秒',
   'effect.disorient': '{s} 秒內左右顛倒',
   'effect.crash': '被撞落, 暈眩 {s} 秒並扣除 {n} 點',
+  'effect.swerve': '躲開小貓, 往旁邊閃避',
 
   'item.pandanCustardBread': '香蘭卡士達麵包',
   'item.cheeseButterBread': '起司奶油麵包',
+  'item.cheesePopcorn': '起司爆米花',
+  'item.dogEars': '狗耳髮箍',
+  'item.iceCream': '冰淇淋',
   'item.cilantroBread': '香菜麵包',
   'item.shiopan': '鹽麵包',
   'item.fishSauceBread': '魚露麵包',
@@ -115,6 +121,7 @@ export const zhHant: Record<StringKey, string> = {
   'item.helicopter': '直升機',
   'item.gavelHammer': '法官的法槌',
   'item.carCrash': '車禍',
+  'item.kitten': '小貓',
 
   'buff.oyster': '點數加倍!',
   'buff.lawyerSuit': '護盾!',
@@ -122,12 +129,15 @@ export const zhHant: Record<StringKey, string> = {
   'buff.handkerchief': '恢復清醒!',
   'buff.rollingPin': '強力拍翅!',
   'buff.helicopter': '直升機!',
+  'buff.goldenRetriever': '磁鐵!',
+  'debuff.dogEars': '害羞!',
 
   'debuff.cilantroBread': '暈呼呼!',
   'debuff.fishSauceBread': '減速!',
   'debuff.planner': '好失望! -300',
   'debuff.gavelHammer': '被敲暈啦!',
   'debuff.carCrash': '撞車啦! -150',
+  'debuff.kitten': '閃開!',
 
   'svc.food': '餐飲',
   'svc.mart': '商城',
@@ -143,6 +153,8 @@ export const zhHant: Record<StringKey, string> = {
   'promos.role.noey': '飾演 Noey, 律師',
   'promos.vimmy.role': 'Vimmy好愛好愛Mami和Mumu喔!!!',
   'promos.soon': '馬上就來',
+  'hud.shy': '害羞',
+  'effect.shy': '{s} 秒內拍翅笨手笨腳，每次升力都隨機',
   'hud.slow': '減速',
   'effect.slow': '{s} 秒內飛行速度降低 {p}%',
   'effect.stunPenalty': '無法移動 {s} 秒並扣除 {n} 點',

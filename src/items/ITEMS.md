@@ -8,7 +8,7 @@ Items come in three kinds:
 - **Buffs:** power-ups that change how the run plays, for a while or until used.
 - **Debuffs:** things to dodge. They hurt your movement, your score, or both.
 
-All numbers are **starting points to tune in playtesting**. Weights are relative: 6 is twice as common as 3. As the player climbs, debuffs get more common (weights up to 2.5x), and points items and buffs get rarer (down to 60% and 50%), reaching full effect at 1500 m. Debuffs also swerve side to side at height. See the difficulty curve in `src/core/README.md`. The item sprites live in `src/assets/items-v6`; gameplay effects also use gold, green and red cues for points, buffs and debuffs.
+All numbers are **starting points to tune in playtesting**. Weights are relative: 6 is twice as common as 3. As the player climbs, debuffs get more common (weights up to 2x), and points items and buffs get rarer (down to 60% and 50%), reaching full effect at 1500 m. Debuffs also swerve side to side at height. See the difficulty curve in `src/core/README.md`. The item sprites live in `src/assets/items-v6`; gameplay effects also use gold, green and red cues for points, buffs and debuffs.
 
 ## Points items
 
@@ -23,7 +23,8 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Pasta | `pasta` | +90 | 4 | Cheese's homemade spaghetti carbonara for Noey |
 | Tom Yum | `tomYum` | +180 | 2 | Hot and sour Thai shrimp soup |
 | Shrimp Fried Rice Lunch Box | `shrimpFriedRiceBox` | +220 | 2 | Noey's homemade apology meal with fried shrimp; rare |
-| Golden Retriever | `goldenRetriever` | +500 | 1 | Rarest and highest; the jackpot item. Only falls from stage 3 (1400 m) up outside a themed finale, is drawn larger, and stays off the Menu until you have finished a run |
+| Ice Cream | `iceCream` | +50 | 2 | From the story: the ice cream a character used as a faked excuse for being at the gym; the Gym rush drops it x8 |
+| Cheese Popcorn | `cheesePopcorn` | +70 | 4 | The cheese popcorn Cheese and Noey got at the mall; the Shopping Mall rush drops it x6 |
 
 ## Buffs
 
@@ -33,6 +34,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Lawyer Suit | `lawyerSuit` | Shield | Blocks the next debuff | 3 | Replaces the briefcase |
 | Handkerchief | `handkerchief` | Cleanse | Instantly clears stun and disorient | 3 | |
 | Rolling Pin | `rollingPin` | Strong flap | Flaps at 150% strength for 5 s | 3 | Bakery tool |
+| Golden Retriever | `goldenRetriever` | Magnet + 300 points | Pulls falling food and power-ups within 200 px toward Vimmy for 6 s (debuffs ignore it) | 1 | Rarest item, and the only one that is both a buff and a prize: it also gives +300 points (doubled under the oyster). Only falls from stage 3 (1400 m) up outside a themed finale, is drawn larger, and stays off the Menu until you have finished a run |
 | Helicopter | `helicopter` | Upward dash | 3 s at 700 px/s | 2 | The big climb; gets rarer the higher you go (down to 25% of its weight, on top of the usual buff scaling) |
 
 ## Debuffs
@@ -43,6 +45,8 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Cilantro Bread | `cilantroBread` | Disoriented | 3 s, left/right swapped | 4 | No points |
 | Fish Sauce Bread | `fishSauceBread` | Slows flying | 5 s, flaps and drift at 60% speed (40% slower) | 3 | No points |
 | Planner | `planner` | Stun and huge point loss | Stun 1.5 s, taps ignored, and -300 points | 2 | Stuns and costs points, with no knock-back |
+| Kitten | `kitten` | Swerve | Shoves Vimmy sideways at 700 px/s, left or right at random (no stun, no points lost; a wall hit still staggers) | 3 | The kitten Cheese swerved for on the rural road; the Rural Road rush drops it x4 |
+| Dog Ears | `dogEars` | Shy + 250 points | For 6 s each flap lifts a random 40% to 120% of normal (fumbled flaps), but it also gives +250 points (doubled under the oyster; a shield blocks both) | 1 | From the story. Hidden: as rare as the golden retriever (weight 1), can fall from the very start, anywhere (the Noey's Apartment rush boosts it), and stays off the Menu until you have finished a run |
 | **Car crash** | `carCrash` | **Big debuff** | Stun 1.8 s, knocked down 500 px/s, -150 points, cancels any active dash | 2 | Nod to how the leads met: Cheese swerves for a kitten and crashes into Noey's Benz |
 
 ## Rules that apply to every item
@@ -61,7 +65,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 - More debuff ideas? Current movement debuffs are stun, disorient, slow and the car crash. Candidates: heavy (falls faster), wind gust (pushed sideways), slippery (drift doesn't stop), fog (screen dims).
 - Should the shield block the car crash and planner, or should one of them be unblockable?
 - Should coffee and wine have effects of their own, or stay plain points?
-- Are the point tiers right (sandwich 45, shiopan 30, pandan bread 40, coffee 60, pasta 90, wine 100, cheese butter bread 120, tom yum 180, lunch box 220, golden retriever 500)?
+- Are the point tiers right (sandwich 45, shiopan 30, pandan bread 40, coffee 60, pasta 90, wine 100, cheese butter bread 120, tom yum 180, lunch box 220, cheese popcorn 70)?
 - Thai names (and baht prices) for each item, for the menu-style item guide.
 
 ## Names in other languages

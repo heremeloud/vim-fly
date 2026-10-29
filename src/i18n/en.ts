@@ -22,7 +22,7 @@ export const en = {
   'countdown.hours': 'Episode 1 airs in {h}h',
 
   'menu.title': 'Menu',
-  'menu.subtitle': '“Why does my life have to be such a mess...?”',
+  'menu.subtitle': '"Why does my life have to be such a mess...?"',
   'kind.points': 'Points',
   'kind.buff': 'Buffs',
   'kind.debuff': 'Debuffs',
@@ -144,6 +144,8 @@ export const en = {
   'promos.role.noey': 'as Noey, the lawyer',
   'promos.vimmy.role': 'Vimmy loves Mami and Mumu soooo much!!!',
   'promos.soon': 'Coming soon!',
+  'hud.shy': 'SHY',
+  'effect.shy': 'Flaps fumble for {s}s: each one lifts a random amount',
   'hud.slow': 'SLOW',
   'effect.slow': 'Flying {p}% slower for {s}s',
   'effect.stunPenalty': "Can't move for {s}s and lose {n} points",
@@ -171,6 +173,16 @@ export const en = {
   'settings.off': 'Off',
   'receipt.sending': 'Sending your score… Just a moment!',
   'receipt.sendFailed': "Oops! Couldn't connect to the leaderboard, but your score is safe on this device.",
+  'hud.magnet': 'MAGNET',
+  'effect.magnet': 'Pulls nearby food and items toward you for {s}s',
+  'effect.swerve': 'Shoves you sideways',
+  'item.cheesePopcorn': 'Cheese Popcorn',
+  'item.dogEars': 'Dog Ears Headband',
+  'item.iceCream': 'Ice Cream',
+  'item.kitten': 'Kitten',
+  'buff.goldenRetriever': 'Magnet!',
+  'debuff.dogEars': 'Embarrassing!',
+  'debuff.kitten': 'Move!',
 };
 
 export type StringKey = keyof typeof en;

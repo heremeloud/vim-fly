@@ -67,10 +67,10 @@ const BUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
   handkerchief: 'vimmy-buff-handkerchief',
   rollingPin: 'vimmy-buff-rollingPin',
   helicopter: 'vimmy-buff-helicopter',
+  goldenRetriever: 'vimmy-points-goldenRetriever', // its own extra-joyful pose
 };
-const POINTS_REACTION_TEXTURE: Readonly<Record<string, string>> = {
-  goldenRetriever: 'vimmy-points-goldenRetriever',
-};
+/** How fast (px/s) the golden retriever magnet pulls an item that is right at its edge, rising as the item gets closer. */
+const MAGNET_SPEED = 360;
 const REACTION_ICON_OFFSET = 78;
 const REACTION_ICON_SIZE = 40;
 const REACTION_ICON_SCALE = REACTION_ICON_SIZE / 64; // the emoji images are 64 px
@@ -87,6 +87,7 @@ const REACTION_CELL_ACCENT: Readonly<Record<string, number>> = {
   cilantroBread: 0x9ccc65,
   fishSauceBread: 0x80cbc4,
   carCrash: 0xef5350,
+  dogEars: 0xf48fb1,
 };
 const DASH_TEXTURE = { '-1': 'vimmy-dash-left', '1': 'vimmy-dash-right' } as const;
 const DEBUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
@@ -95,6 +96,7 @@ const DEBUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
   planner: 'vimmy-debuff-disappointed',
   gavelHammer: 'vimmy-debuff-stunned',
   carCrash: 'vimmy-debuff-crash',
+  dogEars: 'vimmy-debuff-embarrassed',
 };
 const SMELLY_BREADS = new Set(['cilantroBread', 'fishSauceBread']);
 /** Pickup audio follows the effect strength documented in items/ITEMS.md instead of flattening every buff. */
@@ -104,6 +106,7 @@ const BUFF_AUDIO_CUE: Readonly<Record<string, { effect: number; yips: number }>>
   oyster: { effect: 0.74, yips: 0.54 }, // five seconds of double points
   rollingPin: { effect: 0.84, yips: 0.66 }, // five seconds of 150% flaps
   helicopter: { effect: 0.96, yips: 0.82 }, // the big three-second climb
+  goldenRetriever: { effect: 0.9, yips: 0.75 }, // the rare magnet
 };
 const DEBUFF_AUDIO_VOLUME: Readonly<Record<string, number>> = {
   gavelHammer: 0.58, // one-second stun
@@ -111,6 +114,8 @@ const DEBUFF_AUDIO_VOLUME: Readonly<Record<string, number>> = {
   fishSauceBread: 0.72, // five seconds at 60% movement
   planner: 0.86, // stun plus -300 points
   carCrash: 1, // stun, knockback, points loss and dash cancellation
+  kitten: 1, // loud enough to hear over the swerve
+  dogEars: 0.5, // fumbled flaps for six seconds, and it pays points
 };
 
 /**
@@ -438,6 +443,22 @@ export class GameScene extends Phaser.Scene {
       cell.lineStyle(i % 3 === 0 ? 3 : 2, accent, i % 2 === 0 ? 0.62 : 0.42);
       cell.lineBetween(Math.cos(angle) * inner, Math.sin(angle) * inner * 0.78, Math.cos(angle) * outer, Math.sin(angle) * outer * 0.78);
     }
+
+    if (itemId === 'dogEars') {
+      // Paired blush hatching and nervous zigzags give the shy face its own manga shorthand.
+      cell.lineStyle(3, 0xec407a, 0.55);
+      for (const side of [-1, 1]) {
+        for (let i = 0; i < 3; i++) {
+          const x = side * (43 + i * 6);
+          cell.lineBetween(x - side * 4, 29 + i * 3, x + side * 4, 19 + i * 3);
+        }
+        cell.beginPath();
+        cell.moveTo(side * 42, -39);
+        cell.lineTo(side * 48, -45);
+        cell.lineTo(side * 43, -51);
+        cell.strokePath();
+      }
+    }
   }
 
   /**
@@ -496,22 +517,13 @@ export class GameScene extends Phaser.Scene {
     const texture = BUFF_REACTION_TEXTURE[item.id];
     if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
 
-    this.playReaction(texture, item.id === 'helicopter' ? REACTION_HELICOPTER_HOLD_MS : REACTION_HOLD_MS, item.id, () => {
+    this.playReaction(texture, item.id === 'helicopter' ? REACTION_HELICOPTER_HOLD_MS : item.id === 'goldenRetriever' ? REACTION_GOLDEN_HOLD_MS : REACTION_HOLD_MS, item.id, () => {
       if (item.id === 'helicopter') this.playHelicopterFlip();
       else this.player.play(VIMMY_FLY_ANIM);
     });
   }
 
-  /** The rare golden retriever gets a longer, extra-joyful reaction of its own. */
-  private playPointsReaction(item: ItemDef): void {
-    const texture = POINTS_REACTION_TEXTURE[item.id];
-    if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
-
-    this.playReaction(texture, REACTION_GOLDEN_HOLD_MS, item.id, () => this.player.play(VIMMY_FLY_ANIM));
-    playSfx(this, 'yips', 0.75, 0.08);
-  }
-
-  /** Three compact negative faces cover queasy, stunned and crash effects. */
+  /** Show the compact reaction face assigned to this debuff. */
   private playDebuffReaction(item: ItemDef): void {
     const texture = DEBUFF_REACTION_TEXTURE[item.id];
     if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
@@ -552,10 +564,10 @@ export class GameScene extends Phaser.Scene {
 
   /** Emergency sideways dash on a swipe; limited uses per run. */
   private swipeDash(dir: -1 | 1): void {
-    if (this.ended || this.run.isStunned || this.isFlipping || this.swipeDashDir !== 0 || this.swipesLeft <= 0) return;
-    this.swipesLeft--;
+    if (this.ended || this.run.isStunned || this.isFlipping || this.swipeDashDir !== 0 || (!ADMIN && this.swipesLeft <= 0)) return;
+    if (!ADMIN) this.swipesLeft--; // admin has unlimited side dashes
     playSfx(this, 'dash', 1);
-    const spent = this.swipeBreads[this.swipesLeft];
+    const spent = this.swipeBreads[ADMIN ? 0 : this.swipesLeft];
     this.tweens.add({ targets: spent, scale: spent.scale * 1.6, duration: 120, yoyo: true });
     const steer = this.run.isDisoriented ? -dir : dir;
     this.swipeDashDir = steer as -1 | 1;
@@ -588,10 +600,11 @@ export class GameScene extends Phaser.Scene {
     const power = this.run.strongFlapMs > 0 ? this.run.strongFlapFactor : 1;
     const slow = this.run.slowMs > 0 ? this.run.slowFactor : 1; // fish sauce bread: slower flaps and drift
     const finaleLift = finaleAt(this.run.heightMeters)?.flapScale ?? 1;
-    this.vy = PHYSICS.flapVelocity * power * slow * finaleLift;
+    const fumble = this.run.shyMs > 0 ? this.run.shyLiftMin + Math.random() * (this.run.shyLiftMax - this.run.shyLiftMin) : 1; // dog ears: shy, fumbling flaps
+    this.vy = PHYSICS.flapVelocity * power * slow * finaleLift * fumble;
     playSfx(this, 'flap', 0.5, 0.12);
     const steer = this.run.isDisoriented ? -dir : dir; // disoriented: left/right swapped
-    this.vx = steer * PHYSICS.driftVelocity * slow;
+    this.vx = steer * PHYSICS.driftVelocity * slow
   }
 
   update(time: number, deltaMs: number): void {
@@ -761,11 +774,13 @@ export class GameScene extends Phaser.Scene {
         s.x = Phaser.Math.Clamp(it.baseX + wobble, ITEM_RULES.size / 2, GAME_WIDTH - ITEM_RULES.size / 2);
       }
 
+      if (this.run.magnetMs > 0 && it.def.kind !== 'debuff') this.pullToward(it, dt);
+
       it.halo?.setPosition(s.x, s.y);
 
       const reach = (PLAYER_HITBOX_SIZE + Math.max(ITEM_RULES.size, it.visualSize * 0.75)) / 2;
       if (Math.abs(s.x - this.player.x) < reach && Math.abs(s.y - this.player.y) < reach) {
-        if (it.def.kind === 'debuff' && (ADMIN || this.swipeDashDir !== 0 || this.run.dashMs > 0)) continue; // swipe dash or helicopter: debuffs pass through harmlessly
+        if (it.def.kind === 'debuff' && (this.swipeDashDir !== 0 || this.run.dashMs > 0)) continue; // swipe dash or helicopter: debuffs pass through harmlessly (admin takes them too, to see the effects)
         if (it.def.kind === 'buff') {
           this.playBuffReaction(it.def);
           const cue = BUFF_AUDIO_CUE[it.def.id] ?? { effect: 0.7, yips: 0.5 };
@@ -785,21 +800,43 @@ export class GameScene extends Phaser.Scene {
           playSfx(this, itemSfx(it.def.id, 'debuff'), DEBUFF_AUDIO_VOLUME[it.def.id] ?? 0.7);
           if (SMELLY_BREADS.has(it.def.id)) playSfx(this, 'sniff', it.def.id === 'fishSauceBread' ? 0.7 : 0.52, 0.06);
         }
+        const swerveDir = Math.random() < 0.5 ? -1 : 1; // the kitten shoves Vimmy a random way, not necessarily away from it
         const pointsBefore = this.run.itemPoints;
         const applied = this.run.collect(it.def);
         const gained = this.run.itemPoints - pointsBefore;
         if (it.def.kind === 'points' && gained > 0) {
           playSfx(this, itemSfx(it.def.id, 'points', gained), 0.7, 0.06);
           if (itemSfx(it.def.id, 'points', gained) !== 'point') playSfx(this, 'point', 0.4, 0.1);
-          this.playPointsReaction(it.def);
+        }
+        if (it.def.kind !== 'points' && it.def.bonusPoints && gained > 0) {
+          // The golden retriever and the dog ears carry points as well: they pop up just after the item's own text.
+          playSfx(this, 'jackpot', 0.7, 0.06);
+          this.time.delayedCall(350, () => this.showPopup(`+${gained}`, hex(COLORS.primaryDark), true));
         }
         if (it.def.kind === 'points' && gained !== 0) this.showPopup(`${gained > 0 ? '+' : ''}${gained}`, gained > 0 ? hex(COLORS.primaryDark) : hex(COLORS.debuff), gained >= 150);
         if (it.def.kind === 'debuff' && applied) this.playDebuffReaction(it.def);
+        if (this.run.pendingSwerve > 0) {
+          this.vx = swerveDir * this.run.pendingSwerve;
+          this.run.pendingSwerve = 0;
+        }
         this.remove(it);
       } else if (s.y > cam.scrollY + GAME_HEIGHT + 60) {
         this.remove(it);
       }
     }
+  }
+
+  /** Golden retriever magnet: nearby food and power-ups drift toward Vimmy, faster the closer they get. Debuffs ignore it. */
+  private pullToward(it: FallingItem, dt: number): void {
+    const dx = this.player.x - it.shape.x;
+    const dy = this.player.y - it.shape.y;
+    const dist = Math.hypot(dx, dy);
+    if (dist > this.run.magnetRadius || dist < 1) return;
+    const speed = MAGNET_SPEED * (1.4 - dist / this.run.magnetRadius);
+    const step = Math.min(dist, speed * dt);
+    it.shape.x += (dx / dist) * step;
+    it.shape.y += (dy / dist) * step;
+    it.baseX = it.shape.x;
   }
 
   /** Keeps the shield bubble on Vimmy, gently pulsing, for as long as the shield lasts. */
@@ -883,8 +920,10 @@ export class GameScene extends Phaser.Scene {
     if (this.run.dashMs > 0) chips.push({ icon: STATUS_ICON.dash, label: `${t('hud.dash')} ${secs(this.run.dashMs)}`, color: COLORS.buff });
     if (this.run.strongFlapMs > 0) chips.push({ icon: STATUS_ICON.power, label: `${t('hud.power')} ${secs(this.run.strongFlapMs)}`, color: COLORS.buff });
     if (this.run.doublePointsMs > 0) chips.push({ icon: STATUS_ICON.x2, label: `${t('hud.x2')} ${secs(this.run.doublePointsMs)}`, color: COLORS.buff });
+    if (this.run.magnetMs > 0) chips.push({ icon: STATUS_ICON.magnet, label: `${t('hud.magnet')} ${secs(this.run.magnetMs)}`, color: COLORS.buff });
     if (this.run.isStunned) chips.push({ icon: STATUS_ICON.stunned, label: `${t('hud.stunned')} ${secs(this.run.stunMs)}`, color: COLORS.debuff });
     if (this.run.isDisoriented) chips.push({ icon: STATUS_ICON.dizzy, label: `${t('hud.dizzy')} ${secs(this.run.disorientMs)}`, color: COLORS.debuff });
+    if (this.run.shyMs > 0) chips.push({ icon: STATUS_ICON.shy, label: `${t('hud.shy')} ${secs(this.run.shyMs)}`, color: COLORS.debuff });
     if (this.run.slowMs > 0) chips.push({ icon: STATUS_ICON.slow, label: `${t('hud.slow')} ${secs(this.run.slowMs)}`, color: COLORS.debuff });
 
     this.chipGfx.clear();
