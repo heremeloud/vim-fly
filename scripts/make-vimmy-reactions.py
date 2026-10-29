@@ -27,41 +27,127 @@ def base_dash_left() -> Image.Image:
     return Image.open(SIDE_SOURCE).convert("RGBA")
 
 
-def add_brows(image: Image.Image, strong: bool = False) -> None:
-    draw = ImageDraw.Draw(image)
-    if strong:
-        draw.point([(24, 28), (25, 29), (26, 29), (39, 28), (38, 29), (37, 29)], fill=INK)
-    else:
-        draw.point([(24, 29), (25, 28), (38, 28), (39, 29)], fill=INK)
+PINK = (255, 140, 170, 255)
+BLUE = (79, 195, 247, 255)
+HONEY = (255, 193, 7, 255)
+SKIN = {(224, 144, 69), (252, 239, 220), (240, 232, 212), (231, 165, 70), (246, 219, 185), (210, 130, 66)}
+
+# The front face: eyes are 5px wide at x 21-25 and 33-37, y 27-33; the nose sits at x 27-31, y 33-35.
+LEFT, RIGHT = 21, 33
 
 
-def closed_eyes(image: Image.Image) -> None:
-    draw = ImageDraw.Draw(image)
-    # Remove only the four-pixel eye cores, keeping the original outline and face shading.
-    draw.rectangle((25, 30, 28, 33), fill=TAN)
-    draw.rectangle((35, 30, 38, 33), fill=TAN)
-    draw.point([(25, 31), (26, 32), (27, 32), (28, 31)], fill=INK)
-    draw.point([(35, 31), (36, 32), (37, 32), (38, 31)], fill=INK)
+def pts(image: Image.Image, points: list[tuple[int, int]], fill=INK) -> None:
+    ImageDraw.Draw(image).point(points, fill=fill)
 
 
-def small_o_mouth(image: Image.Image) -> None:
-    draw = ImageDraw.Draw(image)
-    draw.rectangle((30, 34, 34, 36), fill=CREAM)
-    draw.point([(31, 34), (32, 34), (33, 34), (31, 35), (33, 35), (31, 36), (32, 36), (33, 36)], fill=INK)
+def both(left_points: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    """The same shape on the right eye, mirrored about the face centre line (x = 29)."""
+    return left_points + [(58 - x, y) for x, y in left_points]
 
 
-def x_eyes(image: Image.Image) -> None:
-    draw = ImageDraw.Draw(image)
-    draw.rectangle((25, 30, 28, 33), fill=TAN)
-    draw.rectangle((35, 30, 38, 33), fill=TAN)
-    draw.point([(25, 30), (28, 30), (26, 31), (27, 31), (26, 32), (27, 32), (25, 33), (28, 33)], fill=INK)
-    draw.point([(35, 30), (38, 30), (36, 31), (37, 31), (36, 32), (37, 32), (35, 33), (38, 33)], fill=INK)
+def clear_eyes(image: Image.Image) -> None:
+    """Erase the original eyes (dark pixels, lashes and sparkle) back to the tan fur."""
+    for x0 in (LEFT, RIGHT):
+        for y in range(26, 34):
+            for x in range(x0 - 1, x0 + 6):
+                inside = x0 <= x <= x0 + 4
+                r, g, b, a = image.getpixel((x, y))
+                dark = r + g + b < 330 and (r, g, b) not in SKIN
+                if dark or (inside and (r, g, b) in {(252, 239, 220), (200, 190, 175)}):
+                    image.putpixel((x, y), TAN)
 
 
-def worried_mouth(image: Image.Image) -> None:
-    draw = ImageDraw.Draw(image)
-    draw.rectangle((29, 34, 35, 36), fill=CREAM)
-    draw.point([(30, 35), (31, 34), (32, 34), (33, 34), (34, 35)], fill=INK)
+def clear_mouth(image: Image.Image) -> None:
+    ImageDraw.Draw(image).rectangle((25, 36, 33, 37), fill=CREAM)
+
+
+def add_blush(image: Image.Image) -> None:
+    pts(image, [(22, 34), (23, 34), (35, 34), (36, 34)], PINK)
+
+
+def happy_closed_eyes(image: Image.Image) -> None:
+    clear_eyes(image)
+    pts(image, both([(21, 32), (22, 31), (23, 30), (24, 31), (25, 32)]))
+
+
+def soft_closed_eyes(image: Image.Image) -> None:
+    clear_eyes(image)
+    pts(image, both([(21, 31), (22, 30), (23, 30), (24, 30), (25, 31)]))
+
+
+def soft_smile(image: Image.Image) -> None:
+    clear_mouth(image)
+    pts(image, [(26, 36), (27, 37), (28, 37), (29, 37), (30, 37), (31, 36)])
+
+
+def tiny_gasp(image: Image.Image) -> None:
+    clear_mouth(image)
+    ImageDraw.Draw(image).rectangle((28, 36, 30, 37), fill=INK)
+
+
+def debuff_faces() -> dict[str, Image.Image]:
+    # Stunned: keep Vimmy's flower-highlight eyes and add two honey dizzy sparkles.
+    stunned = base_front()
+    pts(stunned, [(19, 27), (18, 28), (19, 28), (20, 28), (19, 29)], HONEY)
+    pts(stunned, [(39, 26), (38, 27), (39, 27), (40, 27), (39, 28)], HONEY)
+    tiny_gasp(stunned)
+    add_blush(stunned)
+
+    # Queasy: gently squeezed eyes and a tiny uncertain mouth, without sickly face tinting.
+    queasy = base_front()
+    soft_closed_eyes(queasy)
+    clear_mouth(queasy)
+    pts(queasy, [(27, 37), (28, 36), (29, 36), (30, 36), (31, 37)])
+    add_blush(queasy)
+
+    # Crash: startled closed eyes, tiny tears and a gasp—upset, but never hurt-looking.
+    crash = base_front()
+    soft_closed_eyes(crash)
+    pts(crash, [(20, 32), (20, 33), (38, 32), (38, 33)], BLUE)
+    tiny_gasp(crash)
+    add_blush(crash)
+    return {
+        "debuff-stunned": stunned,
+        "debuff-queasy": queasy,
+        "debuff-crash": crash,
+    }
+
+
+def buff_faces() -> dict[str, Image.Image]:
+    # Oyster: the approved star-eyed face, unchanged.
+    oyster = base_front()
+
+    # Lawyer suit: bright flower eyes, soft confident brows and a smile.
+    shield = base_front()
+    pts(shield, both([(21, 25), (22, 24), (23, 24), (24, 24), (25, 25)]))
+    soft_smile(shield)
+    add_blush(shield)
+
+    # Handkerchief: happy closed eyes, blush and a soft smile.
+    relieved = base_front()
+    happy_closed_eyes(relieved)
+    add_blush(relieved)
+    soft_smile(relieved)
+
+    # Rolling pin: brave flower eyes and softly raised brows, not anger or gritted teeth.
+    power = base_front()
+    pts(power, both([(21, 25), (22, 24), (23, 24), (24, 24), (25, 25)]))
+    soft_smile(power)
+    add_blush(power)
+
+    # Helicopter: raised brows and a small gasp.
+    surprised = base_front()
+    pts(surprised, both([(21, 24), (22, 23), (23, 23), (24, 23), (25, 24)]))
+    tiny_gasp(surprised)
+    add_blush(surprised)
+
+    return {
+        "buff-oyster": oyster,
+        "buff-lawyerSuit": shield,
+        "buff-handkerchief": relieved,
+        "buff-rollingPin": power,
+        "buff-helicopter": surprised,
+    }
 
 
 def dash_faces() -> dict[str, Image.Image]:
@@ -74,46 +160,8 @@ def dash_faces() -> dict[str, Image.Image]:
     }
 
 
-def debuff_faces() -> dict[str, Image.Image]:
-    stunned = base_front()
-    x_eyes(stunned)
-
-    queasy = base_front()
-    closed_eyes(queasy)
-    worried_mouth(queasy)
-
-    crash = base_front()
-    x_eyes(crash)
-    small_o_mouth(crash)
-    return {
-        "debuff-stunned": stunned,
-        "debuff-queasy": queasy,
-        "debuff-crash": crash,
-    }
-
-
 def make() -> None:
-    buffs: dict[str, Image.Image] = {}
-
-    # Oyster: the approved star-eyed face is kept pixel-for-pixel.
-    buffs["buff-oyster"] = base_front()
-
-    shield = base_front()
-    add_brows(shield)
-    buffs["buff-lawyerSuit"] = shield
-
-    relieved = base_front()
-    closed_eyes(relieved)
-    buffs["buff-handkerchief"] = relieved
-
-    power = base_front()
-    add_brows(power, strong=True)
-    buffs["buff-rollingPin"] = power
-
-    surprised = base_front()
-    small_o_mouth(surprised)
-    buffs["buff-helicopter"] = surprised
-
+    buffs = buff_faces()
     actions = {**dash_faces(), **debuff_faces()}
     for name, image in {**buffs, **actions}.items():
         image.save(ASSETS / f"{name}.png", optimize=True)

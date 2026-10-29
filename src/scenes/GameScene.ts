@@ -38,6 +38,11 @@ const BG_BLUR_EASE = 2;
 
 const PLAYER_HITBOX_SIZE = 44;
 const PLAYER_SPRITE_SIZE = 80;
+/** Reactions briefly zoom Vimmy in so the few-pixel facial changes read during play. */
+const PLAYER_REACTION_SIZE = 120;
+const REACTION_HOLD_MS = 760;
+const REACTION_CRASH_HOLD_MS = 940;
+const REACTION_HELICOPTER_HOLD_MS = 380;
 /** Native 32x32 sprites are displayed at 48x48 with nearest-neighbour filtering for clarity. */
 const ITEM_SPRITE_SIZE = 48;
 /**
@@ -58,6 +63,20 @@ const BUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
   rollingPin: 'vimmy-buff-rollingPin',
   helicopter: 'vimmy-buff-helicopter',
 };
+/** The emoji that pops up above Vimmy's head with each reaction, keyed by item id. */
+const REACTION_ICON: Readonly<Record<string, string>> = {
+  oyster: '⭐',
+  lawyerSuit: '🛡️',
+  handkerchief: '💖',
+  rollingPin: '⚡',
+  helicopter: '❗',
+  planner: '💫',
+  gavelHammer: '💫',
+  cilantroBread: '💦',
+  fishSauceBread: '💦',
+  carCrash: '💥',
+};
+const REACTION_ICON_OFFSET = 78;
 const DASH_TEXTURE = { '-1': 'vimmy-dash-left', '1': 'vimmy-dash-right' } as const;
 const DEBUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
   cilantroBread: 'vimmy-debuff-queasy',
@@ -74,6 +93,10 @@ const DEBUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
  */
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.GameObjects.Sprite;
+  /** High-contrast disc behind a reaction, making the enlarged face stand out from busy backdrops. */
+  private reactionFocus!: Phaser.GameObjects.Arc;
+  /** Emoji that pops above Vimmy's head during a reaction. */
+  private reactionIcon!: Phaser.GameObjects.Text;
   /** Soft bubble around Vimmy while the lawyer-suit shield is up. */
   private shieldAura!: Phaser.GameObjects.Arc;
   private bg!: Phaser.GameObjects.TileSprite;
@@ -152,6 +175,12 @@ export class GameScene extends Phaser.Scene {
     this.createVimmyAnimations();
     this.player = this.add.sprite(GAME_WIDTH / 2, START_Y, 'vimmy-fly-0').setDisplaySize(PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE).setDepth(5);
     this.player.play(VIMMY_FLY_ANIM);
+    this.reactionFocus = this.add
+      .circle(this.player.x, this.player.y, PLAYER_REACTION_SIZE * 0.54, 0xffffff, 0.9)
+      .setStrokeStyle(4, 0xf9a825, 1)
+      .setDepth(4.5)
+      .setVisible(false);
+    this.reactionIcon = this.add.text(this.player.x, this.player.y, '', { fontFamily: FONT.family, fontSize: '40px' }).setOrigin(0.5).setDepth(6).setVisible(false);
     this.shieldAura = this.add.circle(this.player.x, this.player.y, PLAYER_SPRITE_SIZE * 0.72, 0x4fc3f7, 0.18).setStrokeStyle(3, 0xb3e5fc, 0.9).setDepth(4).setVisible(false);
 
     // Top-left panel: score big, climbed meters small, and a row of status chips below it.
@@ -347,7 +376,7 @@ export class GameScene extends Phaser.Scene {
   /** A pop-up that bounces in above Vimmy, floats up and fades. Big ones are larger and linger. */
   private showPopup(message: string, stroke: string, big = false): void {
     const text = this.add
-      .text(this.player.x, this.player.y - 50, message, {
+      .text(this.player.x, this.player.y - (big ? 96 : 84), message, {
         fontFamily: FONT.family,
         fontSize: big ? '34px' : '22px',
         color: '#ffffff',
@@ -362,16 +391,59 @@ export class GameScene extends Phaser.Scene {
     this.tweens.add({ targets: text, y: text.y - (big ? 90 : 70), alpha: 0, delay: big ? 800 : 500, duration: 700, onComplete: () => text.destroy() });
   }
 
+  /**
+   * Hold a larger front-facing pose over a clean disc. The source art stays untouched; this presentation
+   * makes expressions made from only a handful of pixels readable while the player and backdrop move.
+   */
+  private playReaction(texture: string, outline: number, holdMs: number, itemId: string, after: () => void): void {
+    this.reactionTimer?.remove(false);
+    this.tweens.killTweensOf(this.player);
+    this.tweens.killTweensOf(this.reactionFocus);
+    this.tweens.killTweensOf(this.reactionIcon);
+
+    this.player.stop().setTexture(texture).setDisplaySize(PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE);
+    this.reactionFocus
+      .setPosition(this.player.x, this.player.y)
+      .setFillStyle(0xffffff, 0.9)
+      .setStrokeStyle(4, outline, 1)
+      .setVisible(true)
+      .setAlpha(0)
+      .setScale(0.7);
+
+    this.tweens.add({ targets: this.player, displayWidth: PLAYER_REACTION_SIZE, displayHeight: PLAYER_REACTION_SIZE, duration: 150, ease: 'Back.easeOut' });
+    this.tweens.add({ targets: this.reactionFocus, alpha: 0.92, scale: 1, duration: 150, ease: 'Back.easeOut' });
+    this.reactionIcon.setText(REACTION_ICON[itemId] ?? '').setPosition(this.player.x, this.player.y - REACTION_ICON_OFFSET).setVisible(true).setAlpha(0).setScale(0.3);
+    this.tweens.add({ targets: this.reactionIcon, alpha: 1, scale: 1.2, duration: 220, ease: 'Back.easeOut' });
+
+    this.reactionTimer = this.time.delayedCall(holdMs, () => {
+      this.reactionTimer = undefined;
+      if (!this.player.active || this.ended) return;
+      this.tweens.add({
+        targets: this.player,
+        displayWidth: PLAYER_SPRITE_SIZE,
+        displayHeight: PLAYER_SPRITE_SIZE,
+        duration: 170,
+        ease: 'Cubic.easeIn',
+        onComplete: after,
+      });
+      this.tweens.add({
+        targets: this.reactionFocus,
+        alpha: 0,
+        scale: 1.12,
+        duration: 170,
+        ease: 'Cubic.easeIn',
+        onComplete: () => this.reactionFocus.setVisible(false),
+      });
+      this.tweens.add({ targets: this.reactionIcon, alpha: 0, scale: 0.6, duration: 170, onComplete: () => this.reactionIcon.setVisible(false) });
+    });
+  }
+
   /** Briefly turn Vimmy toward the player when she collects one of the five buffs. */
   private playBuffReaction(item: ItemDef): void {
     const texture = BUFF_REACTION_TEXTURE[item.id];
     if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
 
-    this.reactionTimer?.remove(false);
-    this.player.stop().setTexture(texture);
-    this.reactionTimer = this.time.delayedCall(item.id === 'helicopter' ? 280 : 560, () => {
-      this.reactionTimer = undefined;
-      if (!this.player.active || this.ended) return;
+    this.playReaction(texture, 0xf9a825, item.id === 'helicopter' ? REACTION_HELICOPTER_HOLD_MS : REACTION_HOLD_MS, item.id, () => {
       if (item.id === 'helicopter') this.playHelicopterFlip();
       else this.player.play(VIMMY_FLY_ANIM);
     });
@@ -382,12 +454,7 @@ export class GameScene extends Phaser.Scene {
     const texture = DEBUFF_REACTION_TEXTURE[item.id];
     if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
 
-    this.reactionTimer?.remove(false);
-    this.player.stop().setTexture(texture);
-    this.reactionTimer = this.time.delayedCall(item.id === 'carCrash' ? 700 : 560, () => {
-      this.reactionTimer = undefined;
-      if (this.player.active && !this.ended) this.player.play(VIMMY_FLY_ANIM);
-    });
+    this.playReaction(texture, 0xc62828, item.id === 'carCrash' ? REACTION_CRASH_HOLD_MS : REACTION_HOLD_MS, item.id, () => this.player.play(VIMMY_FLY_ANIM));
   }
 
   /** Swap the backdrop and announce the zone when the dog climbs past a milestone. */
@@ -428,6 +495,12 @@ export class GameScene extends Phaser.Scene {
     this.swipeDashDir = steer as -1 | 1;
     this.reactionTimer?.remove(false);
     this.reactionTimer = undefined;
+    this.tweens.killTweensOf(this.player);
+    this.tweens.killTweensOf(this.reactionFocus);
+    this.reactionFocus.setVisible(false);
+    this.tweens.killTweensOf(this.reactionIcon);
+    this.reactionIcon.setVisible(false);
+    this.player.setDisplaySize(PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE);
     this.player.stop().setTexture(DASH_TEXTURE[String(steer) as '-1' | '1']);
     this.vx = 0;
     this.vy = 0;
@@ -466,6 +539,8 @@ export class GameScene extends Phaser.Scene {
     this.updateHud();
     this.updateCopterSound();
     this.updateShieldAura(time);
+    if (this.reactionFocus.visible) this.reactionFocus.setPosition(this.player.x, this.player.y);
+    if (this.reactionIcon.visible) this.reactionIcon.setPosition(this.player.x, this.player.y - REACTION_ICON_OFFSET + Math.sin(time / 90) * 3);
 
     const cam = this.cameras.main;
     if (ADMIN) {

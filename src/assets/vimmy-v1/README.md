@@ -16,16 +16,16 @@ The original photos are references only and are not bundled into the game.
 - `fly-0.png` through `fly-3.png`: looping back-view flight. The body remains stable while the ears wave and both blue wings flap.
 - `flip-0.png` through `flip-3.png`: one backward somersault after contacting the helicopter item. The sequence rotates through back, side, upside-down front and recovery views while ears and wings continue moving.
 - `buff-oyster.png`: the approved star-eyed front face, unchanged, for double points.
-- `buff-lawyerSuit.png`: a subtly confident front face for the shield.
-- `buff-handkerchief.png`: relieved closed eyes for cleanse.
-- `buff-rollingPin.png`: determined brows for stronger flaps.
-- `buff-helicopter.png`: a small surprised mouth before the existing backward flip.
+- `buff-lawyerSuit.png`: bright flower eyes, soft confident brows, blush and a smile for the shield.
+- `buff-handkerchief.png`: relieved closed eyes, blush and a soft smile for cleanse.
+- `buff-rollingPin.png`: brave flower eyes and softly raised brows for stronger flaps, cheerful rather than angry.
+- `buff-helicopter.png`: a small surprised mouth and blush before the existing backward flip.
 - `dash-left.png` and `dash-right.png`: mirrored streamlined side views used by the emergency swipe dash. The face remains alert and the large ears trail behind the movement.
-- `debuff-stunned.png`: X-eyed dizzy face shared by the planner and gavel hammer.
-- `debuff-queasy.png`: closed, worried face shared by cilantro and fish sauce bread.
-- `debuff-crash.png`: shocked hurt face reserved for the car crash.
+- `debuff-stunned.png`: flower-eyed dizzy surprise with honey sparkles, shared by the planner and gavel hammer.
+- `debuff-queasy.png`: gently squeezed eyes, blush and a tiny uncertain mouth, shared by cilantro and fish sauce bread.
+- `debuff-crash.png`: startled closed eyes, tiny blue tears, blush and a gasp for the car crash—upset, but never hurt-looking.
 
-The regular front reactions last 560 ms, while the stronger crash face lasts 700 ms. The helicopter reaction lasts 280 ms and flows directly into the existing somersault. The dash pose remains visible for the full sideways movement and faces its travel direction. All frames use nearest-neighbour filtering. Gameplay displays the 64x64 frames at native size while collision remains a smaller 40px hit box.
+During normal flight the 64x64 frames display at 80x80. Front reactions pop to 120x120 over a high-contrast white disc: regular faces hold for 760 ms, the stronger crash face for 940 ms, and the helicopter face for 380 ms before flowing into the existing somersault. This presentation makes the tiny eye and mouth changes readable against moving backdrops without changing the character art or collision size. Each reaction also pops an emoji above her head (drawn by the game, not part of the sprite) so the reactions are easy to tell apart. The dash pose remains visible for the full sideways movement and faces its travel direction. All frames use nearest-neighbour filtering, and collision remains a smaller 44px hit box.
 
 ## Reactions
 
