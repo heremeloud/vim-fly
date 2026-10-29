@@ -23,7 +23,9 @@ function openWelcome(scene: Phaser.Scene): void {
     return o;
   };
 
-  add(scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.55).setOrigin(0).setDepth(depth).setInteractive());
+  add(scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.55).setOrigin(0).setDepth(depth));
+  // Only the card swallows taps; anywhere else falls through to the page underneath (language, tabs, ...).
+  add(scene.add.zone(CARD.x, CARD.y, CARD.w, CARD.h).setOrigin(0).setDepth(depth + 1).setInteractive());
   add(roundedBox(scene, CARD.x, CARD.y, CARD.w, CARD.h, COLORS.surface, 22).setDepth(depth + 1));
   add(label(scene, GAME_WIDTH / 2, CARD.y + 26, t('onboard.title'), { size: 26, bold: true, wrap: CARD.w - 40, align: 'center' }).setOrigin(0.5, 0).setDepth(depth + 2));
   add(label(scene, INPUT.x, CARD.y + 80, t('onboard.nameLabel'), { size: 15, color: COLORS.muted, bold: true }).setDepth(depth + 2));
@@ -87,7 +89,11 @@ function openWelcome(scene: Phaser.Scene): void {
   };
   document.addEventListener('pointerdown', dismissKeyboard);
 
+  const outside = (p: Phaser.Input.Pointer): void => {
+    if (p.x < CARD.x || p.x > CARD.x + CARD.w || p.y < CARD.y || p.y > CARD.y + CARD.h) close();
+  };
   const close = (): void => {
+    scene.input?.off('pointerdown', outside);
     window.removeEventListener('resize', place);
     document.removeEventListener('pointerdown', dismissKeyboard);
     input.remove();
@@ -111,6 +117,8 @@ function openWelcome(scene: Phaser.Scene): void {
     else if (e.key === 'Escape') close();
   });
   scene.events.once(Phaser.Scenes.Events.SHUTDOWN, close);
+  // A tap outside the card dismisses it; the tap still reaches whatever is underneath.
+  scene.input.on('pointerdown', outside);
 
   // Buttons draw at depth 0, so lift everything they added above the card.
   const before = scene.children.length;

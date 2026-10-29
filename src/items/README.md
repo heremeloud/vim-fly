@@ -31,7 +31,7 @@ The item guide screen ("menu list with prices") should read from `ITEMS` so it n
 ## Helpers for the menu
 
 - `describeEffect(item)` builds the plain-English description from the item's effect, so the Menu screen never disagrees with the game.
-- `priceLabel(item)` gives the menu "price": `฿<points>` for points items and penalties (for example `-฿150` for a point loss), or "Buff"/"Debuff" for the rest.
+- `priceLabel(item)` gives the menu "price": `฿<points>` for points items and penalties (for example `-฿150` for a point loss), or nothing for buffs and debuffs (the category chip already says which).
 
 ## Still to build
 

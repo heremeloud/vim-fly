@@ -95,12 +95,17 @@ export class MenuScene extends Phaser.Scene {
         addItemSprite(this, 62, y + ROW_H / 2, item, Math.min(itemDisplaySize(item.id, 48), 60)),
         name,
         desc,
-        label(this, GAME_WIDTH - 36, y + ROW_H / 2, priceLabel(item), {
-          size: 22,
-          bold: true,
-          color: item.kind === 'debuff' ? COLORS.debuff : item.kind === 'buff' ? COLORS.buff : COLORS.accent,
-        }).setOrigin(1, 0.5),
       ];
+      const price = priceLabel(item);
+      if (price) {
+        row.push(
+          label(this, GAME_WIDTH - 36, y + ROW_H / 2, price, {
+            size: 22,
+            bold: true,
+            color: COLORS.accent,
+          }).setOrigin(1, 0.5),
+        );
+      }
       this.list.container.add(row);
     });
 

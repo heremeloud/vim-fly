@@ -118,11 +118,11 @@ export function describeEffect(item: ItemDef): string {
   }
 }
 
-/** The menu "price": the point value for points items and penalties, otherwise the kind of item. */
+/** The menu "price": the point value for points items and penalties, otherwise empty (the category chip already says buff or debuff). */
 export function priceLabel(item: ItemDef): string {
   const e = item.effect;
   if (e.type === 'points') return e.amount >= 0 ? `฿${e.amount}` : `-฿${-e.amount}`;
-  return item.kind === 'buff' ? t('price.buff') : t('price.debuff');
+  return '';
 }
 
 /** The item's name in the current language. */
