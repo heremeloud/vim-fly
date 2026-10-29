@@ -119,7 +119,7 @@ const BUILDERS: Record<Sfx | SfxLoop, (ctx: BaseAudioContext) => AudioBuffer> = 
     return render(ctx, 0.85, (t) => {
       const s = t < 0.28 ? (screech(t) * 0.35 + grit(t) * 0.25) * Math.min(1, t / 0.03) : 0;
       const hit = t >= 0.28 ? (rumble(t) * 1.2 + thump(t) * 0.8) * decay(t - 0.28, 0.57, 1.5) : 0;
-      return (s + hit) * 0.4;
+      return (s + hit) * 0.6;
     });
   },
   // Crunchy bite for bread and sandwiches.
@@ -225,13 +225,17 @@ const BUILDERS: Record<Sfx | SfxLoop, (ctx: BaseAudioContext) => AudioBuffer> = 
       const local = t >= 0.27 ? t - 0.27 : t;
       if (local > 0.22) return 0;
       const envelope = Math.sin((Math.PI * local) / 0.22) ** 0.7 * decay(local, 0.22, 0.8);
-      return tone(t) * envelope * 0.36;
+      return tone(t) * envelope * 0.85;
     });
   },
-  // Air whoosh for the sideways dash.
+  // Air whoosh for the sideways dash: bright rushing air over a quick downward swoop, loud enough to cut through the buzz.
   dash: (ctx) => {
-    const air = noise((t) => 0.04 + 0.35 * Math.sin((Math.PI * t) / 0.4));
-    return render(ctx, 0.4, (t) => air(t) * 3 * Math.sin((Math.PI * t) / 0.4) * 0.8);
+    const air = noise((t) => 0.12 + 0.5 * Math.sin((Math.PI * t) / 0.35));
+    const swoop = oscillator((t) => 1100 - 2000 * t, sine);
+    return render(ctx, 0.35, (t) => {
+      const env = Math.sin((Math.PI * t) / 0.35) ** 0.6;
+      return (air(t) * 2.2 + swoop(t) * 0.25) * env * 0.9;
+    });
   },
   // Bee wing buzz, loops seamlessly (every rate below fits a whole number of cycles in 0.5 s).
   buzz: (ctx) =>
@@ -378,7 +382,7 @@ const BY_ID: Record<string, Sfx> = {
 
 /** The sound for picking up an item: specific to the item, else generic for its kind. */
 export function itemSfx(id: string, kind: 'points' | 'buff' | 'debuff', amount = 0): Sfx {
-  if (kind === 'points' && amount >= 75 && id !== 'goldenRetriever') return 'jackpot';
+  if (kind === 'points' && amount >= 110 && id !== 'goldenRetriever') return 'jackpot';
   return BY_ID[id] ?? (kind === 'debuff' ? 'debuff' : kind === 'buff' ? 'buff' : 'point');
 }
 

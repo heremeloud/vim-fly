@@ -125,9 +125,9 @@ export const zhHant: Record<StringKey, string> = {
 
   'debuff.cilantroBread': '暈呼呼!',
   'debuff.fishSauceBread': '減速!',
-  'debuff.planner': '好失望! -100',
+  'debuff.planner': '好失望! -300',
   'debuff.gavelHammer': '被敲暈啦!',
-  'debuff.carCrash': '撞車啦! -50',
+  'debuff.carCrash': '撞車啦! -150',
 
   'svc.food': '餐飲',
   'svc.mart': '商城',

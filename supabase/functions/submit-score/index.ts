@@ -6,7 +6,7 @@ import { corsHeaders, json } from '../_shared/http.ts';
 import { cleanPlayerName } from '../_shared/player-name.ts';
 
 /** Generous ceiling on how fast anyone can earn: height plus the best items under double points, with a margin. */
-const MAX_POINTS_PER_SECOND = 800;
+const MAX_POINTS_PER_SECOND = 2500;
 const SCORE_HEAD_ROOM = 150;
 const MIN_RUN_MS = 1_000;
 const MAX_RUN_MS = 3 * 60 * 60 * 1000;

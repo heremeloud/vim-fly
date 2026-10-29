@@ -126,9 +126,9 @@ export const en = {
 
   'debuff.cilantroBread': 'DIZZY!',
   'debuff.fishSauceBread': 'SLOWED!',
-  'debuff.planner': 'DISAPPOINTED! -100',
+  'debuff.planner': 'DISAPPOINTED! -300',
   'debuff.gavelHammer': 'BONKED¡!',
-  'debuff.carCrash': 'KABOOM! -50',
+  'debuff.carCrash': 'KABOOM! -150',
 
   'svc.food': 'Food',
   'svc.mart': 'Mart',

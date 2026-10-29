@@ -14,16 +14,16 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 
 | Item | id | Points | Weight | Notes |
 | --- | --- | --- | --- | --- |
-| Pandan Custard Bread | `pandanCustardBread` | +20 | 6 | Core series food |
-| Cheese Butter Bread (Cheese-Noey Bread) | `cheeseButterBread` | +75 | 2 | Aroma of Love's star bread, created from milk, butter and cream cheese; a high-points item, rarer than the pasta and wine |
-| Shiopan | `shiopan` | +15 | 5 | |
-| Sandwich | `sandwich` | +10 | 6 | |
-| Coffee | `coffee` | +25 | 4 | Noey's black coffee with honey |
-| Wine | `wine` | +50 | 2 | Premium white wine shared over an oyster dinner |
-| Pasta | `pasta` | +30 | 4 | Cheese's homemade spaghetti carbonara for Noey |
-| Tom Yum | `tomYum` | +80 | 2 | Hot and sour Thai shrimp soup |
-| Shrimp Fried Rice Lunch Box | `shrimpFriedRiceBox` | +100 | 2 | Noey's homemade apology meal with fried shrimp; rare |
-| Golden Retriever | `goldenRetriever` | +150 | 1 | Rarest and highest; the jackpot item. Only falls from stage 3 (1400 m) up outside a themed finale, is drawn larger, and stays off the Menu until you have finished a run |
+| Pandan Custard Bread | `pandanCustardBread` | +40 | 6 | Core series food |
+| Cheese Butter Bread (Cheese-Noey Bread) | `cheeseButterBread` | +120 | 2 | Aroma of Love's star bread, created from milk, butter and cream cheese; a high-points item, rarer than the pasta and wine |
+| Shiopan | `shiopan` | +30 | 5 | |
+| Sandwich | `sandwich` | +45 | 6 | |
+| Coffee | `coffee` | +60 | 4 | Noey's black coffee with honey |
+| Wine | `wine` | +100 | 2 | Premium white wine shared over an oyster dinner |
+| Pasta | `pasta` | +90 | 4 | Cheese's homemade spaghetti carbonara for Noey |
+| Tom Yum | `tomYum` | +180 | 2 | Hot and sour Thai shrimp soup |
+| Shrimp Fried Rice Lunch Box | `shrimpFriedRiceBox` | +220 | 2 | Noey's homemade apology meal with fried shrimp; rare |
+| Golden Retriever | `goldenRetriever` | +500 | 1 | Rarest and highest; the jackpot item. Only falls from stage 3 (1400 m) up outside a themed finale, is drawn larger, and stays off the Menu until you have finished a run |
 
 ## Buffs
 
@@ -42,8 +42,8 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Gavel Hammer | `gavelHammer` | Stun | 1 s, taps ignored | 6 | The courtroom gavel |
 | Cilantro Bread | `cilantroBread` | Disoriented | 3 s, left/right swapped | 4 | No points |
 | Fish Sauce Bread | `fishSauceBread` | Slows flying | 5 s, flaps and drift at 60% speed (40% slower) | 3 | No points |
-| Planner | `planner` | Stun and huge point loss | Stun 1.5 s, taps ignored, and -100 points | 2 | Stuns and costs points, with no knock-back |
-| **Car crash** | `carCrash` | **Big debuff** | Stun 1.8 s, knocked down 500 px/s, -50 points, cancels any active dash | 2 | Nod to how the leads met: Cheese swerves for a kitten and crashes into Noey's Benz |
+| Planner | `planner` | Stun and huge point loss | Stun 1.5 s, taps ignored, and -300 points | 2 | Stuns and costs points, with no knock-back |
+| **Car crash** | `carCrash` | **Big debuff** | Stun 1.8 s, knocked down 500 px/s, -150 points, cancels any active dash | 2 | Nod to how the leads met: Cheese swerves for a kitten and crashes into Noey's Benz |
 
 ## Rules that apply to every item
 
@@ -61,7 +61,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 - More debuff ideas? Current movement debuffs are stun, disorient, slow and the car crash. Candidates: heavy (falls faster), wind gust (pushed sideways), slippery (drift doesn't stop), fog (screen dims).
 - Should the shield block the car crash and planner, or should one of them be unblockable?
 - Should coffee and wine have effects of their own, or stay plain points?
-- Are the point tiers right (breads 10, pasta and coffee 20, wine 30, lunch box and cheese butter bread 100, golden retriever 150)?
+- Are the point tiers right (sandwich 45, shiopan 30, pandan bread 40, coffee 60, pasta 90, wine 100, cheese butter bread 120, tom yum 180, lunch box 220, golden retriever 500)?
 - Thai names (and baht prices) for each item, for the menu-style item guide.
 
 ## Names in other languages

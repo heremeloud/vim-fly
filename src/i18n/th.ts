@@ -125,9 +125,9 @@ export const th: Record<StringKey, string> = {
 
   'debuff.cilantroBread': 'มึนหัว!',
   'debuff.fishSauceBread': 'ช้าลง!',
-  'debuff.planner': 'ผิดหวังจัง! -100',
+  'debuff.planner': 'ผิดหวังจัง! -300',
   'debuff.gavelHammer': 'ติดสตัน!',
-  'debuff.carCrash': 'โครม! -50',
+  'debuff.carCrash': 'โครม! -150',
 
   'svc.food': 'อาหาร',
   'svc.mart': 'มาร์ท',

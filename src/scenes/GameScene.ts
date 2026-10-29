@@ -109,7 +109,7 @@ const DEBUFF_AUDIO_VOLUME: Readonly<Record<string, number>> = {
   gavelHammer: 0.58, // one-second stun
   cilantroBread: 0.64, // three seconds of reversed steering
   fishSauceBread: 0.72, // five seconds at 60% movement
-  planner: 0.86, // stun plus -100 points
+  planner: 0.86, // stun plus -300 points
   carCrash: 1, // stun, knockback, points loss and dash cancellation
 };
 
@@ -190,7 +190,7 @@ export class GameScene extends Phaser.Scene {
     this.startY = START_Y;
     this.isFlipping = false;
     this.reactionTimer = undefined;
-    this.buzz = loopSfx(this, 'buzz', 0.12);
+    this.buzz = loopSfx(this, 'buzz', 0.05);
     this.copter = null;
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.stopLoops());
     // Dev only: open http://localhost:5173/?zone=courtroom to start the run inside a zone.
@@ -517,7 +517,7 @@ export class GameScene extends Phaser.Scene {
     if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
 
     this.playReaction(texture, item.id === 'carCrash' ? REACTION_CRASH_HOLD_MS : REACTION_HOLD_MS, item.id, () => this.player.play(VIMMY_FLY_ANIM));
-    if (item.id === 'planner') playSfx(this, 'disappointed', 0.72, 0.025);
+    if (item.id === 'planner') playSfx(this, 'disappointed', 1, 0.025);
   }
 
   /** Swap the backdrop and announce the zone when the dog climbs past a milestone. */
@@ -554,7 +554,7 @@ export class GameScene extends Phaser.Scene {
   private swipeDash(dir: -1 | 1): void {
     if (this.ended || this.run.isStunned || this.isFlipping || this.swipeDashDir !== 0 || this.swipesLeft <= 0) return;
     this.swipesLeft--;
-    playSfx(this, 'dash', 0.7);
+    playSfx(this, 'dash', 1);
     const spent = this.swipeBreads[this.swipesLeft];
     this.tweens.add({ targets: spent, scale: spent.scale * 1.6, duration: 120, yoyo: true });
     const steer = this.run.isDisoriented ? -dir : dir;
@@ -793,7 +793,7 @@ export class GameScene extends Phaser.Scene {
           if (itemSfx(it.def.id, 'points', gained) !== 'point') playSfx(this, 'point', 0.4, 0.1);
           this.playPointsReaction(it.def);
         }
-        if (it.def.kind === 'points' && gained !== 0) this.showPopup(`${gained > 0 ? '+' : ''}${gained}`, gained > 0 ? hex(COLORS.primaryDark) : hex(COLORS.debuff), gained >= 100);
+        if (it.def.kind === 'points' && gained !== 0) this.showPopup(`${gained > 0 ? '+' : ''}${gained}`, gained > 0 ? hex(COLORS.primaryDark) : hex(COLORS.debuff), gained >= 150);
         if (it.def.kind === 'debuff' && applied) this.playDebuffReaction(it.def);
         this.remove(it);
       } else if (s.y > cam.scrollY + GAME_HEIGHT + 60) {

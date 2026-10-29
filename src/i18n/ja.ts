@@ -125,9 +125,9 @@ export const ja: Record<StringKey, string> = {
 
   'debuff.cilantroBread': 'クラクラ!',
   'debuff.fishSauceBread': 'スロー!',
-  'debuff.planner': 'ガッカリ! -100',
+  'debuff.planner': 'ガッカリ! -300',
   'debuff.gavelHammer': 'スタン!',
-  'debuff.carCrash': 'ドカーン! -50',
+  'debuff.carCrash': 'ドカーン! -150',
 
   'svc.food': 'フード',
   'svc.mart': 'マート',
