@@ -57,17 +57,17 @@ The full list, story context and vibes are in [ZONES.md](ZONES.md). The code is 
 
 ## Difficulty curve
 
-One number drives it all: `difficulty(height)` in `difficulty.ts` goes from 0 at the start to 1 at `DIFFICULTY.fullAtMeters` (1500 m), then stays at 1. The rise is exponential, set by `DIFFICULTY.growth` (higher = gentler early and steeper near the top; near 0 = linear). With 4.5 it is about 0.06 at 600 m, 0.16 at 900 m, 0.4 at 1200 m and 0.63 at 1350 m. Everything below is a `[start, end]` pair in `constants.ts` interpolated by it, so it is easy to retune in one place.
+One number drives it all: `difficulty(height)` in `difficulty.ts` goes from 0 at the start to 1 at `DIFFICULTY.fullAtMeters` (1800 m), then stays at 1. The rise is exponential, set by `DIFFICULTY.growth` (higher = gentler early and steeper near the top; near 0 = linear). With 4.5 it is about 0.04 at 600 m, 0.10 at 900 m, 0.21 at 1200 m and 0.47 at 1500 m. Everything below is a `[start, end]` pair in `constants.ts` interpolated by it, so it is easy to retune in one place.
 
 | What | At 0 m | At full difficulty |
 | --- | --- | --- |
-| Time between item spawns | 750 ms | 240 ms |
-| Chance of a second item per spawn | 0% | 50% |
-| Item fall speed | 140 px/s | 420 px/s |
+| Time between item spawns | 750 ms | 280 ms |
+| Chance of a second item per spawn | 0% | 30% |
+| Item fall speed | 140 px/s | 370 px/s |
 | Debuffs swerve side to side | 0 px | 110 px |
 | Camera scroll speed | 105 px/s | 280 px/s |
-| Share of debuffs among drops | about 27% | about 57% |
-| Share of points items / buffs | 51% / 22% | 32% / 12% |
+| Share of debuffs among drops | about 27% | about 51% |
+| Share of points items / buffs | 51% / 22% | 36% / 13% |
 
 Food and power-ups get rarer and debuffs more common as you climb (`pointsWeightScale`, `buffWeightScale`, `debuffWeightScale`).
 

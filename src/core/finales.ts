@@ -8,10 +8,10 @@ import { ZONES, zoneAt, type ZoneId } from './zones';
  */
 export const FINALE_METERS = 100;
 
-/** Shared rush pacing: about 25% more spawn beats, with another 20% chance of a second item on each beat. */
+/** Shared rush pacing: about 11% more spawn beats, with another 15% chance of a second item on each beat. */
 export const FINALE_RUSH = {
-  spawnIntervalScale: 0.8,
-  extraDoubleSpawnChance: 0.2,
+  spawnIntervalScale: 0.9,
+  extraDoubleSpawnChance: 0.15,
 } as const;
 
 export interface Finale {

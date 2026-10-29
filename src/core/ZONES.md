@@ -32,7 +32,7 @@ The banner shows the stage number and the location (for example "Stage 3 / CC La
 
 ## Location rushes (the last 100 m)
 
-Every location except the last (Bake Love Bakery, which never ends) finishes with a short themed stretch, `FINALE_METERS` (100 m) long, defined in [finales.ts](finales.ts). A banner and pulsing frame announce it. Spawn beats run at 80% of their normal interval (about 25% more often), with another 20% chance of a double drop, and items that fit the place receive strong weight boosts. These are meant to feel like brief events, so tune them by hand if a later rush becomes unfair.
+Every location except the last (Bake Love Bakery, which never ends) finishes with a short themed stretch, `FINALE_METERS` (100 m) long, defined in [finales.ts](finales.ts). A banner and pulsing frame announce it. Spawn beats run at 90% of their normal interval (about 11% more often), with another 15% chance of a double drop, and items that fit the place receive strong weight boosts. These are meant to feel like brief events, so tune them by hand if a later rush becomes unfair.
 
 | Location | Banner (English) | More of | Effect |
 | --- | --- | --- | --- |
