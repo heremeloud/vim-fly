@@ -14,6 +14,8 @@ import { TAB_BAR_HEIGHT, hitArea, label, pageHeader, roundedBox, tabBar } from '
 
 const HEADER_H = 98; // short: no chips here, but the gingham hem (HEM_Y) is at the same height as on the other tabs
 const PAD = 4;
+/** Space after a card, before the next section. */
+const AFTER = 14;
 const CARD_W = GAME_WIDTH - 40;
 const GAP = 12;
 const HALF_W = (CARD_W - GAP) / 2;
@@ -77,11 +79,11 @@ export class PromosScene extends Phaser.Scene {
     const c = list.container;
     let y = PAD;
 
-    y = this.pilotCard(c, y) + 10;
+    y = this.pilotCard(c, y) + AFTER;
     y = this.section(c, y, t('promos.official'));
-    y = this.wideCard(c, y, OFFICIAL) + 10;
+    y = this.wideCard(c, y, OFFICIAL) + AFTER;
     y = this.section(c, y, t('promos.leads'));
-    y = this.leadsRow(c, y) + 10;
+    y = this.leadsRow(c, y) + AFTER;
     y = this.compactCard(c, y, VIMMY);
     list.setContentHeight(y + PAD);
     if (import.meta.env.DEV) console.info(`[promos] content ${Math.round(y + PAD)} of ${GAME_HEIGHT - TAB_BAR_HEIGHT - HEADER_H}`);
@@ -108,7 +110,7 @@ export class PromosScene extends Phaser.Scene {
 
   private section(c: Phaser.GameObjects.Container, y: number, text: string): number {
     c.add(label(this, 20, y, text, { size: 20, bold: true }));
-    return y + 30;
+    return y + 34;
   }
 
   /** The big "Watch the pilot" button. */
@@ -195,6 +197,7 @@ export class PromosScene extends Phaser.Scene {
   /** The two main leads, side by side: avatar on top, then a large name, the role and small icon buttons, centered. */
   private leadsRow(c: Phaser.GameObjects.Container, y: number): number {
     const room = HALF_W - 20;
+    const roleRoom = HALF_W - 8; // the role, such as "as Cheese, the bakery owner", gets nearly the whole card so it can stay on one row
     const LEAD_BUTTON = 30;
     const LEAD_ICON = 17;
     // The first name and the surname each get their own line.
@@ -202,23 +205,23 @@ export class PromosScene extends Phaser.Scene {
     // Both cards are as tall as the taller one needs.
     const textHeight = (lead: Account): number => {
       const n = label(this, 0, 0, twoLines(lead.name), { size: 21, bold: true, wrap: room, align: 'center' });
-      const r = lead.roleKey ? label(this, 0, 0, t(lead.roleKey), { size: 15, wrap: room, align: 'center' }) : null;
+      const r = lead.roleKey ? label(this, 0, 0, t(lead.roleKey), { size: 14, wrap: roleRoom, align: 'center' }) : null;
       const h = n.height + (r ? r.height + 2 : 0);
       n.destroy();
       r?.destroy();
       return h;
     };
-    const h = 108 + Math.max(...LEADS.map(textHeight)) + 10 + LEAD_BUTTON + 14;
+    const h = 124 + Math.max(...LEADS.map(textHeight)) + 10 + LEAD_BUTTON + 14;
 
     LEADS.forEach((lead, i) => {
       const x = 20 + i * (HALF_W + GAP);
       const cx = x + HALF_W / 2;
       c.add(roundedBox(this, x, y, HALF_W, h, COLORS.surface, RADIUS.card, COLORS.border));
-      this.avatar(c, cx, y + 52, 46, lead.avatar);
-      const name = label(this, cx, y + 108, twoLines(lead.name), { size: 21, bold: true, wrap: room, align: 'center' }).setOrigin(0.5, 0);
+      this.avatar(c, cx, y + 62, 56, lead.avatar);
+      const name = label(this, cx, y + 124, twoLines(lead.name), { size: 21, bold: true, wrap: room, align: 'center' }).setOrigin(0.5, 0);
       c.add(name);
       if (lead.roleKey) {
-        c.add(label(this, cx, y + 108 + name.height + 2, t(lead.roleKey), { size: 15, color: COLORS.muted, wrap: room, align: 'center' }).setOrigin(0.5, 0));
+        c.add(label(this, cx, y + 124 + name.height + 2, t(lead.roleKey), { size: 14, color: COLORS.muted, wrap: roleRoom, align: 'center' }).setOrigin(0.5, 0));
       }
       this.buttonRow(c, cx, y + h - 14 - LEAD_BUTTON, lead, 'center', true, LEAD_BUTTON, LEAD_ICON);
     });
