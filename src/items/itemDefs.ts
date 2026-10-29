@@ -29,6 +29,8 @@ export interface ItemDef {
   /** Relative spawn weight; higher = more common. */
   weight: number;
   effect: ItemEffect;
+  /** Extra weight multiplier reached at full difficulty (ramps in with height, on top of the kind's own scale): below 1 thins the item out as you climb, above 1 keeps it from thinning. */
+  heightWeightScale?: number;
   /** Only falls from this story stage on (see `zones.ts`). */
   minStage?: number;
   /** Hidden from the Menu until the player has finished a run. */
@@ -38,13 +40,13 @@ export interface ItemDef {
 }
 
 export const ITEMS: readonly ItemDef[] = [
-  { id: 'pandanCustardBread', label: 'Pandan Custard Bread', kind: 'points', weight: 6, effect: { type: 'points', amount: 40 }, color: 0x8bc34a },
+  { id: 'pandanCustardBread', label: 'Pandan Custard Bread', kind: 'points', weight: 6, effect: { type: 'points', amount: 40 }, heightWeightScale: 1.6, color: 0x8bc34a },
   { id: 'cheeseButterBread', label: 'Cheese Butter Bread', kind: 'points', weight: 2, effect: { type: 'points', amount: 120 }, color: 0xffca28 },
   { id: 'cilantroBread', label: 'Cilantro Bread', kind: 'debuff', weight: 4, effect: { type: 'disorient', durationMs: 3000 }, color: 0x66bb6a },
-  { id: 'shiopan', label: 'Shiopan', kind: 'points', weight: 5, effect: { type: 'points', amount: 30 }, color: 0xd7a86e },
+  { id: 'shiopan', label: 'Shiopan', kind: 'points', weight: 5, effect: { type: 'points', amount: 30 }, heightWeightScale: 1.6, color: 0xd7a86e },
   { id: 'fishSauceBread', label: 'Fish Sauce Bread', kind: 'debuff', weight: 3, effect: { type: 'slow', durationMs: 5000, factor: 0.6 }, color: 0xa1887f },
   { id: 'oyster', label: 'Oyster', kind: 'buff', weight: 3, effect: { type: 'doublePoints', durationMs: 5000 }, color: 0xb0bec5 },
-  { id: 'sandwich', label: 'Sandwich', kind: 'points', weight: 6, effect: { type: 'points', amount: 45 }, color: 0xffe0b2 },
+  { id: 'sandwich', label: 'Sandwich', kind: 'points', weight: 6, effect: { type: 'points', amount: 45 }, heightWeightScale: 1.6, color: 0xffe0b2 },
   { id: 'coffee', label: 'Coffee', kind: 'points', weight: 4, effect: { type: 'points', amount: 60 }, color: 0x6d4c41 },
   { id: 'wine', label: 'Wine', kind: 'points', weight: 2, effect: { type: 'points', amount: 100 }, color: 0x8e24aa },
   { id: 'pasta', label: 'Pasta', kind: 'points', weight: 4, effect: { type: 'points', amount: 90 }, color: 0xef5350 },
@@ -55,7 +57,7 @@ export const ITEMS: readonly ItemDef[] = [
   { id: 'handkerchief', label: 'Handkerchief', kind: 'buff', weight: 3, effect: { type: 'cleanse' }, color: 0xe3f2fd },
   { id: 'rollingPin', label: 'Rolling Pin', kind: 'buff', weight: 3, effect: { type: 'strongFlap', durationMs: 5000, factor: 1.5 }, color: 0xd7ccc8 },
   { id: 'planner', label: 'Planner', kind: 'debuff', weight: 2, effect: { type: 'stun', durationMs: 1500, points: -300 }, color: 0x7b1fa2 },
-  { id: 'helicopter', label: 'Helicopter', kind: 'buff', weight: 2, effect: { type: 'dash', durationMs: 3000, velocity: -700 }, color: 0x26c6da },
+  { id: 'helicopter', label: 'Helicopter', kind: 'buff', weight: 2, effect: { type: 'dash', durationMs: 3000, velocity: -700 }, heightWeightScale: 0.25, color: 0x26c6da },
   { id: 'gavelHammer', label: 'Gavel Hammer', kind: 'debuff', weight: 6, effect: { type: 'stun', durationMs: 1000 }, color: 0xd32f2f },
   { id: 'carCrash', label: 'Car Crash', kind: 'debuff', weight: 2, effect: { type: 'crash', stunMs: 1800, knockback: 500, points: -150 }, color: 0xff6f00 },
 ];
@@ -76,7 +78,7 @@ export function pickItem(heightMeters: number, rand: () => number = Math.random,
     debuff: ramp(ITEM_RULES.debuffWeightScale, d),
   };
   const finale = finaleAt(heightMeters);
-  const weightOf = (i: ItemDef) => i.weight * scale[i.kind] * (finale?.items[i.id] ?? 1);
+  const weightOf = (i: ItemDef) => i.weight * scale[i.kind] * ramp([1, i.heightWeightScale ?? 1], d) * (finale?.items[i.id] ?? 1);
   const stage = zoneAt(heightMeters).stage;
   const pool = ITEMS.filter((i) => (stage >= (i.minStage ?? 1) || (finale?.items[i.id] ?? 1) > 1) && (!onlyKind || i.kind === onlyKind));
   const total = pool.reduce((sum, i) => sum + weightOf(i), 0);

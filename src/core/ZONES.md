@@ -38,7 +38,7 @@ Every location except the last (Bake Love Bakery, which never ends) finishes wit
 | --- | --- | --- | --- |
 | Rural Road | Don't crash! | Exactly two car crashes are guaranteed (a third and two thirds of the way through), on top of the normal chance | |
 | Heartwarming Bakery | Fresh from the oven! | Every bread: good breads x6, cilantro and fish sauce breads x4 | |
-| Cafe | Coffee rush! | Coffee x14, sandwich x4, golden retriever x18 (even before stage 3) | Flaps 12% stronger |
+| Cafe | Coffee rush! | Coffee x8, sandwich x3, cilantro and fish sauce breads x3, golden retriever x12 (even before stage 3) | Flaps 12% stronger |
 | Shopping Mall | Shopping spree! | Cheese butter bread x8, helicopter x6, golden retriever x5 | |
 | CC Law Office | Paperwork pile-up! | Planners x7 | Flaps 10% weaker |
 | Gym | Pump it up! | Rolling pins x14 | Flaps 15% stronger |

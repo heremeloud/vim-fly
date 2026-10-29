@@ -14,10 +14,10 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 
 | Item | id | Points | Weight | Notes |
 | --- | --- | --- | --- | --- |
-| Pandan Custard Bread | `pandanCustardBread` | +40 | 6 | Core series food |
+| Pandan Custard Bread | `pandanCustardBread` | +40 | 6 | Core series food; cheap breads stay common as you climb (weight x1.6 at full difficulty cancels the food slowdown) |
 | Cheese Butter Bread (Cheese-Noey Bread) | `cheeseButterBread` | +120 | 2 | Aroma of Love's star bread, created from milk, butter and cream cheese; a high-points item, rarer than the pasta and wine |
-| Shiopan | `shiopan` | +30 | 5 | |
-| Sandwich | `sandwich` | +45 | 6 | |
+| Shiopan | `shiopan` | +30 | 5 | Stays common as you climb (as the pandan bread) |
+| Sandwich | `sandwich` | +45 | 6 | Stays common as you climb (as the pandan bread) |
 | Coffee | `coffee` | +60 | 4 | Noey's black coffee with honey |
 | Wine | `wine` | +100 | 2 | Premium white wine shared over an oyster dinner |
 | Pasta | `pasta` | +90 | 4 | Cheese's homemade spaghetti carbonara for Noey |
@@ -33,7 +33,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Lawyer Suit | `lawyerSuit` | Shield | Blocks the next debuff | 3 | Replaces the briefcase |
 | Handkerchief | `handkerchief` | Cleanse | Instantly clears stun and disorient | 3 | |
 | Rolling Pin | `rollingPin` | Strong flap | Flaps at 150% strength for 5 s | 3 | Bakery tool |
-| Helicopter | `helicopter` | Upward dash | 3 s at 700 px/s | 2 | The big climb |
+| Helicopter | `helicopter` | Upward dash | 3 s at 700 px/s | 2 | The big climb; gets rarer the higher you go (down to 25% of its weight, on top of the usual buff scaling) |
 
 ## Debuffs
 
