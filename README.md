@@ -59,7 +59,7 @@ Other commands:
 ```bash
 npm run build      # type-check and produce a static build in dist/
 npm run preview    # serve the production build locally
-npm run check:i18n # check all four languages are complete (needs Node 22.6+)
+npm run check:i18n # check all five languages are complete (needs Node 22.6+)
 npm run check:links # check src/promo/links.json and print what every link opens
 ```
 
@@ -76,7 +76,7 @@ Each folder under `src/` is one domain and has its own `README.md` explaining ho
 | `src/core` | Physics values, input, the main game loop |
 | `src/items` | Item definitions, spawning and effects |
 | `src/scenes` | Screens: home storefront, item guide menu, orders (run history and ladder), game, receipt |
-| `src/i18n` | The four languages and how to add text |
+| `src/i18n` | The five languages and how to add text |
 | `src/ui` | Shared look and widgets for the ordering-app menus |
 | `src/leaderboard` | Score submission and top-scores |
 | `src/promo` | Series links, countdown, share card |
@@ -87,7 +87,7 @@ Project status and next steps are in [PROGRESS.md](PROGRESS.md).
 
 ## Status
 
-Early development. The base project runs and has a placeholder core loop. See [PROGRESS.md](PROGRESS.md).
+Playable and still in development. See [PROGRESS.md](PROGRESS.md) for what's done and what's next.
 
 ## Credits and licenses
 
