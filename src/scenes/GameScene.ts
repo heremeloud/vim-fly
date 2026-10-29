@@ -9,7 +9,7 @@ import { COLORS, FONT } from '../ui/theme';
 import { fitWidth } from '../ui/widgets';
 import { RunState } from '../core/RunState';
 import { difficulty, ramp } from '../core/difficulty';
-import { FINALE_METERS, finaleAt } from '../core/finales';
+import { FINALE_METERS, FINALE_RUSH, finaleAt } from '../core/finales';
 import { zoneAt, zoneBannerText, zoneTextureKey, ZONES, type Zone } from '../core/zones';
 import { getItem, pickItem, type ItemDef } from '../items/itemDefs';
 import { addItemSprite, itemDisplaySize } from '../items/itemSprite';
@@ -105,6 +105,21 @@ const DEBUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
   carCrash: 'vimmy-debuff-crash',
 };
 const SMELLY_BREADS = new Set(['cilantroBread', 'fishSauceBread']);
+/** Pickup audio follows the effect strength documented in items/ITEMS.md instead of flattening every buff. */
+const BUFF_AUDIO_CUE: Readonly<Record<string, { effect: number; yips: number }>> = {
+  handkerchief: { effect: 0.56, yips: 0.32 }, // conditional instant cleanse
+  lawyerSuit: { effect: 0.66, yips: 0.42 }, // one blocked debuff
+  oyster: { effect: 0.74, yips: 0.54 }, // five seconds of double points
+  rollingPin: { effect: 0.84, yips: 0.66 }, // five seconds of 150% flaps
+  helicopter: { effect: 0.96, yips: 0.82 }, // the big three-second climb
+};
+const DEBUFF_AUDIO_VOLUME: Readonly<Record<string, number>> = {
+  gavelHammer: 0.58, // one-second stun
+  cilantroBread: 0.64, // three seconds of reversed steering
+  fishSauceBread: 0.72, // five seconds at 60% movement
+  planner: 0.86, // stun plus -100 points
+  carCrash: 1, // stun, knockback, points loss and dash cancellation
+};
 
 /**
  * Core loop with Vimmy's animated sprite. Tap left/right to flap and drift,
@@ -128,6 +143,8 @@ export class GameScene extends Phaser.Scene {
   private finaleZone: string | null = null;
   /** How many of the finale's guaranteed items have been dropped so far. */
   private finaleGiven = 0;
+  /** Pulsing edge glow that stays visible for the whole location rush. */
+  private finaleFrame!: Phaser.GameObjects.Graphics;
   private zone: Zone = zoneAt(0);
   private banner!: Phaser.GameObjects.Container;
   private bannerBg!: Phaser.GameObjects.Graphics;
@@ -229,6 +246,10 @@ export class GameScene extends Phaser.Scene {
     this.dizzyStars = Array.from({ length: 3 }, () =>
       this.add.text(0, 0, '★', { fontFamily: FONT.family, fontSize: '18px', color: '#ffeb3b', stroke: '#f57f17', strokeThickness: 3 }).setOrigin(0.5).setDepth(6).setVisible(false),
     );
+
+    // Location finales are gameplay events, not just banners: this glow remains until the next location begins.
+    this.finaleFrame = this.add.graphics().setScrollFactor(0).setDepth(17).setVisible(false);
+    this.finaleFrame.lineStyle(8, COLORS.primary, 0.9).strokeRoundedRect(5, 5, GAME_WIDTH - 10, GAME_HEIGHT - 10, 22);
 
     // One bread per sideways dash left; spent ones dim.
     this.swipeBreads = Array.from({ length: PHYSICS.swipeDashesPerRun }, (_, i) =>
@@ -523,6 +544,7 @@ export class GameScene extends Phaser.Scene {
     if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
 
     this.playReaction(texture, item.id === 'carCrash' ? REACTION_CRASH_HOLD_MS : REACTION_HOLD_MS, item.id, () => this.player.play(VIMMY_FLY_ANIM));
+    if (item.id === 'planner') playSfx(this, 'disappointed', 0.72, 0.025);
   }
 
   /** Swap the backdrop and announce the zone when the dog climbs past a milestone. */
@@ -530,9 +552,12 @@ export class GameScene extends Phaser.Scene {
     const finale = finaleAt(this.run.heightMeters);
     if (finale && finale.zoneId !== this.finaleZone) {
       this.showBanner(tDynamic(`finale.${finale.zoneId}`, ''), true);
+      playSfx(this, 'power', 0.75);
+      this.cameras.main.flash(180, 247, 189, 59, false);
       this.finaleGiven = 0;
     }
     this.finaleZone = finale?.zoneId ?? null;
+    this.finaleFrame.setVisible(!!finale);
     // Guaranteed items drop at even steps through the finale (two of them: a third and two thirds of the way).
     const must = finale?.guaranteed;
     if (finale && must && this.finaleGiven < must.count && this.run.heightMeters >= finale.fromMeters + (FINALE_METERS * (this.finaleGiven + 1)) / (must.count + 1)) {
@@ -719,10 +744,12 @@ export class GameScene extends Phaser.Scene {
     if (this.spawnTimerMs > 0) return;
     const h = this.run.heightMeters;
     const d = difficulty(h);
-    this.spawnTimerMs = ramp(ITEM_RULES.spawnMs, d);
+    const finale = finaleAt(h);
+    this.spawnTimerMs = ramp(ITEM_RULES.spawnMs, d) * (finale ? FINALE_RUSH.spawnIntervalScale : 1);
 
     this.spawnOne(h, 0);
-    if (Math.random() < ramp(ITEM_RULES.doubleSpawnChance, d)) this.spawnOne(h, 1);
+    const doubleChance = Math.min(1, ramp(ITEM_RULES.doubleSpawnChance, d) + (finale ? FINALE_RUSH.extraDoubleSpawnChance : 0));
+    if (Math.random() < doubleChance) this.spawnOne(h, 1);
     const { untilMeters, extraChance } = ITEM_RULES.startFood;
     if (h < untilMeters && Math.random() < extraChance * (1 - h / untilMeters)) this.spawnOne(h, 2, 'points');
   }
@@ -760,8 +787,9 @@ export class GameScene extends Phaser.Scene {
         if (it.def.kind === 'debuff' && (ADMIN || this.swipeDashDir !== 0 || this.run.dashMs > 0)) continue; // swipe dash or helicopter: debuffs pass through harmlessly
         if (it.def.kind === 'buff') {
           this.playBuffReaction(it.def);
-          playSfx(this, itemSfx(it.def.id, 'buff'), 0.8);
-          playSfx(this, 'yips', 0.7, 0.08);
+          const cue = BUFF_AUDIO_CUE[it.def.id] ?? { effect: 0.7, yips: 0.5 };
+          playSfx(this, itemSfx(it.def.id, 'buff'), cue.effect);
+          playSfx(this, 'yips', cue.yips, 0.08);
           this.showPopup(tDynamic(`buff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#2e7d32');
         } else if (it.def.kind === 'debuff' && this.run.shield) {
           // The lawyer suit takes the hit: say so instead of announcing the debuff.
@@ -771,9 +799,10 @@ export class GameScene extends Phaser.Scene {
         } else if (it.def.kind === 'debuff') {
           const big = it.def.id === 'carCrash' || it.def.id === 'planner';
           this.showPopup(tDynamic(`debuff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#b71c1c', big);
-          if (big) this.cameras.main.shake(300, 0.012);
-          playSfx(this, itemSfx(it.def.id, 'debuff'), 0.8);
-          if (SMELLY_BREADS.has(it.def.id)) playSfx(this, 'sniff', 0.7, 0.06);
+          if (it.def.id === 'carCrash') this.cameras.main.shake(420, 0.018);
+          else if (it.def.id === 'planner') this.cameras.main.shake(240, 0.008);
+          playSfx(this, itemSfx(it.def.id, 'debuff'), DEBUFF_AUDIO_VOLUME[it.def.id] ?? 0.7);
+          if (SMELLY_BREADS.has(it.def.id)) playSfx(this, 'sniff', it.def.id === 'fishSauceBread' ? 0.7 : 0.52, 0.06);
         }
         const pointsBefore = this.run.itemPoints;
         const applied = this.run.collect(it.def);
@@ -850,6 +879,7 @@ export class GameScene extends Phaser.Scene {
     const score = this.run.score;
     this.scoreText.setText(`${score}`);
     this.metersText.setText(`▲ ${Math.floor(this.run.heightMeters)} m`);
+    if (this.finaleFrame.visible) this.finaleFrame.setAlpha(0.42 + Math.sin(this.time.now / 130) * 0.2);
     // Bar showing progress toward the next location.
     const next = ZONES[ZONES.indexOf(this.zone) + 1];
     const fraction = next ? Phaser.Math.Clamp((this.run.heightMeters - this.zone.fromMeters) / (next.fromMeters - this.zone.fromMeters), 0, 1) : 1;

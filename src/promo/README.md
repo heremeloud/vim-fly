@@ -61,7 +61,7 @@ Everything is in **`src/promo/links.json`**. You never need to touch the code.
 - **Air date:** an ISO date with timezone, for example `"2026-12-01T20:00:00+07:00"`. Once it is set, the home screen shows a countdown to Episode 1 instead of "Watch the pilot now".
 - **banner:** (optional, official account only) the file name of a wide header photo in `src/assets/avatars/`, shown across the top of the card (3:1 works best, like an X header).
 - **avatar:** an emoji, **or the file name of a photo** you put in `src/assets/avatars/` (for example `"view.jpg"`). Photos are cropped to a circle. See `src/assets/avatars/README.md` for sizes and tips; `npm run check:links` checks the file exists.
-- **roleKey:** points at a line of text in `src/i18n` (so it is translated). Leave it out to show no role line. Use a new text key only after adding it to all four languages.
+- **roleKey:** points at a line of text in `src/i18n` (so it is translated). Leave it out to show no role line. Use a new text key only after adding it to all five languages.
 - **name:** shown as written, in every language (the leads' names are placeholders until you set them).
 
 After editing, run:

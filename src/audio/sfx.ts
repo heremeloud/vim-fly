@@ -5,11 +5,15 @@ import { SCENES } from '../core/constants';
 // so the game plays them through Phaser's own sound manager (this.sound) and ships no audio files.
 // Swap any of them for a real recording later by loading a file under the same key.
 
-export type Sfx =
-  | 'flap' | 'point' | 'buff' | 'yips' | 'debuff' | 'hammer' | 'crash' | 'dash'
-  | 'munch' | 'sip' | 'slurp' | 'jackpot' | 'bark' | 'shield' | 'sparkle' | 'power' | 'spool'
-  | 'warble' | 'sag' | 'thud' | 'block' | 'sniff';
-export type SfxLoop = 'buzz' | 'copter';
+/** Public key lists also power the local `?sfx` soundboard, so every new effect appears there automatically. */
+export const SFX_KEYS = [
+  'flap', 'point', 'buff', 'yips', 'debuff', 'disappointed', 'hammer', 'crash', 'dash',
+  'munch', 'sip', 'slurp', 'jackpot', 'bark', 'shield', 'block', 'sparkle', 'power',
+  'spool', 'warble', 'sag', 'thud', 'sniff',
+] as const;
+export type Sfx = (typeof SFX_KEYS)[number];
+export const SFX_LOOP_KEYS = ['buzz', 'copter'] as const;
+export type SfxLoop = (typeof SFX_LOOP_KEYS)[number];
 
 const KEY = 'vimmy-fly.sound';
 const RATE = 44100;
@@ -208,6 +212,21 @@ const BUILDERS: Record<Sfx | SfxLoop, (ctx: BaseAudioContext) => AudioBuffer> = 
     const low = oscillator((t) => 110 - 60 * Math.min(1, t / 0.2), sine);
     const slap = noise(() => 0.25);
     return render(ctx, 0.45, (t) => (low(t) * 0.9 + slap(t) * 0.7 * decay(t, 0.05, 2)) * decay(t, 0.45, 1.5) * 0.6);
+  },
+  // Two gentle descending cartoon notes for Vimmy's disappointed planner reaction.
+  disappointed: (ctx) => {
+    const tone = oscillator((t) => {
+      const second = t >= 0.27;
+      const local = second ? t - 0.27 : t;
+      const start = second ? 390 : 520;
+      return start - 150 * Math.min(1, local / 0.2);
+    }, triangle);
+    return render(ctx, 0.56, (t) => {
+      const local = t >= 0.27 ? t - 0.27 : t;
+      if (local > 0.22) return 0;
+      const envelope = Math.sin((Math.PI * local) / 0.22) ** 0.7 * decay(local, 0.22, 0.8);
+      return tone(t) * envelope * 0.36;
+    });
   },
   // Air whoosh for the sideways dash.
   dash: (ctx) => {

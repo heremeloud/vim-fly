@@ -12,11 +12,11 @@ The in-game delivery app is called VIMMY FLY (see `src/ui/README.md`). It needs 
 
 ## Character
 
-The playable cocker spaniel in a bee costume is implemented in `vimmy-v1/`. Four back-view normal-flight frames animate her large fluffy ears and tiny water-blue wings. Five brief front-view buff reactions use her approved star-eyed face, two side-view poses face the direction of an emergency dash, and three compact negative faces cover queasy, stunned and crash effects. Four helicopter-contact frames perform a backward somersault before returning to normal flight. Full-resolution sheet masters are in `vimmy-v1-sources/`.
+The playable cocker spaniel in a bee costume is implemented in `vimmy-v1/`. Four back-view normal-flight frames animate her large fluffy ears and tiny water-blue wings. Five brief front-view buff reactions use her approved star-eyed face, two side-view poses face the direction of an emergency dash, and three compact negative faces cover queasy, stunned and crash effects. Four helicopter-contact frames perform a backward somersault before returning to normal flight. `header-delivery-bike.png` is the transparent pixel-art key visual used in the home header. Full-resolution sheet masters are in `vimmy-v1-sources/`.
 
 ## Fonts for Thai, Japanese and Chinese
 
-The game is in four languages (`src/i18n/README.md`).
+The game is in five languages (`src/i18n/README.md`).
 
 - **Thai:** **Noto Sans Thai** (weights 400 and 700) is bundled from the `@fontsource/noto-sans-thai` package (SIL OFL). Device fallback fonts for Thai can look odd, so it is listed first in `FONT.family` (`src/ui/theme.ts`); it only covers Thai characters, so Latin text still uses the device font. `main.ts` waits for it to load (up to 3 s) before the first screen draws, because text on the canvas is drawn once.
 - **Japanese and Chinese:** these use the device's own fonts (Hiragino, PingFang, Noto and so on), with Noto Sans JP / SC as fallbacks. Bundling them is possible later, but CJK fonts are large.

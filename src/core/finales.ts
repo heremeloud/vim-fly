@@ -3,10 +3,16 @@ import { ZONES, zoneAt, type ZoneId } from './zones';
 /**
  * Every location except the last ends with a short themed stretch: its final FINALE_METERS. The banner
  * announces it, the items that fit the place fall more often, and a small effect can nudge Vimmy.
- * Nothing here is big: it's flavour, not a new difficulty level. Multipliers are sized to how rare each
- * item normally is, so a themed item makes up roughly 15-35% of what falls, enough to notice in 100 m.
+ * These are short rushes rather than ordinary stretches of play. During every finale, items arrive faster
+ * and double drops become more likely; the per-location rules below make most of those drops fit the theme.
  */
 export const FINALE_METERS = 100;
+
+/** Shared rush pacing: about 54% more spawn beats, with another 30% chance of a second item on each beat. */
+export const FINALE_RUSH = {
+  spawnIntervalScale: 0.65,
+  extraDoubleSpawnChance: 0.3,
+} as const;
 
 export interface Finale {
   /** Spawn weight multipliers by item id (1 when not listed). An item listed above 1 can fall even before its `minStage`. */
@@ -21,14 +27,14 @@ export interface Finale {
 
 const FINALES: Partial<Record<ZoneId, Finale>> = {
   ruralRoad: { items: {}, guaranteed: { id: 'carCrash', count: 2 } }, // car crash hour: two cars, for sure
-  bakery: { items: { pandanCustardBread: 3, shiopan: 3, cheeseButterBread: 3, cilantroBread: 2, fishSauceBread: 2 } }, // fresh from the oven: every kind of bread, the bad ones too
-  cafes: { items: { coffee: 8, sandwich: 2, goldenRetriever: 12 }, flapScale: 1.08 }, // caffeine, and the golden retriever visits
-  mall: { items: {} }, // shopping spree: just the banner
-  lawOffice: { items: { planner: 3 }, flapScale: 0.95 }, // paperwork
-  gym: { items: { rollingPin: 8 }, flapScale: 1.08 }, // pump it up
-  courtroom: { items: { gavelHammer: 2 } }, // order in the court
-  residence: { items: { wine: 6, pasta: 4, handkerchief: 4 } }, // cozy night in
-  aquarium: { items: { fishSauceBread: 3, planner: 4 }, wind: 60 }, // strong current, and the notebooks float by
+  bakery: { items: { pandanCustardBread: 6, shiopan: 6, cheeseButterBread: 6, cilantroBread: 4, fishSauceBread: 4 } }, // fresh from the oven: every kind of bread, the bad ones too
+  cafes: { items: { coffee: 14, sandwich: 4, goldenRetriever: 18 }, flapScale: 1.12 }, // caffeine, and the golden retriever visits
+  mall: { items: { cheeseButterBread: 8, helicopter: 6, goldenRetriever: 5 } }, // a rush of premium finds and prizes
+  lawOffice: { items: { planner: 7 }, flapScale: 0.9 }, // paperwork
+  gym: { items: { rollingPin: 14 }, flapScale: 1.15 }, // pump it up
+  courtroom: { items: { gavelHammer: 5 } }, // order in the court
+  residence: { items: { wine: 10, pasta: 8, handkerchief: 8 } }, // cozy night in
+  aquarium: { items: { fishSauceBread: 7, planner: 8 }, wind: 90 }, // strong current, and the notebooks float by
 };
 
 /** The finale the climber is in at this height, with the location it belongs to, or null. */

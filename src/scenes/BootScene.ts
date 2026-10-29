@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { SCENES } from '../core/constants';
+import { devFlag } from '../core/devTools';
 import { applyRenderScale } from '../core/render';
 import { ZONES, zoneTextureKey, type Zone } from '../core/zones';
 import { ZONE_ICONS } from '../core/zoneIcons';
@@ -57,7 +58,7 @@ export class BootScene extends Phaser.Scene {
       if (key.startsWith('item-') || key.startsWith('vimmy-')) this.textures.get(key).setFilter(Phaser.Textures.FilterMode.NEAREST);
     }
     for (const zone of ZONES) if (!this.textures.exists(zoneTextureKey(zone))) this.makeBackdrop(zone);
-    this.scene.start(SCENES.home);
+    this.scene.start(devFlag('sfx') ? SCENES.sfx : SCENES.home);
   }
 
   /** A 480x200 tile that repeats vertically: flat color, a seam line, and seven of the location's emoji (three above, four below). */

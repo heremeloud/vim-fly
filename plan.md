@@ -74,15 +74,15 @@ If the browser writes scores straight to the database, fake scores will appear w
 
 ## Build order
 
-Start with the core loop using placeholder rectangles; art and the leaderboard come after the game feels good.
+This is the original starter plan; current release status lives in `PROGRESS.md`. The core product is now built.
 
-- [ ] **Core loop.** Character rises on left/right taps, gravity pulls it down, camera scrolls up. Tune until it feels good.
-- [ ] **Falling items.** Random spawns from the top: buffs (points, shield, speed boost, magnet) and debuffs (slow, reversed controls, heavy). Add collisions.
-- [ ] **Score, game over, restart screen.**
-- [ ] **Difficulty curve.** Spawn rate and debuff ratio rise with height.
-- [ ] **Real art, animation and sound.**
-- [ ] **Leaderboard.** Name entry, score submission, top-scores screen.
-- [ ] **Polish.** Screen shake, particles, combo multipliers, mobile testing.
+- [x] **Core loop.** Character rises on left/right taps, gravity pulls it down and the camera scrolls up.
+- [x] **Falling items.** Weighted points, buffs and debuffs with collisions and themed location rushes.
+- [x] **Score, game over and replay flow.** Receipt, local history and score sharing are built.
+- [x] **Difficulty curve.** Spawn rate, fall speed, camera speed, item mix and debuff movement rise with height.
+- [x] **Art, animation and sound.** Pixel-art items, animated Vimmy, location backdrops and synthesized effects are built.
+- [x] **Leaderboard.** Name entry, server-checked score submission and worldwide top scores are built.
+- [ ] **Optional polish.** Combo/Love meter, music and additional particles or screen shake can be post-launch work.
 
 ## Art, animation and sound
 

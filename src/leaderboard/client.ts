@@ -4,6 +4,8 @@
 //
 // Every call can fail (offline, no .env, server down). Callers treat that as "play on without the ladder".
 
+import { getPlayerId } from './playerName';
+
 const URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 const TIMEOUT_MS = 8000;
@@ -42,7 +44,18 @@ export async function startRun(): Promise<RunSession> {
 }
 
 export async function submitScore(session: RunSession, name: string, score: number): Promise<void> {
-  await request('/functions/v1/submit-score', { method: 'POST', body: JSON.stringify({ token: session.token, name, score }) });
+  await request('/functions/v1/submit-score', { method: 'POST', body: JSON.stringify({ token: session.token, playerId: getPlayerId(), name, score }) });
+}
+
+/** Best-effort sync for a settings name change. A future valid score submission also syncs the name. */
+export async function updatePlayerName(name: string): Promise<boolean> {
+  if (!leaderboardConfigured) return false;
+  try {
+    await request('/functions/v1/update-player-name', { method: 'POST', body: JSON.stringify({ playerId: getPlayerId(), name }) });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /** Made-up players for testing the Top Customers list on a dev server, where the real ladder is switched off. */

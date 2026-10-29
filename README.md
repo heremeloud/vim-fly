@@ -54,6 +54,8 @@ npm run dev
 
 Then open the URL Vite prints (usually http://localhost:5173).
 
+To preview every synthesized sound effect, open `http://localhost:5173/?sfx` while the dev server is running.
+
 Other commands:
 
 ```bash
@@ -65,7 +67,7 @@ npm run check:links # check src/promo/links.json and print what every link opens
 
 ## Tech
 
-[Phaser](https://phaser.io) and TypeScript, built with [Vite](https://vite.dev). The leaderboard will use [Supabase](https://supabase.com). The result is a static site that any free host can serve.
+[Phaser](https://phaser.io) and TypeScript, built with [Vite](https://vite.dev). The worldwide leaderboard uses [Supabase](https://supabase.com) Edge Functions and Postgres. The game itself is a static site that any static host can serve.
 
 ## Project layout
 
@@ -87,7 +89,7 @@ Project status and next steps are in [PROGRESS.md](PROGRESS.md).
 
 ## Status
 
-Playable and still in development. See [PROGRESS.md](PROGRESS.md) for what's done and what's next.
+Feature-complete release candidate. The remaining work is final gameplay tuning, mobile/release QA, native-speaker review of translations and a legal review of the parody branding. See [PROGRESS.md](PROGRESS.md).
 
 ## Credits and licenses
 

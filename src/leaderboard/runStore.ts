@@ -1,8 +1,8 @@
 import type { ZoneId } from '../core/zones';
 
 /**
- * One finished run ("order"). The same shape will be submitted to the worldwide
- * leaderboard later (with a player name and a server-issued run token added there).
+ * One finished run ("order") kept on this device. The worldwide leaderboard receives the
+ * final score separately, together with the player name and server-issued run token.
  */
 export interface RunRecord {
   /** Running order number on this device: Order #1, #2, ... */
@@ -21,8 +21,8 @@ export interface RunRecord {
 export type NewRun = Omit<RunRecord, 'no'>;
 
 /**
- * Where finished runs are kept. `LocalRunStore` keeps them on this device. A server-backed
- * store can implement the same interface later so the Orders screen shows the ladder without changes.
+ * Where finished runs are kept. `LocalRunStore` keeps the five best on this device; the worldwide
+ * ladder has its own read/write flow in `client.ts`.
  */
 export interface RunStore {
   /** Save a finished run. Returns the saved record and whether it is the best so far. */
@@ -96,5 +96,5 @@ export class LocalRunStore implements RunStore {
   }
 }
 
-/** The store the game uses. Swap this for a server-backed store when the leaderboard exists. */
+/** The local history store used by receipts and the My Orders view. */
 export const runStore: RunStore = new LocalRunStore();

@@ -102,6 +102,33 @@ def soft_closed_eyes(image: Image.Image) -> None:
     pts(image, both([(21, 31), (22, 30), (23, 30), (24, 30), (25, 31)]))
 
 
+def wide_surprised_eyes(image: Image.Image) -> None:
+    """Large pale eye whites with tiny pupils, deliberately unlike the oyster's dark flower eyes."""
+    clear_eyes(image)
+    outline = [
+        (22, 27), (23, 27), (24, 27),
+        (21, 28), (22, 28), (23, 28), (24, 28), (25, 28),
+        *[(x, y) for y in range(29, 33) for x in range(20, 27)],
+        (21, 33), (22, 33), (23, 33), (24, 33), (25, 33),
+    ]
+    whites = [
+        (22, 28), (23, 28), (24, 28),
+        *[(x, y) for y in range(29, 32) for x in range(21, 26)],
+        (22, 32), (23, 32), (24, 32),
+    ]
+    pts(image, both(outline))
+    pts(image, both(whites), CREAM)
+    pts(image, [(23, 30), (35, 30)])
+    # Keep Vimmy's lashes attached directly to the outer eye edges.
+    pts(image, both([(20, 27), (19, 26), (20, 29)]))
+
+
+def tiny_open_mouth(image: Image.Image) -> None:
+    clear_mouth(image)
+    pts(image, [(28, 35), (29, 35), (30, 35), (27, 36), (31, 36), (28, 37), (29, 37), (30, 37)])
+    pts(image, [(29, 36)], PINK)
+
+
 def tiny_worry_line(image: Image.Image) -> None:
     clear_mouth(image)
     pts(image, [(27, 36), (28, 35), (29, 35), (30, 35), (31, 36)])
@@ -195,10 +222,10 @@ def buff_faces() -> dict[str, Image.Image]:
     replace_eye_highlights(power, diamond_highlight, HONEY)
     add_blush(power)
 
-    # Helicopter: wide round pupils and the original line mouth; the icon reinforces surprise.
+    # Helicopter: large pale eyes and a tiny open mouth, unmistakably different from oyster's flower eyes.
     surprised = base_front()
-    round_highlight = [(1, 1), (2, 1), (3, 1), (1, 2), (2, 2), (3, 2), (2, 3)]
-    replace_eye_highlights(surprised, round_highlight, CREAM)
+    wide_surprised_eyes(surprised)
+    tiny_open_mouth(surprised)
     add_blush(surprised)
 
     return {

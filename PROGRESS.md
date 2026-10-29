@@ -1,87 +1,52 @@
 # Progress
 
-Last updated: 2026-10-27 (core loop session)
+Last updated: 2026-10-29
 
-## Done
+## Status
 
-- [x] Project scaffold: Vite, TypeScript, Phaser, build verified
-- [x] Scene skeleton: Boot, Home, Game, Receipt
-- [x] Placeholder core loop: tap left/right to flap and drift, gravity, game over at bottom
-- [x] Item definitions from the plan (`src/items/itemDefs.ts`)
-- [x] Leaderboard interface and draft database schema
-- [x] Docs: public README, one README per domain, private notes, this file
-- [x] Git repo initialised, first commit made
-- [x] Camera climb, height score, weighted item spawner, collisions and all item effects (placeholder rectangles)
-- [x] Receipt shows height and collected items as line items
-- [x] Item catalog doc (`src/items/ITEMS.md`); helicopter is now an upward dash; added the car crash big debuff
-- [x] Food items replaced with the series' dishes (breads, sandwich, pasta, coffee, wine, shrimp fried rice lunch box)
-- [x] Items split into three kinds (points, buffs, debuffs); cilantro and fish sauce bread are disorient debuffs; oyster added as a double-points buff
-- [x] Item rework: removed delivery car, briefcase, rain cloud, burnt bread; added lawyer suit (shield), handkerchief (cleanse), rolling pin (strong flap), planner (-150), golden retriever (+150)
-- [x] Single difficulty curve (0-1 over 1000 m) driving spawn rate, double spawns, fall speed, swerving debuffs, camera speed and item mix
-- [x] Height zones (first version, replaced by the novel's locations below)
-- [x] Ordering-app menus, first part: shared UI (`src/ui`), home storefront, scrollable item guide with Points/Buffs/Debuffs filter, bottom tab bar, promo config with countdown
-- [x] Menus restyled as a bee-themed parody ("BEE MAN"): honey-yellow palette, deliver-to line and search bar on the home screen; receipt has "Order again" and "Menu" buttons side by side
-- [x] Height zones replaced with the novel's 10 locations in 5 stages, 200 m apart (`src/core/ZONES.md`); all 10 placeholder backdrops and banners checked in the browser; dev shortcut `?zone=<id>`
-- [x] Menus now parody both LINE MAN and Grab: super-app service tile row on the home screen
-- [x] Rebrand: app is now "LOVE MAN" (placeholder), "Delivered by a very good bee dog", shop "Bake Love Bakery", series title "Bake Love Feeling"
-- [x] Four languages (English, Thai, Japanese, Chinese Simplified) with a text-only language picker; `npm run check:i18n`; all non-English text is a draft
-- [x] Orders tab: local run history ("My orders") and ranking ("Top customers"), saved on the device; receipt saves runs and flags a new best
-- [x] App renamed to VIMMY (after the dog); service tiles are plain Food / Mart / Express / Ride; header says "Deliver to Current location"
-- [x] Promos tab built: pilot link, official account, two leads, Vimmy, each with X / Instagram / TikTok (handles not filled in yet); pilot also on home and receipt
-- [x] Planner now stuns (1.5 s) and costs 150 points; fish sauce bread slows flying 40% for 5 s
-- [x] Sharper rendering: canvas drawn up to 3x bigger with the same layout (`src/core/render.ts`); bundled Noto Sans Thai font for Thai text
-- [x] "Tier" is now "Stage" everywhere (banner: "Stage 3" over the location; no stage names), in all four languages
-- [x] The pilot plays inside the game in a window (Promos tab, receipt); the home strip opens the Promos page; official account is X only; receipt line is "Thank you for baking・loving・feeling" in all five languages
-- [x] Cheese butter bread is now a high-points item (+100, rare)
-- [x] The Store tab always returns to the home page (also when another page is showing under a lit Store tab)
-- [x] Receipt rebuilt: fixed header and footer with a scrolling item list, long names wrap, nothing overlaps however long it gets
-- [x] Service tiles do real things (Food = menu, Mart = Bake Love Feeling page, Express = pilot window, Ride = start a run); the joke pages are gone
-- [x] Promos page is titled "Bake Love Feeling"; bottom tab bar is smaller (54 px, icon and label centered with equal space above and below); the pilot window shows "Loading the pilot…" until it is ready
-- [x] The pilot player is built into the receipt (poster with a play button, no autoplay because the game will have sound); the pop-up window stays for the Promos tab and the Express tile. Receipt spacing tightened
-- [x] Promos accounts redesigned: avatar cards (wide for official and Vimmy, side by side for the leads); only real platforms get buttons, otherwise one "soon" tag; wording says "the pilot" (Episode 1 is not out yet)
-- [x] Links live in one editable file, `src/promo/links.json`, with `npm run check:links`; the official X account (https://x.com/BakeLoveFeeling) is set; Promos header tightened; pilot card says "Ep1 coming soon"
-- [x] The social buttons are round X / Instagram / TikTok icons (SVGs in `src/assets/icons`, CC0 shapes from Simple Icons)
-- [x] Vimmy is a small one-line row on the Promos page with one short phrase ("Mascot of the View Mim fans"); the official Vimmy text is saved in `src/promo/README.md`
-- [x] Avatars can be real photos: drop the file in `src/assets/avatars/` and write its name as `avatar` in `links.json` (circle-cropped; missing file falls back to a placeholder; checked by `npm run check:links`)
-- [x] Vimmy phrase has no hyphen in any language ("View Mim")
-- [x] Play-tested in the browser with a bot: Home -> Game -> Receipt works, no console errors
-- [x] Story-specific pixel-art pass: all 19 items redrawn on exact 16x16 grids; all 10 locations drawn as restrained 480x200 tiles from the novel descriptions; old procedural art retained as fallback
+Vimmy Fly is a **feature-complete release candidate**. The complete path from onboarding to a run, receipt, local history and worldwide leaderboard is built. The remaining work is a short tuning and release-readiness pass rather than another feature phase.
 
-## Next up (do these in order)
+## Built
 
-1. **Play it by hand and tune the feel.** Edit `PHYSICS` and `ITEM_RULES` in `src/core/constants.ts`. Not yet judged by a human; a bot climbs ~150 m in 5 s, so check pacing against 30-90 s runs.
-2. **Add the real photos** for View, Mim and Vimmy to `src/assets/avatars/` and **fill in the Promos links** in `src/promo/links.json` (see decisions below), then story-driven items and real art.
-3. **Real art, animation and sound.** Dog-in-bee-costume character, Kenney packs for items; log licenses in `src/assets/README.md`.
-4. **Local best runs** (order history) using localStorage.
-5. **Leaderboard.** Supabase project, server functions with run tokens, name entry, top-scores screen.
-6. **Promo hooks.** Countdown, links, share card, "Watch the latest clip".
-7. **Polish.** Screen shake, particles, combo multipliers, mobile testing.
+- [x] Endless tap-to-fly loop with left/right steering, wall penalties, swipe dashes, camera climb and a height-driven difficulty curve
+- [x] Twenty illustrated items: points, buffs and debuffs, with collisions, effects, reactions and individual sound effects
+- [x] Animated Vimmy character, story-location backdrops, transitions, HUD, status effects and five story stages
+- [x] Ten locations spaced 350 m apart, with a themed 100 m rush at the end of each location except Bake Love Bakery
+- [x] Ordering-app interface: Home, item Menu, Orders, Bake Love Feeling promos, Game and receipt
+- [x] Local best-run history and a Supabase worldwide leaderboard capped at 1,000 players, with private browser IDs, duplicate-safe/editable moderated names, atomic rate limiting, plausibility checks and automatic token cleanup
+- [x] First-run player name and controls card, settings, sound toggle and synthesized game audio
+- [x] Receipt with collected items, score, location, best-score state, score sharing and the pilot player
+- [x] Real promo photos and social links for Bake Love Feeling, View, Mim and Vimmy, all checked by `npm run check:links`
+- [x] English, Thai, Japanese, Simplified Chinese and Traditional Chinese, all checked by `npm run check:i18n`
+- [x] Retina-aware rendering, iOS startup/audio/focus handling and responsive 480x800 mobile layout
+- [x] Authored UI pass: custom navigation icons, Vimmy-branded header, restrained corner shapes and removal of fake rating/template details
+- [x] Production build, localization checker and promo-link checker passing
 
-## Decisions waiting on me
+## Remaining before public release
 
-- Handles for the two leads (and their real names) and Vimmy, on X, Instagram and TikTok; the official X account is set. Edit `src/promo/links.json`; accounts show "soon" until then.
-- App name: VIMMY (after the dog) is a placeholder; is that OK? Is the series title "Bake Love Feeling" exact?
-- How should "Bake Love Feeling" show up in gameplay, beyond the names? Idea: a Love meter that fills as you collect food and bursts into a short double-points "Bake Love" moment.
-- Chinese: Simplified or Traditional (or both)? Have native speakers review all Thai, Japanese and Chinese text.
+1. **Play-test the location rushes.** They now increase spawn frequency, double drops and themed item weights, with a persistent visual cue. Check that the later rushes feel exciting without becoming unavoidable.
+2. **Final mobile QA.** Run full games on current iPhone/iPad and Android devices, including Low Power Mode, rotation, background/resume, silent mode, sharing and the embedded YouTube player.
+3. **Production leaderboard check.** Verify start/submit/top-100 against the deployed Supabase functions and confirm offline fallback on the production URL.
+4. **Translation review.** Thai, Japanese and both Chinese translations are complete drafts but still need native-speaker review, especially jokes, names and gameplay instructions.
+5. **Legal/brand review.** Have the final name and ordering-app parody checked before public promotion.
+6. **Launch content.** Set the air date in `src/promo/links.json` when announced and replace the pilot link/copy when a newer official clip should become the featured video.
 
-- Story-driven items: add a kitten, the Benz, cheese popcorn, the Cheese-Noey Bread? (see `src/core/ZONES.md`)
-- Is 200 m per location right? (Decided: difficulty stays topping out at 1000 m, the harder option.)
+## Optional post-launch ideas
 
-- Have the final app names and look checked by a lawyer before public release (two real brands are being parodied).
+- Combo or Love meter
+- Music, additional particles and screen shake
+- Profanity handling and a way to change the saved leaderboard name
+- "Your rank" outside the top 100
+- New story items such as the kitten, Benz and cheese popcorn
 
-- Show name and logo, brand colors, air date, hashtag and social/YouTube links (needed for the promo features and menu styling).
-- Confirm effects for lawyer suit, handkerchief, rolling pin, oyster. More debuff ideas? (see `src/items/ITEMS.md`)
-- Is oyster = double points the buff you want? Do wine and coffee get effects? Thai names for each dish? (see `src/items/ITEMS.md`)
-- Item questions in `src/items/ITEMS.md` (does the shield block the car crash and planner?).
-- Menu language (the menus are English only so far): Thai, English or both.
-- Hosting choice: Vercel, Netlify or Cloudflare Pages.
-- Phaser 4 was installed (latest). Switch to Phaser 3 if its smaller tutorial ecosystem matters more.
+## Verification
 
-## Housekeeping
+Run before release:
 
-- [x] `git init` and first commit
-- [ ] Item list conflict in the plan: the table and the build-order bullet differ. Code follows the table.
+```bash
+npm run build
+npm run check:i18n
+npm run check:links
+```
 
-## Keep this file current
-
-After each work session: tick what's done, reorder "Next up", and add anything that came up.
+Keep this file focused on current status. Historical design exploration remains in `plan.md` and the domain READMEs.

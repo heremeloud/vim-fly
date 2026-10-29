@@ -30,27 +30,27 @@ Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1
 
 The banner shows the stage number and the location (for example "Stage 3 / CC Law Office"). Stages have no names of their own. The receipt lists the last location reached.
 
-## Location finales (the last 100 m)
+## Location rushes (the last 100 m)
 
-Every location except the last (Bake Love Bakery, which never ends) finishes with a short themed stretch, `FINALE_METERS` (100 m) long, defined in [finales.ts](finales.ts). A banner announces it, the items that fit the place fall more often, and a few add a mild effect. They are flavour, not extra difficulty.
+Every location except the last (Bake Love Bakery, which never ends) finishes with a short themed stretch, `FINALE_METERS` (100 m) long, defined in [finales.ts](finales.ts). A banner and pulsing frame announce it. Spawn beats run at 65% of their normal interval (about 54% more often), with another 30% chance of a double drop, and items that fit the place receive strong weight boosts. These are meant to feel like brief events, so tune them by hand if a later rush becomes unfair.
 
 | Location | Banner (English) | More of | Effect |
 | --- | --- | --- | --- |
-| Rural Road | Car crash hour! | Exactly two car crashes are guaranteed (a third and two thirds of the way through), on top of the normal chance | |
-| Heartwarming Bakery | Fresh from the oven! | Every kind of bread: the good ones (x3) and the debuff breads, cilantro and fish sauce (x2) | |
-| Cafe | Coffee rush! | Coffee (x8), sandwich (x2), golden retriever (x12, even though it normally starts at stage 3) | Flaps 8% stronger |
-| Shopping Mall | Shopping spree! | Nothing: the banner only | |
-| CC Law Office | Paperwork pile-up! | Planners (x3) | Flaps 5% weaker |
-| Gym | Pump it up! | Rolling pins (x8) | Flaps 8% stronger |
-| The Courtroom | Order in the court! | Gavels (x2, already common) | |
-| Noey's Apartment | Cozy night in! | Wine (x6), pasta (x4), handkerchief (x4) | |
-| Aquarium | "Noey, you like Wan, don't you?!" | Fish sauce bread (x3), planners (x4) | Sideways current, up to about 60 px/s |
+| Rural Road | Don't crash! | Exactly two car crashes are guaranteed (a third and two thirds of the way through), on top of the normal chance | |
+| Heartwarming Bakery | Fresh from the oven! | Every bread: good breads x6, cilantro and fish sauce breads x4 | |
+| Cafe | Coffee rush! | Coffee x14, sandwich x4, golden retriever x18 (even before stage 3) | Flaps 12% stronger |
+| Shopping Mall | Shopping spree! | Cheese butter bread x8, helicopter x6, golden retriever x5 | |
+| CC Law Office | Paperwork pile-up! | Planners x7 | Flaps 10% weaker |
+| Gym | Pump it up! | Rolling pins x14 | Flaps 15% stronger |
+| The Courtroom | Order in the court! | Gavels x5 | |
+| Noey's Apartment | Cozy night in! | Wine x10, pasta x8, handkerchief x8 | |
+| Aquarium | "Noey, you like Wan, don't you?!" | Fish sauce bread x7, planners x8 | Sideways current, up to about 90 px/s |
 
 The banner texts are `finale.<zoneId>` in `src/i18n` (drafts, like the location names).
 
 ## Names in other languages
 
-Location names are in `src/i18n` (`zone.<id>`) in all four languages, and the "Stage {n}" label is `zone.stage`. They are drafts; use the show's official names where they exist.
+Location names are in `src/i18n` (`zone.<id>`) in all five languages, and the "Stage {n}" label is `zone.stage`. They are drafts; use the show's official names where they exist.
 
 ## Changing a zone
 

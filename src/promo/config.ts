@@ -121,13 +121,6 @@ function toAccount(id: string, a: RawAccount | undefined, fallbackName: string):
   };
 }
 
-export const OFFICIAL: Account = toAccount('official', links.official, SHOW.title);
-
-export const LEADS: readonly Account[] = (links.leads ?? []).map((a, i) => toAccount(`lead${i + 1}`, a, `Lead actor ${i + 1}`));
-
-/** Vimmy, the dog in a bee costume: always the playable character. */
-export const VIMMY: Account = toAccount('vimmy', links.vimmy, 'Vimmy');
-
 // ---- Turning handles into links ----
 
 const HOSTS: Record<Platform, string[]> = {
@@ -169,6 +162,14 @@ export function profileUrl(platform: Platform, value: string | null | undefined)
       return `https://www.youtube.com/@${h}`;
   }
 }
+
+// Build account records only after the URL validator and its host table have been initialized.
+export const OFFICIAL: Account = toAccount('official', links.official, SHOW.title);
+
+export const LEADS: readonly Account[] = (links.leads ?? []).map((a, i) => toAccount(`lead${i + 1}`, a, `Lead actor ${i + 1}`));
+
+/** Vimmy, the dog in a bee costume: always the playable character. */
+export const VIMMY: Account = toAccount('vimmy', links.vimmy, 'Vimmy');
 
 /** Copy text to the clipboard. Resolves false when the browser refuses. */
 export async function copyText(text: string): Promise<boolean> {

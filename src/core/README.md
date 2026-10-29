@@ -35,9 +35,9 @@ Physics is hand-rolled rather than using Phaser's physics engine; items are simp
 
 Everything in `PHYSICS` is a starting point. Change values, reload, and play until it feels good. Record what you settled on here.
 
-## Still to build
+## Remaining tuning
 
-Combo multipliers, and a proper tuning pass (see below).
+Play-test the 100 m location rushes and the late-game difficulty on real phones. Combo multipliers or a Love meter are optional post-launch additions, not release blockers.
 
 ## Sharpness (render scale)
 

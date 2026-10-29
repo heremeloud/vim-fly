@@ -6,12 +6,12 @@ Every screen. The menus are a parody of a Thai delivery app: a bee-themed app ca
 
 | Scene | File | State |
 | --- | --- | --- |
-| Boot | `BootScene.ts` | Generates a placeholder backdrop texture per height zone, then opens Home |
-| Home | `HomeScene.ts` | Storefront: deliver-to line, language button, search bar (opens Menu), VIMMY FLY banner (placeholder key art), service tiles (Food = menu, Mart = Bake Love Feeling page, Express = official X account, Ride = Bake Love Feeling page), a "Watch the pilot now" strip that opens the pilot on YouTube in a new tab (the countdown once an air date is set), popular menu, "Order now" |
+| Boot | `BootScene.ts` | Loads Vimmy, item, promo and emoji assets; builds fallback backdrops; then opens Home |
+| Home | `HomeScene.ts` | Storefront with settings, language picker, search, VIMMY FLY banner, service shortcuts, pilot strip, popular menu and "Order now" |
 | Menu | `MenuScene.ts` | Item guide: scrollable menu with Points / Buffs / Debuffs filter, descriptions and "prices" read from `ITEMS` |
-| Orders | `OrdersScene.ts` | The ladder tab: "My orders" (run history) and "Top customers" (ranked), from the local run store for now |
+| Orders | `OrdersScene.ts` | "My orders" from the local run store and the worldwide top 100 from Supabase, with an offline local fallback |
 | Promos | `PromosScene.ts` | The Bake Love Feeling page: watch the pilot (plays in a window), then account cards with avatars (the official account as a wide card, the two main leads side by side, and Vimmy as a small one-line row). Each card shows round X / Instagram / TikTok / YouTube icon buttons only for platforms that are set up, or one quiet \"soon\" tag |
-| Game | `GameScene.ts` | Playable loop: camera climb, falling items, height-zone backdrops and stage banners (the novel's locations), HUD (placeholder rectangles) |
+| Game | `GameScene.ts` | Complete loop with animated Vimmy, illustrated falling items, difficulty curve, location backdrops, themed rush finales, HUD and effects |
 | Receipt | `ReceiptScene.ts` | Zone reached, height, the item lines (a scrolling list, so a long receipt never overlaps), total, a \"new best\" star, **the pilot player right on the receipt** (poster with a play button, no autoplay), \"Order again\" and \"Menu\" buttons, and a \"Back to store\" link. Also saves the run to the order history |
 
 Scenes are registered in `src/main.ts`. Scene keys live in `SCENES` in `src/core/constants.ts`.
@@ -22,20 +22,20 @@ The story is set in Thailand and follows a bakery shop owner and a lawyer. The p
 
 Thai text needs a font with Thai glyphs; decide Thai, English or both for menu labels (see `src/assets/README.md`).
 
-## Ordering-app screen to game function (built = Home, Menu)
+## Ordering-app screen to game function
 
 | App screen | Game function |
 | --- | --- |
 | Bakery storefront with key art banner | Home screen, episode countdown |
 | "Order now" button | Play |
 | Menu list with item "prices" | Item guide: what each item does, price = point value |
-| Order history / Top customers (the Orders tab) | Your runs and, later, the worldwide ladder |
+| Order history / Top customers (the Orders tab) | Your local best runs and the worldwide ladder |
 | Receipt | Game over: items collected as line items, total = score |
 | Promotions tab | The Bake Love Feeling page: the series, its stars, links and where to watch (see `src/promo`). Built; links are edited in `src/promo/links.json` |
 
 ## Conventions
 
 - Scenes pass data through `scene.start(key, data)`; the Receipt receives `{ result }` (a `RunResult` from `src/core/RunState.ts`).
-- All text goes through `t()` from `src/i18n` (four languages, see its README). Never hard-code English in a scene.
+- All text goes through `t()` from `src/i18n` (five languages, see its README). Never hard-code English in a scene.
 - Menu screens use the shared widgets in `src/ui` (see its README).
 - Keep game rules out of scenes where possible; put reusable logic in `core` or `items`.

@@ -8,7 +8,7 @@ Items come in three kinds:
 - **Buffs:** power-ups that change how the run plays, for a while or until used.
 - **Debuffs:** things to dodge. They hurt your movement, your score, or both.
 
-All numbers are **starting points to tune in playtesting**. Weights are relative: 6 is twice as common as 3. As the player climbs, debuffs get more common (weights up to 2x), and points items and buffs get rarer (down to 60% and 50%), reaching full effect at 1500 m. Debuffs also swerve side to side at height. See the difficulty curve in `src/core/README.md`. In the placeholder art, points items have a gold outline, buffs green and debuffs red.
+All numbers are **starting points to tune in playtesting**. Weights are relative: 6 is twice as common as 3. As the player climbs, debuffs get more common (weights up to 2.5x), and points items and buffs get rarer (down to 60% and 50%), reaching full effect at 1500 m. Debuffs also swerve side to side at height. See the difficulty curve in `src/core/README.md`. The item sprites live in `src/assets/items-v6`; gameplay effects also use gold, green and red cues for points, buffs and debuffs.
 
 ## Points items
 
@@ -23,7 +23,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Pasta | `pasta` | +30 | 4 | Cheese's homemade spaghetti carbonara for Noey |
 | Tom Yum | `tomYum` | +80 | 2 | Hot and sour Thai shrimp soup |
 | Shrimp Fried Rice Lunch Box | `shrimpFriedRiceBox` | +100 | 2 | Noey's homemade apology meal with fried shrimp; rare |
-| Golden Retriever | `goldenRetriever` | +150 | 1 | Rarest and highest; the jackpot item. Only falls from stage 3 (800 m) up, drawn larger, and stays off the Menu until you have finished a run |
+| Golden Retriever | `goldenRetriever` | +150 | 1 | Rarest and highest; the jackpot item. Only falls from stage 3 (1400 m) up outside a themed finale, is drawn larger, and stays off the Menu until you have finished a run |
 
 ## Buffs
 
@@ -66,7 +66,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 
 ## Names in other languages
 
-Item names are in `src/i18n` (`item.<id>`) in English, Thai, Japanese and Chinese; the English names in this file are the same as `en.ts`.
+Item names are in `src/i18n` (`item.<id>`) in English, Thai, Japanese, Simplified Chinese and Traditional Chinese; the English names in this file are the same as `en.ts`.
 
 ## Adding an item
 
