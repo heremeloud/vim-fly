@@ -36,7 +36,7 @@ export const en = {
   'orders.tab.top': 'World’s Top Customers',
   'orders.orderNo': 'Order #{n}',
   'orders.bestBadge': 'Best',
-  'orders.empty': "No orders yet—let's place your first one!",
+  'orders.empty': "No orders yet, let's place your first one!",
   'orders.topNote': "The world's very best customers!",
   'orders.offline': "Oops! Can't reach the worldwide ladder. Here are your best runs saved on this device.",
   'orders.loading': 'Loading… Just a moment!',

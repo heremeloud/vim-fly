@@ -7,7 +7,7 @@ Eighteen transparent 64x64 pixel-art frames replace the game's placeholder playe
 - Front identity reference: `/Users/fran/Downloads/1.jpeg`
 - Back costume reference: `/Users/fran/Downloads/2.jpeg`
 - Character: warm-tan cocker spaniel dog in a black-and-yellow bee suit
-- Defining features: very large fluffy dark-brown ears, yellow petal skirt, two tiny water-blue back wings, lashes attached directly to the eyes—never detached eyebrows—and the same tiny centered caramel U on every frame where it is visible
+- Defining features: very large fluffy dark-brown ears, yellow petal skirt, two tiny water-blue back wings, lashes attached directly to the eyes (never detached eyebrows) and the same tiny centered caramel U on every frame where it is visible
 
 The original photos are references only and are not bundled into the game.
 
@@ -25,7 +25,7 @@ The original photos are references only and are not bundled into the game.
 - `debuff-stunned.png`: flower-eyed dizzy surprise with honey sparkles and a tiny wobbling line mouth for the gavel hammer.
 - `debuff-disappointed.png`: a planner-specific cute annoyed face with squeezed eyes, a tiny line-mouth pout and a red manga anger mark.
 - `debuff-queasy.png`: gently squeezed eyes, blush and a tiny uncertain mouth, shared by cilantro and fish sauce bread.
-- `debuff-crash.png`: wide round eyes, tiny blue tears, blush and a small worried line mouth for the car crash—startled, but never hurt-looking.
+- `debuff-crash.png`: wide round eyes, tiny blue tears, blush and a small worried line mouth for the car crash: startled, but never hurt-looking.
 
 During normal flight the 64x64 frames display at 80x80. Front reactions pop to 120x120 over a high-contrast white disc: regular faces hold for 760 ms, the stronger crash face for 940 ms, the golden retriever celebration for 1100 ms, and the helicopter face for 380 ms before flowing into the existing somersault. This presentation makes the tiny eye and mouth changes readable against moving backdrops without changing the character art or collision size. Each reaction also pops an emoji above her head (drawn by the game, not part of the sprite) so the reactions are easy to tell apart. The dash pose remains visible for the full sideways movement and faces its travel direction. All frames use nearest-neighbour filtering, and collision remains a smaller 44px hit box.
 

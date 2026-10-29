@@ -80,6 +80,6 @@ The official text, kept here for reference:
 
 > VIMMY (วิมมี่) คาแรกเตอร์ตัวแทนแฟนคลับของ วิว - มิ้ม น้องสุนัขหูยาวสายพันธุ์ค็อกเกอร์ สแปเนียล ที่มาพร้อมความสดใสและพลังความร่าเริงเต็มร้อย ถ่ายทอดเสน่ห์ของวิวที่ผสมผสานเข้ากับผึ้งน้อยแสนหวานละมุนในแบบของมิ้ม จนกลายเป็นน้อง "VIMMY" สุดน่ารัก ที่พร้อมกางปีกแจกความหวาน และโปรยความสดใสให้ฟุ้งกระจายไปทุกพื้นที่ที่ได้เจอ
 >
-> VIMMY — a character representing the fans of View-Mim. Introducing a long-eared Cocker Spaniel brimming with brightness and 100% cheery energy, a perfect combination of View's charm and Mim's sweet, little-bee spirit, coming together as the adorable "VIMMY" who's always ready to spread her wings to sprinkle brightness wherever she goes.
+> VIMMY: a character representing the fans of View-Mim. Introducing a long-eared Cocker Spaniel brimming with brightness and 100% cheery energy, a perfect combination of View's charm and Mim's sweet, little-bee spirit, coming together as the adorable "VIMMY" who's always ready to spread her wings to sprinkle brightness wherever she goes.
 
 On the Promos page this becomes one short line in each language (`promos.vimmy.role` in `src/i18n`): "Vimmy loves Mami and Mumu" (the two nicknames stay in English in every language). For art: a Cocker Spaniel with long ears and little bee wings.

@@ -27,7 +27,7 @@ export function openSettings(scene: Phaser.Scene): void {
   const w = CARD.w - 60;
   add(label(scene, x, CARD.y + 84, t('onboard.nameLabel'), { size: 15, color: COLORS.muted, bold: true }).setDepth(depth + 2));
   add(roundedBox(scene, x, CARD.y + 110, w, 50, COLORS.background, 14).setDepth(depth + 2));
-  add(label(scene, x + 16, CARD.y + 135, getPlayerName() ?? '—', { size: 20, bold: true, wrap: w - 32 }).setOrigin(0, 0.5).setDepth(depth + 3));
+  add(label(scene, x + 16, CARD.y + 135, getPlayerName() ?? '-', { size: 20, bold: true, wrap: w - 32 }).setOrigin(0, 0.5).setDepth(depth + 3));
 
   addSoundToggle(scene, add, x, CARD.y + 176, w, depth);
 

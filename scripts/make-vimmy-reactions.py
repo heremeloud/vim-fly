@@ -159,7 +159,7 @@ def debuff_faces() -> dict[str, Image.Image]:
     tiny_worry_line(queasy)
     add_blush(queasy)
 
-    # Crash: wide round eyes and tiny tears—startled, but never hurt-looking.
+    # Crash: wide round eyes and tiny tears: startled, but never hurt-looking.
     crash = base_front()
     round_highlight = [(1, 1), (2, 1), (3, 1), (1, 2), (2, 2), (3, 2), (2, 3)]
     replace_eye_highlights(crash, round_highlight, CREAM)
