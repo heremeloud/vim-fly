@@ -145,7 +145,7 @@ export class ReceiptScene extends Phaser.Scene {
     // Send the score to the worldwide ranking (the run is already saved on this device either way).
     const name = getPlayerName();
     if (data.result && name && leaderboardConfigured) {
-      const status = label(this, GAME_WIDTH / 2, FOOTER_TOP + 78, t('receipt.sending'), { size: 12, color: COLORS.muted }).setOrigin(0.5, 0);
+      const status = label(this, GAME_WIDTH / 2, FOOTER_TOP + 69, t('receipt.sending'), { size: 12, color: COLORS.muted }).setOrigin(0.5, 0);
       void submitFinishedRun(name, r.total).then((ok) => {
         if (!status.active) return; // the player already left the receipt
         if (ok) status.setText('');
