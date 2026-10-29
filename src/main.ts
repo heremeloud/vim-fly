@@ -27,6 +27,10 @@ function startGame(): void {
     width: GAME_WIDTH * RENDER_SCALE,
     height: GAME_HEIGHT * RENDER_SCALE,
     backgroundColor: '#fff3e0',
+    // Phaser normally clamps the first 120 frames after startup/focus to a 60 Hz delta. iOS often supplies rAF at
+    // 30 Hz (especially in Low Power Mode), so those frames make the whole game run at half speed for about 4 seconds.
+    // GameScene already guards its physics delta against tab-switch spikes, and Phaser resets its clock on resume.
+    fps: { smoothStep: false },
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
