@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { SCENES } from '../core/constants';
 
 // Sound effects are synthesised at start-up into Web Audio buffers and registered in Phaser's audio cache,
 // so the game plays them through Phaser's own sound manager (this.sound) and ships no audio files.
@@ -13,6 +14,8 @@ export type SfxLoop = 'buzz' | 'copter';
 const KEY = 'vimmy-fly.sound';
 const RATE = 44100;
 const TAU = Math.PI * 2;
+const BUILD_SLICE_DELAY_MS = 50;
+const BUILD_RETRY_WHILE_PLAYING_MS = 500;
 
 type Gen = (t: number) => number;
 
@@ -238,14 +241,19 @@ export function initSfx(game: Phaser.Game): void {
   const manager = webAudio(game);
   if (!manager) return; // no Web Audio (very old browser): the game stays silent
   applyAudioSession(enabled);
-  // Synthesising every sound takes a noticeable moment on a phone, so it is spread over idle time after the first
-  // screen is up, one sound per slice, instead of freezing the first load. playSfx skips a sound that is not ready yet.
+  // Synthesising every sound takes a noticeable moment on a phone. Spread it across the non-game screens and pause
+  // the queue completely during a run: even one buffer build can steal a frame on iOS. playSfx already skips a sound
+  // that is not ready yet, so keeping gameplay smooth is more important than preparing every effect immediately.
   const pending = Object.entries(BUILDERS);
   const buildNext = (): void => {
+    if (game.scene.isActive(SCENES.game)) {
+      window.setTimeout(buildNext, BUILD_RETRY_WHILE_PLAYING_MS);
+      return;
+    }
     const next = pending.shift();
     if (!next) return;
     game.cache.audio.add(next[0], next[1](manager.context));
-    window.setTimeout(buildNext, 0);
+    window.setTimeout(buildNext, BUILD_SLICE_DELAY_MS);
   };
   window.setTimeout(buildNext, 300);
 
