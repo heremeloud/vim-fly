@@ -182,7 +182,7 @@ export class ReceiptScene extends Phaser.Scene {
     const box = this.add.graphics();
     box.lineStyle(3, ink, 1).strokeRoundedRect(-w / 2, -h / 2, w, h, 6);
     box.lineStyle(1, ink, 1).strokeRoundedRect(-w / 2 + 4, -h / 2 + 4, w - 8, h - 8, 3);
-    const stamp = this.add.container(GAME_WIDTH - 118, LIST_TOP + 104, [box, word]).setRotation(-0.2).setAlpha(0).setScale(1.7);
+    const stamp = this.add.container(GAME_WIDTH - 118, LIST_TOP + 140, [box, word]).setRotation(-0.2).setAlpha(0).setScale(1.7);
     this.tweens.add({ targets: stamp, alpha: 0.78, scale: 1, duration: 220, delay: 350, ease: 'Cubic.easeIn' });
   }
 }
