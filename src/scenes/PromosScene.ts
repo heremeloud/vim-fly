@@ -15,7 +15,7 @@ import { TAB_BAR_HEIGHT, hitArea, label, pageHeader, roundedBox, tabBar } from '
 const HEADER_H = 98; // short: no chips here, but the gingham hem (HEM_Y) is at the same height as on the other tabs
 const PAD = 4;
 /** Space after a card, before the next section. */
-const AFTER = 14;
+const AFTER = 12;
 const CARD_W = GAME_WIDTH - 40;
 const GAP = 12;
 const HALF_W = (CARD_W - GAP) / 2;
@@ -41,7 +41,7 @@ const photoKey = (avatar: string) => `avatar-src-${avatar}`;
 const circleKey = (avatar: string) => `avatar-circle-${avatar}`;
 const CIRCLE_PX = 256;
 /** Height of the header photo on the official card (the photo is cropped to fit, keeping the middle). */
-const BANNER_H = 84;
+const BANNER_H = 104;
 const iconKey = (p: Platform) => `icon-${p}`;
 
 /**
@@ -110,7 +110,7 @@ export class PromosScene extends Phaser.Scene {
 
   private section(c: Phaser.GameObjects.Container, y: number, text: string): number {
     c.add(label(this, 20, y, text, { size: 20, bold: true }));
-    return y + 34;
+    return y + 32;
   }
 
   /** The big "Watch the pilot" button. */
