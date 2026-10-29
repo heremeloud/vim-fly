@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
-import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
-import { getPlayerName, setPlayerName, NAME_MAX } from '../leaderboard/playerName';
+import { GAME_WIDTH, SCENES } from '../core/constants';
+import { getPlayerName, setPlayerName, validatePlayerName, NAME_MAX } from '../leaderboard/playerName';
 import { t } from '../i18n';
-import { COLORS, FONT, hex } from './theme';
+import { COLORS, FONT, RADIUS, hex } from './theme';
 import { addSoundToggle } from './soundToggle';
-import { button, label, roundedBox } from './widgets';
+import { addHowToPlay } from './howToPlay';
+import { button, label, roundedBox, scrim } from './widgets';
 
 /** Start a run. The first time, ask for a name and explain the controls before the game begins. */
 export function startOrder(scene: Phaser.Scene): void {
@@ -23,29 +24,20 @@ function openWelcome(scene: Phaser.Scene): void {
     return o;
   };
 
-  add(scene.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.55).setOrigin(0).setDepth(depth));
+  add(scrim(scene, depth));
   // Only the card swallows taps; anywhere else falls through to the page underneath (language, tabs, ...).
   add(scene.add.zone(CARD.x, CARD.y, CARD.w, CARD.h).setOrigin(0).setDepth(depth + 1).setInteractive());
-  add(roundedBox(scene, CARD.x, CARD.y, CARD.w, CARD.h, COLORS.surface, 22).setDepth(depth + 1));
+  add(roundedBox(scene, CARD.x, CARD.y, CARD.w, CARD.h, COLORS.surface, RADIUS.sheet, COLORS.border).setDepth(depth + 1));
   add(label(scene, GAME_WIDTH / 2, CARD.y + 26, t('onboard.title'), { size: 26, bold: true, wrap: CARD.w - 40, align: 'center' }).setOrigin(0.5, 0).setDepth(depth + 2));
   add(label(scene, INPUT.x, CARD.y + 80, t('onboard.nameLabel'), { size: 15, color: COLORS.muted, bold: true }).setDepth(depth + 2));
+  const nameError = add(label(scene, INPUT.x, CARD.y + 158, '', { size: 12, color: COLORS.debuff, wrap: INPUT.w }).setDepth(depth + 2));
 
   // Sound sits right under the name, in the same spot as on the settings card. It starts off, so this is the
   // player's first chance to turn it on.
   addSoundToggle(scene, add, INPUT.x, CARD.y + 176, INPUT.w, depth);
 
   add(label(scene, INPUT.x, CARD.y + 266, t('onboard.howTitle'), { size: 18, bold: true }).setDepth(depth + 2));
-  const steps = [
-    ['👆', t('onboard.tap')],
-    ['🍞', t('onboard.catch')],
-    ['💨', t('onboard.swipe')],
-  ];
-  steps.forEach(([icon, text], i) => {
-    const y = CARD.y + 300 + i * 76;
-    add(roundedBox(scene, INPUT.x, y, INPUT.w, 64, COLORS.background, 14).setDepth(depth + 2));
-    add(scene.add.text(INPUT.x + 28, y + 32, icon, { fontFamily: FONT.family, fontSize: '26px' }).setOrigin(0.5).setDepth(depth + 3));
-    add(label(scene, INPUT.x + 56, y + 32, text, { size: 14, wrap: INPUT.w - 70 }).setOrigin(0, 0.5).setDepth(depth + 3));
-  });
+  addHowToPlay(scene, add, INPUT.x, CARD.y + 300, INPUT.w, depth);
 
   // The name field is a real <input> laid over the canvas, so phones show their keyboard and IME.
   const input = document.createElement('input');
@@ -60,7 +52,7 @@ function openWelcome(scene: Phaser.Scene): void {
     boxSizing: 'border-box',
     padding: '0 14px',
     border: `2px solid ${hex(COLORS.primary)}`,
-    borderRadius: '14px',
+    borderRadius: `${RADIUS.control}px`,
     background: '#fff',
     color: hex(COLORS.text),
     fontFamily: FONT.family,
@@ -100,15 +92,20 @@ function openWelcome(scene: Phaser.Scene): void {
     items.forEach((o) => o.destroy());
   };
   const submit = (): void => {
-    if (!setPlayerName(input.value)) {
+    const checked = validatePlayerName(input.value);
+    if (checked.problem || !setPlayerName(checked.name)) {
       input.style.borderColor = hex(COLORS.debuff);
+      nameError.setText(t(checked.problem === 'blocked' ? 'settings.nameBlocked' : 'settings.nameInvalid'));
       input.focus();
       return;
     }
     close();
     scene.scene.start(SCENES.game);
   };
-  input.addEventListener('input', () => (input.style.borderColor = hex(COLORS.primary)));
+  input.addEventListener('input', () => {
+    input.style.borderColor = hex(COLORS.primary);
+    nameError.setText('');
+  });
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       input.blur();
@@ -120,12 +117,6 @@ function openWelcome(scene: Phaser.Scene): void {
   // A tap outside the card dismisses it; the tap still reaches whatever is underneath.
   scene.input.on('pointerdown', outside);
 
-  // Buttons draw at depth 0, so lift everything they added above the card.
-  const before = scene.children.length;
-  button(scene, GAME_WIDTH / 2, CARD.y + CARD.h - 46, 300, 58, t('onboard.start'), submit);
-  scene.children.list.slice(before).forEach((o) => {
-    (o as Phaser.GameObjects.GameObject & { setDepth: (d: number) => void }).setDepth(depth + 3);
-    items.push(o);
-  });
+  button(scene, GAME_WIDTH / 2, CARD.y + CARD.h - 46, 300, 58, t('onboard.start'), submit, 'primary', 24, depth + 3).forEach(add);
   input.focus();
 }

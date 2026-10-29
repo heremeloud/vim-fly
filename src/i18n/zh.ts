@@ -15,7 +15,7 @@ export const zh: Record<StringKey, string> = {
   'app.searchHint': '搜搜面包, 便当, 咖啡吧...',
 
   'home.orderNow': '马上下单',
-  'home.open': '正在营业哦',
+  'home.open': '正在营业',
   'countdown.soon': '第1集 · 马上就来',
   'countdown.now': '第1集开播啦!',
   'countdown.days': '距离第1集还有 {d}天{h}小时',
@@ -31,7 +31,7 @@ export const zh: Record<StringKey, string> = {
 
 
   'orders.title': '订单',
-  'orders.subtitle': '🌍 世界排行榜',
+  'orders.subtitle': '世界排行榜',
   'orders.tab.mine': '我的订单',
   'orders.tab.top': '全球顾客排行榜',
   'orders.orderNo': '订单 #{n}',
@@ -161,6 +161,10 @@ export const zh: Record<StringKey, string> = {
   'onboard.swipe': '遇到危险? 向左或向右滑动(或按住Shift再按A/D键)冲刺闪避! 每局只能用3次哦。',
   'onboard.start': '开始下单!',
   'settings.title': '设置',
+  'settings.editName': '修改昵称',
+  'settings.saveName': '保存昵称',
+  'settings.nameInvalid': '先输入名字哦!',
+  'settings.nameBlocked': '这个名字不能用哦，换一个试试吧!',
   'settings.close': '关闭',
   'settings.sound': '声音',
   'settings.on': '开启',

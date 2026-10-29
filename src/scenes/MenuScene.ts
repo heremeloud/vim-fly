@@ -5,10 +5,10 @@ import { ITEMS, describeEffect, displayName, priceLabel, type ItemKind } from '.
 import { addItemSprite, itemDisplaySize } from '../items/itemSprite';
 import { runStore } from '../leaderboard/runStore';
 import { ScrollList } from '../ui/ScrollList';
-import { COLORS, hex } from '../ui/theme';
-import { TAB_BAR_HEIGHT, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
+import { COLORS, RADIUS } from '../ui/theme';
+import { CHIP, TAB_BAR_HEIGHT, chipWidth, hitArea, itemTile, label, pageHeader, paintChip, roundedBox, tabBar } from '../ui/widgets';
 
-const HEADER_H = 150;
+const HEADER_H = 156;
 const ROW_H = 84;
 const ROW_GAP = 10;
 const LIST_PAD = 14;
@@ -39,37 +39,32 @@ export class MenuScene extends Phaser.Scene {
     this.buildList();
 
     // Header and tab bar are opaque and drawn above the list, hiding rows scrolled under them.
-    this.add.rectangle(0, 0, GAME_WIDTH, HEADER_H, COLORS.background).setOrigin(0).setDepth(40);
-    label(this, 20, 22, t('menu.title'), { size: 34, bold: true }).setDepth(41);
-    label(this, 20, 66, t('menu.subtitle'), { size: 15, color: COLORS.muted }).setDepth(41);
+    pageHeader(this, HEADER_H, t('menu.title'), t('menu.subtitle'));
     this.buildChips();
     tabBar(this, 'menu');
   }
 
   private buildChips(): void {
-    const w = 130;
-    const gap = 12;
+    const w = chipWidth(CATEGORIES.length);
+    const gap = CHIP.gap;
     CATEGORIES.forEach((c, i) => {
       const x = 20 + i * (w + gap);
       const bg = this.add.graphics().setDepth(41);
-      const text = label(this, x + w / 2, 118, t(c.key), { size: 18, bold: true }).setOrigin(0.5).setDepth(42);
+      const text = label(this, x + w / 2, CHIP.y + CHIP.h / 2, t(c.key), { size: CHIP.size, bold: true, maxWidth: w - 16 }).setOrigin(0.5).setDepth(42);
       this.chips.push({ bg, text });
-      hitArea(this, x, 98, w, 40, () => this.selectKind(c.kind)).setDepth(43);
+      hitArea(this, x, CHIP.y, w, CHIP.h, () => this.selectKind(c.kind)).setDepth(43);
     });
     this.paintChips();
   }
 
   private paintChips(): void {
-    const w = 130;
-    const gap = 12;
+    const w = chipWidth(CATEGORIES.length);
+    const gap = CHIP.gap;
     CATEGORIES.forEach((c, i) => {
       const chip = this.chips[i];
       const on = c.kind === this.kind;
       const x = 20 + i * (w + gap);
-      chip.bg.clear();
-      chip.bg.fillStyle(on ? c.color : COLORS.surface, 1).fillRoundedRect(x, 98, w, 40, 20);
-      chip.bg.lineStyle(2, c.color, 1).strokeRoundedRect(x, 98, w, 40, 20);
-      chip.text.setColor(on ? hex(COLORS.onPrimary) : hex(c.color));
+      paintChip(chip.bg, chip.text, x, CHIP.y, w, CHIP.h, on, c.color, c.kind === 'points' ? COLORS.onPrimary : COLORS.surface);
     });
   }
 
@@ -90,8 +85,8 @@ export class MenuScene extends Phaser.Scene {
       // Long names wrap to two lines, so the description sits below whatever height the name ended up.
       const desc = label(this, 100, y + 10 + name.height + 2, describeEffect(item), { size: 14, color: COLORS.muted, wrap: 240 });
       const row = [
-        roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, 14, COLORS.border),
-        this.add.rectangle(62, y + ROW_H / 2, 60, 60, COLORS.background).setStrokeStyle(3, CATEGORIES.find((c) => c.kind === item.kind)!.color),
+        roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, RADIUS.card, COLORS.border),
+        itemTile(this, 62, y + ROW_H / 2, 60, CATEGORIES.find((c) => c.kind === item.kind)!.color),
         addItemSprite(this, 62, y + ROW_H / 2, item, Math.min(itemDisplaySize(item.id, 48), 60)),
         name,
         desc,

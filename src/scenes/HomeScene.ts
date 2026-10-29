@@ -8,8 +8,9 @@ import youtubeIcon from '../assets/icons/youtube.svg?no-inline';
 import { APP, SERVICES } from '../ui/brand';
 import { startOrder } from '../ui/onboarding';
 import { openSettings } from '../ui/settings';
-import { COLORS } from '../ui/theme';
-import { TAB_BAR_HEIGHT, button, hitArea, label, languageButton, roundedBox, tabBar } from '../ui/widgets';
+import { drawIcon } from '../ui/icons';
+import { COLORS, RADIUS } from '../ui/theme';
+import { TAB_BAR_HEIGHT, button, hitArea, itemTile, label, languageButton, roundedBox, tabBar } from '../ui/widgets';
 
 const POPULAR_COUNT = 3;
 
@@ -38,33 +39,42 @@ export class HomeScene extends Phaser.Scene {
     tabBar(this, 'store');
   }
 
-  /** App header and key-art banner: deliver-to line (opens settings), language button, search bar, app name. Banner art is a placeholder. */
+  /** App header and key-art banner: deliver-to line (opens settings), language button, search bar, app name. */
   private drawBanner(): void {
     this.add.rectangle(0, 0, GAME_WIDTH, 230, COLORS.primary).setOrigin(0);
-    this.add.rectangle(0, 200, GAME_WIDTH, 30, COLORS.primaryDark).setOrigin(0).setAlpha(0.25);
     const deliverTo = label(this, 20, 12, t('app.deliverTo'), { size: 15, color: COLORS.onPrimary, bold: true });
-    const gear = label(this, deliverTo.x + deliverTo.width + 8, 6, '⚙', { size: 24, color: COLORS.onPrimary, bold: true });
-    label(this, gear.x + gear.width + 4, 12, '▾', { size: 15, color: COLORS.onPrimary, bold: true });
-    hitArea(this, 10, 6, 150, 32, () => openSettings(this));
+    const gearX = deliverTo.x + deliverTo.width + 20;
+    drawIcon(this, 'gear', gearX, 23, COLORS.onPrimary, { width: 1.8 }).setScale(0.85);
+    drawIcon(this, 'chevronDown', gearX + 18, 23, COLORS.onPrimary, { width: 1.8 }).setScale(0.8);
+    hitArea(this, 10, 6, gearX + 34, 34, () => openSettings(this));
     languageButton(this, GAME_WIDTH - 20, 12);
 
-    roundedBox(this, 20, 42, GAME_WIDTH - 40, 44, COLORS.surface, 22);
-    label(this, 40, 52, '🔍', { size: 18 });
+    roundedBox(this, 20, 42, GAME_WIDTH - 40, 44, COLORS.surface, RADIUS.control);
+    drawIcon(this, 'search', 50, 64, COLORS.muted);
     label(this, 72, 53, t('app.searchHint'), { size: 15, color: COLORS.muted });
     hitArea(this, 20, 42, GAME_WIDTH - 40, 44, () => this.scene.start(SCENES.menu));
 
-    label(this, GAME_WIDTH / 2, 124, `🐶 ${APP.name} 🐝`, { size: 42, color: COLORS.onPrimary, bold: true }).setOrigin(0.5);
-    label(this, GAME_WIDTH / 2, 162, t('app.tagline'), { size: 16, color: COLORS.onPrimary }).setOrigin(0.5);
+    // The lockup: name and slogan left-aligned on the left, the rider on the right resting on the tiles' top edge.
+    label(this, 24, 98, APP.name, { size: 40, color: COLORS.onPrimary, bold: true, display: true, maxWidth: 300 });
+    label(this, 24, 148, t('app.tagline'), { size: 15, color: COLORS.onPrimary, maxWidth: 300 });
+    const BIKE = 96; // 1.5x the 64 px art, drawn with nearest-neighbour filtering so the pixels stay crisp
+    this.textures.get('vimmy-header-delivery-bike').setFilter(Phaser.Textures.FilterMode.NEAREST);
+    const bx = GAME_WIDTH - 24 - BIKE;
+    const g = this.add.graphics();
+    g.lineStyle(3, COLORS.primaryDark, 0.55);
+    [[-6, 44], [-14, 56], [-4, 68]].forEach(([dx, dy], i) => g.lineBetween(bx + dx - 26 + i * 4, 94 + dy, bx + dx - 4, 94 + dy)); // speed lines
+    this.add.image(bx, 190, 'vimmy-header-delivery-bike').setOrigin(0, 1).setDisplaySize(BIKE, BIKE);
   }
 
   /** Super-app style grid of shortcuts under the banner (Food, Mart, Express, Ride). */
   private drawServices(): void {
-    roundedBox(this, 20, 190, GAME_WIDTH - 40, 86, COLORS.surface, 16, COLORS.border);
+    roundedBox(this, 20, 190, GAME_WIDTH - 40, 86, COLORS.surface, RADIUS.card, COLORS.border);
     const w = (GAME_WIDTH - 40) / SERVICES.length;
     SERVICES.forEach((svc, i) => {
       const cx = 20 + i * w + w / 2;
-      label(this, cx, 220, svc.icon, { size: 28 }).setOrigin(0.5);
-      label(this, cx, 252, t(svc.labelKey), { size: 14, bold: true }).setOrigin(0.5);
+      roundedBox(this, cx - 22, 198, 44, 44, COLORS[svc.tint], RADIUS.control);
+      drawIcon(this, svc.icon, cx, 220, COLORS.onPrimary);
+      label(this, cx, 258, t(svc.labelKey), { size: 14, bold: true, maxWidth: w - 8 }).setOrigin(0.5);
       hitArea(this, 20 + i * w, 190, w, 86, () => {
         switch (svc.target) {
           case 'menu':
@@ -92,7 +102,7 @@ export class HomeScene extends Phaser.Scene {
 
   /** Under the tiles: the countdown once an air date is set, otherwise a link that opens the pilot on YouTube. */
   private drawCountdown(): void {
-    roundedBox(this, 20, 294, GAME_WIDTH - 40, 48, 0xffecb3, 24);
+    roundedBox(this, 20, 294, GAME_WIDTH - 40, 48, COLORS.primarySoft, RADIUS.card);
     const hasAirDate = SHOW.airDate !== null;
     const text = hasAirDate ? countdownText() : t('home.watchPilot');
     const txt = label(this, GAME_WIDTH / 2, 318, text, { size: 18, bold: true, color: COLORS.accent }).setOrigin(0.5);
@@ -108,15 +118,15 @@ export class HomeScene extends Phaser.Scene {
   }
 
   private drawPopular(): void {
-    label(this, 20, 364, APP.shopName, { size: 22, bold: true });
-    label(this, GAME_WIDTH - 20, 370, `★ 4.9  ·  ${t('home.open')}`, { size: 14, color: COLORS.muted }).setOrigin(1, 0);
+    label(this, 20, 364, APP.shopName, { size: 22, bold: true, maxWidth: 300 });
+    label(this, GAME_WIDTH - 20, 370, `●  ${t('home.open')}`, { size: 14, color: COLORS.buff, bold: true }).setOrigin(1, 0);
     const cardW = 138;
     const gap = 13;
     pickPopular().forEach((item, i) => {
       const x = 20 + i * (cardW + gap);
       const y = 402;
-      roundedBox(this, x, y, cardW, 160, COLORS.surface, 14, COLORS.border);
-      this.add.circle(x + cardW / 2, y + 44, 36, COLORS.background).setStrokeStyle(3, COLORS.points);
+      roundedBox(this, x, y, cardW, 160, COLORS.surface, RADIUS.card, COLORS.border);
+      itemTile(this, x + cardW / 2, y + 44, 64, COLORS.points);
       addItemSprite(this, x + cardW / 2, y + 44, item, itemDisplaySize(item.id, 48));
       label(this, x + cardW / 2, y + 92, displayName(item), { size: 14, bold: true, wrap: cardW - 16, align: 'center' }).setOrigin(0.5, 0);
       label(this, x + cardW / 2, y + 144, priceLabel(item), { size: 18, bold: true, color: COLORS.accent }).setOrigin(0.5);

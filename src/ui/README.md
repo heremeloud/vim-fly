@@ -7,6 +7,8 @@ Shared building blocks for the ordering-app menus, so every screen looks like on
 - `theme.ts`: the colors and font. This is the one place to change the look. The current honey-yellow and brown palette matches the bee costume and is a **placeholder** until the show's own colors and logo are decided.
 - `brand.ts`: the in-game app's name, tagline, header text and the super-app service tiles (`VIMMY FLY`, Food/Mart/Express/Ride; text that changes with language is in `src/i18n`).
 - `videoPlayer.ts`: `embedVideo()` builds a player into a scene at a spot in the layout (used on the receipt); `openVideo()` plays a YouTube video in a window over the game (close button, tap outside or Escape closes it, with an "Open on YouTube" fallback link). It shows "Loading the pilot…" until the player reports it is ready, using YouTube's player messages.
+- `icons.ts`: `drawIcon` line icons (tabs, gear, globe, speaker, service tiles...).
+- `howToPlay.ts`, `soundToggle.ts`: pieces shared by the welcome card and settings.
 - `ScrollList.ts`: a drag/wheel scrolling list used by the Menu and Orders screens.
 - `widgets.ts`: `label` (text; pass `maxWidth` for any single-line text whose length depends on the language or the player, so it shrinks and ends in "…" instead of overflowing), `roundedBox`, `hitArea` (invisible tap target), `button` (pill button, `primary` filled or `secondary` outlined) `tabBar` (bottom navigation) and `languageButton` (the language picker, text only, no flags).
 
@@ -36,6 +38,10 @@ Store, Menu, Orders, Promos. The Store tab always goes to the home page, even wh
 2. Build it from these widgets and call `tabBar(this, '<tab>')`.
 3. Add it to `TAB_TARGETS` if it is a tab.
 
-## Not done yet
+## Remaining visual options
 
-A bundled Thai/Japanese/Chinese font (the menus use the device fonts for now, see `src/assets/README.md`), real icons in place of the emoji tab icons, and real item art in place of colored squares.
+Thai is bundled and all items have pixel art. Japanese and Chinese currently use system-font stacks to avoid shipping large CJK font files. Menu icons are line icons drawn in code (`icons.ts`), not emoji, so they look the same on every device.
+
+## Look: the show's logo
+
+Shapes follow the Bake Love Feeling lettering: plump, bread-like, chocolate crust outline, butter fill, cream dough blobs, gingham pink. Buttons are puffy with a shine, page headers end in a gingham hem with a dough blob, and the active tab sits on a butter bun. Corner sizes come from `RADIUS` in `theme.ts`; dialogs use `scrim` and `RADIUS.sheet`.

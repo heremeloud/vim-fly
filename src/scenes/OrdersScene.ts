@@ -3,22 +3,22 @@ import { GAME_WIDTH, GAME_HEIGHT, SCENES } from '../core/constants';
 import { zoneAt, zoneLabel, ZONES } from '../core/zones';
 import { localeInfo, t } from '../i18n';
 import { fetchTopScores, type ScoreEntry } from '../leaderboard/client';
-import { getPlayerName } from '../leaderboard/playerName';
 import { runStore, type RunRecord } from '../leaderboard/runStore';
 import { addItemSprite } from '../items/itemSprite';
 import { startOrder } from '../ui/onboarding';
 import { ScrollList } from '../ui/ScrollList';
-import { COLORS, hex } from '../ui/theme';
-import { TAB_BAR_HEIGHT, button, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
+import { drawIcon } from '../ui/icons';
+import { COLORS, RADIUS } from '../ui/theme';
+import { CHIP, TAB_BAR_HEIGHT, button, chipWidth, hitArea, label, pageHeader, paintChip, roundedBox, tabBar } from '../ui/widgets';
 
-const HEADER_H = 150;
+const HEADER_H = 156;
 const ROW_H = 58;
 const ROW_GAP = 10;
 const LIST_PAD = 14;
 
 /** A tilted crown perched on the rank badge of the world champion (rank 1). */
 function addCrown(scene: Phaser.Scene, c: Phaser.GameObjects.Container, x: number, y: number): void {
-  c.add(scene.add.text(x - 6, y - 19, '👑', { fontSize: '27px', padding: { top: 4, bottom: 4 } }).setOrigin(0.5).setRotation(-0.3));
+  c.add(drawIcon(scene, 'crown', x - 2, y - 20, COLORS.onPrimary, { width: 1.8, fill: COLORS.primary }).setScale(0.8).setRotation(-0.25));
 }
 /** Foods shown on the history rows in turn (by order number), instead of a plain number badge. */
 const ORDER_FOODS = ['pandanCustardBread', 'coffee', 'shiopan', 'pasta', 'sandwich', 'tomYum', 'cheeseButterBread', 'shrimpFriedRiceBox', 'cilantroBread', 'wine', 'fishSauceBread'];
@@ -28,9 +28,8 @@ const SCORE_LEFT = 360;
 type View = 'mine' | 'top';
 
 /**
- * The Orders tab. "My orders" is the history of your runs, newest first; "Top customers" ranks
- * your best runs. Both read from `runStore` (this device for now). When the worldwide leaderboard
- * exists, a server-backed store plugs in here and this screen becomes the ladder.
+ * The Orders tab. "My orders" is the device's saved history; "World's Top Customers" loads the
+ * Supabase ladder and falls back to this device's best runs when the network is unavailable.
  */
 export class OrdersScene extends Phaser.Scene {
   private view: View = 'top';
@@ -49,9 +48,7 @@ export class OrdersScene extends Phaser.Scene {
     this.list = new ScrollList(this, HEADER_H, GAME_HEIGHT - TAB_BAR_HEIGHT, true);
     this.buildList();
 
-    this.add.rectangle(0, 0, GAME_WIDTH, HEADER_H, COLORS.background).setOrigin(0).setDepth(40);
-    label(this, 20, 22, t('tab.orders'), { size: 34, bold: true }).setDepth(41);
-    label(this, 20, 66, t('orders.subtitle'), { size: 15, color: COLORS.muted, maxWidth: GAME_WIDTH - 40 }).setDepth(41);
+    pageHeader(this, HEADER_H, t('tab.orders'), t('orders.subtitle'), 'wow');
     this.buildChips();
     if (runStore.best() === null) {
       button(this, GAME_WIDTH / 2, 380, 300, 60, t('home.orderNow'), () => startOrder(this));
@@ -67,29 +64,26 @@ export class OrdersScene extends Phaser.Scene {
   }
 
   private buildChips(): void {
-    const w = 200;
-    const gap = 12;
+    const w = chipWidth(this.chipDefs().length);
+    const gap = CHIP.gap;
     this.chipDefs().forEach((c, i) => {
       const x = 20 + i * (w + gap);
       const bg = this.add.graphics().setDepth(41);
-      const text = label(this, x + w / 2, 118, c.text, { size: 17, bold: true, maxWidth: w - 16 }).setOrigin(0.5).setDepth(42);
+      const text = label(this, x + w / 2, CHIP.y + CHIP.h / 2, c.text, { size: CHIP.size, bold: true, maxWidth: w - 16 }).setOrigin(0.5).setDepth(42);
       this.chips.push({ bg, text });
-      hitArea(this, x, 98, w, 40, () => this.select(c.view)).setDepth(43);
+      hitArea(this, x, CHIP.y, w, CHIP.h, () => this.select(c.view)).setDepth(43);
     });
     this.paintChips();
   }
 
   private paintChips(): void {
-    const w = 200;
-    const gap = 12;
+    const w = chipWidth(this.chipDefs().length);
+    const gap = CHIP.gap;
     this.chipDefs().forEach((c, i) => {
       const on = c.view === this.view;
       const x = 20 + i * (w + gap);
       const chip = this.chips[i];
-      chip.bg.clear();
-      chip.bg.fillStyle(on ? COLORS.primary : COLORS.surface, 1).fillRoundedRect(x, 98, w, 40, 20);
-      chip.bg.lineStyle(2, COLORS.primary, 1).strokeRoundedRect(x, 98, w, 40, 20);
-      chip.text.setColor(on ? hex(COLORS.onPrimary) : hex(COLORS.accent));
+      paintChip(chip.bg, chip.text, x, CHIP.y, w, CHIP.h, on, COLORS.primary, COLORS.onPrimary, COLORS.accent);
     });
   }
 
@@ -126,10 +120,9 @@ export class OrdersScene extends Phaser.Scene {
       return;
     }
     let y = LIST_PAD;
-    const me = getPlayerName();
     rows.forEach((row, i) => {
       const rank = i + 1;
-      c.add(roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, 14, me !== null && row.name === me ? COLORS.primary : COLORS.border));
+      c.add(roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, RADIUS.card, COLORS.border));
       c.add(this.add.circle(52, y + ROW_H / 2, 18, rank === 1 ? COLORS.primary : COLORS.background));
       c.add(label(this, 52, y + ROW_H / 2, `${rank}`, { size: 17, bold: true }).setOrigin(0.5));
       if (rank === 1) addCrown(this, c, 52, y + ROW_H / 2);
@@ -169,7 +162,7 @@ export class OrdersScene extends Phaser.Scene {
   }
 
   private addRow(c: Phaser.GameObjects.Container, y: number, run: RunRecord, rank: number | null, isBest: boolean): void {
-    c.add(roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, 14, isBest ? COLORS.primary : COLORS.border));
+    c.add(roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, RADIUS.card, isBest ? COLORS.primary : COLORS.border));
 
     // Left badge: the rank on the ladder, or a food picture in the history (the order number is in the text).
     c.add(this.add.circle(52, y + ROW_H / 2, 20, rank === 1 ? COLORS.primary : COLORS.background));

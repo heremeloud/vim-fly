@@ -15,7 +15,7 @@ export const en = {
   'app.searchHint': 'Search bread, lunch box, coffee...',
 
   'home.orderNow': 'Order Now',
-  'home.open': 'Open Now',
+  'home.open': 'Open',
   'countdown.soon': 'Episode 1 · Coming Soon',
   'countdown.now': 'Now Streaming!',
   'countdown.days': 'Episode 1 airs in {d}d {h}h',
@@ -31,7 +31,7 @@ export const en = {
 
 
   'orders.title': 'Orders',
-  'orders.subtitle': '🌍 World Leaderboard',
+  'orders.subtitle': 'World Leaderboard',
   'orders.tab.mine': 'My Orders',
   'orders.tab.top': 'World’s Top Customers',
   'orders.orderNo': 'Order #{n}',
@@ -161,6 +161,10 @@ export const en = {
   'onboard.swipe': 'In trouble? Swipe left or right (or hold Shift and press A/D) to dash & dodge! You get 3 per run.',
   'onboard.start': 'Start My Order',
   'settings.title': 'Settings',
+  'settings.editName': 'Change name',
+  'settings.saveName': 'Save',
+  'settings.nameInvalid': 'Enter your name first!',
+  'settings.nameBlocked': "You can't use that name. Try another one!",
   'settings.close': 'Close',
   'settings.sound': 'Sound',
   'settings.on': 'On',

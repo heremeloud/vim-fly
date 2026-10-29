@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import '@fontsource/noto-sans-thai/thai-400.css';
 import '@fontsource/noto-sans-thai/thai-700.css';
 import '@fontsource/sacramento/latin-400.css';
+import '@fontsource/sniglet/latin-400.css';
 import { initSfx } from './audio/sfx';
 import { GAME_WIDTH, GAME_HEIGHT } from './core/constants';
 import { RENDER_SCALE, installTextResolution } from './core/render';
@@ -12,6 +13,7 @@ import { OrdersScene } from './scenes/OrdersScene';
 import { PromosScene } from './scenes/PromosScene';
 import { GameScene } from './scenes/GameScene';
 import { ReceiptScene } from './scenes/ReceiptScene';
+import { SfxScene } from './scenes/SfxScene';
 
 installTextResolution();
 
@@ -35,7 +37,7 @@ function startGame(): void {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [BootScene, HomeScene, MenuScene, OrdersScene, PromosScene, GameScene, ReceiptScene],
+    scene: [BootScene, HomeScene, MenuScene, OrdersScene, PromosScene, SfxScene, GameScene, ReceiptScene],
   });
   initSfx(game);
   // Tapping into the YouTube player (or coming back from a page it opened) takes keyboard focus away from the
@@ -63,6 +65,7 @@ const THAI_FONTS = ['400 16px "Noto Sans Thai"', '700 16px "Noto Sans Thai"'];
 const fontsReady = Promise.all([
   ...THAI_FONTS.map((f) => document.fonts.load(f, 'ก')),
   document.fonts.load('400 16px "Sacramento"', 'a'), // receipt tagline
+  document.fonts.load('400 16px "Sniglet"', 'a'), // page titles and the app name
 ]);
 const timeout = new Promise((resolve) => setTimeout(resolve, 3000));
 Promise.race([fontsReady, timeout]).then(startGame, startGame);

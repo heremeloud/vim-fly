@@ -30,7 +30,7 @@ export const th: Record<StringKey, string> = {
 
 
   'orders.title': 'ออเดอร์',
-  'orders.subtitle': '🌍 อันดับทั่วโลก',
+  'orders.subtitle': 'การจัดอันดับ',
   'orders.tab.mine': 'ออเดอร์',
   'orders.tab.top': 'Top Spender',
   'orders.orderNo': 'ออเดอร์ #{n}',
@@ -160,6 +160,10 @@ export const th: Record<StringKey, string> = {
   'onboard.swipe': 'แย่แล้ว! ปัดหน้าจอไปทางซ้ายหรือขวา (หรือกด Shift ค้างไว้แล้วกด A/D) เพื่อพุ่งหลบอย่างรวดเร็ว! ใช้ได้ 3 ครั้งต่อเกม',
   'onboard.start': 'เริ่มสั่งเลย!',
   'settings.title': 'ตั้งค่า',
+  'settings.editName': 'เปลี่ยนชื่อ',
+  'settings.saveName': 'บันทึกชื่อ',
+  'settings.nameInvalid': 'กรุณากรอกชื่อก่อนนะ',
+  'settings.nameBlocked': 'ใช้ชื่อนี้ไม่ได้นะ ลองชื่ออื่นดูสิ',
   'settings.close': 'ปิด',
   'settings.sound': 'เสียง',
   'settings.on': 'เปิด',

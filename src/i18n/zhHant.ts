@@ -15,7 +15,7 @@ export const zhHant: Record<StringKey, string> = {
   'app.searchHint': '找找麵包, 便當或咖啡吧...',
 
   'home.orderNow': '馬上點餐',
-  'home.open': '營業中喔',
+  'home.open': '營業中',
   'countdown.soon': '第1集 · 馬上就來',
   'countdown.now': '第1集開播啦!',
   'countdown.days': '距離第1集還有 {d}天{h}小時',
@@ -30,7 +30,7 @@ export const zhHant: Record<StringKey, string> = {
   'price.debuff': '減益',
 
   'orders.title': '訂單',
-  'orders.subtitle': '🌍 世界排行榜',
+  'orders.subtitle': '世界排行榜',
   'orders.tab.mine': '我的訂單',
   'orders.tab.top': '全球顧客排行榜',
   'orders.orderNo': '訂單 #{n}',
@@ -160,6 +160,10 @@ export const zhHant: Record<StringKey, string> = {
   'onboard.swipe': '遇到危險? 向左或向右滑動(或按住Shift再按A/D鍵)衝刺閃避! 每局只能用3次喔。',
   'onboard.start': '開始點餐!',
   'settings.title': '設定',
+  'settings.editName': '修改暱稱',
+  'settings.saveName': '儲存暱稱',
+  'settings.nameInvalid': '先輸入名字喔!',
+  'settings.nameBlocked': '這個名字不能用喔，換一個試試吧!',
   'settings.close': '關閉',
   'settings.sound': '聲音',
   'settings.on': '開啟',

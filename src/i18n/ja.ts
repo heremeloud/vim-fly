@@ -30,7 +30,7 @@ export const ja: Record<StringKey, string> = {
 
 
   'orders.title': '注文',
-  'orders.subtitle': '🌍 世界ランキング',
+  'orders.subtitle': '世界ランキング',
   'orders.tab.mine': 'マイ注文',
   'orders.tab.top': 'お得意さまランキング',
   'orders.orderNo': '注文 #{n}',
@@ -160,6 +160,10 @@ export const ja: Record<StringKey, string> = {
   'onboard.swipe': 'ピンチのときは左右にスワイプ(またはShiftを押しながらA/Dキーを押す)でダッシュ&よけよう! 1プレイにつき3回まで使えるよ。',
   'onboard.start': '注文スタート!',
   'settings.title': '設定',
+  'settings.editName': '名前を変える',
+  'settings.saveName': '名前を保存',
+  'settings.nameInvalid': '名前を入力してね',
+  'settings.nameBlocked': 'この名前は使えないよ。別の名前にしてね',
   'settings.close': '閉じる',
   'settings.sound': '効果音',
   'settings.on': 'オン',

@@ -9,10 +9,10 @@ import xIcon from '../assets/icons/x.svg?no-inline';
 import { LEADS, OFFICIAL, PLATFORMS, SHOW, VIMMY, copyText, openLink, profileUrl, type Account, type Platform } from '../promo/config';
 import { watchPilot } from '../promo/pilot';
 import { ScrollList } from '../ui/ScrollList';
-import { COLORS, hex as hexOf } from '../ui/theme';
-import { TAB_BAR_HEIGHT, hitArea, label, roundedBox, tabBar } from '../ui/widgets';
+import { COLORS, RADIUS, hex as hexOf } from '../ui/theme';
+import { TAB_BAR_HEIGHT, hitArea, label, pageHeader, roundedBox, tabBar } from '../ui/widgets';
 
-const HEADER_H = 96;
+const HEADER_H = 98; // short: no chips here, but the gingham hem (HEM_Y) is at the same height as on the other tabs
 const PAD = 4;
 const CARD_W = GAME_WIDTH - 40;
 const GAP = 12;
@@ -87,20 +87,17 @@ export class PromosScene extends Phaser.Scene {
     if (import.meta.env.DEV) console.info(`[promos] content ${Math.round(y + PAD)} of ${GAME_HEIGHT - TAB_BAR_HEIGHT - HEADER_H}`);
 
     // Opaque header (and interactive, so taps don't reach rows scrolled underneath).
-    this.add.rectangle(0, 0, GAME_WIDTH, HEADER_H, COLORS.background).setOrigin(0).setDepth(40).setInteractive();
-    label(this, 20, 22, SHOW.title, { size: 34, bold: true }).setDepth(41);
-    this.hashtagLine();
+    const tag = SHOW.hashtag.replace(/^#/, '');
+    this.hashtagLine(pageHeader(this, HEADER_H, SHOW.title, tag ? `#${tag}` : undefined, 'love'));
     tabBar(this, 'promos');
   }
 
-  /** The show's hashtag under the title, like the subtitle on the other tabs. Tap it to copy. */
-  private hashtagLine(): void {
-    const tag = SHOW.hashtag.replace(/^#/, '');
-    if (!tag) return;
-    const text = `#${tag}`;
-    const line = label(this, 20, 66, text, { size: 15, color: COLORS.muted }).setDepth(41);
+  /** The show's hashtag is the subtitle under the title, like on the other tabs. Tap it to copy. */
+  private hashtagLine(line: Phaser.GameObjects.Text | null): void {
+    if (!line) return;
+    const text = line.text;
     let timer: Phaser.Time.TimerEvent | undefined;
-    hitArea(this, 20, 60, 260, 28, () => {
+    hitArea(this, 20, 60, 260, 30, () => {
       void copyText(text).then((ok) => {
         line.setText(ok ? t('promos.copied') : text).setColor(hexOf(ok ? COLORS.accent : COLORS.muted));
         timer?.remove();
@@ -117,8 +114,8 @@ export class PromosScene extends Phaser.Scene {
   /** The big "Watch the pilot" button. */
   private pilotCard(c: Phaser.GameObjects.Container, y: number): number {
     const h = 60;
-    c.add(roundedBox(this, 20, y + 4, CARD_W, h, COLORS.primaryDark, 18));
-    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.primary, 18));
+    c.add(roundedBox(this, 20, y + 4, CARD_W, h, COLORS.primaryDark, RADIUS.card));
+    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.primary, RADIUS.card));
     if (this.textures.exists(iconKey('youtube'))) c.add(this.add.image(44 + 14, y + 10 + 14, iconKey('youtube')).setDisplaySize(28, 28));
     c.add(label(this, 44 + 40, y + 8, t('promos.pilot.title'), { size: 22, bold: true, color: COLORS.onPrimary }));
     c.add(label(this, 44 + 40, y + 36, t('promos.pilot.sub'), { size: 13, color: COLORS.onPrimary }));
@@ -138,7 +135,7 @@ export class PromosScene extends Phaser.Scene {
     const textH = name.height + (role ? role.height : 0);
     const h = Math.max(96, 12 + textH + 10 + BUTTON + 12);
 
-    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.surface, 16, COLORS.border));
+    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.surface, RADIUS.card, COLORS.border));
     c.add(name);
     if (role) c.add(role);
     this.avatar(c, 20 + 16 + 30, y + h / 2, 30, account.avatar);
@@ -157,7 +154,7 @@ export class PromosScene extends Phaser.Scene {
     const name = label(this, textX, y + bannerH + 6, account.name, { size: 20, bold: true, wrap: room });
     const role = account.roleKey ? label(this, textX, y + bannerH + 6 + name.height, t(account.roleKey), { size: 14, color: COLORS.muted, wrap: room }) : null;
 
-    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.surface, 16, COLORS.border));
+    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.surface, RADIUS.card, COLORS.border));
     c.add(this.add.image(21, y + 1, bannerKey).setOrigin(0).setDisplaySize(CARD_W - 2, bannerH - 1));
     c.add(this.add.circle(x + 36, y + bannerH, 36, COLORS.surface)); // a ring in the card colour so the avatar sits cleanly on the photo
     this.avatar(c, x + 36, y + bannerH, 32, account.avatar);
@@ -216,7 +213,7 @@ export class PromosScene extends Phaser.Scene {
     LEADS.forEach((lead, i) => {
       const x = 20 + i * (HALF_W + GAP);
       const cx = x + HALF_W / 2;
-      c.add(roundedBox(this, x, y, HALF_W, h, COLORS.surface, 16, COLORS.border));
+      c.add(roundedBox(this, x, y, HALF_W, h, COLORS.surface, RADIUS.card, COLORS.border));
       this.avatar(c, cx, y + 52, 46, lead.avatar);
       const name = label(this, cx, y + 108, twoLines(lead.name), { size: 21, bold: true, wrap: room, align: 'center' }).setOrigin(0.5, 0);
       c.add(name);
@@ -234,7 +231,7 @@ export class PromosScene extends Phaser.Scene {
    */
   private compactCard(c: Phaser.GameObjects.Container, y: number, account: Account): number {
     const h = 72;
-    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.surface, 14, COLORS.border));
+    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.surface, RADIUS.card, COLORS.border));
     this.avatar(c, 20 + 14 + 26, y + h / 2, 26, account.avatar);
 
     const x = 20 + 14 + 52 + 14;
@@ -313,7 +310,7 @@ export class PromosScene extends Phaser.Scene {
       probe.destroy();
       const x = align === 'center' ? anchor - w / 2 : align === 'right' ? anchor - w : anchor;
       const top = y + (BUTTON - 28) / 2;
-      c.add(roundedBox(this, x, top, w, 28, COLORS.background, 14, COLORS.border));
+      c.add(roundedBox(this, x, top, w, 28, COLORS.background, RADIUS.card, COLORS.border));
       c.add(label(this, x + w / 2, top + 14, text, { size: 13, color: COLORS.muted }).setOrigin(0.5));
       return;
     }
