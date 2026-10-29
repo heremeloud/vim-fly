@@ -28,21 +28,22 @@ function openWelcome(scene: Phaser.Scene): void {
   add(label(scene, GAME_WIDTH / 2, CARD.y + 26, t('onboard.title'), { size: 26, bold: true, wrap: CARD.w - 40, align: 'center' }).setOrigin(0.5, 0).setDepth(depth + 2));
   add(label(scene, INPUT.x, CARD.y + 80, t('onboard.nameLabel'), { size: 15, color: COLORS.muted, bold: true }).setDepth(depth + 2));
 
-  add(label(scene, INPUT.x, CARD.y + 184, t('onboard.howTitle'), { size: 18, bold: true }).setDepth(depth + 2));
+  // Sound sits right under the name, in the same spot as on the settings card. It starts off, so this is the
+  // player's first chance to turn it on.
+  addSoundToggle(scene, add, INPUT.x, CARD.y + 176, INPUT.w, depth);
+
+  add(label(scene, INPUT.x, CARD.y + 266, t('onboard.howTitle'), { size: 18, bold: true }).setDepth(depth + 2));
   const steps = [
     ['👆', t('onboard.tap')],
     ['🍞', t('onboard.catch')],
     ['💨', t('onboard.swipe')],
   ];
   steps.forEach(([icon, text], i) => {
-    const y = CARD.y + 226 + i * 76;
+    const y = CARD.y + 300 + i * 76;
     add(roundedBox(scene, INPUT.x, y, INPUT.w, 64, COLORS.background, 14).setDepth(depth + 2));
     add(scene.add.text(INPUT.x + 28, y + 32, icon, { fontFamily: FONT.family, fontSize: '26px' }).setOrigin(0.5).setDepth(depth + 3));
     add(label(scene, INPUT.x + 56, y + 32, text, { size: 14, wrap: INPUT.w - 70 }).setOrigin(0, 0.5).setDepth(depth + 3));
   });
-
-  // Sound starts off; this is the player's first chance to turn it on.
-  addSoundToggle(scene, add, INPUT.x, CARD.y + 452, INPUT.w, depth);
 
   // The name field is a real <input> laid over the canvas, so phones show their keyboard and IME.
   const input = document.createElement('input');
