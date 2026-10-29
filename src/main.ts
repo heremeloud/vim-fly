@@ -43,8 +43,11 @@ function startGame(): void {
   const resume = (): void => {
     game.events.emit(Phaser.Core.Events.FOCUS);
   };
+  // The window's blur event fires before focus lands in the iframe, so check on the next tick.
   game.events.on(Phaser.Core.Events.BLUR, () => {
-    if (document.activeElement instanceof HTMLIFrameElement) resume();
+    setTimeout(() => {
+      if (document.activeElement instanceof HTMLIFrameElement && document.hasFocus()) resume();
+    }, 0);
   });
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) resume();
