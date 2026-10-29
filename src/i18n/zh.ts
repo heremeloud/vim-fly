@@ -145,7 +145,7 @@ export const zh: Record<StringKey, string> = {
   'promos.vimmy.role': 'Vimmy好爱好爱Mami和Mumu哦!!!',
   'promos.soon': '马上就来',
   'hud.shy': '害羞',
-  'effect.shy': '{s} 秒内拍翅笨手笨脚，每次升力都随机',
+  'effect.shy': '持续 {s} 秒, 每次拍翅膀上升的高度都不一样',
   'hud.slow': '减速',
   'effect.slow': '{s} 秒内飞行速度降低 {p}%',
   'effect.stunPenalty': '无法移动 {s} 秒并扣除 {n} 分',

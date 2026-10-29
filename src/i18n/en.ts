@@ -145,7 +145,7 @@ export const en = {
   'promos.vimmy.role': 'Vimmy loves Mami and Mumu soooo much!!!',
   'promos.soon': 'Coming soon!',
   'hud.shy': 'SHY',
-  'effect.shy': 'Flaps fumble for {s}s: each one lifts a random amount',
+  'effect.shy': 'Clumsy flapping for {s}s! Each flap gives you a random boost',
   'hud.slow': 'SLOW',
   'effect.slow': 'Flying {p}% slower for {s}s',
   'effect.stunPenalty': "Can't move for {s}s and lose {n} points",

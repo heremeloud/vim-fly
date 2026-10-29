@@ -154,7 +154,7 @@ export const ja: Record<StringKey, string> = {
   'promos.vimmy.role': 'Vimmyは、MamiとMumuのことがだーいすきなの!',
   'promos.soon': 'もうすぐだよ',
   'hud.shy': 'はずかしい',
-  'effect.shy': '{s}秒間、はばたきがぎこちなくなり、毎回ランダムな高さになる',
+  'effect.shy': '{s}秒間、羽ばたくたびに上昇する高さがランダムになる',
   'hud.slow': 'スロー',
   'effect.slow': '{s}秒間、飛ぶ速度が{p}%ダウン',
   'effect.stunPenalty': '{s}秒間動けず、{n}ポイントダウン',
