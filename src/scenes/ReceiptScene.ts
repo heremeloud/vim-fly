@@ -10,7 +10,7 @@ import { runStore } from '../leaderboard/runStore';
 import { embedPilot } from '../promo/pilot';
 import { ScrollList } from '../ui/ScrollList';
 import { COLORS } from '../ui/theme';
-import { button, fitWidth, label } from '../ui/widgets';
+import { button, fitWidth, iconButton, label } from '../ui/widgets';
 
 // The receipt has three zones, so it can never overlap itself however many items there are:
 //   fixed header  (title, height, location)      y 0 .. LIST_TOP
@@ -141,11 +141,11 @@ export class ReceiptScene extends Phaser.Scene {
     if (isBest) {
       label(this, GAME_WIDTH / 2, FOOTER_TOP + 14, `★ ${t('receipt.newBest')}`, { size: 16, bold: true, color: COLORS.accent }).setOrigin(0.5, 0);
     }
-    button(this, GAME_WIDTH / 2, FOOTER_TOP + 54, 110, 30, t('receipt.share'), () => void shareScore(r.total), 'secondary', 14);
+    iconButton(this, GAME_WIDTH / 2, FOOTER_TOP + 55, 40, 26, 'share', () => void shareScore(r.total));
     // Send the score to the worldwide ranking (the run is already saved on this device either way).
     const name = getPlayerName();
     if (data.result && name && leaderboardConfigured) {
-      const status = label(this, GAME_WIDTH / 2, FOOTER_TOP + 72, t('receipt.sending'), { size: 12, color: COLORS.muted }).setOrigin(0.5, 0);
+      const status = label(this, GAME_WIDTH / 2, FOOTER_TOP + 78, t('receipt.sending'), { size: 12, color: COLORS.muted }).setOrigin(0.5, 0);
       void submitFinishedRun(name, r.total).then((ok) => {
         if (!status.active) return; // the player already left the receipt
         if (ok) status.setText('');

@@ -20,7 +20,8 @@ export type IconId =
   | 'cart'
   | 'box'
   | 'scooter'
-  | 'crown';
+  | 'crown'
+  | 'share';
 
 type Pt = [number, number];
 const pts = (list: Pt[]): Phaser.Math.Vector2[] => list.map(([x, y]) => new Phaser.Math.Vector2(x, y));
@@ -145,6 +146,12 @@ export function drawIcon(scene: Phaser.Scene, id: IconId, x: number, y: number, 
       line([[0, -9], [7, -9]]);
       line([[3, 0], [9, 7]]);
       line([[-10, -1], [-3, -1]]);
+      break;
+    case 'share': // three dots joined by lines, the usual share symbol
+      line([[-6, 0], [6, -7]]);
+      line([[-6, 0], [6, 7]]);
+      g.fillStyle(opts.fill ?? color, 1);
+      g.fillCircle(-6, 0, 3.2).fillCircle(6, -7, 3.2).fillCircle(6, 7, 3.2);
       break;
     case 'crown': {
       const crown: Pt[] = [[-10, 7], [-10, -5], [-4, 1], [0, -8], [4, 1], [10, -5], [10, 7]];

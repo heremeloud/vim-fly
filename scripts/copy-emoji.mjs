@@ -1,8 +1,9 @@
-// Copies the Google (Noto) emoji PNGs used by the zone backdrops into src/assets/emoji/,
+// Copies the Google (Noto) emoji PNGs used by the zone backdrops and the in-run effects into src/assets/emoji/,
 // so the backdrops look the same on every device instead of using the OS emoji font.
-// Run after changing src/core/zoneIcons.ts:  npm run emoji
+// Run after changing src/core/zoneIcons.ts or src/core/effectIcons.ts:  npm run emoji
 import { copyFileSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import { ZONE_ICONS } from '../src/core/zoneIcons.ts';
+import { EFFECT_EMOJI } from '../src/core/effectIcons.ts';
 import { emojiFileName } from '../src/core/emojiFile.ts';
 
 const SRC = 'node_modules/emoji-datasource-google/img/google/64';
@@ -11,7 +12,7 @@ rmSync(OUT, { recursive: true, force: true }); // drop emoji no zone uses any mo
 mkdirSync(OUT, { recursive: true });
 
 let missing = 0;
-for (const emoji of new Set(Object.values(ZONE_ICONS).flat(2))) {
+for (const emoji of new Set([...Object.values(ZONE_ICONS).flat(2), ...EFFECT_EMOJI])) {
   const name = emojiFileName(emoji);
   // The package sometimes omits the fe0f variation selector that our string has.
   const candidates = [name, name.replace(/-fe0f/g, '')];

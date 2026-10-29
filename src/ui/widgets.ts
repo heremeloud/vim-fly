@@ -127,6 +127,18 @@ export function button(
   return parts;
 }
 
+/** A small rounded-rectangle button with just an icon (same crust outline as `button`), centered on (cx, cy). */
+export function iconButton(scene: Phaser.Scene, cx: number, cy: number, w: number, h: number, icon: IconId, onTap: () => void, depth = 0): Phaser.GameObjects.GameObject[] {
+  const x = cx - w / 2;
+  const y = cy - h / 2;
+  const radius = Math.min(h / 2.4, 24);
+  const body = scene.add.graphics().setDepth(depth);
+  body.fillStyle(COLORS.onPrimary, 1).fillRoundedRect(x, y + 3, w, h, radius); // crust shadow
+  body.fillStyle(COLORS.surface, 1).fillRoundedRect(x, y, w, h, radius);
+  body.lineStyle(3, COLORS.onPrimary, 1).strokeRoundedRect(x, y, w, h, radius);
+  return [body, drawIcon(scene, icon, cx, cy, COLORS.onPrimary, { width: 2 }).setScale(h / 30 + 0.1).setDepth(depth + 1), hitArea(scene, x, y, w, h, onTap).setDepth(depth + 2)];
+}
+
 /** A gingham ribbon (two rows of small checks in the show's tablecloth pink), used as the hem of page headers. */
 export function gingham(scene: Phaser.Scene, x: number, y: number, w: number, cell = 3): Phaser.GameObjects.Graphics {
   const g = scene.add.graphics().setPosition(x, y);

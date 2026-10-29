@@ -5,7 +5,9 @@ import { itemSfx, loopSfx, playSfx } from '../audio/sfx';
 import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '../core/constants';
 import { bindSteering } from '../core/input';
 import { itemName, t, tDynamic } from '../i18n';
-import { COLORS, FONT } from '../ui/theme';
+import { REACTION_ICON, STATUS_ICON } from '../core/effectIcons';
+import { emojiTextureKey } from '../core/emojiFile';
+import { COLORS, FONT, hex } from '../ui/theme';
 import { fitWidth } from '../ui/widgets';
 import { RunState } from '../core/RunState';
 import { difficulty, ramp } from '../core/difficulty';
@@ -67,21 +69,10 @@ const BUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
 const POINTS_REACTION_TEXTURE: Readonly<Record<string, string>> = {
   goldenRetriever: 'vimmy-points-goldenRetriever',
 };
-/** The emoji that pops up above Vimmy's head with each reaction, keyed by item id. */
-const REACTION_ICON: Readonly<Record<string, string>> = {
-  goldenRetriever: '💛',
-  oyster: '⭐',
-  lawyerSuit: '🛡️',
-  handkerchief: '💖',
-  rollingPin: '⚡',
-  helicopter: '❗',
-  planner: '💢',
-  gavelHammer: '💫',
-  cilantroBread: '💦',
-  fishSauceBread: '💦',
-  carCrash: '💥',
-};
 const REACTION_ICON_OFFSET = 78;
+const CHIP_ICON = 18; // status badge pictures, px
+const REACTION_ICON_SIZE = 40;
+const REACTION_ICON_SCALE = REACTION_ICON_SIZE / 64; // the emoji images are 64 px
 /** Each cut-in gets its own friendly comic accent instead of sharing one fixed ring color. */
 const REACTION_CELL_ACCENT: Readonly<Record<string, number>> = {
   oyster: 0xffb74d,
@@ -131,7 +122,8 @@ export class GameScene extends Phaser.Scene {
   /** Angled manga cell behind a reaction, making the enlarged face stand out from busy backdrops. */
   private reactionFocus!: Phaser.GameObjects.Graphics;
   /** Emoji that pops above Vimmy's head during a reaction. */
-  private reactionIcon!: Phaser.GameObjects.Text;
+  private reactionIcon!: Phaser.GameObjects.Image;
+  private chipIcons: Phaser.GameObjects.Image[] = [];
   /** Soft bubble around Vimmy while the lawyer-suit shield is up. */
   private shieldAura!: Phaser.GameObjects.Arc;
   private bg!: Phaser.GameObjects.TileSprite;
@@ -213,26 +205,28 @@ export class GameScene extends Phaser.Scene {
     this.player = this.add.sprite(GAME_WIDTH / 2, START_Y, 'vimmy-fly-0').setDisplaySize(PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE).setDepth(5);
     this.player.play(VIMMY_FLY_ANIM);
     this.reactionFocus = this.add.graphics().setPosition(this.player.x, this.player.y).setDepth(4.5).setVisible(false);
-    this.reactionIcon = this.add.text(this.player.x, this.player.y, '', { fontFamily: FONT.family, fontSize: '40px' }).setOrigin(0.5).setDepth(6).setVisible(false);
+    this.reactionIcon = this.add.image(this.player.x, this.player.y, '__WHITE').setScale(REACTION_ICON_SCALE).setDepth(6).setVisible(false);
     this.shieldAura = this.add.circle(this.player.x, this.player.y, PLAYER_SPRITE_SIZE * 0.72, 0x4fc3f7, 0.18).setStrokeStyle(3, 0xb3e5fc, 0.9).setDepth(4).setVisible(false);
 
     // Top-left panel: score big, climbed meters small, and a row of status chips below it.
     this.hudPanel = this.add.graphics().setScrollFactor(0).setDepth(19);
-    this.hudPanel.fillStyle(0x000000, 0.15).fillRoundedRect(10, 12, 164, 70, 16);
-    this.hudPanel.fillStyle(0xffffff, 0.95).fillRoundedRect(8, 8, 164, 70, 16);
-    this.hudPanel.lineStyle(3, 0xffb300, 1).strokeRoundedRect(8, 8, 164, 70, 16);
+    // Cream cards with a chocolate crust outline and a hard shadow, like the buttons in the menus.
+    const panel = (x: number, y: number, w: number, h: number): void => {
+      this.hudPanel.fillStyle(COLORS.onPrimary, 0.28).fillRoundedRect(x + 2, y + 4, w, h, 16);
+      this.hudPanel.fillStyle(COLORS.background, 0.96).fillRoundedRect(x, y, w, h, 16);
+      this.hudPanel.lineStyle(3, COLORS.onPrimary, 1).strokeRoundedRect(x, y, w, h, 16);
+    };
+    panel(8, 8, 164, 70);
     // The dash breads get their own pill so they never blend into the backdrop.
     const breadsW = PHYSICS.swipeDashesPerRun * 32 + 12;
-    this.hudPanel.fillStyle(0x000000, 0.15).fillRoundedRect(GAME_WIDTH - breadsW - 6, 12, breadsW, 44, 16);
-    this.hudPanel.fillStyle(0xffffff, 0.95).fillRoundedRect(GAME_WIDTH - breadsW - 8, 8, breadsW, 44, 16);
-    this.hudPanel.lineStyle(3, 0xffb300, 1).strokeRoundedRect(GAME_WIDTH - breadsW - 8, 8, breadsW, 44, 16);
+    panel(GAME_WIDTH - breadsW - 8, 8, breadsW, 44);
     this.progressGfx = this.add.graphics().setScrollFactor(0).setDepth(20);
     this.scoreText = this.add
-      .text(20, 8, '0', { fontFamily: FONT.family, fontSize: '34px', fontStyle: 'bold', color: '#4e342e' })
+      .text(20, 5, '0', { fontFamily: FONT.display, fontSize: '32px', color: hex(COLORS.text), stroke: hex(COLORS.text), strokeThickness: 2 })
       .setScrollFactor(0)
       .setDepth(20);
     this.metersText = this.add
-      .text(20, 48, '▲ 0 m', { fontFamily: FONT.family, fontSize: '14px', fontStyle: 'bold', color: '#8d6e63' })
+      .text(20, 50, '▲ 0 m', { fontFamily: FONT.family, fontSize: '14px', fontStyle: 'bold', color: hex(COLORS.muted) })
       .setScrollFactor(0)
       .setDepth(20);
     this.lastScore = 0;
@@ -240,6 +234,7 @@ export class GameScene extends Phaser.Scene {
     this.chipTexts = Array.from({ length: 7 }, () =>
       this.add.text(0, 0, '', { fontFamily: FONT.family, fontSize: '13px', fontStyle: 'bold', color: '#ffffff' }).setScrollFactor(0).setDepth(20).setVisible(false),
     );
+    this.chipIcons = Array.from({ length: 7 }, () => this.add.image(0, 0, '__WHITE').setDisplaySize(CHIP_ICON, CHIP_ICON).setScrollFactor(0).setDepth(20).setVisible(false));
 
     // Dizzy: a pulsing purple wash over the screen and stars circling Vimmy's head.
     this.dizzyOverlay = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x8e24aa, 0).setOrigin(0).setScrollFactor(0).setDepth(18);
@@ -258,7 +253,7 @@ export class GameScene extends Phaser.Scene {
 
     // Location banner: one small, see-through line, "Stage N · Location" (or just the location within the same stage).
     this.bannerBg = this.add.graphics();
-    this.bannerName = this.add.text(0, 0, '', { fontFamily: FONT.family, fontSize: '17px', fontStyle: 'bold', color: '#4e342e', align: 'center' }).setOrigin(0.5);
+    this.bannerName = this.add.text(0, 0, '', { fontFamily: FONT.display, fontSize: '17px', color: hex(COLORS.text), align: 'center', stroke: hex(COLORS.text), strokeThickness: 1 }).setOrigin(0.5);
     this.banner = this.add.container(GAME_WIDTH / 2, BANNER_Y, [this.bannerBg, this.bannerName]).setScrollFactor(0).setDepth(25).setAlpha(0);
     this.showBanner(zoneBannerText(this.zone));
 
@@ -375,7 +370,8 @@ export class GameScene extends Phaser.Scene {
       this.bannerBg.fillStyle(COLORS.primary, 1).fillRoundedRect(-w / 2, -h / 2, w, h, h / 2);
       this.bannerBg.lineStyle(4, COLORS.onPrimary, 1).strokeRoundedRect(-w / 2, -h / 2, w, h, h / 2);
     } else {
-      this.bannerBg.fillStyle(0xffffff, 1).fillRoundedRect(-w / 2, -h / 2, w, h, h / 2);
+      this.bannerBg.fillStyle(COLORS.background, 1).fillRoundedRect(-w / 2, -h / 2, w, h, h / 2);
+      this.bannerBg.lineStyle(2.5, COLORS.onPrimary, 1).strokeRoundedRect(-w / 2, -h / 2, w, h, h / 2);
     }
   }
 
@@ -414,7 +410,7 @@ export class GameScene extends Phaser.Scene {
   private showPopup(message: string, stroke: string, big = false): void {
     const text = this.add
       .text(this.player.x, this.player.y - (big ? 96 : 84), message, {
-        fontFamily: FONT.family,
+        fontFamily: FONT.display,
         fontSize: big ? '34px' : '22px',
         color: '#ffffff',
         stroke,
@@ -492,8 +488,12 @@ export class GameScene extends Phaser.Scene {
 
     this.tweens.add({ targets: this.player, displayWidth: PLAYER_REACTION_SIZE, displayHeight: PLAYER_REACTION_SIZE, duration: 150, ease: 'Back.easeOut' });
     this.tweens.add({ targets: this.reactionFocus, alpha: 0.92, scale: 1, duration: 150, ease: 'Back.easeOut' });
-    this.reactionIcon.setText(REACTION_ICON[itemId] ?? '').setPosition(this.player.x, this.player.y - REACTION_ICON_OFFSET).setVisible(true).setAlpha(0).setScale(0.3);
-    this.tweens.add({ targets: this.reactionIcon, alpha: 1, scale: 1.2, duration: 220, ease: 'Back.easeOut' });
+    const iconKey = emojiTextureKey(REACTION_ICON[itemId] ?? '');
+    this.reactionIcon.setVisible(false);
+    if (this.textures.exists(iconKey)) {
+      this.reactionIcon.setTexture(iconKey).setPosition(this.player.x, this.player.y - REACTION_ICON_OFFSET).setVisible(true).setAlpha(0).setScale(0.3 * REACTION_ICON_SCALE);
+      this.tweens.add({ targets: this.reactionIcon, alpha: 1, scale: 1.2 * REACTION_ICON_SCALE, duration: 220, ease: 'Back.easeOut' });
+    }
 
     this.reactionTimer = this.time.delayedCall(holdMs, () => {
       this.reactionTimer = undefined;
@@ -514,7 +514,7 @@ export class GameScene extends Phaser.Scene {
         ease: 'Cubic.easeIn',
         onComplete: () => this.reactionFocus.setVisible(false),
       });
-      this.tweens.add({ targets: this.reactionIcon, alpha: 0, scale: 0.6, duration: 170, onComplete: () => this.reactionIcon.setVisible(false) });
+      this.tweens.add({ targets: this.reactionIcon, alpha: 0, scale: 0.6 * REACTION_ICON_SCALE, duration: 170, onComplete: () => this.reactionIcon.setVisible(false) });
     });
   }
 
@@ -790,7 +790,7 @@ export class GameScene extends Phaser.Scene {
           const cue = BUFF_AUDIO_CUE[it.def.id] ?? { effect: 0.7, yips: 0.5 };
           playSfx(this, itemSfx(it.def.id, 'buff'), cue.effect);
           playSfx(this, 'yips', cue.yips, 0.08);
-          this.showPopup(tDynamic(`buff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#2e7d32');
+          this.showPopup(tDynamic(`buff.${it.def.id}`, itemName(it.def.id, it.def.label)), hex(COLORS.buff));
         } else if (it.def.kind === 'debuff' && this.run.shield) {
           // The lawyer suit takes the hit: say so instead of announcing the debuff.
           this.showPopup(t('shield.blocked'), '#1565c0', true);
@@ -798,7 +798,7 @@ export class GameScene extends Phaser.Scene {
           this.burstShield();
         } else if (it.def.kind === 'debuff') {
           const big = it.def.id === 'carCrash' || it.def.id === 'planner';
-          this.showPopup(tDynamic(`debuff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#b71c1c', big);
+          this.showPopup(tDynamic(`debuff.${it.def.id}`, itemName(it.def.id, it.def.label)), hex(COLORS.debuff), big);
           if (it.def.id === 'carCrash') this.cameras.main.shake(420, 0.018);
           else if (it.def.id === 'planner') this.cameras.main.shake(240, 0.008);
           playSfx(this, itemSfx(it.def.id, 'debuff'), DEBUFF_AUDIO_VOLUME[it.def.id] ?? 0.7);
@@ -812,7 +812,7 @@ export class GameScene extends Phaser.Scene {
           if (itemSfx(it.def.id, 'points', gained) !== 'point') playSfx(this, 'point', 0.4, 0.1);
           this.playPointsReaction(it.def);
         }
-        if (it.def.kind === 'points' && gained !== 0) this.showPopup(`${gained > 0 ? '+' : ''}${gained}`, gained > 0 ? '#e65100' : '#b71c1c', gained >= 100);
+        if (it.def.kind === 'points' && gained !== 0) this.showPopup(`${gained > 0 ? '+' : ''}${gained}`, gained > 0 ? hex(COLORS.primaryDark) : hex(COLORS.debuff), gained >= 100);
         if (it.def.kind === 'debuff' && applied) this.playDebuffReaction(it.def);
         this.remove(it);
       } else if (s.y > cam.scrollY + GAME_HEIGHT + 60) {
@@ -884,37 +884,44 @@ export class GameScene extends Phaser.Scene {
     const next = ZONES[ZONES.indexOf(this.zone) + 1];
     const fraction = next ? Phaser.Math.Clamp((this.run.heightMeters - this.zone.fromMeters) / (next.fromMeters - this.zone.fromMeters), 0, 1) : 1;
     this.progressGfx.clear();
-    this.progressGfx.fillStyle(0xf0dcc3, 1).fillRoundedRect(92, 55, 70, 8, 4);
-    if (fraction > 0) this.progressGfx.fillStyle(0xffb300, 1).fillRoundedRect(92, 55, Math.max(8, 70 * fraction), 8, 4);
+    this.progressGfx.fillStyle(COLORS.border, 1).fillRoundedRect(92, 55, 70, 8, 4);
+    if (fraction > 0) this.progressGfx.fillStyle(COLORS.primary, 1).fillRoundedRect(92, 55, Math.max(8, 70 * fraction), 8, 4).lineStyle(1.5, COLORS.primaryDark, 1).strokeRoundedRect(92, 55, Math.max(8, 70 * fraction), 8, 4);
     if (score !== this.lastScore) {
       // Pop and flash green on a gain, red on a loss.
-      this.scoreText.setColor(score > this.lastScore ? '#2e7d32' : '#b71c1c');
+      this.scoreText.setColor(score > this.lastScore ? hex(COLORS.buff) : hex(COLORS.debuff));
       this.tweens.killTweensOf(this.scoreText);
       this.scoreText.setScale(1.3);
-      this.tweens.add({ targets: this.scoreText, scale: 1, duration: 250, ease: 'Back.easeOut', onComplete: () => this.scoreText.setColor('#4e342e') });
+      this.tweens.add({ targets: this.scoreText, scale: 1, duration: 250, ease: 'Back.easeOut', onComplete: () => this.scoreText.setColor(hex(COLORS.text)) });
       this.lastScore = score;
     }
     this.swipeBreads.forEach((b, i) => b.setAlpha(i < this.swipesLeft ? 1 : 0.2));
 
     const secs = (ms: number) => `${(ms / 1000).toFixed(1)}s`;
-    const chips: { label: string; color: number }[] = [];
-    if (this.run.shield) chips.push({ label: `🛡 ${t('hud.shield')}`, color: COLORS.buff });
-    if (this.run.dashMs > 0) chips.push({ label: `🚁 ${t('hud.dash')} ${secs(this.run.dashMs)}`, color: COLORS.buff });
-    if (this.run.strongFlapMs > 0) chips.push({ label: `💪 ${t('hud.power')} ${secs(this.run.strongFlapMs)}`, color: COLORS.buff });
-    if (this.run.doublePointsMs > 0) chips.push({ label: `✨ ${t('hud.x2')} ${secs(this.run.doublePointsMs)}`, color: COLORS.buff });
-    if (this.run.isStunned) chips.push({ label: `💫 ${t('hud.stunned')} ${secs(this.run.stunMs)}`, color: COLORS.debuff });
-    if (this.run.isDisoriented) chips.push({ label: `😵 ${t('hud.dizzy')} ${secs(this.run.disorientMs)}`, color: COLORS.debuff });
-    if (this.run.slowMs > 0) chips.push({ label: `🐌 ${t('hud.slow')} ${secs(this.run.slowMs)}`, color: COLORS.debuff });
+    const chips: { icon: string; label: string; color: number }[] = [];
+    if (this.run.shield) chips.push({ icon: STATUS_ICON.shield, label: `${t('hud.shield')}`, color: COLORS.buff });
+    if (this.run.dashMs > 0) chips.push({ icon: STATUS_ICON.dash, label: `${t('hud.dash')} ${secs(this.run.dashMs)}`, color: COLORS.buff });
+    if (this.run.strongFlapMs > 0) chips.push({ icon: STATUS_ICON.power, label: `${t('hud.power')} ${secs(this.run.strongFlapMs)}`, color: COLORS.buff });
+    if (this.run.doublePointsMs > 0) chips.push({ icon: STATUS_ICON.x2, label: `${t('hud.x2')} ${secs(this.run.doublePointsMs)}`, color: COLORS.buff });
+    if (this.run.isStunned) chips.push({ icon: STATUS_ICON.stunned, label: `${t('hud.stunned')} ${secs(this.run.stunMs)}`, color: COLORS.debuff });
+    if (this.run.isDisoriented) chips.push({ icon: STATUS_ICON.dizzy, label: `${t('hud.dizzy')} ${secs(this.run.disorientMs)}`, color: COLORS.debuff });
+    if (this.run.slowMs > 0) chips.push({ icon: STATUS_ICON.slow, label: `${t('hud.slow')} ${secs(this.run.slowMs)}`, color: COLORS.debuff });
 
     this.chipGfx.clear();
     let y = 88;
     this.chipTexts.forEach((txt, i) => {
       const chip = chips[i];
+      const icon = this.chipIcons[i];
       txt.setVisible(!!chip);
+      icon.setVisible(false);
       if (!chip) return;
-      txt.setText(chip.label).setPosition(18, y + 3);
-      this.chipGfx.fillStyle(chip.color, 0.92).fillRoundedRect(8, y, txt.width + 20, 22, 11);
-      y += 26;
+      const key = emojiTextureKey(chip.icon);
+      const hasIcon = this.textures.exists(key);
+      const textX = hasIcon ? 32 : 18;
+      txt.setText(chip.label).setPosition(textX, y + 4);
+      if (hasIcon) icon.setTexture(key).setDisplaySize(CHIP_ICON, CHIP_ICON).setPosition(22, y + 12).setVisible(true);
+      this.chipGfx.fillStyle(chip.color, 0.94).fillRoundedRect(8, y, txt.width + textX + 12, 24, 12);
+      this.chipGfx.lineStyle(2, COLORS.onPrimary, 0.9).strokeRoundedRect(8, y, txt.width + textX + 12, 24, 12);
+      y += 28;
     });
 
     if (this.run.isStunned) this.player.setTint(0xb0bec5);
