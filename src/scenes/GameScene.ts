@@ -43,6 +43,7 @@ const PLAYER_REACTION_SIZE = 120;
 const REACTION_HOLD_MS = 760;
 const REACTION_CRASH_HOLD_MS = 940;
 const REACTION_HELICOPTER_HOLD_MS = 380;
+const REACTION_GOLDEN_HOLD_MS = 1100;
 /** Native 32x32 sprites are displayed at 48x48 with nearest-neighbour filtering for clarity. */
 const ITEM_SPRITE_SIZE = 48;
 /**
@@ -63,28 +64,47 @@ const BUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
   rollingPin: 'vimmy-buff-rollingPin',
   helicopter: 'vimmy-buff-helicopter',
 };
+const POINTS_REACTION_TEXTURE: Readonly<Record<string, string>> = {
+  goldenRetriever: 'vimmy-points-goldenRetriever',
+};
 /** The emoji that pops up above Vimmy's head with each reaction, keyed by item id. */
 const REACTION_ICON: Readonly<Record<string, string>> = {
+  goldenRetriever: '💛',
   oyster: '⭐',
   lawyerSuit: '🛡️',
   handkerchief: '💖',
   rollingPin: '⚡',
   helicopter: '❗',
-  planner: '💫',
+  planner: '💢',
   gavelHammer: '💫',
   cilantroBread: '💦',
   fishSauceBread: '💦',
   carCrash: '💥',
 };
 const REACTION_ICON_OFFSET = 78;
+/** Each cut-in gets its own friendly comic accent instead of sharing one fixed ring color. */
+const REACTION_CELL_ACCENT: Readonly<Record<string, number>> = {
+  oyster: 0xffb74d,
+  lawyerSuit: 0x64b5f6,
+  handkerchief: 0xf48fb1,
+  rollingPin: 0xffca28,
+  helicopter: 0x4dd0e1,
+  goldenRetriever: 0xffd54f,
+  planner: 0xff7043,
+  gavelHammer: 0xba68c8,
+  cilantroBread: 0x9ccc65,
+  fishSauceBread: 0x80cbc4,
+  carCrash: 0xef5350,
+};
 const DASH_TEXTURE = { '-1': 'vimmy-dash-left', '1': 'vimmy-dash-right' } as const;
 const DEBUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
   cilantroBread: 'vimmy-debuff-queasy',
   fishSauceBread: 'vimmy-debuff-queasy',
-  planner: 'vimmy-debuff-stunned',
+  planner: 'vimmy-debuff-disappointed',
   gavelHammer: 'vimmy-debuff-stunned',
   carCrash: 'vimmy-debuff-crash',
 };
+const SMELLY_BREADS = new Set(['cilantroBread', 'fishSauceBread']);
 
 /**
  * Core loop with Vimmy's animated sprite. Tap left/right to flap and drift,
@@ -93,8 +113,8 @@ const DEBUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
  */
 export class GameScene extends Phaser.Scene {
   private player!: Phaser.GameObjects.Sprite;
-  /** High-contrast disc behind a reaction, making the enlarged face stand out from busy backdrops. */
-  private reactionFocus!: Phaser.GameObjects.Arc;
+  /** Angled manga cell behind a reaction, making the enlarged face stand out from busy backdrops. */
+  private reactionFocus!: Phaser.GameObjects.Graphics;
   /** Emoji that pops above Vimmy's head during a reaction. */
   private reactionIcon!: Phaser.GameObjects.Text;
   /** Soft bubble around Vimmy while the lawyer-suit shield is up. */
@@ -175,11 +195,7 @@ export class GameScene extends Phaser.Scene {
     this.createVimmyAnimations();
     this.player = this.add.sprite(GAME_WIDTH / 2, START_Y, 'vimmy-fly-0').setDisplaySize(PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE).setDepth(5);
     this.player.play(VIMMY_FLY_ANIM);
-    this.reactionFocus = this.add
-      .circle(this.player.x, this.player.y, PLAYER_REACTION_SIZE * 0.54, 0xffffff, 0.9)
-      .setStrokeStyle(4, 0xf9a825, 1)
-      .setDepth(4.5)
-      .setVisible(false);
+    this.reactionFocus = this.add.graphics().setPosition(this.player.x, this.player.y).setDepth(4.5).setVisible(false);
     this.reactionIcon = this.add.text(this.player.x, this.player.y, '', { fontFamily: FONT.family, fontSize: '40px' }).setOrigin(0.5).setDepth(6).setVisible(false);
     this.shieldAura = this.add.circle(this.player.x, this.player.y, PLAYER_SPRITE_SIZE * 0.72, 0x4fc3f7, 0.18).setStrokeStyle(3, 0xb3e5fc, 0.9).setDepth(4).setVisible(false);
 
@@ -346,7 +362,7 @@ export class GameScene extends Phaser.Scene {
     if (!this.anims.exists(VIMMY_FLY_ANIM)) {
       this.anims.create({
         key: VIMMY_FLY_ANIM,
-        frames: [0, 1, 2, 3].map((i) => ({ key: `vimmy-fly-${i}` })),
+        frames: [0, 1, 2, 3, 4].map((i) => ({ key: `vimmy-fly-${i}` })),
         frameRate: 8,
         repeat: -1,
       });
@@ -391,24 +407,67 @@ export class GameScene extends Phaser.Scene {
     this.tweens.add({ targets: text, y: text.y - (big ? 90 : 70), alpha: 0, delay: big ? 800 : 500, duration: 700, onComplete: () => text.destroy() });
   }
 
+  /** Draw a light, friendly manga cut-in whose accent changes with the collected item. */
+  private drawReactionCell(itemId: string): void {
+    const accent = REACTION_CELL_ACCENT[itemId] ?? 0xffb300;
+    const r = (accent >> 16) & 0xff;
+    const g = (accent >> 8) & 0xff;
+    const b = accent & 0xff;
+    const paper = Phaser.Display.Color.GetColor(
+      Math.round(r + (255 - r) * 0.86),
+      Math.round(g + (255 - g) * 0.86),
+      Math.round(b + (255 - b) * 0.86),
+    );
+    const cell = this.reactionFocus;
+    const panel = (offsetX: number, offsetY: number): void => {
+      cell.beginPath();
+      cell.moveTo(-72 + offsetX, -52 + offsetY);
+      cell.lineTo(55 + offsetX, -61 + offsetY);
+      cell.lineTo(75 + offsetX, -13 + offsetY);
+      cell.lineTo(62 + offsetX, 56 + offsetY);
+      cell.lineTo(-57 + offsetX, 62 + offsetY);
+      cell.lineTo(-76 + offsetX, 13 + offsetY);
+      cell.closePath();
+    };
+
+    cell.clear();
+    cell.fillStyle(0x000000, 0.14);
+    panel(3, 5);
+    cell.fillPath();
+    cell.fillStyle(paper, 0.96);
+    cell.lineStyle(4, accent, 0.95);
+    panel(0, 0);
+    cell.fillPath();
+    cell.strokePath();
+
+    // Short radial ink strokes stay at the edge, framing the face without covering it.
+    for (let i = 0; i < 14; i++) {
+      const angle = (Math.PI * 2 * i) / 14 + 0.08;
+      const inner = i % 2 === 0 ? 51 : 56;
+      const outer = i % 3 === 0 ? 70 : 66;
+      cell.lineStyle(i % 3 === 0 ? 3 : 2, accent, i % 2 === 0 ? 0.62 : 0.42);
+      cell.lineBetween(Math.cos(angle) * inner, Math.sin(angle) * inner * 0.78, Math.cos(angle) * outer, Math.sin(angle) * outer * 0.78);
+    }
+  }
+
   /**
-   * Hold a larger front-facing pose over a clean disc. The source art stays untouched; this presentation
+   * Hold a larger front-facing pose inside a comic cut-in. The source art stays untouched; this presentation
    * makes expressions made from only a handful of pixels readable while the player and backdrop move.
    */
-  private playReaction(texture: string, outline: number, holdMs: number, itemId: string, after: () => void): void {
+  private playReaction(texture: string, holdMs: number, itemId: string, after: () => void): void {
     this.reactionTimer?.remove(false);
     this.tweens.killTweensOf(this.player);
     this.tweens.killTweensOf(this.reactionFocus);
     this.tweens.killTweensOf(this.reactionIcon);
 
     this.player.stop().setTexture(texture).setDisplaySize(PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE);
+    this.drawReactionCell(itemId);
     this.reactionFocus
       .setPosition(this.player.x, this.player.y)
-      .setFillStyle(0xffffff, 0.9)
-      .setStrokeStyle(4, outline, 1)
+      .setAngle(itemId.length % 2 === 0 ? -2 : 2)
       .setVisible(true)
       .setAlpha(0)
-      .setScale(0.7);
+      .setScale(0.72);
 
     this.tweens.add({ targets: this.player, displayWidth: PLAYER_REACTION_SIZE, displayHeight: PLAYER_REACTION_SIZE, duration: 150, ease: 'Back.easeOut' });
     this.tweens.add({ targets: this.reactionFocus, alpha: 0.92, scale: 1, duration: 150, ease: 'Back.easeOut' });
@@ -443,10 +502,19 @@ export class GameScene extends Phaser.Scene {
     const texture = BUFF_REACTION_TEXTURE[item.id];
     if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
 
-    this.playReaction(texture, 0xf9a825, item.id === 'helicopter' ? REACTION_HELICOPTER_HOLD_MS : REACTION_HOLD_MS, item.id, () => {
+    this.playReaction(texture, item.id === 'helicopter' ? REACTION_HELICOPTER_HOLD_MS : REACTION_HOLD_MS, item.id, () => {
       if (item.id === 'helicopter') this.playHelicopterFlip();
       else this.player.play(VIMMY_FLY_ANIM);
     });
+  }
+
+  /** The rare golden retriever gets a longer, extra-joyful reaction of its own. */
+  private playPointsReaction(item: ItemDef): void {
+    const texture = POINTS_REACTION_TEXTURE[item.id];
+    if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
+
+    this.playReaction(texture, REACTION_GOLDEN_HOLD_MS, item.id, () => this.player.play(VIMMY_FLY_ANIM));
+    playSfx(this, 'yips', 0.75, 0.08);
   }
 
   /** Three compact negative faces cover queasy, stunned and crash effects. */
@@ -454,7 +522,7 @@ export class GameScene extends Phaser.Scene {
     const texture = DEBUFF_REACTION_TEXTURE[item.id];
     if (!texture || this.isFlipping || this.swipeDashDir !== 0) return;
 
-    this.playReaction(texture, 0xc62828, item.id === 'carCrash' ? REACTION_CRASH_HOLD_MS : REACTION_HOLD_MS, item.id, () => this.player.play(VIMMY_FLY_ANIM));
+    this.playReaction(texture, item.id === 'carCrash' ? REACTION_CRASH_HOLD_MS : REACTION_HOLD_MS, item.id, () => this.player.play(VIMMY_FLY_ANIM));
   }
 
   /** Swap the backdrop and announce the zone when the dog climbs past a milestone. */
@@ -705,6 +773,7 @@ export class GameScene extends Phaser.Scene {
           this.showPopup(tDynamic(`debuff.${it.def.id}`, itemName(it.def.id, it.def.label)), '#b71c1c', big);
           if (big) this.cameras.main.shake(300, 0.012);
           playSfx(this, itemSfx(it.def.id, 'debuff'), 0.8);
+          if (SMELLY_BREADS.has(it.def.id)) playSfx(this, 'sniff', 0.7, 0.06);
         }
         const pointsBefore = this.run.itemPoints;
         const applied = this.run.collect(it.def);
@@ -712,6 +781,7 @@ export class GameScene extends Phaser.Scene {
         if (it.def.kind === 'points' && gained > 0) {
           playSfx(this, itemSfx(it.def.id, 'points', gained), 0.7, 0.06);
           if (itemSfx(it.def.id, 'points', gained) !== 'point') playSfx(this, 'point', 0.4, 0.1);
+          this.playPointsReaction(it.def);
         }
         if (it.def.kind === 'points' && gained !== 0) this.showPopup(`${gained > 0 ? '+' : ''}${gained}`, gained > 0 ? '#e65100' : '#b71c1c', gained >= 100);
         if (it.def.kind === 'debuff' && applied) this.playDebuffReaction(it.def);

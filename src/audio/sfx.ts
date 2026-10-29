@@ -8,7 +8,7 @@ import { SCENES } from '../core/constants';
 export type Sfx =
   | 'flap' | 'point' | 'buff' | 'yips' | 'debuff' | 'hammer' | 'crash' | 'dash'
   | 'munch' | 'sip' | 'slurp' | 'jackpot' | 'bark' | 'shield' | 'sparkle' | 'power' | 'spool'
-  | 'warble' | 'sag' | 'thud' | 'block';
+  | 'warble' | 'sag' | 'thud' | 'block' | 'sniff';
 export type SfxLoop = 'buzz' | 'copter';
 
 const KEY = 'vimmy-fly.sound';
@@ -136,6 +136,17 @@ const BUILDERS: Record<Sfx | SfxLoop, (ctx: BaseAudioContext) => AudioBuffer> = 
     const tone = oscillator((t) => 500 + 1100 * t * t * 6, triangle);
     const spit = noise(() => 0.3);
     return render(ctx, 0.3, (t) => (tone(t) * 0.5 + spit(t) * 0.25) * (0.7 + 0.3 * sine(TAU * 35 * t)) * decay(t, 0.3, 0.7) * 0.5);
+  },
+  // Two quick nasal inhales for the smelly cilantro and fish-sauce breads.
+  sniff: (ctx) => {
+    const breath = noise((t) => 0.24 + 0.12 * sine(TAU * 18 * t));
+    const nose = oscillator((t) => 430 + 90 * sine(TAU * 7 * t), sine);
+    return render(ctx, 0.44, (t) => {
+      const local = t < 0.19 ? t : t - 0.24;
+      if (local < 0 || local > 0.16) return 0;
+      const inhale = Math.sin((Math.PI * local) / 0.16) ** 0.7;
+      return (breath(t) * 1.15 + nose(t) * 0.16) * inhale * 0.55;
+    });
   },
   // Big treat: a bright run up with a held top note.
   jackpot: (ctx) => {
