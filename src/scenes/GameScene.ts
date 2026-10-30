@@ -67,7 +67,7 @@ const TAP_GUIDE_Y = GAME_HEIGHT - 190;
 /** The score panel (score, then metres, then the progress bar) runs from y 8 to HUD_BOTTOM; the right-hand stack of dash breads and buttons ends at the same line. */
 const HUD_H = 74;
 const HUD_BOTTOM = 8 + HUD_H;
-const REGISTER_W = 128;
+const REGISTER_W = 144;
 const PROGRESS = { x: 20, y: 70, w: REGISTER_W - 24, h: 7 };
 /** The register's LCD: amber digits on dark brown, flashing green or red on a gain or a loss. */
 const LCD = { x: 16, y: 14, w: REGISTER_W - 16, h: 32, right: REGISTER_W - 8, text: 0xf7bd3b, up: 0x8be28f, down: 0xff7b7b, screen: 0x2b1d12 };
