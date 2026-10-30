@@ -116,8 +116,14 @@ export class PromosScene extends Phaser.Scene {
   /** The big "Watch the pilot" button. */
   private pilotCard(c: Phaser.GameObjects.Container, y: number): number {
     const h = 60;
-    c.add(roundedBox(this, 20, y + 4, CARD_W, h, COLORS.primaryDark, RADIUS.card));
-    c.add(roundedBox(this, 20, y, CARD_W, h, COLORS.primary, RADIUS.card));
+    // The same puffy look as the primary buttons (Order Now): crust shadow, butter body, soft shine and a chocolate outline.
+    const radius = Math.min(h / 2.4, 24);
+    const body = this.add.graphics();
+    body.fillStyle(COLORS.onPrimary, 1).fillRoundedRect(20, y + 4, CARD_W, h, radius);
+    body.fillStyle(COLORS.primary, 1).fillRoundedRect(20, y, CARD_W, h, radius);
+    body.fillStyle(0xffffff, 0.35).fillRoundedRect(20 + radius * 0.6, y + 5, CARD_W - radius * 1.2, Math.max(4, h * 0.16), h * 0.08);
+    body.lineStyle(2, COLORS.onPrimary, 1).strokeRoundedRect(20, y, CARD_W, h, radius);
+    c.add(body);
     if (this.textures.exists(iconKey('youtube'))) c.add(this.add.image(44 + 14, y + 10 + 14, iconKey('youtube')).setDisplaySize(28, 28));
     c.add(label(this, 44 + 40, y + 8, t('promos.pilot.title'), { size: 22, bold: true, color: COLORS.onPrimary }));
     c.add(label(this, 44 + 40, y + 36, t('promos.pilot.sub'), { size: 13, color: COLORS.onPrimary }));

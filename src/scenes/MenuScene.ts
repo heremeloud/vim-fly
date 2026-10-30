@@ -78,7 +78,9 @@ export class MenuScene extends Phaser.Scene {
       const chip = this.chips[i];
       const on = c.kind === this.kind;
       const x = 20 + i * (w + gap);
-      paintChip(chip.bg, chip.text, x, CHIP.y, w, CHIP.h, on, c.color, c.kind === 'points' ? COLORS.onPrimary : COLORS.surface);
+      // The Points chip is the butter yellow of the other pages' chips (Orders), so the two read as the same button; Buffs and Debuffs keep their own colors.
+      if (c.kind === 'points') paintChip(chip.bg, chip.text, x, CHIP.y, w, CHIP.h, on, COLORS.primary, COLORS.onPrimary, COLORS.accent);
+      else paintChip(chip.bg, chip.text, x, CHIP.y, w, CHIP.h, on, c.color, COLORS.surface);
     });
   }
 

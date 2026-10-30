@@ -176,8 +176,9 @@ export class ReceiptScene extends Phaser.Scene {
     const listH = Phaser.Math.Clamp(listY + 8, LIST_MIN, LIST_MAX);
     const shift = LIST_MAX - listH;
     const footerTop = FOOTER_TOP - shift;
-    // The paper gives back all the space the items did not use, except what the follow cards need: the View and Mim row first, and the official account row too when both fit.
-    const followH = LEADS.length === 0 ? 0 : shift >= FOLLOW_BOTH_H + FOLLOW_EXTRA ? FOLLOW_BOTH_H : shift >= LEAD_H + FOLLOW_EXTRA ? LEAD_H : 0;
+    // The paper gives back all the space the items did not use, except what the follow cards need: the View and Mim row first, with the official account row too when both fit, and the slimmer official account row alone when only that fits.
+    const hasLeads = LEADS.length > 0;
+    const followH = hasLeads && shift >= FOLLOW_BOTH_H + FOLLOW_EXTRA ? FOLLOW_BOTH_H : hasLeads && shift >= LEAD_H + FOLLOW_EXTRA ? LEAD_H : shift >= OFFICIAL_H + FOLLOW_EXTRA ? OFFICIAL_H : 0;
     const sheetBottom = SHEET.bottom - shift + (followH ? followH + FOLLOW_EXTRA : 0);
     const video = { ...VIDEO, y: VIDEO.y - shift };
 
@@ -248,12 +249,13 @@ export class ReceiptScene extends Phaser.Scene {
       drawFlourish(gfx, tagline.x + tagline.width / 2 + 10, tagline.y + 1, 1, flourishLen);
     }
 
-    if (followH) this.addFollowCards(video.y + video.h + 14, followH === FOLLOW_BOTH_H);
+    if (followH) this.addFollowCards(video.y + video.h + 14, followH !== OFFICIAL_H, followH !== LEAD_H);
 
     // Two buttons side by side: play again, or go back to the store.
     const by = GAME_HEIGHT - 40;
-    button(this, 130, by, 190, 50, t('receipt.orderAgain'), () => this.scene.start(SCENES.game), 'primary', 18);
-    button(this, 350, by, 190, 50, t('receipt.backToStore'), () => this.scene.start(SCENES.home), 'secondary', 18);
+    const buttonW = (GAME_WIDTH - X * 2 - 12) / 2; // together exactly as wide as the receipt content, 12 px apart
+    button(this, X + buttonW / 2, by, buttonW, 50, t('receipt.orderAgain'), () => this.scene.start(SCENES.game), 'primary', 18);
+    button(this, GAME_WIDTH - X - buttonW / 2, by, buttonW, 50, t('receipt.backToStore'), () => this.scene.start(SCENES.home), 'secondary', 18);
   }
 
   /** A round version of a loaded avatar photo, made once (cropped to fill the circle, keeping the top where faces usually are). */
@@ -295,34 +297,36 @@ export class ReceiptScene extends Phaser.Scene {
     });
   }
 
-  /** Printed on the paper between the pilot video and the tagline: the two leads side by side (photo, name, follow buttons), then the official account when `withOfficial`. */
-  private addFollowCards(top: number, withOfficial: boolean): void {
+  /** Printed on the paper between the pilot video and the tagline: the two leads side by side (photo, name, follow buttons) when `withLeads`, then the official account when `withOfficial`. */
+  private addFollowCards(top: number, withLeads: boolean, withOfficial: boolean): void {
     let y = top;
     const x = X;
     const w = GAME_WIDTH - x * 2;
 
-    const gap = 6;
-    const tileW = (w - gap) / 2;
-    const leads = LEADS.slice(0, 2);
-    // Each name is set on two lines (first name, then the rest) and both share one size: the biggest at which the longest line fits beside the photo.
-    const lines = leads.map((lead) => {
-      const [first, ...rest] = lead.name.split(' ');
-      return [first, rest.join(' ')].filter(Boolean);
-    });
-    const nameRoom = tileW - (AVATAR_PAD + AVATAR_D + 8) - 6;
-    const probes = lines.flat().map((line) => label(this, 0, 0, line, { size: 18, bold: true }));
-    const nameSize = Math.max(12, Math.min(18, Math.floor((18 * nameRoom) / Math.max(...probes.map((p) => p.width), 1))));
-    probes.forEach((p) => p.destroy());
-    leads.forEach((lead, i) => {
-      const tx = x + i * (tileW + gap);
-      roundedBox(this, tx, y, tileW, LEAD_H, COLORS.surface, 16, COLORS.border);
-      this.addAvatar(tx + AVATAR_PAD + AVATAR_D / 2, y + LEAD_H / 2, AVATAR_D / 2, lead);
-      const textX = tx + AVATAR_PAD + AVATAR_D + 8;
-      label(this, textX, y + 3, lines[i].join('\n'), { size: nameSize, bold: true });
-      this.addFollowButtons(tx + tileW - 8, y + LEAD_H - 5 - 8, lead);
-    });
+    if (withLeads) {
+      const gap = 6;
+      const tileW = (w - gap) / 2;
+      const leads = LEADS.slice(0, 2);
+      // Each name is set on two lines (first name, then the rest) and both share one size: the biggest at which the longest line fits beside the photo.
+      const lines = leads.map((lead) => {
+        const [first, ...rest] = lead.name.split(' ');
+        return [first, rest.join(' ')].filter(Boolean);
+      });
+      const nameRoom = tileW - (AVATAR_PAD + AVATAR_D + 8) - 6;
+      const probes = lines.flat().map((line) => label(this, 0, 0, line, { size: 18, bold: true }));
+      const nameSize = Math.max(12, Math.min(18, Math.floor((18 * nameRoom) / Math.max(...probes.map((p) => p.width), 1))));
+      probes.forEach((p) => p.destroy());
+      leads.forEach((lead, i) => {
+        const tx = x + i * (tileW + gap);
+        roundedBox(this, tx, y, tileW, LEAD_H, COLORS.surface, 16, COLORS.border);
+        this.addAvatar(tx + AVATAR_PAD + AVATAR_D / 2, y + LEAD_H / 2, AVATAR_D / 2, lead);
+        const textX = tx + AVATAR_PAD + AVATAR_D + 8;
+        label(this, textX, y + 3, lines[i].join('\n'), { size: nameSize, bold: true });
+        this.addFollowButtons(tx + tileW - 8, y + LEAD_H - 5 - 8, lead);
+      });
+    }
     if (!withOfficial) return;
-    y += LEAD_H + FOLLOW_GAP;
+    if (withLeads) y += LEAD_H + FOLLOW_GAP;
 
     roundedBox(this, x, y, w, OFFICIAL_H, COLORS.surface, 16, COLORS.border);
     this.addAvatar(x + AVATAR_PAD + AVATAR_D / 2, y + OFFICIAL_H / 2, AVATAR_D / 2, OFFICIAL);

@@ -8,6 +8,7 @@ import youtubeIcon from '../assets/icons/youtube.svg?no-inline';
 import { APP, SERVICES } from '../ui/brand';
 import { startOrder } from '../ui/onboarding';
 import { openSettings } from '../ui/settings';
+import { drawBee, drawPaw } from '../ui/titleArt';
 import { drawIcon } from '../ui/icons';
 import { COLORS, RADIUS } from '../ui/theme';
 import { TAB_BAR_HEIGHT, button, hitArea, itemTile, label, languageButton, roundedBox, tabBar } from '../ui/widgets';
@@ -55,7 +56,13 @@ export class HomeScene extends Phaser.Scene {
     hitArea(this, 20, 42, GAME_WIDTH - 40, 44, () => this.scene.start(SCENES.menu));
 
     // The lockup: name and slogan left-aligned on the left, the rider on the right resting on the tiles' top edge.
-    label(this, 24, 98, APP.name, { size: 40, color: COLORS.onPrimary, bold: true, display: true, maxWidth: 300 });
+    const title = label(this, 44, 98, APP.name, { size: 40, color: COLORS.onPrimary, bold: true, display: true, maxWidth: 300 });
+    // The name sits a little to the right to leave room for a paw print at the upper left, before the V, and a tiny bee at the lower right, after the Y, both within the height of the letters.
+    const letterTop = title.y + title.height * 0.27;
+    const letterBottom = title.y + title.height * 0.83;
+    const titleEnd = title.x + title.width;
+    drawPaw(this, 24 + 8, letterTop + 9, 18, COLORS.onPrimary, 0.85); // as big as the bee; its left edge lines up with the slogan below
+    drawBee(this, Math.min(titleEnd + 4, 340), letterBottom - 6, 16); // its body ends at the bottom of the letters, the wings a little above
     label(this, 24, 148, t('app.tagline'), { size: 15, color: COLORS.onPrimary, maxWidth: 300 });
     const BIKE = 96; // 1.5x the 64 px art, drawn with nearest-neighbour filtering so the pixels stay crisp
     this.textures.get('vimmy-header-delivery-bike').setFilter(Phaser.Textures.FilterMode.NEAREST);

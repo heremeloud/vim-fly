@@ -32,7 +32,7 @@ export const ja: Record<StringKey, string> = {
   'orders.title': '注文',
   'orders.subtitle': '世界ランキング',
   'orders.tab.mine': 'マイ注文',
-  'orders.tab.top': 'お得意さまランキング',
+  'orders.tab.top': 'お得意さまたち',
   'orders.orderNo': '注文 #{n}',
   'orders.bestBadge': 'ベスト',
   'orders.empty': 'まだ注文がないよ! さっそく注文してみよう!',
