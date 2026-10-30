@@ -60,6 +60,12 @@ const ADMIN = devFlag('admin');
 const BANNER_Y = 190; // below the HUD panel; small and see-through so it never hides the play area
 const BANNER_ALPHA = 0.7;
 const START_Y = GAME_HEIGHT - 200;
+/** The tap-left / tap-right guides stay over the first 50 m, fading out over the last 8 of them, at this height on screen. */
+const TAP_GUIDE_METERS = 50;
+const TAP_GUIDE_FADE_METERS = 8;
+const TAP_GUIDE_Y = GAME_HEIGHT - 290;
+/** Corner radius of the swipe hint and the tap guides: a rounded rectangle, not a full pill. */
+const HINT_RADIUS = 14;
 const VIMMY_FLY_ANIM = 'vimmy-fly';
 const VIMMY_FLIP_ANIM = 'vimmy-helicopter-flip';
 const BUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
@@ -131,7 +137,7 @@ export class GameScene extends Phaser.Scene {
   /** Emoji that pops above Vimmy's head during a reaction. */
   private reactionIcon!: Phaser.GameObjects.Image;
   private chipIcons: Phaser.GameObjects.Image[] = [];
-  /** Twinkling sparkles around Vimmy while the lawyer-suit shield is up. */
+  /** Twinkling little shields around Vimmy while the lawyer-suit shield is up. */
   private shieldAura!: Phaser.GameObjects.Graphics;
   /** Clock for the power fly's rising sparkles. */
   private powerEmberMs = 0;
@@ -179,6 +185,10 @@ export class GameScene extends Phaser.Scene {
   /** Counts down between batches of comic speed lines during the helicopter climb. */
   private climbLinesMs = 0;
   private swipeBreads: Phaser.GameObjects.Image[] = [];
+  /** The two "tap here" guides shown over the first stretch of the climb. */
+  private tapGuide: Phaser.GameObjects.Container[] = [];
+  /** The swipe hint, kept up as long as the tap guides so the two leave together. */
+  private swipeHint: Phaser.GameObjects.Container | null = null;
   private isFlipping = false;
   private reactionTimer?: Phaser.Time.TimerEvent;
   private buzz: Phaser.Sound.BaseSound | null = null;
@@ -202,6 +212,8 @@ export class GameScene extends Phaser.Scene {
     this.paused = false;
     this.pauseOverlay = [];
     this.hudButtonIcons = [];
+    this.tapGuide = [];
+    this.swipeHint = null;
     this.swipesLeft = PHYSICS.swipeDashesPerRun;
     this.swipeDashDir = 0;
     this.vx = 0;
@@ -281,6 +293,7 @@ export class GameScene extends Phaser.Scene {
     this.showBanner(zoneBannerText(this.zone));
 
     this.showSwipeHint();
+    this.showTapGuide();
 
     bindSteering(
       this,
@@ -375,6 +388,55 @@ export class GameScene extends Phaser.Scene {
     this.refreshHudButtons();
   }
 
+  /**
+   * For the first TAP_GUIDE_METERS of the climb: a soft card on each half of the screen with a tapping hand and
+   * "Tap" with an arrow either way, so a new player sees at once that the two halves steer. They fade out as the climb nears the mark.
+   */
+  private showTapGuide(): void {
+    const make = (dir: -1 | 1): Phaser.GameObjects.Container => {
+      // The same look as the swipe hint: a soft see-through pale butter pill with a white rim, brown bold text and caramel triangles that nudge the way they point.
+      const w = 116;
+      const h = 100;
+      const bg = this.add.graphics();
+      bg.fillStyle(0xfff6e8, 0.62).fillRoundedRect(-w / 2, -h / 2, w, h, HINT_RADIUS);
+      bg.lineStyle(2, 0xffffff, 0.85).strokeRoundedRect(-w / 2, -h / 2, w, h, HINT_RADIUS);
+      const handY = -17;
+      const scale = 2;
+      const ripple = this.add.circle(0, handY - 9 * scale, 10, 0xffffff, 0).setStrokeStyle(2.5, COLORS.primaryDark, 0.85);
+      const hand = drawIcon(this, 'tap', 0, handY, 0x6d4c41, { width: 2.2 }).setScale(scale);
+      this.tweens.add({ targets: hand, y: handY + 6, duration: 420, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }); // a tapping finger
+      this.tweens.add({ targets: ripple, scale: 2.2, alpha: 0, duration: 840, repeat: -1, ease: 'Sine.easeOut' });
+      const text = this.add.text(0, 0, t('hud.tap'), { fontFamily: FONT.family, fontSize: '19px', fontStyle: 'bold', color: '#6d4c41', padding: { top: 3, bottom: 3 } }).setOrigin(0.5);
+      const rowY = 31;
+      const arrowGap = 10;
+      const arrowW = 12;
+      const total = arrowW + arrowGap + text.width;
+      text.setPosition(dir < 0 ? total / 2 - text.width / 2 : -total / 2 + text.width / 2, rowY);
+      const arrow = this.add.graphics().setPosition(dir < 0 ? -total / 2 + arrowW / 2 : total / 2 - arrowW / 2, rowY);
+      arrow.fillStyle(COLORS.primaryDark, 1).fillTriangle(dir * 7, 0, -dir * 5, -8, -dir * 5, 8);
+      this.tweens.add({ targets: arrow, x: arrow.x + dir * 5, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      return this.add.container(GAME_WIDTH / 2 + dir * 140, TAP_GUIDE_Y, [bg, ripple, hand, text, arrow]).setScrollFactor(0).setDepth(24);
+    };
+    this.tapGuide = [make(-1), make(1)];
+  }
+
+  /** Fades the tap guides and the swipe hint out together over the last stretch before TAP_GUIDE_METERS, then removes them. */
+  private updateTapGuide(): void {
+    if (this.tapGuide.length === 0 && !this.swipeHint) return;
+    const hints = [...this.tapGuide, ...(this.swipeHint ? [this.swipeHint] : [])];
+    const left = TAP_GUIDE_METERS - this.run.heightMeters;
+    if (left <= 0) {
+      hints.forEach((c) => {
+        this.tweens.killTweensOf(c.list);
+        c.destroy();
+      });
+      this.tapGuide = [];
+      this.swipeHint = null;
+      return;
+    }
+    hints.forEach((c) => c.setAlpha(Math.min(1, left / TAP_GUIDE_FADE_METERS)));
+  }
+
   /** Soft see-through pill near the bottom with a small caramel arrow either side that nudges outward, fading after a few seconds. */
   private showSwipeHint(): void {
     const text = this.add
@@ -385,8 +447,8 @@ export class GameScene extends Phaser.Scene {
     const h = 40;
     const bg = this.add.graphics();
     // Soft and see-through so the playfield shows behind it: a pale butter pill with a white rim.
-    bg.fillStyle(0xfff6e8, 0.62).fillRoundedRect(-w / 2, -h / 2, w, h, h / 2);
-    bg.lineStyle(2, 0xffffff, 0.85).strokeRoundedRect(-w / 2, -h / 2, w, h, h / 2);
+    bg.fillStyle(0xfff6e8, 0.62).fillRoundedRect(-w / 2, -h / 2, w, h, HINT_RADIUS);
+    bg.lineStyle(2, 0xffffff, 0.85).strokeRoundedRect(-w / 2, -h / 2, w, h, HINT_RADIUS);
     const arrow = (dir: -1 | 1): Phaser.GameObjects.Graphics => {
       const g = this.add.graphics().setPosition(dir * (w / 2 - 24), 0);
       g.fillStyle(COLORS.primaryDark, 1).fillTriangle(dir * 7, 0, -dir * 5, -8, -dir * 5, 8);
@@ -394,17 +456,7 @@ export class GameScene extends Phaser.Scene {
       return g;
     };
     const arrows = [arrow(-1), arrow(1)];
-    const hint = this.add.container(GAME_WIDTH / 2, GAME_HEIGHT - 60, [bg, text, ...arrows]).setScrollFactor(0).setDepth(25);
-    this.tweens.add({
-      targets: hint,
-      alpha: 0,
-      delay: 3500,
-      duration: 600,
-      onComplete: () => {
-        this.tweens.killTweensOf(arrows);
-        hint.destroy();
-      },
-    });
+    this.swipeHint = this.add.container(GAME_WIDTH / 2, GAME_HEIGHT - 60, [bg, text, ...arrows]).setScrollFactor(0).setDepth(25);
   }
 
   /**
@@ -706,6 +758,7 @@ export class GameScene extends Phaser.Scene {
     this.spawnItems(dt * 1000);
     this.updateItems(dt);
     this.updateHud();
+    this.updateTapGuide();
     this.updateCopterSound();
     this.updateShieldAura(time);
     this.updatePowerAura(time, dt * 1000);
@@ -972,21 +1025,25 @@ export class GameScene extends Phaser.Scene {
     const { x, y } = this.player;
     const g = this.shieldAura;
     g.clear();
-    // A cloud of twinkling four-point sparkles drifting around the body on two orbits.
+    // A cloud of twinkling little shields drifting around the body on two orbits.
     const count = 9;
     for (let i = 0; i < count; i++) {
       const outer = i % 3 !== 0;
       const a = (outer ? timeMs / 800 : -timeMs / 550) + (i * Math.PI * 2) / count;
       const r = PLAYER_SPRITE_SIZE * (outer ? 0.74 : 0.5) * (1 + 0.06 * Math.sin(timeMs / 300 + i));
       const twinkle = 0.5 + 0.5 * Math.sin(timeMs / 140 + i * 1.7);
-      this.drawSparkle(g, x + Math.cos(a) * r, y + Math.sin(a) * r, 7 + 7 * twinkle, i % 2 ? 0xffffff : 0x81d4fa, 0x0288d1, 0.8 + 0.2 * twinkle);
+      this.drawMiniShield(g, x + Math.cos(a) * r, y + Math.sin(a) * r, 6 + 5 * twinkle, i % 2 ? 0xffffff : 0x81d4fa, 0x0288d1, 0.8 + 0.2 * twinkle);
     }
   }
 
-  /** A four-point star centred on (x, y), `s` px from the centre to each tip. */
-  private drawSparkle(g: Phaser.GameObjects.Graphics, x: number, y: number, s: number, color: number, outline: number, alpha: number): void {
-    const k = s * 0.32;
-    const points = [[0, -s], [k, -k], [s, 0], [k, k], [0, s], [-k, k], [-s, 0], [-k, -k]].map(([px, py]) => new Phaser.Math.Vector2(x + px, y + py));
+  /** The points of a little heater-shaped shield centred on (x, y), `s` px from the centre to the top and about `s` to each side. */
+  private shieldPoints(x: number, y: number, s: number): Phaser.Math.Vector2[] {
+    return [[-0.85, -0.8], [0, -1], [0.85, -0.8], [0.85, 0.1], [0.55, 0.65], [0, 1.1], [-0.55, 0.65], [-0.85, 0.1]].map(([px, py]) => new Phaser.Math.Vector2(x + px * s, y + py * s));
+  }
+
+  /** A tiny filled shield with an outline, for the shield's twinkling cloud. */
+  private drawMiniShield(g: Phaser.GameObjects.Graphics, x: number, y: number, s: number, color: number, outline: number, alpha: number): void {
+    const points = this.shieldPoints(x, y, s);
     g.fillStyle(color, alpha).fillPoints(points, true);
     g.lineStyle(2, outline, alpha).strokePoints(points, true, true);
   }
@@ -1019,11 +1076,12 @@ export class GameScene extends Phaser.Scene {
 
   /** The bubble pops outward when the shield takes a hit. */
   private burstShield(): void {
-    // A burst of sparkles flies off the shield, as if the hit glanced away.
+    // A burst of little shields flies off, as if the hit glanced away.
     const sparks = 10;
     for (let i = 0; i < sparks; i++) {
       const angle = (i / sparks) * Math.PI * 2 + Math.random() * 0.3;
-      const spark = this.add.star(this.player.x, this.player.y, 4, 3, 11, i % 2 ? 0xffffff : 0xffeb3b).setStrokeStyle(2, 0x0288d1, 1).setDepth(7);
+      const spark = this.add.graphics().setPosition(this.player.x, this.player.y).setDepth(7);
+      this.drawMiniShield(spark, 0, 0, 10, i % 2 ? 0xffffff : 0x81d4fa, 0x0288d1, 1);
       this.tweens.add({
         targets: spark,
         x: this.player.x + Math.cos(angle) * 85,

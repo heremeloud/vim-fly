@@ -17,9 +17,11 @@ export const HOW_TO_PLAY_ROWS_HEIGHT = 64 * 3 + 12 * 2;
 export function addHowToPlay(scene: Phaser.Scene, add: <T extends Phaser.GameObjects.GameObject>(o: T) => T, x: number, y: number, w: number, depth: number): void {
   STEPS.forEach((step, i) => {
     const ry = y + i * 76;
-    add(roundedBox(scene, x, ry, w, 64, COLORS.background, RADIUS.control).setDepth(depth + 2));
+    // The first row, the one thing you must know (tap left or right), stands out: butter fill, a butter outline and bold text.
+    const key = i === 0;
+    add(roundedBox(scene, x, ry, w, 64, key ? COLORS.primarySoft : COLORS.background, RADIUS.control, key ? COLORS.primary : undefined).setDepth(depth + 2));
     add(roundedBox(scene, x + 10, ry + 10, 44, 44, step.tint, RADIUS.control).setDepth(depth + 2));
     add(drawIcon(scene, step.icon, x + 32, ry + 32, COLORS.onPrimary).setDepth(depth + 3));
-    add(label(scene, x + 68, ry + 32, t(step.key), { size: 13, wrap: w - 82 }).setOrigin(0, 0.5).setDepth(depth + 3));
+    add(label(scene, x + 68, ry + 32, t(step.key), { size: 13, wrap: w - 82, bold: key }).setOrigin(0, 0.5).setDepth(depth + 3));
   });
 }

@@ -57,6 +57,7 @@ export const zh: Record<StringKey, string> = {
   'hud.shield': '护盾',
   'hud.dash': '冲刺',
   'hud.swipeHint': '左右滑动冲刺、闪避!',
+  'hud.tap': '点击',
   'hud.paused': '已暂停',
   'hud.dashPlus': '+1 冲刺',
   'hud.stunned': '眩晕',
