@@ -25,7 +25,7 @@ export function dashTrail(scene: Phaser.Scene, textureKey: string, x: number, y:
 /**
  * Comic speed lines for a fast climb (the helicopter): tapered streaks that come to a point at the top, fanned a little
  * away from Vimmy on both sides, They race downward past him and fade.
- * White and sky blue with a dark outline so they show on every backdrop.
+ * White with a dark outline so they show on every backdrop.
  */
 export function climbSpeedLines(scene: Phaser.Scene, x: number, y: number, size: number): void {
   for (let i = 0; i < 2; i++) {
@@ -43,7 +43,7 @@ export function climbSpeedLines(scene: Phaser.Scene, x: number, y: number, size:
       new Phaser.Math.Vector2(-width * 0.5, len * 0.3),
       new Phaser.Math.Vector2(-width * 0.55, -len * 0.1),
     ];
-    g.fillStyle(i % 2 ? 0xb3e5fc : COLORS.surface, 0.7).fillPoints(blade, true);
+    g.fillStyle(COLORS.surface, 0.8).fillPoints(blade, true);
     g.lineStyle(1, COLORS.text, 0.45).strokePoints(blade, true, true);
     g.setAngle(side * Phaser.Math.Between(1, 5)); // fan outward from Vimmy
     scene.tweens.add({ targets: g, y: g.y + 190 + Phaser.Math.Between(0, 60), scaleY: 1.35, alpha: 0, duration: 320 + Phaser.Math.Between(0, 140), ease: 'Quad.easeIn', onComplete: () => g.destroy() });
