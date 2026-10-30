@@ -64,6 +64,13 @@ const START_Y = GAME_HEIGHT - 200;
 const TAP_GUIDE_METERS = 50;
 const TAP_GUIDE_FADE_METERS = 8;
 const TAP_GUIDE_Y = GAME_HEIGHT - 190;
+/** The score panel (score, then metres, then the progress bar) runs from y 8 to HUD_BOTTOM; the right-hand stack of dash breads and buttons ends at the same line. */
+const HUD_H = 74;
+const HUD_BOTTOM = 8 + HUD_H;
+const REGISTER_W = 128;
+const PROGRESS = { x: 20, y: 70, w: REGISTER_W - 24, h: 7 };
+/** The register's LCD: amber digits on dark brown, flashing green or red on a gain or a loss. */
+const LCD = { x: 16, y: 14, w: REGISTER_W - 16, h: 32, right: REGISTER_W - 8, text: 0xf7bd3b, up: 0x8be28f, down: 0xff7b7b, screen: 0x2b1d12 };
 const VIMMY_FLY_ANIM = 'vimmy-fly';
 const VIMMY_FLIP_ANIM = 'vimmy-helicopter-flip';
 const BUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
@@ -245,23 +252,26 @@ export class GameScene extends Phaser.Scene {
 
     // Top-left panel: score big, climbed meters small, and a row of status chips below it.
     this.hudPanel = this.add.graphics().setScrollFactor(0).setDepth(19);
-    // Cream cards with a chocolate crust outline and a hard shadow, like the buttons in the menus.
-    const panel = (x: number, y: number, w: number, h: number): void => {
-      this.hudPanel.fillStyle(COLORS.onPrimary, 0.28).fillRoundedRect(x + 2, y + 4, w, h, 16);
-      this.hudPanel.fillStyle(COLORS.background, 0.96).fillRoundedRect(x, y, w, h, 16);
-      this.hudPanel.lineStyle(3, COLORS.onPrimary, 1).strokeRoundedRect(x, y, w, h, 16);
-    };
-    panel(8, 8, 164, 70);
-    // The dash breads get their own pill so they never blend into the backdrop.
-    const breadsW = PHYSICS.swipeDashesPerRun * 32 + 12;
-    panel(GAME_WIDTH - breadsW - 8, 8, breadsW, 44);
+    // The score panel is a little cash register: a dark LCD with the score in amber digits, then the metres and the progress bar.
+    this.drawRegister(8, 8, REGISTER_W, HUD_H);
+    // The dash breads sit on a wooden tray with a handle at each end, so they never blend into the backdrop. The right-hand stack
+    // (tray, then the sound and pause buttons) ends at the same height as the register.
+    const trayW = PHYSICS.swipeDashesPerRun * 32 + 12;
+    this.drawTray(GAME_WIDTH - trayW - 8, 8, trayW, 36);
     this.progressGfx = this.add.graphics().setScrollFactor(0).setDepth(20);
     this.scoreText = this.add
-      .text(20, 5, '0', { fontFamily: FONT.display, fontSize: '32px', color: hex(COLORS.text), stroke: hex(COLORS.text), strokeThickness: 2 })
+      .text(LCD.right, LCD.y + 2, '0', { fontFamily: FONT.display, fontSize: '26px', color: hex(LCD.text), stroke: hex(LCD.text), strokeThickness: 1 })
+      .setOrigin(1, 0)
+      .setScrollFactor(0)
+      .setDepth(20);
+    // The currency sign sits at the left of the LCD, dimmer than the digits, the way a register shows it.
+    this.add
+      .text(LCD.x + 10, LCD.y + 4, '฿', { fontFamily: FONT.family, fontSize: '20px', fontStyle: 'bold', color: hex(LCD.text) })
+      .setAlpha(0.75)
       .setScrollFactor(0)
       .setDepth(20);
     this.metersText = this.add
-      .text(20, 50, '▲ 0 m', { fontFamily: FONT.family, fontSize: '14px', fontStyle: 'bold', color: hex(COLORS.muted) })
+      .text(20, 52, '▲ 0 m', { fontFamily: FONT.family, fontSize: '13px', fontStyle: 'bold', color: hex(COLORS.muted) })
       .setScrollFactor(0)
       .setDepth(20);
     this.lastScore = 0;
@@ -283,7 +293,7 @@ export class GameScene extends Phaser.Scene {
 
     // One bread per sideways dash left; spent ones dim.
     this.swipeBreads = Array.from({ length: PHYSICS.swipeDashesPerRun }, (_, i) =>
-      addItemSprite(this, GAME_WIDTH - 28 - i * 32, 30, { id: 'cheeseButterBread', color: 0xffca28 }, 28).setScrollFactor(0).setDepth(20),
+      addItemSprite(this, GAME_WIDTH - 28 - i * 32, 26, { id: 'cheeseButterBread', color: 0xffca28 }, 26).setScrollFactor(0).setDepth(20),
     ).reverse();
 
     // Location banner: one small, see-through line, "Stage N · Location" (or just the location within the same stage).
@@ -331,25 +341,52 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  /** Two round buttons under the dash breads: sound on/off and pause/resume. */
+  /** The score panel drawn as a cash register: a cream body with a chocolate outline and a dark LCD for the score. */
+  private drawRegister(x: number, y: number, w: number, h: number): void {
+    const g = this.hudPanel;
+    g.fillStyle(COLORS.onPrimary, 0.28).fillRoundedRect(x + 2, y + 4, w, h, 16);
+    g.fillStyle(COLORS.background, 0.96).fillRoundedRect(x, y, w, h, 16);
+    g.lineStyle(3, COLORS.onPrimary, 1).strokeRoundedRect(x, y, w, h, 16);
+    // The LCD: a dark screen with a thin lighter rim.
+    g.fillStyle(LCD.screen, 1).fillRoundedRect(LCD.x, LCD.y, LCD.w, LCD.h, 8);
+    g.lineStyle(1.5, 0x5a3b22, 1).strokeRoundedRect(LCD.x, LCD.y, LCD.w, LCD.h, 8);
+  }
+
+  /** The dash-bread panel drawn as a wooden tray: a caramel rim around a pale inside, with a handle at each end. */
+  private drawTray(x: number, y: number, w: number, h: number): void {
+    const g = this.hudPanel;
+    g.fillStyle(COLORS.onPrimary, 0.28).fillRoundedRect(x + 2, y + 4, w, h, 12);
+    // The handles stick out a little at both ends.
+    g.fillStyle(COLORS.primaryDark, 1).fillRoundedRect(x - 5, y + h / 2 - 6, 10, 12, 4).fillRoundedRect(x + w - 5, y + h / 2 - 6, 10, 12, 4);
+    g.lineStyle(2, COLORS.onPrimary, 1).strokeRoundedRect(x - 5, y + h / 2 - 6, 10, 12, 4).strokeRoundedRect(x + w - 5, y + h / 2 - 6, 10, 12, 4);
+    // The tray body, then its pale inside.
+    g.fillStyle(COLORS.primaryDark, 1).fillRoundedRect(x, y, w, h, 12);
+    g.lineStyle(3, COLORS.onPrimary, 1).strokeRoundedRect(x, y, w, h, 12);
+    g.fillStyle(0xfff0c2, 1).fillRoundedRect(x + 4, y + 4, w - 8, h - 8, 8);
+  }
+
+  /** Two rounded-square buttons under the dash breads: sound on/off and pause/resume. */
   private addHudButtons(): void {
-    const y = 76;
-    const r = 19;
+    const size = 32; // small rounded squares, like the score and dash-bread panels beside them
+    const radius = 10;
+    const y = HUD_BOTTOM - size / 2; // their bottom edge is the bottom of the score panel
     const spots: { id: 'sound' | 'pause'; x: number }[] = [
-      { id: 'sound', x: GAME_WIDTH - 28 - 46 },
-      { id: 'pause', x: GAME_WIDTH - 28 },
+      { id: 'sound', x: GAME_WIDTH - 8 - size / 2 - (size + 6) },
+      { id: 'pause', x: GAME_WIDTH - 8 - size / 2 }, // its right edge lines up with the dash-bread panel
     ];
     const bg = this.add.graphics().setScrollFactor(0).setDepth(19);
     const iconFor = (id: 'sound' | 'pause'): IconId => (id === 'sound' ? (soundEnabled() ? 'speaker' : 'speakerOff') : this.paused ? 'play' : 'pause');
     const redraw = (): void => {
       this.hudButtonIcons.forEach((g) => g.destroy());
-      this.hudButtonIcons = spots.map((s) => drawIcon(this, iconFor(s.id), s.x, y, COLORS.text).setScrollFactor(0).setDepth(21));
+      this.hudButtonIcons = spots.map((s) => drawIcon(this, iconFor(s.id), s.x, y, COLORS.text).setScale(0.78).setScrollFactor(0).setDepth(21));
     };
     spots.forEach((s) => {
-      bg.fillStyle(COLORS.onPrimary, 0.28).fillCircle(s.x + 1, y + 3, r);
-      bg.fillStyle(COLORS.background, 0.96).fillCircle(s.x, y, r);
-      bg.lineStyle(3, COLORS.onPrimary, 1).strokeCircle(s.x, y, r);
-      const hit = this.add.circle(s.x, y, r + 4, 0xffffff, 0.001).setScrollFactor(0).setDepth(22).setInteractive({ useHandCursor: true });
+      const left = s.x - size / 2;
+      const top = y - size / 2;
+      bg.fillStyle(COLORS.onPrimary, 0.28).fillRoundedRect(left + 2, top + 4, size, size, radius);
+      bg.fillStyle(COLORS.background, 0.96).fillRoundedRect(left, top, size, size, radius);
+      bg.lineStyle(3, COLORS.onPrimary, 1).strokeRoundedRect(left, top, size, size, radius);
+      const hit = this.add.rectangle(s.x, y, size + 6, size + 6, 0xffffff, 0.001).setScrollFactor(0).setDepth(22).setInteractive({ useHandCursor: true });
       hit.on('pointerup', () => {
         if (s.id === 'sound') setSoundEnabled(this.game, !soundEnabled());
         else this.togglePause();
@@ -1125,14 +1162,17 @@ export class GameScene extends Phaser.Scene {
     const next = ZONES[ZONES.indexOf(this.zone) + 1];
     const fraction = next ? Phaser.Math.Clamp((this.run.heightMeters - this.zone.fromMeters) / (next.fromMeters - this.zone.fromMeters), 0, 1) : 1;
     this.progressGfx.clear();
-    this.progressGfx.fillStyle(COLORS.border, 1).fillRoundedRect(92, 55, 70, 8, 4);
-    if (fraction > 0) this.progressGfx.fillStyle(COLORS.primary, 1).fillRoundedRect(92, 55, Math.max(8, 70 * fraction), 8, 4).lineStyle(1.5, COLORS.primaryDark, 1).strokeRoundedRect(92, 55, Math.max(8, 70 * fraction), 8, 4);
+    this.progressGfx.fillStyle(COLORS.border, 1).fillRoundedRect(PROGRESS.x, PROGRESS.y, PROGRESS.w, PROGRESS.h, 4);
+    if (fraction > 0) {
+      const filled = Math.max(PROGRESS.h, PROGRESS.w * fraction);
+      this.progressGfx.fillStyle(COLORS.primary, 1).fillRoundedRect(PROGRESS.x, PROGRESS.y, filled, PROGRESS.h, 4).lineStyle(1.5, COLORS.primaryDark, 1).strokeRoundedRect(PROGRESS.x, PROGRESS.y, filled, PROGRESS.h, 4);
+    }
     if (score !== this.lastScore) {
       // Pop and flash green on a gain, red on a loss.
-      this.scoreText.setColor(score > this.lastScore ? hex(COLORS.buff) : hex(COLORS.debuff));
+      this.scoreText.setColor(score > this.lastScore ? hex(LCD.up) : hex(LCD.down));
       this.tweens.killTweensOf(this.scoreText);
       this.scoreText.setScale(1.3);
-      this.tweens.add({ targets: this.scoreText, scale: 1, duration: 250, ease: 'Back.easeOut', onComplete: () => this.scoreText.setColor(hex(COLORS.text)) });
+      this.tweens.add({ targets: this.scoreText, scale: 1, duration: 250, ease: 'Back.easeOut', onComplete: () => this.scoreText.setColor(hex(LCD.text)) });
       this.lastScore = score;
     }
     this.swipeBreads.forEach((b, i) => b.setAlpha(i < this.swipesLeft ? 1 : 0.2));
@@ -1150,7 +1190,7 @@ export class GameScene extends Phaser.Scene {
     if (this.run.slowMs > 0) chips.push({ icon: STATUS_ICON.slow, label: `${t('hud.slow')} ${secs(this.run.slowMs)}`, color: COLORS.debuff });
 
     this.chipGfx.clear();
-    let y = 88;
+    let y = HUD_BOTTOM + 10;
     this.chipTexts.forEach((txt, i) => {
       const chip = chips[i];
       this.chipIcons[i].setVisible(false);
