@@ -10,6 +10,7 @@ import { ScrollList } from '../ui/ScrollList';
 import { drawIcon } from '../ui/icons';
 import { COLORS, RADIUS } from '../ui/theme';
 import { CHIP, TAB_BAR_HEIGHT, button, chipWidth, hitArea, label, pageHeader, paintChip, roundedBox, tabBar } from '../ui/widgets';
+import { baht } from '../core/format';
 
 const HEADER_H = 156;
 const ROW_H = 58;
@@ -20,6 +21,31 @@ const LIST_PAD = 14;
 function addCrown(scene: Phaser.Scene, c: Phaser.GameObjects.Container, x: number, y: number): void {
   c.add(drawIcon(scene, 'crown', x - 2, y - 20, COLORS.onPrimary, { width: 1.8, fill: COLORS.primary }).setScale(0.8).setRotation(-0.25));
 }
+/** Badge colors for the podium: gold (with the crown), silver and bronze (with a ribbon). Other ranks keep the plain badge. */
+const PODIUM = [
+  { fill: COLORS.primary, ring: COLORS.primaryDark },
+  { fill: 0xe3eaee, ring: 0x90a4ae },
+  { fill: 0xf3c7a0, ring: 0xb56a3a },
+] as const;
+
+/** The round rank badge for a row, dressed for the podium: gold and a crown for 1st, silver and bronze with a ribbon for 2nd and 3rd. */
+function addRankBadge(scene: Phaser.Scene, c: Phaser.GameObjects.Container, x: number, y: number, radius: number, rank: number): void {
+  const podium = PODIUM[rank - 1];
+  const badge = scene.add.circle(x, y, radius, podium?.fill ?? COLORS.background);
+  if (podium) badge.setStrokeStyle(2.5, podium.ring);
+  c.add(badge);
+  c.add(label(scene, x, y, `${rank}`, { size: 17, bold: true, color: COLORS.text }).setOrigin(0.5));
+  if (rank === 1) addCrown(scene, c, x, y);
+  else if (podium) {
+    // A small medal ribbon: two tails meeting in a V above the badge.
+    const g = scene.add.graphics();
+    g.fillStyle(podium.ring, 1);
+    g.fillPoints([new Phaser.Math.Vector2(x - 10, y - radius - 9), new Phaser.Math.Vector2(x - 3, y - radius - 9), new Phaser.Math.Vector2(x + 2, y - radius + 3), new Phaser.Math.Vector2(x - 5, y - radius + 3)], true);
+    g.fillPoints([new Phaser.Math.Vector2(x + 10, y - radius - 9), new Phaser.Math.Vector2(x + 3, y - radius - 9), new Phaser.Math.Vector2(x - 2, y - radius + 3), new Phaser.Math.Vector2(x + 5, y - radius + 3)], true);
+    c.add(g);
+  }
+}
+
 /** Foods shown on the history rows in turn (by order number), instead of a plain number badge. */
 const ORDER_FOODS = ['pandanCustardBread', 'coffee', 'shiopan', 'pasta', 'sandwich', 'tomYum', 'cheeseButterBread', 'shrimpFriedRiceBox', 'cilantroBread', 'wine', 'fishSauceBread'];
 /** Text on the left of a row must end before this x, where the score and best badge begin. */
@@ -123,13 +149,11 @@ export class OrdersScene extends Phaser.Scene {
     rows.forEach((row, i) => {
       const rank = i + 1;
       c.add(roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, RADIUS.card, COLORS.border));
-      c.add(this.add.circle(52, y + ROW_H / 2, 18, rank === 1 ? COLORS.primary : COLORS.background));
-      c.add(label(this, 52, y + ROW_H / 2, `${rank}`, { size: 17, bold: true }).setOrigin(0.5));
-      if (rank === 1) addCrown(this, c, 52, y + ROW_H / 2);
+      addRankBadge(this, c, 52, y + ROW_H / 2, 18, rank);
       c.add(label(this, 84, y + 8, row.name, { size: 17, bold: true, maxWidth: 230 }));
       const when = new Date(row.createdAt).toLocaleDateString(localeInfo().dateLocale, { day: 'numeric', month: 'short', year: 'numeric' });
       c.add(label(this, 84, y + 34, when, { size: 12, color: COLORS.muted }));
-      c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2, `฿${row.score}`, { size: 20, bold: true, color: COLORS.accent }).setOrigin(1, 0.5));
+      c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2, baht(row.score), { size: 20, bold: true, color: COLORS.accent }).setOrigin(1, 0.5));
       y += ROW_H + ROW_GAP;
     });
     this.list.setContentHeight(y + LIST_PAD);
@@ -165,11 +189,10 @@ export class OrdersScene extends Phaser.Scene {
     c.add(roundedBox(this, 20, y, GAME_WIDTH - 40, ROW_H, COLORS.surface, RADIUS.card, isBest ? COLORS.primary : COLORS.border));
 
     // Left badge: the rank on the ladder, or a food picture in the history (the order number is in the text).
-    c.add(this.add.circle(52, y + ROW_H / 2, 20, rank === 1 ? COLORS.primary : COLORS.background));
     if (rank !== null) {
-      c.add(label(this, 52, y + ROW_H / 2, `${rank}`, { size: 17, bold: true, color: COLORS.text }).setOrigin(0.5));
-      if (rank === 1) addCrown(this, c, 52, y + ROW_H / 2);
+      addRankBadge(this, c, 52, y + ROW_H / 2, 20, rank);
     } else {
+      c.add(this.add.circle(52, y + ROW_H / 2, 20, COLORS.background));
       const food = ORDER_FOODS[(run.no - 1 + ORDER_FOODS.length) % ORDER_FOODS.length];
       c.add(addItemSprite(this, 52, y + ROW_H / 2, { id: food, color: 0xd7ccc8 }, 28));
     }
@@ -184,7 +207,7 @@ export class OrdersScene extends Phaser.Scene {
     c.add(label(this, dateX, y + 10, when, { size: 12, color: COLORS.muted, maxWidth: SCORE_LEFT - dateX }));
     c.add(label(this, 84, y + 33, `${zoneLabel(zone)} · ${run.heightMeters} m`, { size: 12, color: COLORS.muted, maxWidth: SCORE_LEFT - 84 }));
 
-    c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2 - 7, `฿${run.score}`, { size: 20, bold: true, color: COLORS.accent }).setOrigin(1, 0.5));
+    c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2 - 7, baht(run.score), { size: 20, bold: true, color: COLORS.accent }).setOrigin(1, 0.5));
     if (isBest) c.add(label(this, GAME_WIDTH - 36, y + ROW_H / 2 + 12, `★ ${t('orders.bestBadge')}`, { size: 12, bold: true, color: COLORS.primaryDark, maxWidth: 80 }).setOrigin(1, 0.5));
   }
 }

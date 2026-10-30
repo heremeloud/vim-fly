@@ -3,6 +3,7 @@ import { difficulty, ramp } from '../core/difficulty';
 import { finaleAt } from '../core/finales';
 import { zoneAt, type ZoneId } from '../core/zones';
 import { itemName, t } from '../i18n';
+import { baht } from '../core/format';
 
 // Single source of truth for items. Values are starting points to tune.
 // Mirrors the item table in plan.md. Durations are in milliseconds.
@@ -145,8 +146,8 @@ export function describeEffect(item: ItemDef): string {
 /** The menu "price": the point value for points items and penalties, otherwise empty unless the item also carries bonus points (the category chip already says buff or debuff). */
 export function priceLabel(item: ItemDef): string {
   const e = item.effect;
-  if (e.type === 'points') return e.amount >= 0 ? `฿${e.amount}` : `-฿${-e.amount}`;
-  return item.bonusPoints ? `฿${item.bonusPoints}` : '';
+  if (e.type === 'points') return baht(e.amount);
+  return item.bonusPoints ? baht(item.bonusPoints) : '';
 }
 
 /** The item's name in the current language. */
