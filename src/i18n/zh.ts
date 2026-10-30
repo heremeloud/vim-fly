@@ -3,44 +3,49 @@
 import type { LangKey } from './en';
 
 export const zh: Record<LangKey, string> = {
+  // Language and tabs
   'lang.title': '语言',
-
   'tab.store': '首页',
   'tab.menu': '菜单',
   'tab.orders': '订单',
   'tab.promos': '活动',
 
+  // App shell
   'app.tagline': '超乖乖的蜜蜂狗狗来给你送餐啦',
   'app.deliverTo': '配送至',
   'app.searchHint': '搜搜面包, 便当, 咖啡吧...',
+  'svc.food': '美食',
+  'svc.mart': '超市',
+  'svc.express': '快递',
+  'svc.ride': '出行',
 
+  // Home and countdown
   'home.orderNow': '马上下单',
   'home.open': '正在营业',
+  'home.watchPilot': '立即观看试播集',
   'countdown.soon': '第1集 · 马上就来',
   'countdown.now': '第1集开播啦!',
   'countdown.days': '距离第1集还有 {d}天{h}小时',
   'countdown.hours': '距离第1集还有 {h}小时',
 
+  // Menu
   'menu.title': '菜单',
   'menu.subtitle': '"我的人生怎么会这么糟糕啊..."',
   'kind.points': '积分',
   'kind.buff': '增益',
   'kind.debuff': '减益',
-  'price.buff': '增益',
-  'price.debuff': '减益',
 
-
-  'orders.title': '订单',
+  // Orders tab
   'orders.subtitle': '世界排行榜',
   'orders.tab.mine': '我的订单',
   'orders.tab.top': '顾客排行榜',
   'orders.orderNo': '订单 #{n}',
   'orders.bestBadge': '最佳',
   'orders.empty': '还没有订单哦。快来下第一单吧!',
-  'orders.topNote': '来自全世界的超级顾客们!',
   'orders.offline': '暂时连不上全球排行榜, 先看看你在这台设备上的最佳记录吧。',
   'orders.loading': '加载中… 稍等一下哦',
 
+  // Receipt
   'receipt.title': '收据',
   'receipt.height': '高度',
   'receipt.reached': '到达地点',
@@ -50,9 +55,44 @@ export const zh: Record<LangKey, string> = {
   'receipt.newBest': '刷新纪录啦!',
   'receipt.thanks': '谢谢惠顾!',
   'receipt.follow': '关注官方账号',
-  'receipt.share': '分享',
   'receipt.shareText': '我在 Vimmy Fly 拿到了 {score} 分! 你能打破我的纪录吗?🐶🐝\n面包店即将开张!🍞🧀🧈\n敬请期待新剧 Bake Love Feeling, 也请多多支持饰演 NoeyCheese 的 ViewMim 哦!💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
+  'receipt.sending': '正在上传分数… 稍等一下哦',
+  'receipt.sendFailed': '暂时连不上排行榜, 不过分数已经保存在这台设备上啦。',
 
+  // Onboarding and how to play
+  'onboard.title': '欢迎光临, 新顾客!',
+  'onboard.nameLabel': '你的名字',
+  'onboard.namePlaceholder': '输入名字吧',
+  'onboard.howTitle': '怎么玩',
+  'onboard.tap': '点击屏幕左侧或右侧(或按A/D键), 一边向上飞, 一边朝对应方向移动!',
+  'onboard.catch': '接住食物赚积分, 努力飞高高! 记得躲开危险道具哦!',
+  'onboard.swipe': '遇到危险? 向左或向右滑动（或按 Shift + A/D）就能冲刺闪避! 每局可以使用3次，吃下奶酪黄油面包还能恢复1次!',
+  'onboard.start': '开始下单!',
+
+  // Settings
+  'settings.title': '设置',
+  'settings.nameInvalid': '先输入名字哦!',
+  'settings.nameBlocked': '这个名字不能用哦，换一个试试吧!',
+  'settings.close': '关闭',
+  'settings.sound': '声音',
+  'settings.on': '开启',
+  'settings.off': '关闭',
+
+  // Promos and video
+  'promos.pilot.title': '观看试播集',
+  'promos.copied': '复制好啦!',
+  'promos.official': '官方账号',
+  'promos.leads': '主演',
+  'promos.role.cheese': '饰演 Cheese, 面包店老板',
+  'promos.role.noey': '饰演 Noey, 律师',
+  'promos.vimmy.role': 'Vimmy好爱好爱Mami和Mumu哦!!!',
+  'promos.soon': '马上就来',
+  'video.close': '关闭',
+  'video.title': '视频',
+  'video.openYoutube': '在 YouTube 打开',
+  'video.loading': '试播集加载中… 稍等一下哦',
+
+  // In-game HUD
   'hud.shield': '护盾',
   'hud.dash': '冲刺',
   'hud.swipeHint': '左右滑动冲刺、闪避!',
@@ -62,9 +102,13 @@ export const zh: Record<LangKey, string> = {
   'hud.stunned': '眩晕',
   'hud.power': '强力',
   'hud.dizzy': '头晕',
+  'hud.shy': '害羞',
+  'hud.slow': '减速',
+  'hud.magnet': '磁铁',
+  'shield.blocked': '挡住了!',
 
+  // Zones and finales
   'zone.stage': '第{n}关',
-
   'zone.ruralRoad': '乡间小路',
   'zone.bakery': '温暖烘焙坊',
   'zone.cafes': '咖啡店',
@@ -75,7 +119,6 @@ export const zh: Record<LangKey, string> = {
   'zone.aquarium': '水族馆',
   'zone.residence': 'Noey的家',
   'zone.bakeLove': '恋恋香气烘焙坊',
-
   // The last stretch of each location (see src/core/finales.ts).
   'finale.ruralRoad': '小心追尾!',
   'finale.bakery': '新鲜出炉!',
@@ -87,18 +130,24 @@ export const zh: Record<LangKey, string> = {
   'finale.residence': '温馨的夜晚!',
   'finale.aquarium': '"Noey, 你喜欢 Wan, 对不对?!"',
 
+  // Effects (item descriptions)
   'effect.points.gain': '获得 {n} 分',
-  'effect.refillsDash': '恢复1次侧向冲刺',
   'effect.points.loss': '扣除 {n} 分',
+  'effect.refillsDash': '恢复1次侧向冲刺',
   'effect.dash': '{s} 秒内嗖地向上冲',
   'effect.shield': '挡住下一次减益',
   'effect.cleanse': '清除眩晕和头晕状态',
   'effect.strongFlap': '{s} 秒内振翅力量提升 {p}%',
   'effect.doublePoints': '{s} 秒内得分翻倍',
+  'effect.magnet': '持续 {s} 秒吸引附近的食物和强化道具',
   'effect.stun': '无法移动 {s} 秒',
   'effect.disorient': '{s} 秒内左右反过来',
+  'effect.shy': '持续 {s} 秒, 每次拍翅膀上升的高度都不一样',
+  'effect.slow': '{s} 秒内飞行速度降低 {p}%',
   'effect.crash': '被撞落, 眩晕 {s} 秒',
+  'effect.swerve': '躲开小猫，向一旁闪避',
 
+  // Item names
   'item.pandanCustardBread': '斑斓卡仕达面包',
   'item.cheeseButterBread': '奶酪黄油面包',
   'item.cilantroBread': '香菜面包',
@@ -119,69 +168,25 @@ export const zh: Record<LangKey, string> = {
   'item.helicopter': '直升机',
   'item.gavelHammer': '法官的法槌',
   'item.carCrash': '车祸',
+  'item.cheesePopcorn': '芝士爆米花',
+  'item.dogEars': '狗耳发箍',
+  'item.iceCream': '冰淇淋',
+  'item.kitten': '小猫',
 
+  // Pickup callouts: buffs
   'buff.oyster': '双倍得分!',
   'buff.lawyerSuit': '护盾!',
-  'shield.blocked': '挡住了!',
   'buff.handkerchief': '恢复清醒!',
   'buff.rollingPin': '强力振翅!',
   'buff.helicopter': '直升机!',
+  'buff.goldenRetriever': '磁铁!',
 
+  // Pickup callouts: debuffs
   'debuff.cilantroBread': '晕乎乎!',
   'debuff.fishSauceBread': '减速!',
   'debuff.planner': '好失望! -300',
   'debuff.gavelHammer': '被击晕啦!',
   'debuff.carCrash': '撞车啦! -150',
-
-  'svc.food': '美食',
-  'svc.mart': '超市',
-  'svc.express': '快递',
-  'svc.ride': '出行',
-  'home.watchPilot': '立即观看试播集',
-  'promos.pilot.title': '观看试播集',
-  'promos.copied': '复制好啦!',
-  'promos.official': '官方账号',
-  'promos.leads': '主演',
-  'promos.role.cheese': '饰演 Cheese, 面包店老板',
-  'promos.role.noey': '饰演 Noey, 律师',
-  'promos.vimmy.role': 'Vimmy好爱好爱Mami和Mumu哦!!!',
-  'promos.soon': '马上就来',
-  'hud.shy': '害羞',
-  'effect.shy': '持续 {s} 秒, 每次拍翅膀上升的高度都不一样',
-  'hud.slow': '减速',
-  'effect.slow': '{s} 秒内飞行速度降低 {p}%',
-  'video.close': '关闭',
-  'video.title': '视频',
-  'video.openYoutube': '在 YouTube 打开',
-  'video.loading': '试播集加载中… 稍等一下哦',
-
-  'onboard.title': '欢迎光临, 新顾客!',
-  'onboard.nameLabel': '你的名字',
-  'onboard.namePlaceholder': '输入名字吧',
-  'onboard.howTitle': '怎么玩',
-  'onboard.tap': '点击屏幕左侧或右侧(或按A/D键), 一边向上飞, 一边朝对应方向移动!',
-  'onboard.catch': '接住食物赚积分, 努力飞高高! 记得躲开危险道具哦!',
-  'onboard.swipe': '遇到危险? 向左或向右滑动（或按 Shift + A/D）就能冲刺闪避! 每局可以使用3次，吃下奶酪黄油面包还能恢复1次!',
-  'onboard.start': '开始下单!',
-  'settings.title': '设置',
-  'settings.editName': '修改昵称',
-  'settings.saveName': '保存昵称',
-  'settings.nameInvalid': '先输入名字哦!',
-  'settings.nameBlocked': '这个名字不能用哦，换一个试试吧!',
-  'settings.close': '关闭',
-  'settings.sound': '声音',
-  'settings.on': '开启',
-  'settings.off': '关闭',
-  'receipt.sending': '正在上传分数… 稍等一下哦',
-  'receipt.sendFailed': '暂时连不上排行榜, 不过分数已经保存在这台设备上啦。',
-  'hud.magnet': '磁铁',
-  'effect.magnet': '持续 {s} 秒吸引附近的食物和强化道具',
-  'effect.swerve': '躲开小猫，向一旁闪避',
-  'item.cheesePopcorn': '芝士爆米花',
-  'item.dogEars': '狗耳发箍',
-  'item.iceCream': '冰淇淋',
-  'item.kitten': '小猫',
-  'buff.goldenRetriever': '磁铁!',
   'debuff.dogEars': '害羞!',
   'debuff.kitten': '闪开!',
 };

@@ -28,6 +28,10 @@ npm run check:i18n
 
 It fails if any language is missing a key, has an extra or empty key, uses different `{placeholders}` than English, or if an item or zone has no name. It needs Node 22.6 or newer. Run it after adding any string.
 
+## Key order
+
+Keys are grouped by area under `// Section` comments, in the same order in every language file: language and tabs, app shell, home, menu, orders, receipt, onboarding, settings, promos and video, HUD, zones and finales, effects, item names, then buff and debuff callouts. Put a new key in its section, in the same place in all five files.
+
 ## Adding or changing a string
 
 If the text is identical in every language, add it to `common.json` only (and nowhere else). Otherwise:

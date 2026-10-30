@@ -3,43 +3,49 @@
 import type { LangKey } from './en';
 
 export const zhHant: Record<LangKey, string> = {
+  // Language and tabs
   'lang.title': '語言',
-
   'tab.store': '首頁',
   'tab.menu': '菜單',
   'tab.orders': '訂單',
   'tab.promos': '活動',
 
+  // App shell
   'app.tagline': '超乖的蜜蜂狗狗來幫你送餐啦',
   'app.deliverTo': '配送至',
   'app.searchHint': '找找麵包, 便當或咖啡吧...',
+  'svc.food': '餐飲',
+  'svc.mart': '商城',
+  'svc.express': '快遞',
+  'svc.ride': '叫車',
 
+  // Home and countdown
   'home.orderNow': '馬上點餐',
   'home.open': '營業中',
+  'home.watchPilot': '立即觀看試播集',
   'countdown.soon': '第1集 · 馬上就來',
   'countdown.now': '第1集開播啦!',
   'countdown.days': '距離第1集還有 {d}天{h}小時',
   'countdown.hours': '距離第1集還有 {h}小時',
 
+  // Menu
   'menu.title': '菜單',
   'menu.subtitle': '「我的人生怎麼會這麼糟糕啊...」',
   'kind.points': '點數',
   'kind.buff': '增益',
   'kind.debuff': '減益',
-  'price.buff': '增益',
-  'price.debuff': '減益',
 
-  'orders.title': '訂單',
+  // Orders tab
   'orders.subtitle': '世界排行榜',
   'orders.tab.mine': '我的訂單',
   'orders.tab.top': '顧客排行榜',
   'orders.orderNo': '訂單 #{n}',
   'orders.bestBadge': '最佳',
   'orders.empty': '還沒有訂單喔。快來點第一份餐吧!',
-  'orders.topNote': '來自世界各地的超級顧客們!',
   'orders.offline': '暫時連不上全球排行榜, 先看看你在這台裝置上的最佳紀錄吧。',
   'orders.loading': '載入中… 等一下下喔',
 
+  // Receipt
   'receipt.title': '收據',
   'receipt.height': '高度',
   'receipt.reached': '抵達地點',
@@ -49,9 +55,44 @@ export const zhHant: Record<LangKey, string> = {
   'receipt.newBest': '刷新紀錄啦!',
   'receipt.thanks': '謝謝惠顧!',
   'receipt.follow': '追蹤官方帳號',
-  'receipt.share': '分享',
   'receipt.shareText': '我在 Vimmy Fly 拿到了 {score} 分! 你能打破我的紀錄嗎?🐶🐝\n麵包店即將開張!🍞🧀🧈\n敬請期待新劇 Bake Love Feeling, 也要多多支持飾演 NoeyCheese 的 ViewMim 喔!💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
+  'receipt.sending': '正在上傳分數… 等一下下喔',
+  'receipt.sendFailed': '暫時連不上排行榜, 不過分數已經存在這台裝置裡囉。',
 
+  // Onboarding and how to play
+  'onboard.title': '歡迎光臨, 新客人!',
+  'onboard.nameLabel': '你的名字',
+  'onboard.namePlaceholder': '輸入名字吧',
+  'onboard.howTitle': '怎麼玩',
+  'onboard.tap': '點擊畫面左側或右側(或按A/D鍵), 一邊往上飛, 一邊朝對應方向移動!',
+  'onboard.catch': '接住食物賺點數, 努力飛高高! 記得閃開危險道具喔!',
+  'onboard.swipe': '遇到危險? 向左或向右滑動（或按 Shift + A/D）就能衝刺閃避! 每局可以使用3次，吃下起司奶油麵包還能恢復1次!',
+  'onboard.start': '開始點餐!',
+
+  // Settings
+  'settings.title': '設定',
+  'settings.nameInvalid': '先輸入名字喔!',
+  'settings.nameBlocked': '這個名字不能用喔，換一個試試吧!',
+  'settings.close': '關閉',
+  'settings.sound': '聲音',
+  'settings.on': '開啟',
+  'settings.off': '關閉',
+
+  // Promos and video
+  'promos.pilot.title': '觀看試播集',
+  'promos.copied': '複製好囉!',
+  'promos.official': '官方帳號',
+  'promos.leads': '主演',
+  'promos.role.cheese': '飾演 Cheese, 麵包店老闆',
+  'promos.role.noey': '飾演 Noey, 律師',
+  'promos.vimmy.role': 'Vimmy好愛好愛Mami和Mumu喔!!!',
+  'promos.soon': '馬上就來',
+  'video.close': '關閉',
+  'video.title': '影片',
+  'video.openYoutube': '在 YouTube 開啟',
+  'video.loading': '正在載入試播集… 等一下下喔',
+
+  // In-game HUD
   'hud.shield': '護盾',
   'hud.dash': '衝刺',
   'hud.swipeHint': '左右滑動衝刺、閃避!',
@@ -61,10 +102,13 @@ export const zhHant: Record<LangKey, string> = {
   'hud.stunned': '暈眩',
   'hud.power': '強力',
   'hud.dizzy': '頭暈',
+  'hud.shy': '害羞',
+  'hud.slow': '減速',
   'hud.magnet': '磁鐵',
+  'shield.blocked': '擋住了!',
 
+  // Zones and finales
   'zone.stage': '第{n}關',
-
   'zone.ruralRoad': '鄉間道路',
   'zone.bakery': '溫暖烘焙坊',
   'zone.cafes': '咖啡店',
@@ -75,7 +119,6 @@ export const zhHant: Record<LangKey, string> = {
   'zone.aquarium': '水族館',
   'zone.residence': 'Noey的家',
   'zone.bakeLove': '戀戀香氣烘焙坊',
-
   // The last stretch of each location (see src/core/finales.ts).
   'finale.ruralRoad': '小心追撞!',
   'finale.bakery': '剛出爐!',
@@ -87,9 +130,10 @@ export const zhHant: Record<LangKey, string> = {
   'finale.residence': '溫馨的夜晚!',
   'finale.aquarium': '「Noey, 你喜歡 Wan, 對不對?!」',
 
+  // Effects (item descriptions)
   'effect.points.gain': '獲得 {n} 點',
-  'effect.refillsDash': '恢復1次側向衝刺',
   'effect.points.loss': '扣除 {n} 點',
+  'effect.refillsDash': '恢復1次側向衝刺',
   'effect.dash': '{s} 秒內咻地往上衝',
   'effect.shield': '擋住下一個減益效果',
   'effect.cleanse': '清除暈眩和頭暈狀態',
@@ -98,14 +142,14 @@ export const zhHant: Record<LangKey, string> = {
   'effect.magnet': '持續 {s} 秒吸引附近的食物和強化道具',
   'effect.stun': '無法移動 {s} 秒',
   'effect.disorient': '{s} 秒內左右顛倒',
+  'effect.shy': '持續 {s} 秒, 每次拍翅膀上升的高度都不一樣',
+  'effect.slow': '{s} 秒內飛行速度降低 {p}%',
   'effect.crash': '被撞落, 暈眩 {s} 秒',
   'effect.swerve': '躲開小貓, 往旁邊閃避',
 
+  // Item names
   'item.pandanCustardBread': '香蘭卡士達麵包',
   'item.cheeseButterBread': '起司奶油麵包',
-  'item.cheesePopcorn': '起司爆米花',
-  'item.dogEars': '狗耳髮箍',
-  'item.iceCream': '冰淇淋',
   'item.cilantroBread': '香菜麵包',
   'item.shiopan': '鹽麵包',
   'item.fishSauceBread': '魚露麵包',
@@ -124,63 +168,25 @@ export const zhHant: Record<LangKey, string> = {
   'item.helicopter': '直升機',
   'item.gavelHammer': '法官的法槌',
   'item.carCrash': '車禍',
+  'item.cheesePopcorn': '起司爆米花',
+  'item.dogEars': '狗耳髮箍',
+  'item.iceCream': '冰淇淋',
   'item.kitten': '小貓',
 
+  // Pickup callouts: buffs
   'buff.oyster': '點數加倍!',
   'buff.lawyerSuit': '護盾!',
-  'shield.blocked': '擋住了!',
   'buff.handkerchief': '恢復清醒!',
   'buff.rollingPin': '強力拍翅!',
   'buff.helicopter': '直升機!',
   'buff.goldenRetriever': '磁鐵!',
-  'debuff.dogEars': '害羞!',
 
+  // Pickup callouts: debuffs
   'debuff.cilantroBread': '暈呼呼!',
   'debuff.fishSauceBread': '減速!',
   'debuff.planner': '好失望! -300',
   'debuff.gavelHammer': '被敲暈啦!',
   'debuff.carCrash': '撞車啦! -150',
+  'debuff.dogEars': '害羞!',
   'debuff.kitten': '閃開!',
-
-  'svc.food': '餐飲',
-  'svc.mart': '商城',
-  'svc.express': '快遞',
-  'svc.ride': '叫車',
-  'home.watchPilot': '立即觀看試播集',
-  'promos.pilot.title': '觀看試播集',
-  'promos.copied': '複製好囉!',
-  'promos.official': '官方帳號',
-  'promos.leads': '主演',
-  'promos.role.cheese': '飾演 Cheese, 麵包店老闆',
-  'promos.role.noey': '飾演 Noey, 律師',
-  'promos.vimmy.role': 'Vimmy好愛好愛Mami和Mumu喔!!!',
-  'promos.soon': '馬上就來',
-  'hud.shy': '害羞',
-  'effect.shy': '持續 {s} 秒, 每次拍翅膀上升的高度都不一樣',
-  'hud.slow': '減速',
-  'effect.slow': '{s} 秒內飛行速度降低 {p}%',
-  'video.close': '關閉',
-  'video.title': '影片',
-  'video.openYoutube': '在 YouTube 開啟',
-  'video.loading': '正在載入試播集… 等一下下喔',
-
-  'onboard.title': '歡迎光臨, 新客人!',
-  'onboard.nameLabel': '你的名字',
-  'onboard.namePlaceholder': '輸入名字吧',
-  'onboard.howTitle': '怎麼玩',
-  'onboard.tap': '點擊畫面左側或右側(或按A/D鍵), 一邊往上飛, 一邊朝對應方向移動!',
-  'onboard.catch': '接住食物賺點數, 努力飛高高! 記得閃開危險道具喔!',
-  'onboard.swipe': '遇到危險? 向左或向右滑動（或按 Shift + A/D）就能衝刺閃避! 每局可以使用3次，吃下起司奶油麵包還能恢復1次!',
-  'onboard.start': '開始點餐!',
-  'settings.title': '設定',
-  'settings.editName': '修改暱稱',
-  'settings.saveName': '儲存暱稱',
-  'settings.nameInvalid': '先輸入名字喔!',
-  'settings.nameBlocked': '這個名字不能用喔，換一個試試吧!',
-  'settings.close': '關閉',
-  'settings.sound': '聲音',
-  'settings.on': '開啟',
-  'settings.off': '關閉',
-  'receipt.sending': '正在上傳分數… 等一下下喔',
-  'receipt.sendFailed': '暫時連不上排行榜, 不過分數已經存在這台裝置裡囉。',
 };

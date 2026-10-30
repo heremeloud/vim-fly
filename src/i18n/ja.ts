@@ -2,44 +2,49 @@
 import type { LangKey } from './en';
 
 export const ja: Record<LangKey, string> = {
+  // Language and tabs
   'lang.title': '言語',
-
   'tab.store': 'ホーム',
   'tab.menu': 'メニュー',
   'tab.orders': '注文履歴',
   'tab.promos': 'プロモ',
 
+  // App shell
   'app.tagline': '世界一かわいいハチイヌがお届けするブーン!',
   'app.deliverTo': 'お届け先',
   'app.searchHint': 'パン、お弁当、コーヒーを探してみてね…',
+  'svc.food': 'フード',
+  'svc.mart': 'マート',
+  'svc.express': 'エクスプレス',
+  'svc.ride': 'ライド',
 
+  // Home and countdown
   'home.orderNow': '今すぐ注文',
   'home.open': '営業中',
+  'home.watchPilot': 'Pilotを観る',
   'countdown.soon': '第1話 · もうすぐだよ',
   'countdown.now': 'ただいま配信中!',
   'countdown.days': '第1話まであと{d}日{h}時間',
   'countdown.hours': '第1話まであと{h}時間',
 
+  // Menu
   'menu.title': 'メニュー',
   'menu.subtitle': '「なんで私の人生、こんなに最悪なの…」',
   'kind.points': 'ポイント',
   'kind.buff': 'バフ',
   'kind.debuff': 'デバフ',
-  'price.buff': 'バフ',
-  'price.debuff': 'デバフ',
 
-
-  'orders.title': '注文',
+  // Orders tab
   'orders.subtitle': '世界ランキング',
   'orders.tab.mine': 'マイ注文',
   'orders.tab.top': 'お得意さまたち',
   'orders.orderNo': '注文 #{n}',
   'orders.bestBadge': 'ベスト',
   'orders.empty': 'まだ注文がないよ! さっそく注文してみよう!',
-  'orders.topNote': 'お得意さまたち',
   'orders.offline': '世界ランキングにつながらないみたい。この端末のベスト記録を表示するね。',
   'orders.loading': '読み込み中… ちょっと待ってね',
 
+  // Receipt
   'receipt.title': 'レシート',
   'receipt.height': '高さ',
   'receipt.reached': '到達点',
@@ -49,9 +54,44 @@ export const ja: Record<LangKey, string> = {
   'receipt.newBest': 'ベスト更新!',
   'receipt.thanks': 'まいど!',
   'receipt.follow': '公式アカウント',
-  'receipt.share': 'シェア',
   'receipt.shareText': 'Vimmy Flyで{score}ポイントゲット! 私のスコアを超えられるかな?🐶🐝\nパン屋さんがもうすぐオープン!🍞🧀🧈\nドラマ Bake Love Feeling をお楽しみに! NoeyCheese役のViewMimもぜひ応援してね!💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
+  'receipt.sending': 'スコアを送信中… ちょっと待ってね',
+  'receipt.sendFailed': 'ランキングにつながらなかったよ。スコアはこの端末に保存したから安心してね。',
 
+  // Onboarding and how to play
+  'onboard.title': 'いらっしゃいませ!',
+  'onboard.nameLabel': 'おなまえ',
+  'onboard.namePlaceholder': 'おなまえを入力してね',
+  'onboard.howTitle': 'あそびかた',
+  'onboard.tap': '画面の左側か右側をタップ(またはA/Dキー)して、上に飛びながらその方向に移動しよう!',
+  'onboard.catch': '食べ物をキャッチしてスコアをゲット! 危険なアイテムをよけながら、どこまで高く飛べるかな?',
+  'onboard.swipe': 'ピンチのときは左右にスワイプ（またはShift＋A/D）で横ダッシュしてよけよう! 1プレイにつき3回まで使えるよ! チーズバターパンで1回分回復!',
+  'onboard.start': '注文スタート!',
+
+  // Settings
+  'settings.title': '設定',
+  'settings.nameInvalid': '名前を入力してね',
+  'settings.nameBlocked': 'この名前は使えないよ! 別の名前にしてね',
+  'settings.close': '閉じる',
+  'settings.sound': '効果音',
+  'settings.on': 'オン',
+  'settings.off': 'オフ',
+
+  // Promos and video
+  'promos.pilot.title': 'Pilotを観る',
+  'promos.copied': 'コピーしたよ!',
+  'promos.official': '公式アカウント',
+  'promos.leads': '主演',
+  'promos.role.cheese': 'Cheese役・パン屋さん',
+  'promos.role.noey': 'Noey役・弁護士',
+  'promos.vimmy.role': 'Vimmyは、MamiとMumuのことがだーいすきなの!',
+  'promos.soon': 'もうすぐだよ',
+  'video.close': '閉じる',
+  'video.title': '動画',
+  'video.openYoutube': 'YouTubeで開く',
+  'video.loading': 'Pilotを読み込み中… ちょっと待ってね',
+
+  // In-game HUD
   'hud.shield': 'シールド',
   'hud.dash': 'ダッシュ',
   'hud.swipeHint': '左右にスワイプでダッシュ&よけよう!',
@@ -61,10 +101,13 @@ export const ja: Record<LangKey, string> = {
   'hud.stunned': 'スタン',
   'hud.power': 'パワー',
   'hud.dizzy': 'めまい',
+  'hud.shy': 'はずかしい',
+  'hud.slow': 'スロー',
   'hud.magnet': 'マグネット',
+  'shield.blocked': 'ガード!',
 
+  // Zones and finales
   'zone.stage': 'ステージ{n}',
-
   'zone.ruralRoad': '田舎道',
   'zone.bakery': 'ハートウォーミング ベーカリー',
   'zone.cafes': 'カフェ',
@@ -75,7 +118,6 @@ export const ja: Record<LangKey, string> = {
   'zone.aquarium': '水族館',
   'zone.residence': 'Noeyの家',
   'zone.bakeLove': 'ハート・ベイクド・ラブ ベーカリー',
-
   // The last stretch of each location (see src/core/finales.ts).
   'finale.ruralRoad': '追突注意!',
   'finale.bakery': '焼きたてパン!',
@@ -87,9 +129,10 @@ export const ja: Record<LangKey, string> = {
   'finale.residence': 'おうちでまったり!',
   'finale.aquarium': '「Noey, Wanのことが\n好きなんでしょ?!」',
 
+  // Effects (item descriptions)
   'effect.points.gain': '{n}ポイントゲット',
-  'effect.refillsDash': '横ダッシュが1回分回復',
   'effect.points.loss': '{n}ポイントダウン',
+  'effect.refillsDash': '横ダッシュが1回分回復',
   'effect.dash': '{s}秒間、ぐーんと上へダッシュ',
   'effect.shield': '次のデバフをガード',
   'effect.cleanse': 'スタンとめまいがスッキリ',
@@ -98,14 +141,14 @@ export const ja: Record<LangKey, string> = {
   'effect.magnet': '{s}秒間、近くの食べ物やパワーアップを引き寄せる',
   'effect.stun': '{s}秒間動けない',
   'effect.disorient': '{s}秒間、左右があべこべ',
+  'effect.shy': '{s}秒間、羽ばたくたびに上昇する高さがランダムになる',
+  'effect.slow': '{s}秒間、飛ぶ速度が{p}%ダウン',
   'effect.crash': '吹き飛ばされ、{s}秒スタン',
   'effect.swerve': '子ネコをよけて横に移動する',
 
+  // Item names
   'item.pandanCustardBread': 'パンダンカスタードパン',
   'item.cheeseButterBread': 'チーズバターパン',
-  'item.cheesePopcorn': 'チーズポップコーン',
-  'item.dogEars': '犬耳カチューシャ',
-  'item.iceCream': 'アイスクリーム',
   'item.cilantroBread': 'パクチーパン',
   'item.shiopan': '塩パン',
   'item.fishSauceBread': 'ナンプラーパン',
@@ -124,63 +167,25 @@ export const ja: Record<LangKey, string> = {
   'item.helicopter': 'ヘリコプター',
   'item.gavelHammer': '裁判官の木槌',
   'item.carCrash': '交通事故',
+  'item.cheesePopcorn': 'チーズポップコーン',
+  'item.dogEars': '犬耳カチューシャ',
+  'item.iceCream': 'アイスクリーム',
   'item.kitten': '子猫',
 
+  // Pickup callouts: buffs
   'buff.oyster': 'ポイント2倍!',
   'buff.lawyerSuit': 'シールド!',
-  'shield.blocked': 'ガード!',
   'buff.handkerchief': 'スッキリ!',
   'buff.rollingPin': 'パワーはばたき!',
   'buff.helicopter': 'ヘリコプター!',
   'buff.goldenRetriever': 'マグネット!',
-  'debuff.dogEars': 'はずかしい!',
 
+  // Pickup callouts: debuffs
   'debuff.cilantroBread': 'クラクラ!',
   'debuff.fishSauceBread': 'スロー!',
   'debuff.planner': 'ガッカリ! -300',
   'debuff.gavelHammer': 'スタン!',
   'debuff.carCrash': 'ドカーン! -150',
+  'debuff.dogEars': 'はずかしい!',
   'debuff.kitten': 'よけて!',
-
-  'svc.food': 'フード',
-  'svc.mart': 'マート',
-  'svc.express': 'エクスプレス',
-  'svc.ride': 'ライド',
-  'home.watchPilot': 'Pilotを観る',
-  'promos.pilot.title': 'Pilotを観る',
-  'promos.copied': 'コピーしたよ!',
-  'promos.official': '公式アカウント',
-  'promos.leads': '主演',
-  'promos.role.cheese': 'Cheese役・パン屋さん',
-  'promos.role.noey': 'Noey役・弁護士',
-  'promos.vimmy.role': 'Vimmyは、MamiとMumuのことがだーいすきなの!',
-  'promos.soon': 'もうすぐだよ',
-  'hud.shy': 'はずかしい',
-  'effect.shy': '{s}秒間、羽ばたくたびに上昇する高さがランダムになる',
-  'hud.slow': 'スロー',
-  'effect.slow': '{s}秒間、飛ぶ速度が{p}%ダウン',
-  'video.close': '閉じる',
-  'video.title': '動画',
-  'video.openYoutube': 'YouTubeで開く',
-  'video.loading': 'Pilotを読み込み中… ちょっと待ってね',
-
-  'onboard.title': 'いらっしゃいませ!',
-  'onboard.nameLabel': 'おなまえ',
-  'onboard.namePlaceholder': 'おなまえを入力してね',
-  'onboard.howTitle': 'あそびかた',
-  'onboard.tap': '画面の左側か右側をタップ(またはA/Dキー)して、上に飛びながらその方向に移動しよう!',
-  'onboard.catch': '食べ物をキャッチしてスコアをゲット! 危険なアイテムをよけながら、どこまで高く飛べるかな?',
-  'onboard.swipe': 'ピンチのときは左右にスワイプ（またはShift＋A/D）で横ダッシュしてよけよう! 1プレイにつき3回まで使えるよ! チーズバターパンで1回分回復!',
-  'onboard.start': '注文スタート!',
-  'settings.title': '設定',
-  'settings.editName': '名前を変える',
-  'settings.saveName': '名前を保存',
-  'settings.nameInvalid': '名前を入力してね',
-  'settings.nameBlocked': 'この名前は使えないよ! 別の名前にしてね',
-  'settings.close': '閉じる',
-  'settings.sound': '効果音',
-  'settings.on': 'オン',
-  'settings.off': 'オフ',
-  'receipt.sending': 'スコアを送信中… ちょっと待ってね',
-  'receipt.sendFailed': 'ランキングにつながらなかったよ。スコアはこの端末に保存したから安心してね。',
 };

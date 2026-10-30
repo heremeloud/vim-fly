@@ -2,44 +2,49 @@
 import type { LangKey } from './en';
 
 export const th: Record<LangKey, string> = {
+  // Language and tabs
   'lang.title': 'ภาษา',
-
   'tab.store': 'หน้าแรก',
   'tab.menu': 'เมนู',
   'tab.orders': 'ออเดอร์',
   'tab.promos': 'โปรโมชัน',
 
+  // App shell
   'app.tagline': 'น้องหมาผึ้งสุดน่ารักพร้อมส่งให้ถึงที่เลย',
   'app.deliverTo': 'จัดส่งที่',
   'app.searchHint': 'ค้นหาขนมปัง ข้าวกล่อง หรือกาแฟ...',
+  'svc.food': 'อาหาร',
+  'svc.mart': 'มาร์ท',
+  'svc.express': 'ส่งด่วน',
+  'svc.ride': 'เรียกรถ',
 
+  // Home and countdown
   'home.orderNow': 'สั่งเลย',
   'home.open': 'เปิดแล้วนะ',
+  'home.watchPilot': 'ดูตอนนำร่องเลย!',
   'countdown.soon': 'ตอนที่ 1 · เร็ว ๆ นี้',
   'countdown.now': 'ตอนที่ 1 มาแล้ว!',
   'countdown.days': 'อีก {d} วัน {h} ชม. เจอกันตอนแรก!',
   'countdown.hours': 'อีก {h} ชม. เจอกันตอนแรก!',
 
+  // Menu
   'menu.title': 'เมนู',
   'menu.subtitle': '"ทำไมชีวิตฉันมันถึงได้เฮงซวยแบบนี้วะ..."',
   'kind.points': 'แต้ม',
   'kind.buff': 'บัฟ',
   'kind.debuff': 'ดีบัฟ',
-  'price.buff': 'บัฟ',
-  'price.debuff': 'ดีบัฟ',
 
-
-  'orders.title': 'ออเดอร์',
+  // Orders tab
   'orders.subtitle': 'การจัดอันดับ',
   'orders.tab.mine': 'ออเดอร์',
   'orders.tab.top': 'Top Spender',
   'orders.orderNo': 'ออเดอร์ #{n}',
   'orders.bestBadge': 'ดสถิติสูงสุด',
   'orders.empty': 'ยังไม่มีออเดอร์เลย ลองสั่งออเดอร์แรกกัน!',
-  'orders.topNote': 'รวมลูกค้าตัวท็อปจากทั่วโลก!',
   'orders.offline': 'เชื่อมต่อกับตารางอันดับโลกไม่ได้ เลยแสดงสถิติที่ดีที่สุดในเครื่องนี้แทนนะ',
   'orders.loading': 'กำลังโหลด… รอสักครู่นะ',
 
+  // Receipt
   'receipt.title': 'ใบเสร็จรับเงิน',
   'receipt.height': 'ความสูง',
   'receipt.reached': 'ไปถึง',
@@ -49,9 +54,44 @@ export const th: Record<LangKey, string> = {
   'receipt.newBest': 'ทำสถิติใหม่แล้ว!',
   'receipt.thanks': 'ขอบคุณนะ!',
   'receipt.follow': 'Official Account',
-  'receipt.share': 'แชร์',
   'receipt.shareText': 'เล่น Vimmy Fly ได้ {score} แต้มแล้ว! มีใครทำได้เยอะกว่าเราบ้าง? 🐶🐝\nร้านขนมปังใกล้เปิดแล้ว! 🍞🧀🧈\nฝากติดตามซีรีส์ Bake Love Feeling และเป็นกำลังใจให้ ViewMim ในบทเนยชีสด้วยนะ! 💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
+  'receipt.sending': 'กำลังส่งแต้ม… รอสักครู่นะ',
+  'receipt.sendFailed': 'เชื่อมต่อกับตารางคะแนนไม่ได้ แต่บันทึกแต้มไว้ในเครื่องให้แล้วนะ',
 
+  // Onboarding and how to play
+  'onboard.title': 'ยินดีต้อนรับ คุณลูกค้า!',
+  'onboard.nameLabel': 'ชื่อของคุณ',
+  'onboard.namePlaceholder': 'ชื่ออะไรเอ่ย?',
+  'onboard.howTitle': 'วิธีเล่น',
+  'onboard.tap': 'แตะหน้าจอด้านซ้ายหรือขวา (หรือกด A/D) เพื่อบินขึ้นและเคลื่อนที่ไปทางนั้น',
+  'onboard.catch': 'เก็บอาหารเพื่อเพิ่มแต้ม บินให้สูงที่สุด แล้วอย่าลืมหลบไอเทมอันตรายด้วยนะ!',
+  'onboard.swipe': 'เจออันตรายเหรอ? ปัดซ้ายหรือขวา (หรือกด Shift + A/D) เพื่อพุ่งหลบได้เลย! ใช้ได้ 3 ครั้งต่อรอบ กินขนมปังชีสเนยแล้วจะได้เพิ่มอีก 1 ครั้ง!',
+  'onboard.start': 'เริ่มสั่งเลย!',
+
+  // Settings
+  'settings.title': 'ตั้งค่า',
+  'settings.nameInvalid': 'กรุณากรอกชื่อก่อนนะ',
+  'settings.nameBlocked': 'ใช้ชื่อนี้ไม่ได้นะ ลองชื่ออื่นดูสิ',
+  'settings.close': 'ปิด',
+  'settings.sound': 'เสียง',
+  'settings.on': 'เปิด',
+  'settings.off': 'ปิด',
+
+  // Promos and video
+  'promos.pilot.title': 'ดูตอนนำร่อง',
+  'promos.copied': 'คัดลอกให้แล้ว!',
+  'promos.official': 'บัญชีทางการ',
+  'promos.leads': 'นักแสดงนำ',
+  'promos.role.cheese': 'รับบทชีส เจ้าของร้านขนมปัง',
+  'promos.role.noey': 'รับบทเนย ทนายความ',
+  'promos.vimmy.role': 'วิมมี่รักม่ามี้หมู่มู้นะคะ',
+  'promos.soon': 'อีกไม่นานนะ',
+  'video.close': 'ปิด',
+  'video.title': 'วิดีโอ',
+  'video.openYoutube': 'ดูบน YouTube',
+  'video.loading': 'กำลังโหลด Pilot… รอสักครู่นะ',
+
+  // In-game HUD
   'hud.shield': 'โล่',
   'hud.dash': 'พุ่ง',
   'hud.swipeHint': 'ปัดซ้ายหรือขวาเพื่อพุ่งหลบ!',
@@ -61,9 +101,13 @@ export const th: Record<LangKey, string> = {
   'hud.stunned': 'สตัน',
   'hud.power': 'พลัง',
   'hud.dizzy': 'เวียนหัว',
+  'hud.shy': 'เขินอาย!',
+  'hud.slow': 'บินช้าลง!',
+  'hud.magnet': 'แม่เหล็ก',
+  'shield.blocked': 'กันได้แล้ว!',
 
+  // Zones and finales
   'zone.stage': 'ด่านที่ {n}',
-
   'zone.ruralRoad': 'ถนนชนบท',
   'zone.bakery': 'ร้านขนมปังอบอุ่น',
   'zone.cafes': 'ร้านกาแฟ',
@@ -74,7 +118,6 @@ export const th: Record<LangKey, string> = {
   'zone.aquarium': 'อะแควเรียม',
   'zone.residence': 'บ้านเนย',
   'zone.bakeLove': 'ร้านขนมปัง​อบอวล​รัก​',
-
   // The last stretch of each location (see src/core/finales.ts).
   'finale.ruralRoad': 'ระวังชนท้าย!',
   'finale.bakery': 'ขนมอบใหม่ ๆ จากเตา!',
@@ -86,18 +129,24 @@ export const th: Record<LangKey, string> = {
   'finale.residence': 'พักผ่อนสบาย ๆ ที่บ้าน!',
   'finale.aquarium': '"เนยชอบวาฬใช่ไหม?!"',
 
+  // Effects (item descriptions)
   'effect.points.gain': 'ได้ {n} แต้ม',
-  'effect.refillsDash': 'เพิ่มจำนวนครั้งที่พุ่งหลบ 1 ครั้ง',
   'effect.points.loss': 'เสียไป {n} แต้ม',
+  'effect.refillsDash': 'เพิ่มจำนวนครั้งที่พุ่งหลบ 1 ครั้ง',
   'effect.dash': 'พุพุ่งขึ้นไปบนฟ้า {s} วินาที',
   'effect.shield': 'กันดีบัฟครั้งหน้าได้เลย',
   'effect.cleanse': 'หายสตันแล้ว ไม่เวียนหัวแล้วด้วย',
   'effect.strongFlap': 'กระพือปีกแรงขึ้น {p}% นาน {s} วินาที',
   'effect.doublePoints': 'แต้มคูณสองนาน {s} วินาที',
+  'effect.magnet': 'ดูดอาหารและไอเทมเพิ่มพลังรอบตัวนาน {s} วินาที',
   'effect.stun': 'ขยับไม่ได้ {s} วินาที',
   'effect.disorient': 'ปุ่มซ้ายขวาสลับกัน {s} วินาที',
+  'effect.shy': 'กระพือปีกไม่เป็นจังหวะนาน {s} วินาที ทำให้บินสูงขึ้นไม่เท่ากันในแต่ละครั้ง',
+  'effect.slow': 'ความเร็วในการบินลดลง {p}% เป็นเวลา {s} วินาที',
   'effect.crash': 'โดนสอยร่วงเลย! สตัน {s} วินาที',
+  'effect.swerve': 'หลบน้องแมวแล้วพุ่งไปด้านข้าง',
 
+  // Item names
   'item.pandanCustardBread': 'ขนมปังสังขยาใบเตย',
   'item.cheeseButterBread': 'ขนมปังชีสเนย',
   'item.cilantroBread': 'ขนมปังผักชี',
@@ -118,69 +167,25 @@ export const th: Record<LangKey, string> = {
   'item.helicopter': 'เฮลิคอปเตอร์',
   'item.gavelHammer': 'ค้อนผู้พิพากษา',
   'item.carCrash': 'รถชน',
+  'item.cheesePopcorn': 'ป๊อปคอร์นชีส',
+  'item.dogEars': 'ที่คาดผมหูน้องหมา',
+  'item.iceCream': 'ไอศกรีม',
+  'item.kitten': 'ลูกแมว',
 
+  // Pickup callouts: buffs
   'buff.oyster': 'แต้มคูณสอง!',
   'buff.lawyerSuit': 'โล่ป้องกัน!',
-  'shield.blocked': 'กันได้แล้ว!',
   'buff.handkerchief': 'สดชื่นแล้ว!',
   'buff.rollingPin': 'กระพือปีกแรงขึ้น!',
   'buff.helicopter': 'เฮลิคอปเตอร์!',
+  'buff.goldenRetriever': 'แม่เหล็ก!',
 
+  // Pickup callouts: debuffs
   'debuff.cilantroBread': 'มึนหัว!',
   'debuff.fishSauceBread': 'ช้าลง!',
   'debuff.planner': 'ผิดหวังจัง! -300',
   'debuff.gavelHammer': 'ติดสตัน!',
   'debuff.carCrash': 'โครม! -150',
-
-  'svc.food': 'อาหาร',
-  'svc.mart': 'มาร์ท',
-  'svc.express': 'ส่งด่วน',
-  'svc.ride': 'เรียกรถ',
-  'home.watchPilot': 'ดูตอนนำร่องเลย!',
-  'promos.pilot.title': 'ดูตอนนำร่อง',
-  'promos.copied': 'คัดลอกให้แล้ว!',
-  'promos.official': 'บัญชีทางการ',
-  'promos.leads': 'นักแสดงนำ',
-  'promos.role.cheese': 'รับบทชีส เจ้าของร้านขนมปัง',
-  'promos.role.noey': 'รับบทเนย ทนายความ',
-  'promos.vimmy.role': 'วิมมี่รักม่ามี้หมู่มู้นะคะ',
-  'promos.soon': 'อีกไม่นานนะ',
-  'hud.shy': 'เขินอาย!',
-  'effect.shy': 'กระพือปีกไม่เป็นจังหวะนาน {s} วินาที ทำให้บินสูงขึ้นไม่เท่ากันในแต่ละครั้ง',
-  'hud.slow': 'บินช้าลง!',
-  'effect.slow': 'ความเร็วในการบินลดลง {p}% เป็นเวลา {s} วินาที',
-  'video.close': 'ปิด',
-  'video.title': 'วิดีโอ',
-  'video.openYoutube': 'ดูบน YouTube',
-  'video.loading': 'กำลังโหลด Pilot… รอสักครู่นะ',
-
-  'onboard.title': 'ยินดีต้อนรับ คุณลูกค้า!',
-  'onboard.nameLabel': 'ชื่อของคุณ',
-  'onboard.namePlaceholder': 'ชื่ออะไรเอ่ย?',
-  'onboard.howTitle': 'วิธีเล่น',
-  'onboard.tap': 'แตะหน้าจอด้านซ้ายหรือขวา (หรือกด A/D) เพื่อบินขึ้นและเคลื่อนที่ไปทางนั้น',
-  'onboard.catch': 'เก็บอาหารเพื่อเพิ่มแต้ม บินให้สูงที่สุด แล้วอย่าลืมหลบไอเทมอันตรายด้วยนะ!',
-  'onboard.swipe': 'เจออันตรายเหรอ? ปัดซ้ายหรือขวา (หรือกด Shift + A/D) เพื่อพุ่งหลบได้เลย! ใช้ได้ 3 ครั้งต่อรอบ กินขนมปังชีสเนยแล้วจะได้เพิ่มอีก 1 ครั้ง!',
-  'onboard.start': 'เริ่มสั่งเลย!',
-  'settings.title': 'ตั้งค่า',
-  'settings.editName': 'เปลี่ยนชื่อ',
-  'settings.saveName': 'บันทึกชื่อ',
-  'settings.nameInvalid': 'กรุณากรอกชื่อก่อนนะ',
-  'settings.nameBlocked': 'ใช้ชื่อนี้ไม่ได้นะ ลองชื่ออื่นดูสิ',
-  'settings.close': 'ปิด',
-  'settings.sound': 'เสียง',
-  'settings.on': 'เปิด',
-  'settings.off': 'ปิด',
-  'receipt.sending': 'กำลังส่งแต้ม… รอสักครู่นะ',
-  'receipt.sendFailed': 'เชื่อมต่อกับตารางคะแนนไม่ได้ แต่บันทึกแต้มไว้ในเครื่องให้แล้วนะ',
-  'hud.magnet': 'แม่เหล็ก',
-  'effect.magnet': 'ดูดอาหารและไอเทมเพิ่มพลังรอบตัวนาน {s} วินาที',
-  'effect.swerve': 'หลบน้องแมวแล้วพุ่งไปด้านข้าง',
-  'item.cheesePopcorn': 'ป๊อปคอร์นชีส',
-  'item.dogEars': 'ที่คาดผมหูน้องหมา',
-  'item.iceCream': 'ไอศกรีม',
-  'item.kitten': 'ลูกแมว',
-  'buff.goldenRetriever': 'แม่เหล็ก!',
   'debuff.dogEars': 'อายจัง!',
   'debuff.kitten': 'หลบ!',
 };
