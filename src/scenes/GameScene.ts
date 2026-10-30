@@ -394,28 +394,29 @@ export class GameScene extends Phaser.Scene {
    */
   private showTapGuide(): void {
     const make = (dir: -1 | 1): Phaser.GameObjects.Container => {
-      // The same look as the swipe hint: a soft see-through pale butter pill with a white rim, brown bold text and caramel triangles that nudge the way they point.
-      const w = 116;
-      const h = 100;
-      const bg = this.add.graphics();
-      bg.fillStyle(0xfff6e8, 0.62).fillRoundedRect(-w / 2, -h / 2, w, h, HINT_RADIUS);
-      bg.lineStyle(2, 0xffffff, 0.85).strokeRoundedRect(-w / 2, -h / 2, w, h, HINT_RADIUS);
-      const handY = -17;
-      const scale = 2;
-      const ripple = this.add.circle(0, handY - 9 * scale, 10, 0xffffff, 0).setStrokeStyle(2.5, COLORS.primaryDark, 0.85);
-      const hand = drawIcon(this, 'tap', 0, handY, 0x6d4c41, { width: 2.2 }).setScale(scale);
-      this.tweens.add({ targets: hand, y: handY + 6, duration: 420, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }); // a tapping finger
+      // No box: the swipe hint's colours (brown, caramel) with a soft white outline so they read on any backdrop.
+      const brown = 0x6d4c41;
+      const handY = -22;
+      const scale = 2.2;
+      const ripple = this.add.circle(0, handY - 9 * scale, 10, 0xffffff, 0).setStrokeStyle(3, COLORS.primaryDark, 0.85);
+      const halo = drawIcon(this, 'tap', 0, handY, 0xffffff, { width: 6 }).setScale(scale);
+      const hand = drawIcon(this, 'tap', 0, handY, brown, { width: 2.2 }).setScale(scale);
+      this.tweens.add({ targets: [halo, hand], y: handY + 7, duration: 420, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }); // a tapping finger
       this.tweens.add({ targets: ripple, scale: 2.2, alpha: 0, duration: 840, repeat: -1, ease: 'Sine.easeOut' });
-      const text = this.add.text(0, 0, t('hud.tap'), { fontFamily: FONT.family, fontSize: '19px', fontStyle: 'bold', color: '#6d4c41', padding: { top: 3, bottom: 3 } }).setOrigin(0.5);
-      const rowY = 31;
+      const text = this.add
+        .text(0, 0, t('hud.tap'), { fontFamily: FONT.family, fontSize: '21px', fontStyle: 'bold', color: '#6d4c41', stroke: '#fff6e8', strokeThickness: 5, padding: { top: 3, bottom: 3 } })
+        .setOrigin(0.5);
+      const rowY = 30;
       const arrowGap = 10;
-      const arrowW = 12;
+      const arrowW = 14;
       const total = arrowW + arrowGap + text.width;
       text.setPosition(dir < 0 ? total / 2 - text.width / 2 : -total / 2 + text.width / 2, rowY);
       const arrow = this.add.graphics().setPosition(dir < 0 ? -total / 2 + arrowW / 2 : total / 2 - arrowW / 2, rowY);
-      arrow.fillStyle(COLORS.primaryDark, 1).fillTriangle(dir * 7, 0, -dir * 5, -8, -dir * 5, 8);
+      const tri = [new Phaser.Math.Vector2(dir * 8, 0), new Phaser.Math.Vector2(-dir * 6, -9), new Phaser.Math.Vector2(-dir * 6, 9)];
+      arrow.fillStyle(COLORS.primaryDark, 1).fillPoints(tri, true);
+      arrow.lineStyle(3, 0xfff6e8, 1).strokePoints(tri, true, true);
       this.tweens.add({ targets: arrow, x: arrow.x + dir * 5, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-      return this.add.container(GAME_WIDTH / 2 + dir * 140, TAP_GUIDE_Y, [bg, ripple, hand, text, arrow]).setScrollFactor(0).setDepth(24);
+      return this.add.container(GAME_WIDTH / 2 + dir * 140, TAP_GUIDE_Y, [ripple, halo, hand, text, arrow]).setScrollFactor(0).setDepth(24);
     };
     this.tapGuide = [make(-1), make(1)];
   }
