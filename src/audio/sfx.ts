@@ -39,6 +39,32 @@ function oscillator(freq: Gen, wave: (phase: number) => number): Gen {
   };
 }
 
+/** Linear interpolation through [time, value] points, held flat outside them. */
+function keyframe(t: number, points: [number, number][]): number {
+  if (t <= points[0][0]) return points[0][1];
+  for (let i = 1; i < points.length; i++) {
+    if (t <= points[i][0]) {
+      const [t0, v0] = points[i - 1];
+      const [t1, v1] = points[i];
+      return v0 + ((v1 - v0) * (t - t0)) / (t1 - t0);
+    }
+  }
+  return points[points.length - 1][1];
+}
+
+/** A two-pole band-pass resonance (a vowel formant) whose centre `freq(t)` can move, with a fixed bandwidth in Hz. */
+function resonator(freq: Gen, bandwidth: number): (x: number, t: number) => number {
+  let y1 = 0;
+  let y2 = 0;
+  const r = Math.exp((-Math.PI * bandwidth) / RATE);
+  return (x, t) => {
+    const y = (1 - r) * x + 2 * r * Math.cos((TAU * freq(t)) / RATE) * y1 - r * r * y2;
+    y2 = y1;
+    y1 = y;
+    return y;
+  };
+}
+
 const sine = Math.sin;
 const saw = (p: number): number => ((p / TAU) % 1) * 2 - 1;
 const square = (p: number): number => (Math.sin(p) >= 0 ? 1 : -1);
@@ -243,17 +269,28 @@ const BUILDERS: Record<Sfx | SfxLoop, (ctx: BaseAudioContext) => AudioBuffer> = 
       return (tone(t) * 0.72 + breath(t) * 0.12) * envelope * 0.58;
     });
   },
-  // A cat's "mi-aow": a quick rise into the "mi", then a long slide down through the "aow", with a nasal buzz and a little wobble.
+  // A cat's "mi-aow". Cats have a short vocal tract, so the vowel resonances sit high: the voice buzz is shaped by formants that go
+  // "m" to "i" to "a" to "ow", while the pitch jumps up at the start and then slides down, getting rougher towards the end.
   meow: (ctx) => {
-    const len = 0.55;
-    const pitch = (t: number) => (t < 0.14 ? 420 + 2800 * t : 810 - 780 * ((t - 0.14) / 0.41) ** 0.8) * (1 + 0.02 * Math.sin(TAU * 7 * t));
-    const voice = oscillator(pitch, saw);
-    const nasal = oscillator((t) => pitch(t) * 2, triangle);
-    return render(ctx, len, (t) => {
-      const env = Math.min(1, t / 0.03) * Math.sin((Math.PI * Math.min(1, t / len)) ** 0.9) ** 0.5;
-      const open = t < 0.14 ? 0.5 : 1; // the mouth opens from "mi" to "aow"
-      return (voice(t) * 0.45 * open + nasal(t) * 0.35) * env * 0.85;
+    const len = 0.7;
+    const pitch = (t: number) => keyframe(t, [[0, 520], [0.12, 880], [0.3, 800], [0.5, 640], [len, 470]]) * (1 + 0.02 * sine(TAU * 5 * t));
+    const source = oscillator(pitch, saw);
+    const f1 = resonator((t) => keyframe(t, [[0, 450], [0.12, 560], [0.3, 1050], [0.5, 900], [len, 650]]), 140);
+    const f2 = resonator((t) => keyframe(t, [[0, 1500], [0.12, 2700], [0.3, 2100], [0.5, 1500], [len, 1200]]), 220);
+    const f3 = resonator(() => 3600, 400);
+    const breath = noise(() => 0.35);
+    const buffer = render(ctx, len, (t) => {
+      const rough = 1 - 0.3 * Math.max(0, (t - 0.35) / 0.35) * (0.5 + 0.5 * sine(TAU * 38 * t)); // a growl creeping into the "ow"
+      const x = source(t) * rough + breath(t) * 0.15;
+      const env = Math.min(1, t / 0.04) * Math.min(1, (len - t) / 0.18) ** 1.5;
+      const soft = t < 0.07 ? 0.6 : 1; // the "m" is closed-mouth and quieter
+      return (f1(x, t) + f2(x, t) * 1.1 + f3(x, t) * 0.4) * env * soft;
     });
+    const data = buffer.getChannelData(0);
+    let peak = 0;
+    for (let i = 0; i < data.length; i++) peak = Math.max(peak, Math.abs(data[i]));
+    for (let i = 0; i < data.length; i++) data[i] = (data[i] / peak) * 0.8;
+    return buffer;
   },
   // Air whoosh for the sideways dash: bright rushing air over a quick downward swoop, loud enough to cut through the buzz.
   dash: (ctx) => {

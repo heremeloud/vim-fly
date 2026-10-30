@@ -7,7 +7,7 @@ import { bindSteering } from '../core/input';
 import { itemName, t, tDynamic } from '../i18n';
 import { REACTION_ICON, STATUS_ICON } from '../core/effectIcons';
 import { FINALE_BOARD, layoutBanner, type BannerBoard } from '../ui/boards';
-import { CHIP_ICON, dashBurst, dashImpact, dashTrail, drawStatusChip, popup } from '../ui/fx';
+import { CHIP_ICON, climbSpeedLines, dashBurst, dashImpact, dashTrail, drawStatusChip, popup } from '../ui/fx';
 import { emojiTextureKey } from '../core/emojiFile';
 import { COLORS, FONT, hex } from '../ui/theme';
 import { drawIcon, type IconId } from '../ui/icons';
@@ -131,8 +131,10 @@ export class GameScene extends Phaser.Scene {
   /** Emoji that pops above Vimmy's head during a reaction. */
   private reactionIcon!: Phaser.GameObjects.Image;
   private chipIcons: Phaser.GameObjects.Image[] = [];
-  /** Soft bubble around Vimmy while the lawyer-suit shield is up. */
-  private shieldAura!: Phaser.GameObjects.Arc;
+  /** Twinkling sparkles around Vimmy while the lawyer-suit shield is up. */
+  private shieldAura!: Phaser.GameObjects.Graphics;
+  /** Clock for the power fly's rising sparkles. */
+  private powerEmberMs = 0;
   private bg!: Phaser.GameObjects.TileSprite;
   /** The previous location's backdrop, fading out on top of `bg` after a zone change. */
   private bgFade: Phaser.GameObjects.TileSprite | null = null;
@@ -172,6 +174,8 @@ export class GameScene extends Phaser.Scene {
   private swipeDashDir: -1 | 0 | 1 = 0;
   /** Counts down between afterimages while dashing sideways. */
   private dashTrailMs = 0;
+  /** Counts down between batches of comic speed lines during the helicopter climb. */
+  private climbLinesMs = 0;
   private swipeBreads: Phaser.GameObjects.Image[] = [];
   private isFlipping = false;
   private reactionTimer?: Phaser.Time.TimerEvent;
@@ -221,7 +225,8 @@ export class GameScene extends Phaser.Scene {
     this.player.play(VIMMY_FLY_ANIM);
     this.reactionFocus = this.add.graphics().setPosition(this.player.x, this.player.y).setDepth(4.5).setVisible(false);
     this.reactionIcon = this.add.image(this.player.x, this.player.y, '__WHITE').setScale(REACTION_ICON_SCALE).setDepth(6).setVisible(false);
-    this.shieldAura = this.add.circle(this.player.x, this.player.y, PLAYER_SPRITE_SIZE * 0.72, 0x4fc3f7, 0.18).setStrokeStyle(3, 0xb3e5fc, 0.9).setDepth(4).setVisible(false);
+    this.powerEmberMs = 0;
+    this.shieldAura = this.add.graphics().setDepth(4).setVisible(false);
 
     // Top-left panel: score big, climbed meters small, and a row of status chips below it.
     this.hudPanel = this.add.graphics().setScrollFactor(0).setDepth(19);
@@ -699,6 +704,7 @@ export class GameScene extends Phaser.Scene {
     this.updateHud();
     this.updateCopterSound();
     this.updateShieldAura(time);
+    this.updatePowerAura(time, dt * 1000);
     if (this.reactionFocus.visible) this.reactionFocus.setPosition(this.player.x, this.player.y);
     if (this.reactionIcon.visible) this.reactionIcon.setPosition(this.player.x, this.player.y - REACTION_ICON_OFFSET + Math.sin(time / 90) * 3);
 
@@ -739,6 +745,11 @@ export class GameScene extends Phaser.Scene {
     }
     if (this.run.dashMs > 0) {
       this.vy = this.run.dashVelocity;
+      this.climbLinesMs -= dt * 1000;
+      if (this.climbLinesMs <= 0) {
+        climbSpeedLines(this, this.player.x, this.player.y, PLAYER_SPRITE_SIZE);
+        this.climbLinesMs = 120;
+      }
     } else {
       this.vy = Math.min(this.vy + PHYSICS.gravity * dt, PHYSICS.maxFallSpeed);
     }
@@ -823,12 +834,18 @@ export class GameScene extends Phaser.Scene {
     this.spawnOne(h, 0);
     const doubleChance = Math.min(1, ramp(ITEM_RULES.doubleSpawnChance, d) + (finale ? FINALE_RUSH.extraDoubleSpawnChance : 0));
     if (Math.random() < doubleChance) this.spawnOne(h, 1);
+    // A flood finale (coffee rush, shopping spree) piles extra signature items on top of every beat.
+    if (finale?.flood) {
+      for (let row = 3; row <= 4; row++) if (Math.random() < finale.flood.extraChance) this.spawnOne(h, row, undefined, finale.flood.id);
+    }
     const { untilMeters, extraChance } = ITEM_RULES.startFood;
     if (h < untilMeters && Math.random() < extraChance * (1 - h / untilMeters)) this.spawnOne(h, 2, 'points');
   }
 
   private spawnOne(heightMeters: number, row: number, onlyKind?: ItemDef['kind'], forceId?: string): void {
-    const def = (forceId && getItem(forceId)) || pickItem(heightMeters, Math.random, onlyKind);
+    const flood = finaleAt(heightMeters)?.flood;
+    const flooded = !onlyKind && flood && Math.random() < flood.chance ? flood.id : undefined;
+    const def = ((forceId ?? flooded) && getItem((forceId ?? flooded) as string)) || pickItem(heightMeters, Math.random, onlyKind);
     const cam = this.cameras.main;
     const x = Phaser.Math.Between(40, GAME_WIDTH - 40);
     const y = cam.scrollY - 40 - row * 70;
@@ -923,19 +940,61 @@ export class GameScene extends Phaser.Scene {
     const on = this.run.shield;
     this.shieldAura.setVisible(on);
     if (!on) return;
-    const pulse = Math.sin(timeMs / 220);
-    this.shieldAura.setPosition(this.player.x, this.player.y).setScale(1 + 0.05 * pulse).setAlpha(0.8 + 0.2 * pulse);
+    const { x, y } = this.player;
+    const g = this.shieldAura;
+    g.clear();
+    // A cloud of twinkling four-point sparkles drifting around the body on two orbits.
+    const count = 9;
+    for (let i = 0; i < count; i++) {
+      const outer = i % 3 !== 0;
+      const a = (outer ? timeMs / 800 : -timeMs / 550) + (i * Math.PI * 2) / count;
+      const r = PLAYER_SPRITE_SIZE * (outer ? 0.74 : 0.5) * (1 + 0.06 * Math.sin(timeMs / 300 + i));
+      const twinkle = 0.5 + 0.5 * Math.sin(timeMs / 140 + i * 1.7);
+      this.drawSparkle(g, x + Math.cos(a) * r, y + Math.sin(a) * r, 7 + 7 * twinkle, i % 2 ? 0xffffff : 0x81d4fa, 0x0288d1, 0.8 + 0.2 * twinkle);
+    }
+  }
+
+  /** A four-point star centred on (x, y), `s` px from the centre to each tip. */
+  private drawSparkle(g: Phaser.GameObjects.Graphics, x: number, y: number, s: number, color: number, outline: number, alpha: number): void {
+    const k = s * 0.32;
+    const points = [[0, -s], [k, -k], [s, 0], [k, k], [0, s], [-k, k], [-s, 0], [-k, -k]].map(([px, py]) => new Phaser.Math.Vector2(x + px, y + py));
+    g.fillStyle(color, alpha).fillPoints(points, true);
+    g.lineStyle(2, outline, alpha).strokePoints(points, true, true);
+  }
+
+  /** Power fly: golden sparkles streaming upward from the body. */
+  private updatePowerAura(_timeMs: number, deltaMs: number): void {
+    if (this.run.strongFlapMs <= 0) return;
+    this.powerEmberMs -= deltaMs;
+    if (this.powerEmberMs > 0) return;
+    this.powerEmberMs = 40;
+    const angle = Math.random() * Math.PI * 2;
+    const reach = PLAYER_SPRITE_SIZE * (0.3 + Math.random() * 0.35);
+    const size = 9 + Math.random() * 8;
+    const spark = this.add
+      .star(this.player.x + Math.cos(angle) * reach, this.player.y + Math.sin(angle) * reach, 4, size * 0.3, size, Math.random() < 0.5 ? 0xffd54f : 0xffab00)
+      .setStrokeStyle(2, 0xe65100, 1)
+      .setDepth(4.2);
+    this.tweens.add({
+      targets: spark,
+      x: spark.x + (Math.random() - 0.5) * 30,
+      y: spark.y - 55 - Math.random() * 45,
+      alpha: 0,
+      scale: 0.2,
+      angle: 90,
+      duration: 450 + Math.random() * 250,
+      ease: 'Cubic.easeOut',
+      onComplete: () => spark.destroy(),
+    });
   }
 
   /** The bubble pops outward when the shield takes a hit. */
   private burstShield(): void {
-    const ring = this.add.circle(this.player.x, this.player.y, PLAYER_SPRITE_SIZE * 0.72, 0x4fc3f7, 0.3).setStrokeStyle(4, 0xffffff, 1).setDepth(6);
-    this.tweens.add({ targets: ring, scale: 2, alpha: 0, duration: 450, ease: 'Cubic.easeOut', onComplete: () => ring.destroy() });
-    // A ring of sparks flies off the bubble, as if the hit glanced away.
+    // A burst of sparkles flies off the shield, as if the hit glanced away.
     const sparks = 10;
     for (let i = 0; i < sparks; i++) {
       const angle = (i / sparks) * Math.PI * 2 + Math.random() * 0.3;
-      const spark = this.add.circle(this.player.x, this.player.y, 4, i % 2 ? 0xffffff : 0xffeb3b).setDepth(7);
+      const spark = this.add.star(this.player.x, this.player.y, 4, 3, 11, i % 2 ? 0xffffff : 0xffeb3b).setStrokeStyle(2, 0x0288d1, 1).setDepth(7);
       this.tweens.add({
         targets: spark,
         x: this.player.x + Math.cos(angle) * 85,

@@ -59,7 +59,7 @@ export const ITEMS: readonly ItemDef[] = [
   { id: 'pasta', label: 'Pasta', kind: 'points', weight: 4, effect: { type: 'points', amount: 90 }, color: 0xef5350 },
   { id: 'tomYum', label: 'Tom Yum', kind: 'points', weight: 2, effect: { type: 'points', amount: 180 }, color: 0xe8641e },
   { id: 'shrimpFriedRiceBox', label: 'Shrimp Fried Rice Lunch Box', kind: 'points', weight: 2, effect: { type: 'points', amount: 220 }, color: 0xff8a65 },
-  { id: 'goldenRetriever', label: 'Golden Retriever', kind: 'buff', weight: 1, effect: { type: 'magnet', durationMs: 6000, radius: 200 }, bonusPoints: 300, minStage: 3, secret: true, color: 0xffc107 },
+  { id: 'goldenRetriever', label: 'Golden Retriever', kind: 'buff', weight: 1, effect: { type: 'magnet', durationMs: 6000, radius: 200 }, bonusPoints: 300, minStage: 5, secret: true, color: 0xffc107 },
   { id: 'iceCream', label: 'Ice Cream', kind: 'points', weight: 2, effect: { type: 'points', amount: 50 }, color: 0xf8bbd0 },
   { id: 'dogEars', label: 'Dog Ears', kind: 'debuff', weight: 1, effect: { type: 'shy', durationMs: 6000, liftMin: 0.4, liftMax: 1.2 }, bonusPoints: 250, secret: true, color: 0xa1724a },
   { id: 'cheesePopcorn', label: 'Cheese Popcorn', kind: 'points', weight: 4, effect: { type: 'points', amount: 70 }, color: 0xffd54f },

@@ -34,7 +34,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Lawyer Suit | `lawyerSuit` | Shield | Blocks the next debuff | 3 | Replaces the briefcase |
 | Handkerchief | `handkerchief` | Cleanse | Instantly clears stun and disorient | 3 | |
 | Rolling Pin | `rollingPin` | Strong flap | Flaps at 150% strength for 5 s | 3 | Bakery tool |
-| Golden Retriever | `goldenRetriever` | Magnet + 300 points | Pulls falling food and power-ups within 200 px toward Vimmy for 6 s (debuffs ignore it) | 1 | Rarest item, and the only one that is both a buff and a prize: it also gives +300 points (doubled under the oyster). Only falls from stage 3 (1400 m) up outside a themed finale, is drawn larger, and stays off the Menu until you have finished a run |
+| Golden Retriever | `goldenRetriever` | Magnet + 300 points | Pulls falling food and power-ups within 200 px toward Vimmy for 6 s (debuffs ignore it) | 1 | Rarest item, and the only one that is both a buff and a prize: it also gives +300 points (doubled under the oyster). Only falls from stage 5 (1400 m) up outside a themed finale, is drawn larger, and stays off the Menu until you have finished a run |
 | Helicopter | `helicopter` | Upward dash | 3 s at 700 px/s | 2 | The big climb; gets rarer the higher you go (down to 25% of its weight, on top of the usual buff scaling) |
 
 ## Debuffs
