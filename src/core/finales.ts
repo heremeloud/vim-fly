@@ -8,10 +8,10 @@ import { ZONES, zoneAt, type ZoneId } from './zones';
  */
 export const FINALE_METERS = 100;
 
-/** Shared rush pacing: about 80% more spawn beats, with another 35% chance of a second item on each beat. */
+/** Shared rush pacing: about 11% more spawn beats, with another 15% chance of a second item on each beat. */
 export const FINALE_RUSH = {
-  spawnIntervalScale: 0.55,
-  extraDoubleSpawnChance: 0.35,
+  spawnIntervalScale: 0.9,
+  extraDoubleSpawnChance: 0.15,
 } as const;
 
 export interface Finale {
@@ -19,6 +19,8 @@ export interface Finale {
   items: Readonly<Record<string, number>>;
   /** Items that must fall during the finale (not left to chance): `count` of them, spread evenly across its length. */
   guaranteed?: { id: string; count: number };
+  /** Replaces the usual random drops with exactly this many, spread evenly over the finale (one every FINALE_METERS / total of climbing). */
+  totalDrops?: number;
   /** A flood of one item: each drop is that item with this chance, and each beat may add up to two extra ones. */
   flood?: { id: string; chance: number; extraChance: number };
   /** Peak sideways push in px/s. It sways left and right so it never just pins Vimmy to one wall. */
@@ -29,7 +31,7 @@ export interface Finale {
 
 const FINALES: Partial<Record<ZoneId, Finale>> = {
   ruralRoad: { items: { carCrash: 5, kitten: 4 }, guaranteed: { id: 'carCrash', count: 2 } }, // car crash hour: two cars, for sure
-  bakery: { items: { pandanCustardBread: 6, shiopan: 6, cheeseButterBread: 6, cilantroBread: 4, fishSauceBread: 4 } }, // fresh from the oven: every kind of bread, the bad ones too
+  bakery: { items: { pandanCustardBread: 6, shiopan: 6, cheeseButterBread: 3, cilantroBread: 4, fishSauceBread: 4 }, totalDrops: 40 }, // fresh from the oven: every kind of bread, the bad ones too, exactly 40 of them
   cafes: { items: { coffee: 40, sandwich: 3, cilantroBread: 3, fishSauceBread: 3, goldenRetriever: 12 }, flood: { id: 'coffee', chance: 0.75, extraChance: 0.6 }, flapScale: 1.12 }, // caffeine and a sandwich (the bakery is the bread rush), and the golden retriever visits
   mall: { items: { cheesePopcorn: 40, cheeseButterBread: 8, helicopter: 6, goldenRetriever: 5 }, flood: { id: 'cheesePopcorn', chance: 0.75, extraChance: 0.6 } }, // popcorn everywhere, plus a few premium finds and prizes
   lawOffice: { items: { planner: 4, shrimpFriedRiceBox: 6 }, flapScale: 0.9 }, // paperwork

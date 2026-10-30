@@ -32,12 +32,12 @@ The banner shows the stage number and the location (for example "Stage 5 / CC La
 
 ## Location rushes (the last 100 m)
 
-Every location except the last (Bake Love Bakery, which never ends) finishes with a short themed stretch, `FINALE_METERS` (100 m) long, defined in [finales.ts](finales.ts). A banner and pulsing frame announce it. Spawn beats run at 55% of their normal interval (about 80% more often), with another 35% chance of a double drop, and items that fit the place receive strong weight boosts. These are meant to feel like brief events, so tune them by hand if a later rush becomes unfair.
+Every location except the last (Bake Love Bakery, which never ends) finishes with a short themed stretch, `FINALE_METERS` (100 m) long, defined in [finales.ts](finales.ts). A banner and pulsing frame announce it. Spawn beats run at 90% of their normal interval (about 11% more often), with another 15% chance of a double drop, and items that fit the place receive strong weight boosts. These are meant to feel like brief events, so tune them by hand if a later rush becomes unfair.
 
 | Location | Banner (English) | More of | Effect |
 | --- | --- | --- | --- |
 | Rural Road | Don't crash! | Car crashes x5, kittens x4, and exactly two are guaranteed (a third and two thirds of the way through) on top of the normal chance | |
-| Heartwarming Bakery | Fresh from the oven! | Every bread: good breads x6, cilantro and fish sauce breads x4 | |
+| Heartwarming Bakery | Fresh from the oven! | Every bread: pandan custard bread and shiopan x6, cheese butter bread x3 (each one refills a side dash, so it stays scarce), cilantro and fish sauce breads x4 | Exactly 40 drops, spread evenly over the 100 m (no random timer) |
 | Cafe | Coffee rush! | Coffee x40 (and 75% of all drops, plus extras), sandwich x3, cilantro and fish sauce breads x3, golden retriever x12 (even before stage 5) | Flaps 12% stronger |
 | Shopping Mall | Shopping spree! | Cheese popcorn x40 (and 75% of all drops, plus extras), cheese butter bread x8, helicopter x6, golden retriever x5 | |
 | CC Law Office | Paperwork pile-up! | Planners x4, shrimp fried rice lunch box x6 | Flaps 10% weaker |

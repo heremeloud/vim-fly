@@ -144,6 +144,8 @@ export class GameScene extends Phaser.Scene {
   private finaleZone: string | null = null;
   /** How many of the finale's guaranteed items have been dropped so far. */
   private finaleGiven = 0;
+  /** How many of a fixed-total finale's drops have fallen so far. */
+  private finaleDropped = 0;
   /** Pulsing edge glow that stays visible for the whole location rush. */
   private finaleFrame!: Phaser.GameObjects.Graphics;
   private zone: Zone = zoneAt(0);
@@ -194,6 +196,7 @@ export class GameScene extends Phaser.Scene {
     this.bgBlurLevel = 0;
     this.finaleZone = null;
     this.finaleGiven = 0;
+    this.finaleDropped = 0;
     this.spawnTimerMs = 0;
     this.ended = false;
     this.paused = false;
@@ -624,6 +627,7 @@ export class GameScene extends Phaser.Scene {
       playSfx(this, 'power', 0.75);
       this.cameras.main.flash(180, 247, 189, 59, false);
       this.finaleGiven = 0;
+      this.finaleDropped = 0;
     }
     this.finaleZone = finale?.zoneId ?? null;
     this.finaleFrame.setVisible(!!finale);
@@ -829,6 +833,16 @@ export class GameScene extends Phaser.Scene {
     const h = this.run.heightMeters;
     const d = difficulty(h);
     const finale = finaleAt(h);
+    // A fixed-total finale (the bakery's 40 loaves) drops on a schedule by height instead of on the random timer.
+    if (finale?.totalDrops) {
+      let row = 0;
+      while (this.finaleDropped < finale.totalDrops && h >= finale.fromMeters + (FINALE_METERS * this.finaleDropped) / finale.totalDrops) {
+        this.spawnOne(h, row++);
+        this.finaleDropped += 1;
+      }
+      this.spawnTimerMs = 0;
+      return;
+    }
     this.spawnTimerMs = ramp(ITEM_RULES.spawnMs, d) * (finale ? FINALE_RUSH.spawnIntervalScale : 1);
 
     this.spawnOne(h, 0);
@@ -876,7 +890,14 @@ export class GameScene extends Phaser.Scene {
 
       const reach = (PLAYER_HITBOX_SIZE + Math.max(ITEM_RULES.size, it.visualSize * 0.75)) / 2;
       if (Math.abs(s.x - this.player.x) < reach && Math.abs(s.y - this.player.y) < reach) {
-        if (it.def.kind === 'debuff' && (this.swipeDashDir !== 0 || this.run.dashMs > 0)) continue; // swipe dash or helicopter: debuffs pass through harmlessly (admin takes them too, to see the effects)
+        if (this.swipeDashDir !== 0) {
+          // The sideways dash is too fast to grab anything but the helicopter, which cuts the dash short and takes off at once.
+          if (it.def.id !== 'helicopter') continue;
+          this.swipeDashDir = 0;
+          this.vx = 0;
+          this.player.play(VIMMY_FLY_ANIM);
+        }
+        if (it.def.kind === 'debuff' && this.run.dashMs > 0) continue; // helicopter: debuffs pass through harmlessly (admin takes them too, to see the effects)
         if (it.def.kind === 'buff') {
           this.playBuffReaction(it.def);
           const cue = BUFF_AUDIO_CUE[it.def.id] ?? { effect: 0.7, yips: 0.5 };
@@ -908,6 +929,14 @@ export class GameScene extends Phaser.Scene {
           // The golden retriever and the dog ears carry points as well: they pop up just after the item's own text.
           playSfx(this, 'jackpot', 0.7, 0.06);
           this.time.delayedCall(350, () => this.showPopup(`+${gained}`, hex(COLORS.primaryDark), true));
+        }
+        if (it.def.refillsDash && this.swipesLeft < PHYSICS.swipeDashesPerRun) {
+          // The bread gives a sideways dash back: the spent loaf in the corner lights up again.
+          this.swipesLeft += 1;
+          const loaf = this.swipeBreads[this.swipesLeft - 1];
+          this.tweens.add({ targets: loaf, scale: loaf.scale * 1.7, duration: 160, yoyo: true });
+          playSfx(this, 'sparkle', 0.6, 0.1);
+          this.time.delayedCall(350, () => this.showPopup(t('hud.dashPlus'), hex(COLORS.buff)));
         }
         if (it.def.kind === 'points' && gained !== 0) this.showPopup(`${gained > 0 ? '+' : ''}${gained}`, gained > 0 ? hex(COLORS.primaryDark) : hex(COLORS.debuff), gained >= 150);
         if (it.def.kind === 'debuff' && applied) this.playDebuffReaction(it.def);

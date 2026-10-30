@@ -20,6 +20,6 @@ export function addHowToPlay(scene: Phaser.Scene, add: <T extends Phaser.GameObj
     add(roundedBox(scene, x, ry, w, 64, COLORS.background, RADIUS.control).setDepth(depth + 2));
     add(roundedBox(scene, x + 10, ry + 10, 44, 44, step.tint, RADIUS.control).setDepth(depth + 2));
     add(drawIcon(scene, step.icon, x + 32, ry + 32, COLORS.onPrimary).setDepth(depth + 3));
-    add(label(scene, x + 68, ry + 32, t(step.key), { size: 14, wrap: w - 82 }).setOrigin(0, 0.5).setDepth(depth + 3));
+    add(label(scene, x + 68, ry + 32, t(step.key), { size: 13, wrap: w - 82 }).setOrigin(0, 0.5).setDepth(depth + 3));
   });
 }

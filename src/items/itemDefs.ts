@@ -34,6 +34,8 @@ export interface ItemDef {
   effect: ItemEffect;
   /** Points added on top of a non-points effect (the golden retriever and the dog ears, so each is both a power-up or hazard and a prize). */
   bonusPoints?: number;
+  /** Also gives back one sideways dash (up to the per-run maximum). */
+  refillsDash?: boolean;
   /** Extra weight multiplier reached at full difficulty (ramps in with height, on top of the kind's own scale): below 1 thins the item out as you climb, above 1 keeps it from thinning. */
   heightWeightScale?: number;
   /** Only falls from this story stage on (see `zones.ts`). */
@@ -48,7 +50,7 @@ export interface ItemDef {
 
 export const ITEMS: readonly ItemDef[] = [
   { id: 'pandanCustardBread', label: 'Pandan Custard Bread', kind: 'points', weight: 6, effect: { type: 'points', amount: 40 }, heightWeightScale: 1.6, color: 0x8bc34a },
-  { id: 'cheeseButterBread', label: 'Cheese Butter Bread', kind: 'points', weight: 2, effect: { type: 'points', amount: 120 }, color: 0xffca28 },
+  { id: 'cheeseButterBread', label: 'Cheese Butter Bread', kind: 'points', weight: 2, effect: { type: 'points', amount: 120 }, refillsDash: true, color: 0xffca28 },
   { id: 'cilantroBread', label: 'Cilantro Bread', kind: 'debuff', weight: 4, effect: { type: 'disorient', durationMs: 3000 }, color: 0x66bb6a },
   { id: 'shiopan', label: 'Shiopan', kind: 'points', weight: 5, effect: { type: 'points', amount: 30 }, heightWeightScale: 1.6, color: 0xd7a86e },
   { id: 'fishSauceBread', label: 'Fish Sauce Bread', kind: 'debuff', weight: 3, effect: { type: 'slow', durationMs: 5000, factor: 0.6 }, color: 0xa1887f },
@@ -107,8 +109,10 @@ export function describeEffect(item: ItemDef): string {
   const e = item.effect;
   const secs = (ms: number) => ms / 1000;
   switch (e.type) {
-    case 'points':
-      return e.amount >= 0 ? t('effect.points.gain', { n: e.amount }) : t('effect.points.loss', { n: -e.amount });
+    case 'points': {
+      const base = e.amount >= 0 ? t('effect.points.gain', { n: e.amount }) : t('effect.points.loss', { n: -e.amount });
+      return item.refillsDash ? `${base} | ${t('effect.refillsDash')}` : base;
+    }
     case 'dash':
       return t('effect.dash', { s: secs(e.durationMs) });
     case 'magnet':
@@ -123,7 +127,7 @@ export function describeEffect(item: ItemDef): string {
       return t('effect.doublePoints', { s: secs(e.durationMs) });
     case 'stun':
       return e.points
-        ? t('effect.stunPenalty', { s: secs(e.durationMs), n: -e.points })
+        ? `${t('effect.stun', { s: secs(e.durationMs) })} | ${t('effect.points.loss', { n: -e.points })}`
         : t('effect.stun', { s: secs(e.durationMs) });
     case 'shy':
       return t('effect.shy', { s: secs(e.durationMs) });
@@ -134,7 +138,7 @@ export function describeEffect(item: ItemDef): string {
     case 'swerve':
       return t('effect.swerve');
     case 'crash':
-      return t('effect.crash', { s: secs(e.stunMs), n: -e.points });
+      return `${t('effect.crash', { s: secs(e.stunMs) })} | ${t('effect.points.loss', { n: -e.points })}`;
   }
 }
 

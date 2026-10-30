@@ -15,7 +15,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Item | id | Points | Weight | Notes |
 | --- | --- | --- | --- | --- |
 | Pandan Custard Bread | `pandanCustardBread` | +40 | 6 | Core series food; cheap breads stay common as you climb (weight x1.6 at full difficulty cancels the food slowdown) |
-| Cheese Butter Bread (Cheese-Noey Bread) | `cheeseButterBread` | +120 | 2 | Aroma of Love's star bread, created from milk, butter and cream cheese; a high-points item, rarer than the pasta and wine |
+| Cheese Butter Bread (Cheese-Noey Bread) | `cheeseButterBread` | +120 | 2 | Aroma of Love's star bread, created from milk, butter and cream cheese; a high-points item, rarer than the pasta and wine. It also gives back one sideways dash (up to 3), lighting up a spent loaf in the corner |
 | Shiopan | `shiopan` | +30 | 5 | Stays common as you climb (as the pandan bread) |
 | Sandwich | `sandwich` | +45 | 6 | Stays common as you climb (as the pandan bread) |
 | Coffee | `coffee` | +60 | 4 | Noey's black coffee with honey |
