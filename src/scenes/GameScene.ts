@@ -63,7 +63,7 @@ const START_Y = GAME_HEIGHT - 200;
 /** The tap-left / tap-right guides stay over the first 50 m, fading out over the last 8 of them, at this height on screen. */
 const TAP_GUIDE_METERS = 50;
 const TAP_GUIDE_FADE_METERS = 8;
-const TAP_GUIDE_Y = GAME_HEIGHT - 290;
+const TAP_GUIDE_Y = GAME_HEIGHT - 190;
 /** Corner radius of the swipe hint and the tap guides: a rounded rectangle, not a full pill. */
 const HINT_RADIUS = 14;
 const VIMMY_FLY_ANIM = 'vimmy-fly';
