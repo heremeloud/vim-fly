@@ -9,8 +9,8 @@ export function watchPilot(): void {
 
 /**
  * Build the pilot player into a scene (the receipt). It shows the video's thumbnail with a play button
- * (always instant, and nothing from YouTube is loaded) and waits for a tap, so it never competes with
- * the game's own sound or streams on every game over. The tap loads the player and starts it with sound. To start by itself instead, use `autoplay: true, muted: true`
+ * while the paused player gets ready underneath. The poster protects the iframe from accidental edge taps;
+ * only the central play button reveals and starts it with sound. To start by itself instead, use `autoplay: true, muted: true`
  * (browsers only allow muted autoplay).
  */
 export function embedPilot(scene: Phaser.Scene, box: LayoutBox): void {

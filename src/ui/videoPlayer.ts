@@ -24,9 +24,9 @@ interface Player {
  * ready (so a slow connection never looks like nothing is playing). Shared by the pop-up window
  * and the player built into the receipt.
  *
- * With `facade`, the box shows the video's thumbnail with a play button and does not create the real player
- * until it is tapped. This keeps an idle embed from taking focus when someone taps an edge of the preview.
- * After the tap, the thumbnail stays over the player until YouTube is ready and playback starts.
+ * With `facade`, the real player preloads paused under the video's thumbnail so it is ready for one-tap playback.
+ * The thumbnail remains over the whole iframe until its central play button is tapped, preventing inactive edges
+ * of the embed from taking focus away from the game.
  */
 function createPlayer(videoId: string, { autoplay, muted, facade = false }: { autoplay: boolean; muted: boolean; facade?: boolean }): Player {
   const box = document.createElement('div');
@@ -53,7 +53,7 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
     textShadow: '0 1px 6px rgba(0, 0, 0, 0.9)',
     pointerEvents: 'none', // lets taps through to the player underneath
     fontFamily: FONT.family,
-    background: facade ? 'rgba(0, 0, 0, 0.4)' : 'transparent', // darkens the thumbnail so the message stays readable
+    background: facade ? 'rgba(0, 0, 0, 0.4)' : 'transparent', // darkens the thumbnail while the player gets ready
   } satisfies Partial<CSSStyleDeclaration>);
   let giveUp = 0;
   let frame: HTMLIFrameElement | null = null;
@@ -88,7 +88,11 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
       f.contentWindow?.postMessage(JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }), YOUTUBE);
     });
     frame = f;
-    giveUp = window.setTimeout(hideLoading, 20000); // never leave it up forever
+    // A preloaded facade must never expose the iframe on its own: its poster is what makes edge taps harmless.
+    // After an intentional play tap, give up waiting eventually so a broken embed does not stay covered forever.
+    giveUp = window.setTimeout(() => {
+      if (!facade || wantPlay) hideLoading();
+    }, 20000);
     // Keep a facade above the iframe until the player is ready. Appending the iframe here would put it over
     // the poster, allowing its inactive edges to steal focus while the loading message is visible.
     if (facade) box.prepend(f);
@@ -105,30 +109,30 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
     }
     const info = msg?.info as { playerState?: number } | number | undefined;
     const state = msg?.event === 'onStateChange' ? info : (info as { playerState?: number } | undefined)?.playerState;
-    if (state === 1 || state === 2 || state === 0 || state === 5) hideLoading();
-    // The click-to-load player is ready: start it and swap the thumbnail for the real controls.
+    if ((!facade || wantPlay) && (state === 1 || state === 2 || state === 0 || state === 5)) hideLoading();
+    // The preloaded player is ready. Keep it protected until the play button is intentionally pressed.
     if (facade && !ready && (msg?.event === 'onReady' || msg?.event === 'initialDelivery')) {
       ready = true;
-      if (wantPlay) frame.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: [] }), YOUTUBE);
-      hideLoading();
+      if (wantPlay) {
+        frame.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: [] }), YOUTUBE);
+        hideLoading();
+      }
     }
   };
   window.addEventListener('message', onMessage);
 
   if (facade) {
     poster = document.createElement('div');
-    poster.setAttribute('role', 'button');
-    poster.tabIndex = 0;
-    poster.setAttribute('aria-label', t('video.title'));
     Object.assign(poster.style, {
       position: 'absolute',
       inset: '0',
-      cursor: 'pointer',
       backgroundImage: `url(https://i.ytimg.com/vi/${videoId}/hqdefault.jpg)`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
     } satisfies Partial<CSSStyleDeclaration>);
-    const play = document.createElement('div');
+    const play = document.createElement('button');
+    play.type = 'button';
+    play.setAttribute('aria-label', t('video.title'));
     Object.assign(play.style, {
       position: 'absolute',
       left: '50%',
@@ -137,8 +141,11 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
       height: '48px',
       transform: 'translate(-50%, -50%)',
       borderRadius: '14px',
+      border: '0',
+      padding: '0',
       background: 'rgba(255, 0, 0, 0.92)',
       boxShadow: '0 2px 10px rgba(0, 0, 0, 0.4)',
+      cursor: 'pointer',
     } satisfies Partial<CSSStyleDeclaration>);
     const triangle = document.createElement('div');
     Object.assign(triangle.style, {
@@ -148,25 +155,24 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
       borderStyle: 'solid',
       borderWidth: '10px 0 10px 18px',
       borderColor: 'transparent transparent transparent #ffffff',
+      pointerEvents: 'none',
     } satisfies Partial<CSSStyleDeclaration>);
     play.append(triangle);
     poster.append(play);
-    // Only create the iframe after an intentional tap anywhere on the preview. Until then there is no embedded
-    // window whose inactive edge can take browser focus away from Phaser.
+    // Only the play button activates the protected iframe. Taps around it land on the poster and do nothing.
     const start = () => {
       if (wantPlay) return;
       wantPlay = true;
       play.remove();
-      mountFrame(true);
-      box.append(loading);
-    };
-    poster.addEventListener('click', start);
-    poster.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        start();
+      if (ready && frame) {
+        frame.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: [] }), YOUTUBE);
+        hideLoading();
+      } else {
+        box.append(loading);
       }
-    });
+    };
+    play.addEventListener('click', start);
+    mountFrame(false);
     box.append(poster);
   } else {
     mountFrame(autoplay);
