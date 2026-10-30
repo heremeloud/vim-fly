@@ -24,7 +24,7 @@ All numbers are **starting points to tune in playtesting**. Weights are relative
 | Tom Yum | `tomYum` | +180 | 2 | Hot and sour Thai shrimp soup |
 | Shrimp Fried Rice Lunch Box | `shrimpFriedRiceBox` | +220 | 2 | Noey's homemade apology meal with fried shrimp; rare |
 | Ice Cream | `iceCream` | +50 | 2 | From the story: the ice cream a character used as a faked excuse for being at the gym; the Gym rush drops it x8 |
-| Cheese Popcorn | `cheesePopcorn` | +70 | 4 | The cheese popcorn Cheese and Noey got at the mall; the Shopping Mall rush drops it x6 |
+| Cheese Popcorn | `cheesePopcorn` | +70 | 4 | The cheese popcorn Cheese and Noey got at the mall; the Shopping Mall rush drops it x40 |
 
 ## Buffs
 

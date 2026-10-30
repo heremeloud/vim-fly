@@ -28,8 +28,8 @@ export interface Finale {
 const FINALES: Partial<Record<ZoneId, Finale>> = {
   ruralRoad: { items: { carCrash: 5, kitten: 4 }, guaranteed: { id: 'carCrash', count: 2 } }, // car crash hour: two cars, for sure
   bakery: { items: { pandanCustardBread: 6, shiopan: 6, cheeseButterBread: 6, cilantroBread: 4, fishSauceBread: 4 } }, // fresh from the oven: every kind of bread, the bad ones too
-  cafes: { items: { coffee: 8, sandwich: 3, cilantroBread: 3, fishSauceBread: 3, goldenRetriever: 12 }, flapScale: 1.12 }, // caffeine and a sandwich (the bakery is the bread rush), and the golden retriever visits
-  mall: { items: { cheesePopcorn: 6, cheeseButterBread: 8, helicopter: 6, goldenRetriever: 5 } }, // a rush of premium finds and prizes
+  cafes: { items: { coffee: 40, sandwich: 3, cilantroBread: 3, fishSauceBread: 3, goldenRetriever: 12 }, flapScale: 1.12 }, // caffeine and a sandwich (the bakery is the bread rush), and the golden retriever visits
+  mall: { items: { cheesePopcorn: 40, cheeseButterBread: 8, helicopter: 6, goldenRetriever: 5 } }, // popcorn everywhere, plus a few premium finds and prizes
   lawOffice: { items: { planner: 4, shrimpFriedRiceBox: 6 }, flapScale: 0.9 }, // paperwork
   gym: { items: { rollingPin: 14, iceCream: 8 }, flapScale: 1.15 }, // pump it up
   courtroom: { items: { gavelHammer: 5 } }, // order in the court
