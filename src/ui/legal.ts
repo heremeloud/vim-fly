@@ -9,6 +9,7 @@ import { button, hitArea, label, roundedBox, scrim } from './widgets';
 const TITLE = 'Legal & Disclaimer';
 const BODY =
   'Vimmy Fly is a free, unofficial, non-commercial fan game. It is not affiliated with, authorized, endorsed or sponsored by GMMTV, Snow Leopard, the cast or other rights holders.\n\n' +
+  'Made by a fan to celebrate Bake Love Feeling and encourage support for the official series and novel.\n\n' +
   'The game drawings, sprites and item art are original fan art. Vimmy and the series characters belong to GMMTV. Item concepts and story references are inspired by the Bake Love Feeling pilot and the novel ขนมปังชีสเนย (Bake Love Feelings) by Snow Leopard (เสือดาวหิมะ).\n\n' +
   'Profile photos, banners and other third-party images belong to GMMTV and/or their respective creators. No ownership or license is claimed over third-party characters, stories, likenesses, images, logos or trademarks.\n\n' +
   'All shops, prices and orders are fictional. Nothing is offered for sale.\n\n' +
