@@ -55,6 +55,7 @@ export const ja: Record<StringKey, string> = {
   'hud.shield': 'シールド',
   'hud.dash': 'ダッシュ',
   'hud.swipeHint': '左右にスワイプでダッシュ&よけよう!',
+  'hud.paused': '一時停止中',
   'hud.stunned': 'スタン',
   'hud.power': 'パワー',
   'hud.dizzy': 'めまい',

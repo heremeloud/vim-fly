@@ -1,7 +1,7 @@
 import { beginRun } from '../leaderboard/client';
 import Phaser from 'phaser';
 import { devFlag, devParam } from '../core/devTools';
-import { itemSfx, loopSfx, playSfx } from '../audio/sfx';
+import { itemSfx, loopSfx, playSfx, setSoundEnabled, soundEnabled } from '../audio/sfx';
 import { GAME_WIDTH, GAME_HEIGHT, PHYSICS, ITEM_RULES, CAMERA, SCENES } from '../core/constants';
 import { bindSteering } from '../core/input';
 import { itemName, t, tDynamic } from '../i18n';
@@ -10,6 +10,7 @@ import { FINALE_BOARD, layoutBanner, type BannerBoard } from '../ui/boards';
 import { CHIP_ICON, dashBurst, dashImpact, dashTrail, drawStatusChip, popup } from '../ui/fx';
 import { emojiTextureKey } from '../core/emojiFile';
 import { COLORS, FONT, hex } from '../ui/theme';
+import { drawIcon, type IconId } from '../ui/icons';
 import { fitWidth } from '../ui/widgets';
 import { RunState } from '../core/RunState';
 import { difficulty, ramp } from '../core/difficulty';
@@ -163,6 +164,9 @@ export class GameScene extends Phaser.Scene {
   private vy = 0;
   private startY = START_Y;
   private ended = false;
+  private paused = false;
+  private pauseOverlay: Phaser.GameObjects.GameObject[] = [];
+  private hudButtonIcons: Phaser.GameObjects.Graphics[] = [];
   private swipesLeft = PHYSICS.swipeDashesPerRun;
   /** Direction of the dash in progress (0 = none). While dashing Vimmy flies level and ignores debuffs. */
   private swipeDashDir: -1 | 0 | 1 = 0;
@@ -188,6 +192,9 @@ export class GameScene extends Phaser.Scene {
     this.finaleGiven = 0;
     this.spawnTimerMs = 0;
     this.ended = false;
+    this.paused = false;
+    this.pauseOverlay = [];
+    this.hudButtonIcons = [];
     this.swipesLeft = PHYSICS.swipeDashesPerRun;
     this.swipeDashDir = 0;
     this.vx = 0;
@@ -267,7 +274,22 @@ export class GameScene extends Phaser.Scene {
 
     this.showSwipeHint();
 
-    bindSteering(this, (dir) => this.flap(dir), (dir) => this.swipeDash(dir));
+    bindSteering(
+      this,
+      (dir) => {
+        if (!this.paused) this.flap(dir);
+      },
+      (dir) => {
+        if (!this.paused) this.swipeDash(dir);
+      },
+    );
+    this.addHudButtons();
+    const onPauseKey = () => this.togglePause();
+    this.input.keyboard?.on('keydown-P', onPauseKey);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      this.input.keyboard?.off('keydown-P', onPauseKey);
+      if (this.paused) this.sound.resumeAll();
+    });
 
     if (ADMIN) {
       const onNext = () => this.jumpToNextZone();
@@ -286,6 +308,63 @@ export class GameScene extends Phaser.Scene {
         .setScrollFactor(0)
         .setDepth(30);
     }
+  }
+
+  /** Two round buttons under the dash breads: sound on/off and pause/resume. */
+  private addHudButtons(): void {
+    const y = 76;
+    const r = 19;
+    const spots: { id: 'sound' | 'pause'; x: number }[] = [
+      { id: 'sound', x: GAME_WIDTH - 28 - 46 },
+      { id: 'pause', x: GAME_WIDTH - 28 },
+    ];
+    const bg = this.add.graphics().setScrollFactor(0).setDepth(19);
+    const iconFor = (id: 'sound' | 'pause'): IconId => (id === 'sound' ? (soundEnabled() ? 'speaker' : 'speakerOff') : this.paused ? 'play' : 'pause');
+    const redraw = (): void => {
+      this.hudButtonIcons.forEach((g) => g.destroy());
+      this.hudButtonIcons = spots.map((s) => drawIcon(this, iconFor(s.id), s.x, y, COLORS.text).setScrollFactor(0).setDepth(21));
+    };
+    spots.forEach((s) => {
+      bg.fillStyle(COLORS.onPrimary, 0.28).fillCircle(s.x + 1, y + 3, r);
+      bg.fillStyle(COLORS.background, 0.96).fillCircle(s.x, y, r);
+      bg.lineStyle(3, COLORS.onPrimary, 1).strokeCircle(s.x, y, r);
+      const hit = this.add.circle(s.x, y, r + 4, 0xffffff, 0.001).setScrollFactor(0).setDepth(22).setInteractive({ useHandCursor: true });
+      hit.on('pointerup', () => {
+        if (s.id === 'sound') setSoundEnabled(this.game, !soundEnabled());
+        else this.togglePause();
+        redraw();
+      });
+    });
+    redraw();
+    this.refreshHudButtons = redraw;
+  }
+
+  private refreshHudButtons: () => void = () => {};
+
+  private togglePause(): void {
+    if (this.ended) return;
+    this.paused = !this.paused;
+    if (this.paused) {
+      this.sound.pauseAll();
+      this.tweens.pauseAll();
+      this.time.paused = true;
+      this.player.anims.pause();
+      const dim = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.35).setOrigin(0).setScrollFactor(0).setDepth(18.5);
+      const text = this.add
+        .text(GAME_WIDTH / 2, GAME_HEIGHT / 2, t('hud.paused'), { fontFamily: FONT.display, fontSize: '40px', color: '#ffffff', stroke: hex(COLORS.text), strokeThickness: 6 })
+        .setOrigin(0.5)
+        .setScrollFactor(0)
+        .setDepth(24);
+      this.pauseOverlay = [dim, text];
+    } else {
+      this.sound.resumeAll();
+      this.tweens.resumeAll();
+      this.time.paused = false;
+      this.player.anims.resume();
+      this.pauseOverlay.forEach((o) => o.destroy());
+      this.pauseOverlay = [];
+    }
+    this.refreshHudButtons();
   }
 
   /** Soft see-through pill near the bottom with a small caramel arrow either side that nudges outward, fading after a few seconds. */
@@ -608,7 +687,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   update(time: number, deltaMs: number): void {
-    if (this.ended) return;
+    if (this.ended || this.paused) return;
     const dt = Math.min(deltaMs, 66) / 1000; // clamp so a tab switch can't teleport the player; high enough that 30 fps (Low Power Mode) stays at full speed
     this.run.tick(dt * 1000);
 

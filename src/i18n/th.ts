@@ -55,6 +55,7 @@ export const th: Record<StringKey, string> = {
   'hud.shield': 'โล่',
   'hud.dash': 'พุ่ง',
   'hud.swipeHint': 'ปัดซ้ายหรือขวาเพื่อพุ่งหลบ!',
+  'hud.paused': 'หยุดชั่วคราว',
   'hud.stunned': 'สตัน',
   'hud.power': 'พลัง',
   'hud.dizzy': 'เวียนหัว',

@@ -14,6 +14,8 @@ export type IconId =
   | 'check'
   | 'speaker'
   | 'speakerOff'
+  | 'pause'
+  | 'play'
   | 'tap'
   | 'bread'
   | 'swipe'
@@ -105,6 +107,12 @@ export function drawIcon(scene: Phaser.Scene, id: IconId, x: number, y: number, 
         line([[5, -4], [11, 4]]);
         line([[11, -4], [5, 4]]);
       }
+      break;
+    case 'pause':
+      g.fillStyle(color, 1).fillRoundedRect(-7, -8, 5, 16, 1.5).fillRoundedRect(2, -8, 5, 16, 1.5);
+      break;
+    case 'play':
+      g.fillStyle(color, 1).fillPoints(pts([[-5, -9], [-5, 9], [9, 0]]), true);
       break;
     case 'tap': {
       // A hand with the index finger out, tapping, and three little taps radiating from the fingertip.

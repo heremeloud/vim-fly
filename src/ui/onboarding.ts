@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, SCENES } from '../core/constants';
+import { toLayout } from '../core/render';
 import { getPlayerName, setPlayerName, validatePlayerName, NAME_MAX } from '../leaderboard/playerName';
 import { t } from '../i18n';
 import { COLORS, FONT, RADIUS, hex } from './theme';
@@ -82,7 +83,9 @@ function openWelcome(scene: Phaser.Scene): void {
   document.addEventListener('pointerdown', dismissKeyboard);
 
   const outside = (p: Phaser.Input.Pointer): void => {
-    if (p.x < CARD.x || p.x > CARD.x + CARD.w || p.y < CARD.y || p.y > CARD.y + CARD.h) close();
+    const x = toLayout(p.x);
+    const y = toLayout(p.y);
+    if (x < CARD.x || x > CARD.x + CARD.w || y < CARD.y || y > CARD.y + CARD.h) close();
   };
   const close = (): void => {
     scene.input?.off('pointerdown', outside);

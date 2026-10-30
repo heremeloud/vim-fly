@@ -56,6 +56,7 @@ export const en = {
   'hud.shield': 'SHIELD',
   'hud.dash': 'DASH',
   'hud.swipeHint': 'Swipe left or right to dash & dodge!',
+  'hud.paused': 'Paused',
   'hud.stunned': 'STUNNED',
   'hud.power': 'POWER',
   'hud.dizzy': 'DIZZY',

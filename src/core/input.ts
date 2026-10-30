@@ -16,7 +16,10 @@ const RIGHT_KEYS = ['RIGHT', 'D'];
  * never stacks duplicate handlers.
  */
 export function bindSteering(scene: Phaser.Scene, onSteer: (dir: Steer) => void, onSwipe?: (dir: Steer) => void): void {
-  const onPointer = (p: Phaser.Input.Pointer) => onSteer(toLayout(p.x) < GAME_WIDTH / 2 ? -1 : 1);
+  const onPointer = (p: Phaser.Input.Pointer, over: Phaser.GameObjects.GameObject[] = []) => {
+    if (over.length) return; // a tap on a button is not a flap
+    onSteer(toLayout(p.x) < GAME_WIDTH / 2 ? -1 : 1);
+  };
   scene.input.on('pointerdown', onPointer);
 
   // A quick mostly-horizontal drag is a swipe.
