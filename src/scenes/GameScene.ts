@@ -399,7 +399,7 @@ export class GameScene extends Phaser.Scene {
       const handY = -22;
       const scale = 2.2;
       const ripple = this.add.circle(0, handY - 9 * scale, 10, 0xffffff, 0).setStrokeStyle(3, COLORS.primaryDark, 0.85);
-      const hand = drawIcon(this, 'tap', 0, handY, brown, { width: 2.2 }).setScale(scale);
+      const hand = drawIcon(this, 'tap', 0, handY, brown, { width: 2.2 }).setScale(dir < 0 ? -scale : scale, scale); // the left one is mirrored, a left hand
       this.tweens.add({ targets: hand, y: handY + 7, duration: 420, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }); // a tapping finger
       this.tweens.add({ targets: ripple, scale: 2.2, alpha: 0, duration: 840, repeat: -1, ease: 'Sine.easeOut' });
       const text = this.add
