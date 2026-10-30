@@ -74,7 +74,7 @@ If the browser writes scores straight to the database, fake scores will appear w
 
 ## Build order
 
-This is the original starter plan; current release status lives in `PROGRESS.md`. The core product is now built.
+This is the original starter plan. The core product is now built.
 
 - [x] **Core loop.** Character rises on left/right taps, gravity pulls it down and the camera scrolls up.
 - [x] **Falling items.** Weighted points, buffs and debuffs with collisions and themed location rushes.

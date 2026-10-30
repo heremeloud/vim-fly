@@ -83,8 +83,6 @@ Each folder under `src/` is one domain and has its own `README.md` explaining ho
 | `src/assets` | Art and audio, with license tracking |
 | `supabase` | Database schema |
 
-Project status and next steps are in [PROGRESS.md](PROGRESS.md).
-
 ## Status
 
 Feature-complete release candidate. The remaining work is final gameplay tuning, mobile/release QA, native-speaker review of translations and a legal review of the parody branding.
