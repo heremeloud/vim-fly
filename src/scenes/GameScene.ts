@@ -16,7 +16,7 @@ import { RunState } from '../core/RunState';
 import { difficulty, ramp } from '../core/difficulty';
 import { FINALE_METERS, FINALE_RUSH, finaleAt } from '../core/finales';
 import { zoneAt, zoneBannerText, zoneTextureKey, ZONES, type Zone } from '../core/zones';
-import { getItem, pickItem, type ItemDef } from '../items/itemDefs';
+import { getItem, pickCheapFood, pickItem, type ItemDef } from '../items/itemDefs';
 import { addItemSprite, itemDisplaySize } from '../items/itemSprite';
 
 interface FallingItem {
@@ -941,7 +941,11 @@ export class GameScene extends Phaser.Scene {
       for (let row = 3; row <= 4; row++) if (Math.random() < finale.flood.extraChance) this.spawnOne(h, row, undefined, finale.flood.id);
     }
     const { untilMeters, extraChance } = ITEM_RULES.startFood;
-    if (h < untilMeters && Math.random() < extraChance * (1 - h / untilMeters)) this.spawnOne(h, 2, 'points');
+    // No cap on the extra snacks: after each one, another follows with the same chance, so a beat can bring none, one or several (less and less so as the climb goes on).
+    if (h < untilMeters) {
+      const more = extraChance * (1 - h / untilMeters);
+      for (let extra = 0; Math.random() < more; extra++) this.spawnOne(h, 2 + extra, 'points', pickCheapFood().id); // small snacks fill the opening stretch
+    }
   }
 
   private spawnOne(heightMeters: number, row: number, onlyKind?: ItemDef['kind'], forceId?: string): void {

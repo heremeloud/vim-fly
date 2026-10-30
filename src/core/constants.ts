@@ -38,7 +38,7 @@ export const CAMERA = {
 // Item spawning. All [start, end] pairs run from difficulty 0 to 1.
 export const ITEM_RULES = {
   size: 36,
-  spawnMs: [750, 280] as const, // time between spawns
+  spawnMs: [600, 280] as const, // time between spawns (quicker at the start, so the first stretch is not empty)
   fallSpeed: [140, 370] as const, // px/s
   doubleSpawnChance: [0, 0.3] as const, // chance a spawn drops a second item at once
   debuffSway: [0, 110] as const, // debuffs swerve side to side by up to this many px
@@ -46,8 +46,9 @@ export const ITEM_RULES = {
   debuffWeightScale: [1, 1.6] as const, // multiplies debuff spawn weights
   pointsWeightScale: [1, 0.6] as const, // food gets rarer
   buffWeightScale: [1, 0.5] as const, // power-ups get rarer
-  // Opening stretch: extra food-only drops for pure points. The chance starts at `extraChance` and fades to 0 at `untilMeters`.
-  startFood: { untilMeters: 350, extraChance: 0.7 },
+  // Opening stretch: extra food-only drops, with no cap on how many. After each one another follows with chance `extraChance`, which fades
+  // to 0 at `untilMeters` (about 1.5 extra per beat at the start). They are all cheap food, so a fuller screen early on does not make it harder.
+  startFood: { untilMeters: 350, extraChance: 0.6 },
 } as const;
 
 export const SCENES = {

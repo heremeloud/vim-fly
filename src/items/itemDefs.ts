@@ -105,6 +105,19 @@ export function pickItem(heightMeters: number, rand: () => number = Math.random,
   return pool[0];
 }
 
+/** The cheap snacks (worth CHEAP_FOOD_MAX points or less), for filling the opening stretch with small, easy food. Picked by weight. */
+export const CHEAP_FOOD_MAX = 50;
+export function pickCheapFood(rand: () => number = Math.random): ItemDef {
+  const pool = ITEMS.filter((i) => i.effect.type === 'points' && i.effect.amount > 0 && i.effect.amount <= CHEAP_FOOD_MAX && !i.onlyInZone && (i.minStage ?? 1) <= 1);
+  const total = pool.reduce((sum, i) => sum + i.weight, 0);
+  let roll = rand() * total;
+  for (const item of pool) {
+    roll -= item.weight;
+    if (roll < 0) return item;
+  }
+  return pool[0];
+}
+
 /** Description of what an item does, built from its effect so it never drifts from the game. Translated. */
 export function describeEffect(item: ItemDef): string {
   const e = item.effect;
