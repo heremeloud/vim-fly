@@ -64,6 +64,7 @@ const START_Y = GAME_HEIGHT - 200;
 const TAP_GUIDE_METERS = 50;
 const TAP_GUIDE_FADE_METERS = 8;
 const TAP_GUIDE_Y = GAME_HEIGHT - 190;
+const SWIPE_HINT_MIN_W = 380;
 /** The score panel (score, then metres, then the progress bar) runs from y 8 to HUD_BOTTOM; the right-hand stack of dash breads and buttons ends at the same line. */
 const HUD_H = 74;
 const HUD_BOTTOM = 8 + HUD_H;
@@ -481,7 +482,8 @@ export class GameScene extends Phaser.Scene {
       .text(0, 0, t('hud.swipeHint'), { fontFamily: FONT.family, fontSize: '17px', fontStyle: 'bold', color: '#6d4c41', padding: { top: 3, bottom: 3 } })
       .setOrigin(0.5);
     fitWidth(text, GAME_WIDTH - 120);
-    const w = text.displayWidth + 76;
+    // Floor the width: CJK and Thai strings are far shorter than English, which would pull the arrows (and the tap guides placed off them) into the middle.
+    const w = Math.max(text.displayWidth + 76, SWIPE_HINT_MIN_W);
     this.hintArrowOffset = w / 2 - 24;
     // No box, like the tap guides: just the brown text between two caramel arrows.
     const arrow = (dir: -1 | 1): Phaser.GameObjects.Graphics => {
