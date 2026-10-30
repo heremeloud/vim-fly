@@ -38,7 +38,7 @@ export const zhHant: Record<StringKey, string> = {
   'orders.empty': '還沒有訂單喔。快來點第一份餐吧!',
   'orders.topNote': '來自世界各地的超級顧客們!',
   'orders.offline': '暫時連不上全球排行榜, 先看看你在這台裝置上的最佳紀錄吧。',
-  'orders.loading': '載入中…等一下下喔',
+  'orders.loading': '載入中… 等一下下喔',
 
   'receipt.title': '收據',
   'receipt.height': '高度',

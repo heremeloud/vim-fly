@@ -39,7 +39,7 @@ export const zh: Record<StringKey, string> = {
   'orders.empty': '还没有订单哦。快来下第一单吧!',
   'orders.topNote': '来自全世界的超级顾客们!',
   'orders.offline': '暂时连不上全球排行榜, 先看看你在这台设备上的最佳记录吧。',
-  'orders.loading': '加载中…稍等一下哦',
+  'orders.loading': '加载中… 稍等一下哦',
 
   'receipt.title': '收据',
   'receipt.height': '高度',
