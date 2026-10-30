@@ -1,7 +1,7 @@
 // Japanese (日本語). DRAFT translation: have a native speaker review, especially names and puns.
-import type { StringKey } from './en';
+import type { LangKey } from './en';
 
-export const ja: Record<StringKey, string> = {
+export const ja: Record<LangKey, string> = {
   'lang.title': '言語',
 
   'tab.store': 'ホーム',
@@ -49,7 +49,6 @@ export const ja: Record<StringKey, string> = {
   'receipt.newBest': 'ベスト更新!',
   'receipt.thanks': 'まいど!',
   'receipt.follow': '公式アカウント',
-  'receipt.tagline': 'Baking · Loving · Feeling',
   'receipt.share': 'シェア',
   'receipt.shareText': 'Vimmy Flyで{score}ポイントゲット! 私のスコアを超えられるかな?🐶🐝\nパン屋さんがもうすぐオープン!🍞🧀🧈\nドラマ Bake Love Feeling をお楽しみに! NoeyCheese役のViewMimもぜひ応援してね!💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
 
@@ -62,7 +61,6 @@ export const ja: Record<StringKey, string> = {
   'hud.stunned': 'スタン',
   'hud.power': 'パワー',
   'hud.dizzy': 'めまい',
-  'hud.x2': 'x2',
   'hud.magnet': 'マグネット',
 
   'zone.stage': 'ステージ{n}',
@@ -150,7 +148,6 @@ export const ja: Record<StringKey, string> = {
   'svc.ride': 'ライド',
   'home.watchPilot': 'Pilotを観る',
   'promos.pilot.title': 'Pilotを観る',
-  'promos.pilot.sub': 'EP1 COMING SOON',
   'promos.copied': 'コピーしたよ!',
   'promos.official': '公式アカウント',
   'promos.leads': '主演',

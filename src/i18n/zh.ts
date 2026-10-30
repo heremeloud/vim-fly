@@ -1,8 +1,8 @@
 // Chinese, Simplified (简体中文). DRAFT translation: have a native speaker review, especially
 // names and puns.
-import type { StringKey } from './en';
+import type { LangKey } from './en';
 
-export const zh: Record<StringKey, string> = {
+export const zh: Record<LangKey, string> = {
   'lang.title': '语言',
 
   'tab.store': '首页',
@@ -50,7 +50,6 @@ export const zh: Record<StringKey, string> = {
   'receipt.newBest': '刷新纪录啦!',
   'receipt.thanks': '谢谢惠顾!',
   'receipt.follow': '关注官方账号',
-  'receipt.tagline': 'Baking · Loving · Feeling',
   'receipt.share': '分享',
   'receipt.shareText': '我在 Vimmy Fly 拿到了 {score} 分! 你能打破我的纪录吗?🐶🐝\n面包店即将开张!🍞🧀🧈\n敬请期待新剧 Bake Love Feeling, 也请多多支持饰演 NoeyCheese 的 ViewMim 哦!💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
 
@@ -63,7 +62,6 @@ export const zh: Record<StringKey, string> = {
   'hud.stunned': '眩晕',
   'hud.power': '强力',
   'hud.dizzy': '头晕',
-  'hud.x2': 'x2',
 
   'zone.stage': '第{n}关',
 
@@ -141,7 +139,6 @@ export const zh: Record<StringKey, string> = {
   'svc.ride': '出行',
   'home.watchPilot': '立即观看试播集',
   'promos.pilot.title': '观看试播集',
-  'promos.pilot.sub': 'EP1 COMING SOON',
   'promos.copied': '复制好啦!',
   'promos.official': '官方账号',
   'promos.leads': '主演',

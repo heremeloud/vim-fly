@@ -1,8 +1,8 @@
 // Chinese, Traditional (繁體中文). Uses Taiwan terminology and date formatting.
 // DRAFT translation: have a native speaker review, especially names and puns.
-import type { StringKey } from './en';
+import type { LangKey } from './en';
 
-export const zhHant: Record<StringKey, string> = {
+export const zhHant: Record<LangKey, string> = {
   'lang.title': '語言',
 
   'tab.store': '首頁',
@@ -49,7 +49,6 @@ export const zhHant: Record<StringKey, string> = {
   'receipt.newBest': '刷新紀錄啦!',
   'receipt.thanks': '謝謝惠顧!',
   'receipt.follow': '追蹤官方帳號',
-  'receipt.tagline': 'Baking · Loving · Feeling',
   'receipt.share': '分享',
   'receipt.shareText': '我在 Vimmy Fly 拿到了 {score} 分! 你能打破我的紀錄嗎?🐶🐝\n麵包店即將開張!🍞🧀🧈\n敬請期待新劇 Bake Love Feeling, 也要多多支持飾演 NoeyCheese 的 ViewMim 喔!💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
 
@@ -62,7 +61,6 @@ export const zhHant: Record<StringKey, string> = {
   'hud.stunned': '暈眩',
   'hud.power': '強力',
   'hud.dizzy': '頭暈',
-  'hud.x2': 'x2',
   'hud.magnet': '磁鐵',
 
   'zone.stage': '第{n}關',
@@ -150,7 +148,6 @@ export const zhHant: Record<StringKey, string> = {
   'svc.ride': '叫車',
   'home.watchPilot': '立即觀看試播集',
   'promos.pilot.title': '觀看試播集',
-  'promos.pilot.sub': 'EP1 COMING SOON',
   'promos.copied': '複製好囉!',
   'promos.official': '官方帳號',
   'promos.leads': '主演',

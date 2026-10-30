@@ -1,11 +1,12 @@
-import { en, type StringKey } from './en';
+import { en, type LangKey } from './en';
+import common from './common.json';
 import { th } from './th';
 import { ja } from './ja';
 import { zh } from './zh';
 import { zhHant } from './zhHant';
 
 export type Locale = 'en' | 'th' | 'ja' | 'zh' | 'zh-Hant';
-export type { StringKey };
+export type StringKey = LangKey | keyof typeof common;
 
 export interface LocaleInfo {
   id: Locale;
@@ -26,7 +27,15 @@ export const LOCALES: readonly LocaleInfo[] = [
   { id: 'zh-Hant', name: '繁體中文', dateLocale: 'zh-TW', hourCycle: 'h23' },
 ];
 
-const TABLES: Record<Locale, Record<StringKey, string>> = { en, th, ja, zh, 'zh-Hant': zhHant };
+// Universal strings (same in every language) live in common.json; a language file can still override one by defining it.
+const withCommon = (table: Record<LangKey, string>): Record<StringKey, string> => ({ ...common, ...table });
+const TABLES: Record<Locale, Record<StringKey, string>> = {
+  en: withCommon(en),
+  th: withCommon(th),
+  ja: withCommon(ja),
+  zh: withCommon(zh),
+  'zh-Hant': withCommon(zhHant),
+};
 const STORAGE_KEY = 'vimmy-fly.locale';
 
 function detect(): Locale {
@@ -70,12 +79,12 @@ function fill(text: string, params?: Record<string, string | number>): string {
 
 /** True if `key` is a real string key (used to check keys written in data files). */
 export function hasKey(key: string): key is StringKey {
-  return key in en;
+  return key in en || key in common;
 }
 
 /** Translate a known key, filling {placeholders}. */
 export function t(key: StringKey, params?: Record<string, string | number>): string {
-  return fill(TABLES[current][key] ?? en[key], params);
+  return fill(TABLES[current][key], params);
 }
 
 /** Look up a key built at runtime (item and zone names). Returns the fallback if it has no entry. */

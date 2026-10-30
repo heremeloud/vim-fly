@@ -8,6 +8,7 @@ import { zh } from '../src/i18n/zh.ts';
 import { zhHant } from '../src/i18n/zhHant.ts';
 import { readFileSync } from 'node:fs';
 
+const common = JSON.parse(readFileSync('src/i18n/common.json', 'utf8'));
 const tables = { th, ja, zh, zhHant };
 const placeholders = (s) => [...s.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort().join(',');
 let problems = 0;
@@ -25,6 +26,11 @@ for (const [name, table] of Object.entries(tables)) {
   for (const key of Object.keys(table)) if (!(key in en)) fail(`${name}: extra key "${key}"`);
 }
 
+for (const key of Object.keys(common)) {
+  if (key in en) fail(`common.json: "${key}" is also in en.ts`);
+  if (typeof common[key] !== 'string' || common[key].trim() === '') fail(`common.json: bad value for "${key}"`);
+}
+
 // Every item id and zone id used by the game needs a name.
 const ids = (file, re) => [...readFileSync(file, 'utf8').matchAll(re)].map((m) => m[1]);
 const itemIds = ids('src/items/itemDefs.ts', /\{ id: '(\w+)', label:/g);
@@ -36,4 +42,4 @@ if (problems) {
   console.error(`\n${problems} problem(s).`);
   process.exit(1);
 }
-console.log(`✓ i18n OK: ${Object.keys(en).length} strings in ${Object.keys(tables).length + 1} languages, ${itemIds.length} items, ${zoneIds.length} zones.`);
+console.log(`✓ i18n OK: ${Object.keys(en).length + Object.keys(common).length} strings in ${Object.keys(tables).length + 1} languages, ${itemIds.length} items, ${zoneIds.length} zones.`);

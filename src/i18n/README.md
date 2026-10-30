@@ -5,6 +5,7 @@ The game speaks five languages: **English, Thai (ไทย), Japanese (日本語
 ## Files
 
 - `en.ts`: the English strings, which are the source of truth.
+- `common.json`: strings that are the same in every language (the tagline, `x2`, `EP1 COMING SOON`). Edit them here once; they are merged under each language at load time.
 - `th.ts`, `ja.ts`, `zh.ts`, `zhHant.ts`: the other languages. Each has exactly the same keys as English (TypeScript enforces it).
 - `index.ts`: `t(key, params)` to translate, plus `itemName`, `zoneName`, `getLocale`, `setLocale` and the `LOCALES` list.
 
@@ -28,6 +29,8 @@ npm run check:i18n
 It fails if any language is missing a key, has an extra or empty key, uses different `{placeholders}` than English, or if an item or zone has no name. It needs Node 22.6 or newer. Run it after adding any string.
 
 ## Adding or changing a string
+
+If the text is identical in every language, add it to `common.json` only (and nowhere else). Otherwise:
 
 1. Add the key to `en.ts`.
 2. Add the same key to `th.ts`, `ja.ts`, `zh.ts`, and `zhHant.ts` (TypeScript will complain until you do).

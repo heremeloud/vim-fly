@@ -3,6 +3,8 @@
 import { existsSync, readFileSync, statSync } from 'node:fs';
 import { en } from '../src/i18n/en.ts';
 
+const common = JSON.parse(readFileSync('src/i18n/common.json', 'utf8'));
+
 const links = JSON.parse(readFileSync('src/promo/links.json', 'utf8'));
 let problems = 0;
 const fail = (msg) => {
@@ -55,7 +57,7 @@ for (const [where, a] of accounts) {
     else console.log(`  (${where}: photo ${a.avatar}, ${Math.round(statSync(`src/assets/avatars/${a.avatar}`).size / 1024)} KB)`);
   }
   if (a.banner && !existsSync(`src/assets/avatars/${a.banner}`)) fail(`${where}: banner "${a.banner}" is not in src/assets/avatars/`);
-  if (a.roleKey && !(a.roleKey in en)) fail(`${where}: roleKey "${a.roleKey}" is not a known text key`);
+  if (a.roleKey && !(a.roleKey in en || a.roleKey in common)) fail(`${where}: roleKey "${a.roleKey}" is not a known text key`);
   const parts = [];
   for (const [platform, value] of Object.entries(a.handles ?? {})) {
     if (!(platform in PLATFORMS)) {

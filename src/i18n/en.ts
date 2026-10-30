@@ -50,7 +50,6 @@ export const en = {
   'receipt.newBest': 'New Best Order!',
   'receipt.thanks': 'THANK YOU!',
   'receipt.follow': 'Follow the official account',
-  'receipt.tagline': 'Baking · Loving · Feeling',
   'receipt.share': 'Share',
   'receipt.shareText': 'I just scored {score} points in Vimmy Fly! Can you beat me? 🐶🐝\nThe bakery is opening soon! 🍞🧀🧈\nStay tuned for the series Bake Love Feeling and please support ViewMim as NoeyCheese! 💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
 
@@ -63,7 +62,6 @@ export const en = {
   'hud.stunned': 'STUNNED',
   'hud.power': 'POWER',
   'hud.dizzy': 'DIZZY',
-  'hud.x2': 'x2',
 
   'zone.stage': 'Stage {n}',
 
@@ -141,7 +139,6 @@ export const en = {
   'svc.ride': 'Ride',
   'home.watchPilot': 'Watch the Pilot Now',
   'promos.pilot.title': 'Watch the Pilot',
-  'promos.pilot.sub': 'EP1 COMING SOON',
   'promos.copied': 'Copied for you!',
   'promos.official': 'Official Account',
   'promos.leads': 'Main Leads',
@@ -189,4 +186,5 @@ export const en = {
   'debuff.kitten': 'Move!',
 };
 
-export type StringKey = keyof typeof en;
+/** Keys each language file must translate. Universal strings live in common.json instead. */
+export type LangKey = keyof typeof en;

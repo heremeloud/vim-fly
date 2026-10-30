@@ -1,7 +1,7 @@
 // Thai (ไทย). DRAFT translation: have a native speaker review, especially names and puns.
-import type { StringKey } from './en';
+import type { LangKey } from './en';
 
-export const th: Record<StringKey, string> = {
+export const th: Record<LangKey, string> = {
   'lang.title': 'ภาษา',
 
   'tab.store': 'หน้าแรก',
@@ -49,7 +49,6 @@ export const th: Record<StringKey, string> = {
   'receipt.newBest': 'ทำสถิติใหม่แล้ว!',
   'receipt.thanks': 'ขอบคุณนะ!',
   'receipt.follow': 'Official Account',
-  'receipt.tagline': 'Baking · Loving · Feeling',
   'receipt.share': 'แชร์',
   'receipt.shareText': 'เล่น Vimmy Fly ได้ {score} แต้มแล้ว! มีใครทำได้เยอะกว่าเราบ้าง? 🐶🐝\nร้านขนมปังใกล้เปิดแล้ว! 🍞🧀🧈\nฝากติดตามซีรีส์ Bake Love Feeling และเป็นกำลังใจให้ ViewMim ในบทเนยชีสด้วยนะ! 💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
 
@@ -62,7 +61,6 @@ export const th: Record<StringKey, string> = {
   'hud.stunned': 'สตัน',
   'hud.power': 'พลัง',
   'hud.dizzy': 'เวียนหัว',
-  'hud.x2': 'x2',
 
   'zone.stage': 'ด่านที่ {n}',
 
@@ -140,7 +138,6 @@ export const th: Record<StringKey, string> = {
   'svc.ride': 'เรียกรถ',
   'home.watchPilot': 'ดูตอนนำร่องเลย!',
   'promos.pilot.title': 'ดูตอนนำร่อง',
-  'promos.pilot.sub': 'EP1 COMING SOON',
   'promos.copied': 'คัดลอกให้แล้ว!',
   'promos.official': 'บัญชีทางการ',
   'promos.leads': 'นักแสดงนำ',
