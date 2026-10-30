@@ -39,7 +39,9 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
   } satisfies Partial<CSSStyleDeclaration>);
 
   const loading = document.createElement('div');
-  loading.textContent = t('video.loading');
+  // The receipt facade keeps its thumbnail visible while the player starts, so it does not need loading text.
+  // Standalone video windows still show the message because they have no poster underneath.
+  loading.textContent = facade ? '' : t('video.loading');
   Object.assign(loading.style, {
     position: 'absolute',
     inset: '0',
