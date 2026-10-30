@@ -87,7 +87,7 @@ Project status and next steps are in [PROGRESS.md](PROGRESS.md).
 
 ## Status
 
-Feature-complete release candidate. The remaining work is final gameplay tuning, mobile/release QA, native-speaker review of translations and a legal review of the parody branding. See [PROGRESS.md](PROGRESS.md).
+Feature-complete release candidate. The remaining work is final gameplay tuning, mobile/release QA, native-speaker review of translations and a legal review of the parody branding.
 
 ## Credits and licenses
 
