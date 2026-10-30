@@ -51,7 +51,7 @@ export const en = {
   'receipt.thanks': 'THANK YOU!',
   'receipt.tagline': "Let's baking · loving · feeling",
   'receipt.share': 'Share',
-  'receipt.shareText': 'I just scored {score} points in Vimmy Fly! Can you beat me? 🐶🐝\nThe bakery is opening soon! 🍞🧀🧈\nStay tuned for the series Bake Love Feeling and support ViewMim as NoeyCheese! 💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
+  'receipt.shareText': 'I just scored {score} points in Vimmy Fly! Can you beat me? 🐶🐝\nThe bakery is opening soon! 🍞🧀🧈\nStay tuned for the series Bake Love Feeling and please support ViewMim as NoeyCheese! 💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
 
   'hud.shield': 'SHIELD',
   'hud.dash': 'DASH',

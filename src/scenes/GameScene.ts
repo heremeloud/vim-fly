@@ -654,7 +654,7 @@ export class GameScene extends Phaser.Scene {
   private swipeDash(dir: -1 | 1): void {
     if (this.ended || this.run.isStunned || this.isFlipping || this.swipeDashDir !== 0 || (!ADMIN && this.swipesLeft <= 0)) return;
     if (!ADMIN) this.swipesLeft--; // admin has unlimited side dashes
-    playSfx(this, 'dash', 1);
+    playSfx(this, 'dash', 0.6);
     const spent = this.swipeBreads[ADMIN ? 0 : this.swipesLeft];
     this.tweens.add({ targets: spent, scale: spent.scale * 1.6, duration: 120, yoyo: true });
     const steer = this.run.isDisoriented ? -dir : dir;
