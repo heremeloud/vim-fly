@@ -1,5 +1,4 @@
-# Vimmy Fly
-
+# vim fly
 
 ## How to play
 
