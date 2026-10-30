@@ -69,7 +69,7 @@ One number drives it all: `difficulty(height)` in `difficulty.ts` goes from 0 at
 | Share of debuffs among drops | about 27% | about 51% |
 | Share of points items / buffs | 51% / 22% | 36% / 13% |
 
-The opening 350 m also get extra drops on every beat, with no limit on how many (each one is followed by another with a chance that fades out as you climb; `startFood` in `constants.ts`). They are always the cheap snacks (shiopan, pandan custard bread, sandwich, ice cream: 50 points or less, `pickCheapFood`), so the early screen is full without getting harder.
+The first four stages (up to the end of the Shopping Mall, 1400 m) also get extra drops on every beat, with no limit on how many (each one is followed by another with a chance that fades out as you climb; `startFood` in `constants.ts`). They are always the cheap snacks (shiopan, pandan custard bread, sandwich, ice cream: 50 points or less, `pickCheapFood`), so the early screen is full without getting harder.
 
 Food and power-ups get rarer and debuffs more common as you climb (`pointsWeightScale`, `buffWeightScale`, `debuffWeightScale`).
 

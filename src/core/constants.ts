@@ -46,9 +46,10 @@ export const ITEM_RULES = {
   debuffWeightScale: [1, 1.6] as const, // multiplies debuff spawn weights
   pointsWeightScale: [1, 0.6] as const, // food gets rarer
   buffWeightScale: [1, 0.5] as const, // power-ups get rarer
-  // Opening stretch: extra food-only drops, with no cap on how many. After each one another follows with chance `extraChance`, which fades
-  // to 0 at `untilMeters` (about 1.5 extra per beat at the start). They are all cheap food, so a fuller screen early on does not make it harder.
-  startFood: { untilMeters: 350, extraChance: 0.6 },
+  // Early stretch: extra food-only drops, with no cap on how many. After each one another follows with chance `extraChance`, which fades
+  // to 0 at `untilMeters`: the end of the Shopping Mall (1400 m), so the screen stays full through the first four stages. That is
+  // about 1.5 extra per beat at the start, 0.8 at 350 m, 0.4 at 700 m and 0.2 at 1050 m. They are all cheap food, so a fuller screen does not make it harder.
+  startFood: { untilMeters: 1400, extraChance: 0.6 },
 } as const;
 
 export const SCENES = {
