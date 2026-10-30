@@ -49,7 +49,7 @@ export const ja: Record<StringKey, string> = {
   'receipt.newBest': 'ベスト更新!',
   'receipt.thanks': 'まいど!',
   'receipt.follow': '公式アカウント',
-  'receipt.tagline': "Let's baking · loving · feeling",
+  'receipt.tagline': 'baking · loving · feeling',
   'receipt.share': 'シェア',
   'receipt.shareText': 'Vimmy Flyで{score}ポイントゲット! 私のスコアを超えられるかな?🐶🐝\nパン屋さんがもうすぐオープン!🍞🧀🧈\nドラマ Bake Love Feeling をお楽しみに! NoeyCheese役のViewMimもぜひ応援してね!💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
 
