@@ -117,8 +117,8 @@ export function drawIcon(scene: Phaser.Scene, id: IconId, x: number, y: number, 
     case 'tap': {
       // A hand with the index finger out, tapping, and three little taps radiating from the fingertip.
       const hand: Pt[] = [
-        [-3, -6], [-2.5, -8], [0.5, -9], [3.5, -8], [4, -6], [4, 0], [7, -0.5], [9.5, 1], [10, 3], [10, 7],
-        [8, 11], [5, 13], [-2, 13], [-5, 10], [-9, 4], [-8, 2], [-6, 3], [-3, 6],
+        [-1.4, -6], [-1.1, -8], [0.6, -9], [2.3, -8], [2.7, -6], [2.7, 0], [7, -0.5], [9.5, 1], [10, 3], [10, 7],
+        [8, 11], [5, 13], [-2, 13], [-5, 10], [-9, 4], [-8, 2], [-6, 3], [-1.4, 6],
       ];
       g.setY(y + 2);
       line(hand, true);

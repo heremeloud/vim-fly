@@ -64,8 +64,6 @@ const START_Y = GAME_HEIGHT - 200;
 const TAP_GUIDE_METERS = 50;
 const TAP_GUIDE_FADE_METERS = 8;
 const TAP_GUIDE_Y = GAME_HEIGHT - 190;
-/** Corner radius of the swipe hint and the tap guides: a rounded rectangle, not a full pill. */
-const HINT_RADIUS = 14;
 const VIMMY_FLY_ANIM = 'vimmy-fly';
 const VIMMY_FLIP_ANIM = 'vimmy-helicopter-flip';
 const BUFF_REACTION_TEXTURE: Readonly<Record<string, string>> = {
@@ -189,6 +187,8 @@ export class GameScene extends Phaser.Scene {
   private tapGuide: Phaser.GameObjects.Container[] = [];
   /** The swipe hint, kept up as long as the tap guides so the two leave together. */
   private swipeHint: Phaser.GameObjects.Container | null = null;
+  /** How far from the screen's centre the swipe hint's arrows sit, so the tap guides' arrows can line up with them. */
+  private hintArrowOffset = 0;
   private isFlipping = false;
   private reactionTimer?: Phaser.Time.TimerEvent;
   private buzz: Phaser.Sound.BaseSound | null = null;
@@ -394,27 +394,29 @@ export class GameScene extends Phaser.Scene {
    */
   private showTapGuide(): void {
     const make = (dir: -1 | 1): Phaser.GameObjects.Container => {
-      // No box and no outline: just the swipe hint's colours (brown, caramel).
+      // No box and no outline: just the swipe hint's colours (brown, caramel). Each arrow sits exactly where the swipe hint's
+      // arrow on the same side sits, with the word inward of it and the hand centred over the pair. Positions are absolute (the container is at 0, 0).
       const brown = 0x6d4c41;
-      const handY = -22;
-      const scale = 2.2;
-      const ripple = this.add.circle(0, handY - 9 * scale, 10, 0xffffff, 0).setStrokeStyle(3, COLORS.primaryDark, 0.85);
-      const hand = drawIcon(this, 'tap', 0, handY, brown, { width: 2.2 }).setScale(dir < 0 ? -scale : scale, scale); // the left one is mirrored, a left hand
-      this.tweens.add({ targets: hand, y: handY + 7, duration: 420, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }); // a tapping finger
-      this.tweens.add({ targets: ripple, scale: 2.2, alpha: 0, duration: 840, repeat: -1, ease: 'Sine.easeOut' });
+      const arrowX = GAME_WIDTH / 2 + dir * this.hintArrowOffset;
+      const arrowW = 12; // the swipe hint's triangle is 12 px wide
+      const gap = 10;
       const text = this.add
         .text(0, 0, t('hud.tap'), { fontFamily: FONT.family, fontSize: '21px', fontStyle: 'bold', color: '#6d4c41', padding: { top: 3, bottom: 3 } })
         .setOrigin(0.5);
-      const rowY = 30;
-      const arrowGap = 10;
-      const arrowW = 14;
-      const total = arrowW + arrowGap + text.width;
-      text.setPosition(dir < 0 ? total / 2 - text.width / 2 : -total / 2 + text.width / 2, rowY);
-      const arrow = this.add.graphics().setPosition(dir < 0 ? -total / 2 + arrowW / 2 : total / 2 - arrowW / 2, rowY);
-      const tri = [new Phaser.Math.Vector2(dir * 8, 0), new Phaser.Math.Vector2(-dir * 6, -9), new Phaser.Math.Vector2(-dir * 6, 9)];
-      arrow.fillStyle(COLORS.primaryDark, 1).fillPoints(tri, true);
-      this.tweens.add({ targets: arrow, x: arrow.x + dir * 5, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
-      return this.add.container(GAME_WIDTH / 2 + dir * 140, TAP_GUIDE_Y, [ripple, hand, text, arrow]).setScrollFactor(0).setDepth(24);
+      const textX = arrowX - dir * (arrowW / 2 + gap + text.width / 2);
+      const rowY = TAP_GUIDE_Y + 30;
+      text.setPosition(textX, rowY);
+      const arrow = this.add.graphics().setPosition(arrowX, rowY);
+      arrow.fillStyle(COLORS.primaryDark, 1).fillTriangle(dir * 7, 0, -dir * 5, -8, -dir * 5, 8);
+      this.tweens.add({ targets: arrow, x: arrow.x + dir * 5, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }); // the same nudge as the swipe hint's
+      const handX = (arrowX + textX) / 2;
+      const handY = TAP_GUIDE_Y - 22;
+      const scale = 2.2;
+      const ripple = this.add.circle(handX, handY - 9 * scale, 10, 0xffffff, 0).setStrokeStyle(3, COLORS.primaryDark, 0.85);
+      const hand = drawIcon(this, 'tap', handX, handY, brown, { width: 2.2 }).setScale(dir < 0 ? -scale : scale, scale); // the left one is mirrored, a left hand
+      this.tweens.add({ targets: hand, y: handY + 7, duration: 420, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' }); // a tapping finger
+      this.tweens.add({ targets: ripple, scale: 2.2, alpha: 0, duration: 840, repeat: -1, ease: 'Sine.easeOut' });
+      return this.add.container(0, 0, [ripple, hand, text, arrow]).setScrollFactor(0).setDepth(24);
     };
     this.tapGuide = [make(-1), make(1)];
   }
@@ -443,11 +445,8 @@ export class GameScene extends Phaser.Scene {
       .setOrigin(0.5);
     fitWidth(text, GAME_WIDTH - 120);
     const w = text.displayWidth + 76;
-    const h = 40;
-    const bg = this.add.graphics();
-    // Soft and see-through so the playfield shows behind it: a pale butter pill with a white rim.
-    bg.fillStyle(0xfff6e8, 0.62).fillRoundedRect(-w / 2, -h / 2, w, h, HINT_RADIUS);
-    bg.lineStyle(2, 0xffffff, 0.85).strokeRoundedRect(-w / 2, -h / 2, w, h, HINT_RADIUS);
+    this.hintArrowOffset = w / 2 - 24;
+    // No box, like the tap guides: just the brown text between two caramel arrows.
     const arrow = (dir: -1 | 1): Phaser.GameObjects.Graphics => {
       const g = this.add.graphics().setPosition(dir * (w / 2 - 24), 0);
       g.fillStyle(COLORS.primaryDark, 1).fillTriangle(dir * 7, 0, -dir * 5, -8, -dir * 5, 8);
@@ -455,7 +454,7 @@ export class GameScene extends Phaser.Scene {
       return g;
     };
     const arrows = [arrow(-1), arrow(1)];
-    this.swipeHint = this.add.container(GAME_WIDTH / 2, GAME_HEIGHT - 60, [bg, text, ...arrows]).setScrollFactor(0).setDepth(25);
+    this.swipeHint = this.add.container(GAME_WIDTH / 2, GAME_HEIGHT - 60, [text, ...arrows]).setScrollFactor(0).setDepth(25);
   }
 
   /**
