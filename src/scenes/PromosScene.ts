@@ -133,7 +133,7 @@ export class PromosScene extends Phaser.Scene {
 
   /** A full-width card: avatar on the left; name, role and buttons to its right. */
   private wideCard(c: Phaser.GameObjects.Container, y: number, account: Account): number {
-    const banner = account.banner ? this.bannerImage(account.banner) : null;
+    const banner = account.banner ? this.bannerImage(account.banner, account.bannerFocusY, account.bannerZoom) : null;
     if (banner) return this.bannerCard(c, y, account, banner);
     const x = 20 + 16 + 60 + 14;
     const room = CARD_W - (x - 20) - 16;
@@ -174,7 +174,7 @@ export class PromosScene extends Phaser.Scene {
   }
 
   /** The header photo with rounded top corners (to match the card), made once from the loaded image. */
-  private bannerImage(file: string): string | null {
+  private bannerImage(file: string, focusY: number, zoom: number): string | null {
     const out = `banner-${file}`;
     if (this.textures.exists(out)) return out;
     if (!this.textures.exists(photoKey(file))) return null;
@@ -194,8 +194,32 @@ export class PromosScene extends Phaser.Scene {
     ctx.lineTo(W, H);
     ctx.closePath();
     ctx.clip();
-    const scale = Math.max(W / img.width, H / img.height);
-    ctx.drawImage(img, (W - img.width * scale) / 2, (H - img.height * scale) / 2, img.width * scale, img.height * scale);
+    const cover = Math.max(W / img.width, H / img.height);
+    const scale = cover * zoom;
+    const pw = img.width * scale;
+    const ph = img.height * scale;
+    const px = (W - pw) / 2;
+    const py = (H - ph) * focusY;
+    if (zoom < 1) {
+      // Zoomed out the photo no longer spans the card: fill each side with the colour at that edge of the photo (its
+      // outer columns stretched sideways), blurred (shrunk and stretched back up, as ctx.filter is missing in some browsers).
+      const fill = document.createElement('canvas');
+      fill.width = W;
+      fill.height = H;
+      const fctx = fill.getContext('2d')!;
+      fctx.drawImage(img, 0, 0, 1, img.height, 0, py, px + 1, ph);
+      fctx.drawImage(img, img.width - 1, 0, 1, img.height, px + pw - 1, py, px + 1, ph);
+      const small = document.createElement('canvas');
+      small.width = Math.round(W / 10);
+      small.height = Math.round(H / 10);
+      const sctx = small.getContext('2d')!;
+      sctx.imageSmoothingQuality = 'high';
+      sctx.drawImage(fill, 0, 0, small.width, small.height);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(small, 0, 0, W, H);
+    }
+    ctx.drawImage(img, px, py, pw, ph);
     texture.refresh();
     return out;
   }

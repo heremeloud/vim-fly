@@ -227,7 +227,7 @@ export class ReceiptScene extends Phaser.Scene {
       void submitFinishedRun(name, r.total).then((ok) => {
         if (!status.active) return; // the player already left the receipt
         if (ok) status.setText('');
-        else status.setText(t('receipt.sendFailed'));
+        else fitWidth(status.setText(t('receipt.sendFailed')), SHEET.x1 - SHEET.x0 - 2 * X);
       });
     }
     // The pilot, right here: poster with a play button (no autoplay, so it never clashes with the game's sound).

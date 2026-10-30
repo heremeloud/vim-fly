@@ -46,11 +46,18 @@ function startGame(): void {
   const resume = (): void => {
     game.events.emit(Phaser.Core.Events.FOCUS);
   };
-  // The window's blur event fires before focus lands in the iframe, so check on the next tick.
+  // The window's blur event can fire before focus lands in the iframe. The exact hand-off timing varies by
+  // browser, so retry briefly instead of relying on a single zero-delay check. Keep the hasFocus guard: a real
+  // switch to another tab or app should still let Phaser pause normally.
   game.events.on(Phaser.Core.Events.BLUR, () => {
-    setTimeout(() => {
-      if (document.activeElement instanceof HTMLIFrameElement && document.hasFocus()) resume();
-    }, 0);
+    let recovered = false;
+    for (const delay of [0, 50, 250]) {
+      window.setTimeout(() => {
+        if (recovered || document.hidden || !document.hasFocus() || !(document.activeElement instanceof HTMLIFrameElement)) return;
+        recovered = true;
+        resume();
+      }, delay);
+    }
   });
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) resume();

@@ -24,9 +24,9 @@ interface Player {
  * ready (so a slow connection never looks like nothing is playing). Shared by the pop-up window
  * and the player built into the receipt.
  *
- * With `facade`, the box shows the video's thumbnail with a play button at once while the real player loads
- * (paused) underneath. When the player is ready the thumbnail is swapped for it, so it plays on one tap. A tap
- * on the thumbnail before then queues the video to start as soon as the player is ready.
+ * With `facade`, the box shows the video's thumbnail with a play button and does not create the real player
+ * until it is tapped. This keeps an idle embed from taking focus when someone taps an edge of the preview.
+ * After the tap, the thumbnail stays over the player until YouTube is ready and playback starts.
  */
 function createPlayer(videoId: string, { autoplay, muted, facade = false }: { autoplay: boolean; muted: boolean; facade?: boolean }): Player {
   const box = document.createElement('div');
@@ -87,8 +87,10 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
     });
     frame = f;
     giveUp = window.setTimeout(hideLoading, 20000); // never leave it up forever
-    box.append(f);
-    if (!facade) box.append(loading);
+    // Keep a facade above the iframe until the player is ready. Appending the iframe here would put it over
+    // the poster, allowing its inactive edges to steal focus while the loading message is visible.
+    if (facade) box.prepend(f);
+    else box.append(f, loading);
   };
 
   const onMessage = (e: MessageEvent) => {
@@ -102,7 +104,7 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
     const info = msg?.info as { playerState?: number } | number | undefined;
     const state = msg?.event === 'onStateChange' ? info : (info as { playerState?: number } | undefined)?.playerState;
     if (state === 1 || state === 2 || state === 0 || state === 5) hideLoading();
-    // The preloaded player is ready: swap the thumbnail for it, so it can be played with one tap on its own button.
+    // The click-to-load player is ready: start it and swap the thumbnail for the real controls.
     if (facade && !ready && (msg?.event === 'onReady' || msg?.event === 'initialDelivery')) {
       ready = true;
       if (wantPlay) frame.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: [] }), YOUTUBE);
@@ -147,18 +149,22 @@ function createPlayer(videoId: string, { autoplay, muted, facade = false }: { au
     } satisfies Partial<CSSStyleDeclaration>);
     play.append(triangle);
     poster.append(play);
-    // Tapped before the player is ready: show the loading message and start as soon as it is.
+    // Only create the iframe after an intentional tap anywhere on the preview. Until then there is no embedded
+    // window whose inactive edge can take browser focus away from Phaser.
     const start = () => {
       if (wantPlay) return;
       wantPlay = true;
       play.remove();
+      mountFrame(true);
       box.append(loading);
     };
     poster.addEventListener('click', start);
     poster.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') start();
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        start();
+      }
     });
-    mountFrame(false); // loads in the background, under the thumbnail, so it is ready when the page is reached
     box.append(poster);
   } else {
     mountFrame(autoplay);

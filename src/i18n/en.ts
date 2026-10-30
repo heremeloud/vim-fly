@@ -176,7 +176,7 @@ export const en = {
   'settings.on': 'On',
   'settings.off': 'Off',
   'receipt.sending': 'Sending your score… Just a moment!',
-  'receipt.sendFailed': "Oops! Couldn't connect to the leaderboard, but your score is safe on this device.",
+  'receipt.sendFailed': "Couldn't reach the leaderboard. Your score is saved here.",
   'hud.magnet': 'MAGNET',
   'effect.magnet': 'Pulls nearby food and items toward you for {s}s',
   'effect.swerve': 'Shoves you sideways',

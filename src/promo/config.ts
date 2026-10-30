@@ -13,6 +13,8 @@ interface RawAccount {
   name?: string;
   avatar?: string;
   banner?: string;
+  bannerFocusY?: number;
+  bannerZoom?: number;
   roleKey?: string;
   handles?: Handles;
 }
@@ -92,6 +94,10 @@ export interface Account {
   avatar: string;
   /** Optional header photo (file name in src/assets/avatars) shown across the top of a wide card. */
   banner?: string;
+  /** Which part of the header photo to show when it is cropped: 0 is the top edge, 0.5 the middle (default), 1 the bottom edge. */
+  bannerFocusY: number;
+  /** How much of the header photo to show: 1 fills the card (cropped), lower zooms out (0.7 at the least) and fills the sides with a blur. */
+  bannerZoom: number;
   /** Optional line under the name, translated. */
   roleKey?: StringKey;
   /**
@@ -116,6 +122,8 @@ function toAccount(id: string, a: RawAccount | undefined, fallbackName: string):
     name: a?.name?.trim() || fallbackName,
     avatar: a?.avatar || '🙂',
     banner: a?.banner || undefined,
+    bannerFocusY: typeof a?.bannerFocusY === 'number' ? Math.min(1, Math.max(0, a.bannerFocusY)) : 0.5,
+    bannerZoom: typeof a?.bannerZoom === 'number' ? Math.min(1, Math.max(0.7, a.bannerZoom)) : 1,
     roleKey: roleKey && hasKey(roleKey) ? roleKey : undefined,
     handles,
   };

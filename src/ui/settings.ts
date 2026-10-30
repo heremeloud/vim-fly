@@ -6,7 +6,8 @@ import { t } from '../i18n';
 import { COLORS, FONT, RADIUS, hex } from './theme';
 import { addSoundToggle } from './soundToggle';
 import { addHowToPlay } from './howToPlay';
-import { button, label, roundedBox, scrim } from './widgets';
+import { LEGAL_LINK, openLegal } from './legal';
+import { button, hitArea, label, roundedBox, scrim } from './widgets';
 
 const CARD = { x: 30, y: 80, w: GAME_WIDTH - 60, h: 640 };
 
@@ -109,6 +110,17 @@ export function openSettings(scene: Phaser.Scene): void {
   addHowToPlay(scene, add, x, CARD.y + 300, w, depth);
 
   button(scene, GAME_WIDTH / 2, CARD.y + CARD.h - 68, 300, 58, t('settings.close'), close, 'primary', 24, depth + 3).forEach(add);
-  add(label(scene, GAME_WIDTH / 2, CARD.y + CARD.h - 10, `v${__APP_VERSION__}  ·  created by @heremeloud`, { size: 11, color: COLORS.muted, align: 'center' }).setOrigin(0.5, 1).setDepth(depth + 3));
+  // The footer line: author, version, then the legal link, centred together.
+  const footY = CARD.y + CARD.h - 10;
+  const foot = { size: 11, color: COLORS.muted };
+  const credit = add(label(scene, 0, footY, `created by @heremeloud  ·  v${__APP_VERSION__}  ·  `, foot).setOrigin(0, 1).setDepth(depth + 3));
+  const legal = add(label(scene, 0, footY, LEGAL_LINK, foot).setOrigin(0, 1).setDepth(depth + 3));
+  const left = GAME_WIDTH / 2 - (credit.width + legal.width) / 2;
+  credit.setX(left);
+  legal.setX(left + credit.width);
+  add(hitArea(scene, legal.x - 10, footY - 28, legal.width + 20, 36, () => {
+    if (input) input.style.visibility = 'hidden'; // the name field is a real element over the canvas, so it would show through the page
+    openLegal(scene, () => input && (input.style.visibility = 'visible'));
+  }).setDepth(depth + 4));
   scene.events.once(Phaser.Scenes.Events.SHUTDOWN, close);
 }

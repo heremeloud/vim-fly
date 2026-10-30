@@ -11,6 +11,8 @@
     "name": "Bake Love Feeling",
     "avatar": "blf.jpg",
     "banner": "blf_header.jpg",
+    "bannerFocusY": 0.5,
+    "bannerZoom": 0.85,
     "handles": {
       "x": "BakeLoveFeeling"
     }
