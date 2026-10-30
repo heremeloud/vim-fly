@@ -11,6 +11,7 @@ const TITLE = legal.title;
 
 const BODY_SIZE = 13;
 const BODY_MIN_SIZE = 9;
+const PARA_STEP = 1.5; // lines from one paragraph's last line to the next one's first
 
 export const LEGAL_LINK = legal.linkLabel;
 
@@ -18,7 +19,7 @@ const CARD = { x: 30, y: 80, w: GAME_WIDTH - 60, h: 640 };
 
 /**
  * Wrapped paragraphs where **double-starred** words are bold and *single-starred* words are italic. A Phaser Text has
- * one style, so each word is its own Text, placed left to right and wrapped by hand. Blank space between paragraphs is one line.
+ * one style, so each word is its own Text, placed left to right and wrapped by hand. The gap between paragraphs is half a line.
  */
 function layoutRich(scene: Phaser.Scene, paragraphs: string[], x: number, y: number, maxW: number, size: number, depth: number): { items: Phaser.GameObjects.Text[]; height: number } {
   const items: Phaser.GameObjects.Text[] = [];
@@ -35,7 +36,7 @@ function layoutRich(scene: Phaser.Scene, paragraphs: string[], x: number, y: num
   let cy = 0;
   paragraphs.forEach((para, i) => {
     if (i > 0) {
-      cy += lineH * 2;
+      cy += lineH * PARA_STEP;
       cx = 0;
     }
     const chunks = para
