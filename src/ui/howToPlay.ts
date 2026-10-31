@@ -25,3 +25,30 @@ export function addHowToPlay(scene: Phaser.Scene, add: <T extends Phaser.GameObj
     add(label(scene, x + 68, ry + 32, t(step.key), { size: 13, wrap: w - 82, bold: key }).setOrigin(0, 0.5).setDepth(depth + 3));
   });
 }
+
+/**
+ * A keyboard reminder on the "How to Play" heading line, drawn as icons and key caps so it needs no translation:
+ * tap icon + A/D (flap), swipe icon + Shift + A/D (dodge). The arrow keys work as well but are left off to keep it small.
+ * Touch screens have no use for it, so it is left out there. `y` is the top of the heading line.
+ */
+export function addKeyboardHint(scene: Phaser.Scene, add: <T extends Phaser.GameObjects.GameObject>(o: T) => T, x: number, y: number, w: number, depth: number): void {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+  const capH = 22;
+  const cy = y + 12;
+  const cap = (text: string, cx: number, capW: number): void => {
+    add(roundedBox(scene, cx - capW, cy - capH / 2, capW, capH, COLORS.surface, 5, COLORS.border).setDepth(depth + 2));
+    add(label(scene, cx - capW / 2, cy, text, { size: 11, bold: true, color: COLORS.muted }).setOrigin(0.5).setDepth(depth + 3));
+  };
+  const icon = (id: IconId, cx: number): void => {
+    add(drawIcon(scene, id, cx - 8, cy, COLORS.muted, { width: 2.6 }).setScale(0.8).setDepth(depth + 3));
+  };
+  // Built right to left from the card's edge.
+  let cx = x + w;
+  cap('D', cx, 24); cx -= 28;
+  cap('A', cx, 24); cx -= 28;
+  cap('Shift', cx, 42); cx -= 46;
+  icon('swipe', cx); cx -= 30;
+  cap('D', cx, 24); cx -= 28;
+  cap('A', cx, 24); cx -= 28;
+  icon('tap', cx);
+}

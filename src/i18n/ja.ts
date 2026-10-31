@@ -63,9 +63,9 @@ export const ja: Record<LangKey, string> = {
   'onboard.nameLabel': 'おなまえ',
   'onboard.namePlaceholder': 'おなまえを入力してね',
   'onboard.howTitle': 'あそびかた',
-  'onboard.tap': '画面の左側か右側をタップ(またはA/Dキー)して、上に飛びながらその方向に移動しよう!',
+  'onboard.tap': '画面の左側か右側をタップして、上に飛びながらその方向に移動しよう!',
   'onboard.catch': '食べ物をキャッチしてスコアをゲット! 危険なアイテムをよけながら、どこまで高く飛べるかな?',
-  'onboard.swipe': 'ピンチのときは左右にスワイプ（またはShift＋A/D）でよけよう! 1プレイにつき3回まで使えるよ! チーズバターパンで1回分回復!',
+  'onboard.swipe': 'ピンチのときは左右にスワイプでよけよう! 1プレイにつき3回まで使えるよ! チーズバターパンで1回分回復!',
   'onboard.start': '注文スタート!',
 
   // Settings

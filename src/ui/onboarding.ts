@@ -5,7 +5,7 @@ import { getPlayerName, setPlayerName, validatePlayerName, NAME_MAX } from '../l
 import { t } from '../i18n';
 import { COLORS, FONT, RADIUS, hex } from './theme';
 import { addSoundToggle } from './soundToggle';
-import { addHowToPlay } from './howToPlay';
+import { addHowToPlay, addKeyboardHint } from './howToPlay';
 import { button, label, roundedBox, scrim } from './widgets';
 
 /** Start a run. The first time, ask for a name and explain the controls before the game begins. */
@@ -39,6 +39,7 @@ function openWelcome(scene: Phaser.Scene): void {
 
   add(label(scene, INPUT.x, CARD.y + 266, t('onboard.howTitle'), { size: 18, bold: true }).setDepth(depth + 2));
   addHowToPlay(scene, add, INPUT.x, CARD.y + 300, INPUT.w, depth);
+  addKeyboardHint(scene, add, INPUT.x, CARD.y + 266, INPUT.w, depth);
 
   // The name field is a real <input> laid over the canvas, so phones show their keyboard and IME.
   const input = document.createElement('input');

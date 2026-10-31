@@ -5,7 +5,7 @@ import { getPlayerName, NAME_MAX, setPlayerName, validatePlayerName } from '../l
 import { t } from '../i18n';
 import { COLORS, FONT, RADIUS, hex } from './theme';
 import { addSoundToggle } from './soundToggle';
-import { addHowToPlay } from './howToPlay';
+import { addHowToPlay, addKeyboardHint } from './howToPlay';
 import { LEGAL_LINK, openLegal } from './legal';
 import { button, hitArea, label, roundedBox, scrim } from './widgets';
 
@@ -108,6 +108,7 @@ export function openSettings(scene: Phaser.Scene): void {
 
   add(label(scene, x, CARD.y + 266, t('onboard.howTitle'), { size: 18, bold: true }).setDepth(depth + 2));
   addHowToPlay(scene, add, x, CARD.y + 300, w, depth);
+  addKeyboardHint(scene, add, x, CARD.y + 266, w, depth);
 
   button(scene, GAME_WIDTH / 2, CARD.y + CARD.h - 68, 300, 58, t('settings.close'), close, 'primary', 24, depth + 3).forEach(add);
   // The footer line: author, version, then the legal link, centred together.

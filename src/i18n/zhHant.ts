@@ -64,9 +64,9 @@ export const zhHant: Record<LangKey, string> = {
   'onboard.nameLabel': '你的名字',
   'onboard.namePlaceholder': '輸入名字吧',
   'onboard.howTitle': '怎麼玩',
-  'onboard.tap': '點擊畫面左側或右側(或按A/D鍵), 一邊往上飛, 一邊朝對應方向移動!',
+  'onboard.tap': '點擊畫面左側或右側, 一邊往上飛, 一邊朝對應方向移動!',
   'onboard.catch': '接住食物賺點數, 努力飛高高! 記得閃開危險道具喔!',
-  'onboard.swipe': '遇到危險? 向左或向右滑動（或按 Shift + A/D）就能閃避! 每局可以使用3次，吃下起司奶油麵包還能恢復1次!',
+  'onboard.swipe': '遇到危險? 向左或向右滑動就能閃避! 每局可以使用3次，吃下起司奶油麵包還能恢復1次!',
   'onboard.start': '開始點餐!',
 
   // Settings
