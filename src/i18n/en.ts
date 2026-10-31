@@ -66,7 +66,7 @@ export const en = {
   'onboard.howTitle': 'How to Play',
   'onboard.tap': 'Tap the left or right side of the screen to flap up and scoot that way!',
   'onboard.catch': 'Catch tasty food for points, fly as high as you can, and dodge the dangerous stuff!',
-  'onboard.swipe': 'In trouble? Swipe left or right to dodge! You get 3 dodges per run! Cheese Butter Bread restores 1!',
+  'onboard.swipe': 'In trouble? Swipe left or right to dodge! You get 3 dodges per run! **Cheese Butter Bread** restores 1!',
   'onboard.start': 'Start My Order',
 
   // Settings

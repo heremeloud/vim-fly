@@ -66,7 +66,7 @@ export const zh: Record<LangKey, string> = {
   'onboard.howTitle': '怎么玩',
   'onboard.tap': '点击屏幕左侧或右侧, 一边向上飞, 一边朝对应方向移动!',
   'onboard.catch': '接住食物赚积分, 努力飞高高! 记得躲开危险道具哦!',
-  'onboard.swipe': '遇到危险? 向左或向右滑动就能闪避! 每局可以使用3次，吃下奶酪黄油面包还能恢复1次!',
+  'onboard.swipe': '遇到危险? 向左或向右滑动就能闪避! 每局可以使用3次，吃下**奶酪黄油面包**还能恢复1次!',
   'onboard.start': '开始下单!',
 
   // Settings

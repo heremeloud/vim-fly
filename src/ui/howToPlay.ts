@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { t } from '../i18n';
 import { drawIcon, type IconId } from './icons';
 import { COLORS, RADIUS } from './theme';
-import { label, roundedBox } from './widgets';
+import { label, layoutRich, roundedBox } from './widgets';
 
 const STEPS: { icon: IconId; key: 'onboard.tap' | 'onboard.catch' | 'onboard.swipe'; tint: number }[] = [
   { icon: 'tap', key: 'onboard.tap', tint: COLORS.lavenderSoft },
@@ -22,7 +22,14 @@ export function addHowToPlay(scene: Phaser.Scene, add: <T extends Phaser.GameObj
     add(roundedBox(scene, x, ry, w, 64, key ? COLORS.primarySoft : COLORS.background, RADIUS.control, key ? COLORS.primary : undefined).setDepth(depth + 2));
     add(roundedBox(scene, x + 10, ry + 10, 44, 44, step.tint, RADIUS.control).setDepth(depth + 2));
     add(drawIcon(scene, step.icon, x + 32, ry + 32, COLORS.onPrimary).setDepth(depth + 3));
-    add(label(scene, x + 68, ry + 32, t(step.key), { size: 13, wrap: w - 82, bold: key }).setOrigin(0, 0.5).setDepth(depth + 3));
+    const text = t(step.key);
+    if (text.includes('**')) {
+      // **Double stars** mark bold words, which a single Text cannot do, so the row is laid out word by word.
+      const rich = layoutRich(scene, [text], x + 68, 0, w - 82, 13, depth + 3);
+      rich.items.forEach((o) => add(o.setY(o.y + ry + 32 - rich.height / 2)));
+    } else {
+      add(label(scene, x + 68, ry + 32, text, { size: 13, wrap: w - 82, bold: key }).setOrigin(0, 0.5).setDepth(depth + 3));
+    }
   });
 }
 
@@ -33,15 +40,15 @@ export function addHowToPlay(scene: Phaser.Scene, add: <T extends Phaser.GameObj
  */
 export function addKeyboardHint(scene: Phaser.Scene, add: <T extends Phaser.GameObjects.GameObject>(o: T) => T, x: number, y: number, w: number, depth: number): void {
   if (window.matchMedia('(pointer: coarse)').matches) return;
-  const capH = 22;
-  const cy = y + 12;
+  const capH = 18; // nothing in the hint is taller than the 18 px heading beside it
+  const cy = y + 13; // the heading's text box is 26 px tall, so this is its middle
   const cap = (text: string, cx: number, capW: number): void => {
     add(roundedBox(scene, cx - capW, cy - capH / 2, capW, capH, COLORS.surface, 5, COLORS.border).setDepth(depth + 2));
-    add(label(scene, cx - capW / 2, cy, text, { size: 10, bold: true, color: COLORS.muted }).setOrigin(0.5).setDepth(depth + 3));
+    add(label(scene, cx - capW / 2, cy, text, { size: 9, bold: true, color: COLORS.muted }).setOrigin(0.5).setDepth(depth + 3));
   };
   // The tap hand is drawn a little below its centre (its taps rise above it), so it is lifted to sit level with the caps.
   const icon = (id: IconId, cx: number): void => {
-    add(drawIcon(scene, id, cx - 9, id === 'tap' ? cy - 3 : cy, COLORS.muted, { width: 2.6 }).setScale(0.8).setDepth(depth + 3));
+    add(drawIcon(scene, id, cx - 7, id === 'tap' ? cy - 3 : cy, COLORS.muted, { width: 2.6 }).setScale(0.62).setDepth(depth + 3));
   };
   // Built right to left from the card's edge: tap and its keys, then swipe and Shift.
   let cx = x + w;

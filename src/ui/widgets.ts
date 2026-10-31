@@ -434,3 +434,57 @@ export function openLanguagePicker(scene: Phaser.Scene): void {
     }).setDepth(depth + 4));
   });
 }
+
+/**
+ * Wrapped paragraphs where **double-starred** words are bold and *single-starred* words are italic. A Phaser Text has
+ * one style, so each word is its own Text, placed left to right and wrapped by hand. The gap between paragraphs is `paraStep` lines from one paragraph's last line to the next one's first.
+ * Japanese and Chinese have no spaces, so each of their characters is a word of its own.
+ */
+export function layoutRich(scene: Phaser.Scene, paragraphs: string[], x: number, y: number, maxW: number, size: number, depth: number, paraStep = 1.5): { items: Phaser.GameObjects.Text[]; height: number } {
+  const items: Phaser.GameObjects.Text[] = [];
+  const word = (text: string, bold: boolean, italic = false): Phaser.GameObjects.Text => {
+    const obj = label(scene, 0, 0, text, { size, bold }).setDepth(depth);
+    if (italic) obj.setFontStyle('italic');
+    return obj;
+  };
+  const probe = word('a', false);
+  const lineH = probe.height;
+  const space = size * 0.3;
+  probe.destroy();
+  let cx = 0;
+  let cy = 0;
+  paragraphs.forEach((para, i) => {
+    if (i > 0) {
+      cy += lineH * paraStep;
+      cx = 0;
+    }
+    const chunks = para
+      .split(/(\*\*[^*]+\*\*|\*[^*]+\*)/g)
+      .filter(Boolean)
+      .map((raw) => {
+        const bold = raw.startsWith('**') && raw.endsWith('**');
+        const italic = !bold && raw.startsWith('*') && raw.endsWith('*');
+        return { text: bold ? raw.slice(2, -2) : italic ? raw.slice(1, -1) : raw, bold, italic };
+      });
+    let gap = false; // whitespace seen since the last word, so the next word is set apart from it
+    chunks.forEach((chunk) => {
+      (chunk.text.match(/\s+|[\u3040-\u30ff\u3400-\u9fff\uff00-\uffef]|[^\s\u3040-\u30ff\u3400-\u9fff\uff00-\uffef]+/g) ?? []).forEach((w) => {
+        if (/^\s/.test(w)) {
+          gap = true;
+          return;
+        }
+        const obj = word(w, chunk.bold, chunk.italic);
+        if (gap && cx > 0) cx += space;
+        gap = false;
+        if (cx > 0 && cx + obj.width > maxW) {
+          cx = 0;
+          cy += lineH;
+        }
+        obj.setPosition(x + cx, y + cy);
+        items.push(obj);
+        cx += obj.width;
+      });
+    });
+  });
+  return { items, height: cy + lineH };
+}
