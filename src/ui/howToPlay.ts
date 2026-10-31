@@ -28,7 +28,7 @@ export function addHowToPlay(scene: Phaser.Scene, add: <T extends Phaser.GameObj
 
 /**
  * A keyboard reminder on the "How to Play" heading line, drawn as icons and key caps so it needs no translation:
- * tap icon + A/D (flap), swipe icon + Shift + A/D (dodge). The arrow keys work as well but are left off to keep it small.
+ * tap icon + A/D or the arrows (flap), swipe icon + Shift (dodge, held with the same keys).
  * Touch screens have no use for it, so it is left out there. `y` is the top of the heading line.
  */
 export function addKeyboardHint(scene: Phaser.Scene, add: <T extends Phaser.GameObjects.GameObject>(o: T) => T, x: number, y: number, w: number, depth: number): void {
@@ -37,18 +37,17 @@ export function addKeyboardHint(scene: Phaser.Scene, add: <T extends Phaser.Game
   const cy = y + 12;
   const cap = (text: string, cx: number, capW: number): void => {
     add(roundedBox(scene, cx - capW, cy - capH / 2, capW, capH, COLORS.surface, 5, COLORS.border).setDepth(depth + 2));
-    add(label(scene, cx - capW / 2, cy, text, { size: 11, bold: true, color: COLORS.muted }).setOrigin(0.5).setDepth(depth + 3));
+    add(label(scene, cx - capW / 2, cy, text, { size: 10, bold: true, color: COLORS.muted }).setOrigin(0.5).setDepth(depth + 3));
   };
+  // The tap hand is drawn a little below its centre (its taps rise above it), so it is lifted to sit level with the caps.
   const icon = (id: IconId, cx: number): void => {
-    add(drawIcon(scene, id, cx - 8, cy, COLORS.muted, { width: 2.6 }).setScale(0.8).setDepth(depth + 3));
+    add(drawIcon(scene, id, cx - 9, id === 'tap' ? cy - 3 : cy, COLORS.muted, { width: 2.6 }).setScale(0.8).setDepth(depth + 3));
   };
-  // Built right to left from the card's edge.
+  // Built right to left from the card's edge: tap and its keys, then swipe and Shift.
   let cx = x + w;
-  cap('D', cx, 24); cx -= 28;
-  cap('A', cx, 24); cx -= 28;
-  cap('Shift', cx, 42); cx -= 46;
-  icon('swipe', cx); cx -= 30;
-  cap('D', cx, 24); cx -= 28;
-  cap('A', cx, 24); cx -= 28;
+  cap('Shift', cx, 40); cx -= 44;
+  icon('swipe', cx); cx -= 32;
+  cap('D/→', cx, 34); cx -= 37;
+  cap('A/←', cx, 34); cx -= 37;
   icon('tap', cx);
 }
