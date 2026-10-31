@@ -38,7 +38,7 @@ export const CAMERA = {
 // Item spawning. All [start, end] pairs run from difficulty 0 to 1.
 export const ITEM_RULES = {
   size: 36,
-  spawnMs: [600, 280] as const, // time between spawns (quicker at the start, so the first stretch is not empty)
+  spawnMs: [520, 280] as const, // time between spawns (quicker at the start, so the first stretch is not empty)
   fallSpeed: [140, 370] as const, // px/s
   doubleSpawnChance: [0, 0.3] as const, // chance a spawn drops a second item at once
   debuffSway: [0, 110] as const, // debuffs swerve side to side by up to this many px
@@ -48,8 +48,8 @@ export const ITEM_RULES = {
   buffWeightScale: [1, 0.5] as const, // power-ups get rarer
   // Early stretch: extra food-only drops, with no cap on how many. After each one another follows with chance `extraChance`, which fades
   // to 0 at `untilMeters`: the end of the Shopping Mall (1400 m), so the screen stays full through the first four stages. That is
-  // about 1.5 extra per beat at the start, 0.8 at 350 m, 0.4 at 700 m and 0.2 at 1050 m. They are all cheap food, so a fuller screen does not make it harder.
-  startFood: { untilMeters: 1400, extraChance: 0.6 },
+  // about 2.6 extra per beat at the start, 1.2 at 350 m, 0.6 at 700 m and 0.2 at 1050 m. They are all cheap food, so a fuller screen does not make it harder.
+  startFood: { untilMeters: 1400, extraChance: 0.72 },
 } as const;
 
 export const SCENES = {
