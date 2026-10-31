@@ -54,7 +54,7 @@ export const th: Record<LangKey, string> = {
   'receipt.newBest': 'สถิติใหม่!',
   'receipt.thanks': 'ขอบคุณนะ!',
   'receipt.follow': 'Official Account',
-  'receipt.shareText': 'เล่น Vimmy Fly ได้ {score} แต้มแล้ว! มีใครทำได้เยอะกว่าเราบ้าง? 🐶🐝\nร้านขนมปังใกล้เปิดแล้ว! 🍞🧀🧈\nฝากติดตามซีรีส์ Bake Love Feeling และเป็นกำลังใจให้ ViewMim ในบทเนยชีสด้วยนะ! 💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
+  'receipt.shareText': 'เล่น Vimmy Fly ทำได้ {score} แต้มแล้ว! มีใครทำได้เยอะกว่าเราบ้าง? 🐶🐝\nร้านขนมปังใกล้เปิดแล้ว! 🍞🧀🧈\nฝากติดตามซีรีส์ Bake Love Feeling และเป็นกำลังใจให้ ViewMim ในบทเนยชีสด้วยนะ! 💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
   'receipt.sending': 'กำลังส่งแต้ม… รอสักครู่นะ',
   'receipt.sendFailed': 'เชื่อมต่อกับอันดับโลกไม่ได้ แต่บันทึกคะแนนไว้ในเครื่องนี้ให้แล้วนะ',
 
@@ -130,8 +130,8 @@ export const th: Record<LangKey, string> = {
   'finale.aquarium': '"เนยชอบวาฬใช่ไหม?!"',
 
   // Effects (item descriptions)
-  'effect.points.gain': 'ได้ {n} แต้ม',
-  'effect.points.loss': 'เสียไป {n} แต้ม',
+  'effect.points.gain': 'เก็บ {n} แต้ม',
+  'effect.points.loss': 'โดนหัก {n} แต้ม',
   'effect.refillsDash': 'เพิ่มจำนวนครั้งที่พุ่งหลบ 1 ครั้ง',
   'effect.dash': 'พุพุ่งขึ้นไปบนฟ้า {s} วินาที',
   'effect.shield': 'กันดีบัฟครั้งหน้าได้เลย',
