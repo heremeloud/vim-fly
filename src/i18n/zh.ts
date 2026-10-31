@@ -145,7 +145,7 @@ export const zh: Record<LangKey, string> = {
   'effect.shy': '持续 {s} 秒, 每次拍翅膀上升的高度都不一样',
   'effect.slow': '{s} 秒内飞行速度降低 {p}%',
   'effect.crash': '被撞落, 眩晕 {s} 秒',
-  'effect.swerve': '躲开小猫，向一旁闪避',
+  'effect.swerve': '被小猫咪推向一边',
 
   // Item names
   'item.pandanCustardBread': '斑斓卡仕达面包',

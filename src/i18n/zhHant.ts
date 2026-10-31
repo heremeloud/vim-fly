@@ -145,7 +145,7 @@ export const zhHant: Record<LangKey, string> = {
   'effect.shy': '持續 {s} 秒, 每次拍翅膀上升的高度都不一樣',
   'effect.slow': '{s} 秒內飛行速度降低 {p}%',
   'effect.crash': '被撞落, 暈眩 {s} 秒',
-  'effect.swerve': '躲開小貓, 往旁邊閃避',
+  'effect.swerve': '被小貓咪推向一邊',
 
   // Item names
   'item.pandanCustardBread': '香蘭卡士達麵包',

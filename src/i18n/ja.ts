@@ -141,10 +141,10 @@ export const ja: Record<LangKey, string> = {
   'effect.magnet': '{s}秒間、近くの食べ物やパワーアップを引き寄せる',
   'effect.stun': '{s}秒間動けない',
   'effect.disorient': '{s}秒間、左右があべこべ',
-  'effect.shy': '{s}秒間、羽ばたくたびに上昇する高さがランダムになる',
+  'effect.shy': '{s}秒間、羽ばたくたびに飛び上がる高さがバラバラになる',
   'effect.slow': '{s}秒間、飛ぶ速度が{p}%ダウン',
   'effect.crash': '吹き飛ばされ、{s}秒スタン',
-  'effect.swerve': '子ネコをよけて横に移動する',
+  'effect.swerve': '子ネコに横へ押される',
 
   // Item names
   'item.pandanCustardBread': 'パンダンカスタードパン',
