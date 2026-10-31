@@ -66,7 +66,7 @@ export const zhHant: Record<LangKey, string> = {
   'onboard.howTitle': '怎麼玩',
   'onboard.tap': '點擊畫面左側或右側(或按A/D鍵), 一邊往上飛, 一邊朝對應方向移動!',
   'onboard.catch': '接住食物賺點數, 努力飛高高! 記得閃開危險道具喔!',
-  'onboard.swipe': '遇到危險? 向左或向右滑動（或按 Shift + A/D）就能衝刺閃避! 每局可以使用3次，吃下起司奶油麵包還能恢復1次!',
+  'onboard.swipe': '遇到危險? 向左或向右滑動（或按 Shift + A/D）就能閃避! 每局可以使用3次，吃下起司奶油麵包還能恢復1次!',
   'onboard.start': '開始點餐!',
 
   // Settings
@@ -95,10 +95,10 @@ export const zhHant: Record<LangKey, string> = {
   // In-game HUD
   'hud.shield': '護盾',
   'hud.dash': '衝刺',
-  'hud.swipeHint': '左右滑動衝刺、閃避!',
+  'hud.swipeHint': '左右滑動閃避!',
   'hud.tap': '點擊',
   'hud.paused': '已暫停',
-  'hud.dashPlus': '+1 衝刺',
+  'hud.dodgePlus': '+1 閃避',
   'hud.stunned': '暈眩',
   'hud.power': '強力',
   'hud.dizzy': '頭暈',
@@ -133,7 +133,7 @@ export const zhHant: Record<LangKey, string> = {
   // Effects (item descriptions)
   'effect.points.gain': '獲得 {n} 點',
   'effect.points.loss': '扣除 {n} 點',
-  'effect.refillsDash': '恢復1次側向衝刺',
+  'effect.refillsDodge': '恢復1次閃避',
   'effect.dash': '{s} 秒內咻地往上衝',
   'effect.shield': '擋住下一個減益效果',
   'effect.cleanse': '清除暈眩和頭暈狀態',

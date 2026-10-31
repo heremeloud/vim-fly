@@ -129,7 +129,7 @@ export function describeEffect(item: ItemDef): string {
   switch (e.type) {
     case 'points': {
       const base = e.amount >= 0 ? t('effect.points.gain', { n: e.amount }) : t('effect.points.loss', { n: -e.amount });
-      return item.refillsDash ? `${base} | ${t('effect.refillsDash')}` : base;
+      return item.refillsDash ? `${base} | ${t('effect.refillsDodge')}` : base;
     }
     case 'dash':
       return t('effect.dash', { s: secs(e.durationMs) });

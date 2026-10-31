@@ -1034,7 +1034,7 @@ export class GameScene extends Phaser.Scene {
           const loaf = this.swipeBreads[this.swipesLeft - 1];
           this.tweens.add({ targets: loaf, scale: loaf.scale * 1.7, duration: 160, yoyo: true });
           playSfx(this, 'sparkle', 0.6, 0.1);
-          this.time.delayedCall(350, () => this.showPopup(t('hud.dashPlus'), hex(COLORS.buff)));
+          this.time.delayedCall(350, () => this.showPopup(t('hud.dodgePlus'), hex(COLORS.buff)));
         }
         if (it.def.kind === 'points' && gained !== 0) this.showPopup(`${gained > 0 ? '+' : ''}${gained}`, gained > 0 ? hex(COLORS.primaryDark) : hex(COLORS.debuff), gained >= 150);
         if (it.def.kind === 'debuff' && applied) this.playDebuffReaction(it.def);

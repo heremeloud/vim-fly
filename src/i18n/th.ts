@@ -65,7 +65,7 @@ export const th: Record<LangKey, string> = {
   'onboard.howTitle': 'วิธีเล่น',
   'onboard.tap': 'แตะหน้าจอด้านซ้ายหรือขวา (หรือกด A/D) เพื่อบินขึ้นและเคลื่อนที่ไปทางนั้น',
   'onboard.catch': 'เก็บอาหารเพื่อเพิ่มแต้ม บินให้สูงที่สุด แล้วอย่าลืมหลบไอเทมอันตรายด้วยนะ!',
-  'onboard.swipe': 'เจออันตรายเหรอ? ปัดซ้ายหรือขวา (หรือกด Shift + A/D) เพื่อพุ่งหลบได้เลย! ใช้ได้ 3 ครั้งต่อรอบ กินขนมปังชีสเนยแล้วจะได้เพิ่มอีก 1 ครั้ง!',
+  'onboard.swipe': 'เจออันตรายเหรอ? ปัดซ้ายหรือขวา (หรือกด Shift + A/D) เพื่อหลบได้เลย! ใช้ได้ 3 ครั้งต่อรอบ กินขนมปังชีสเนยแล้วจะได้เพิ่มอีก 1 ครั้ง!',
   'onboard.start': 'เริ่มสั่งเลย!',
 
   // Settings
@@ -93,11 +93,11 @@ export const th: Record<LangKey, string> = {
 
   // In-game HUD
   'hud.shield': 'โล่',
-  'hud.dash': 'พุ่ง',
-  'hud.swipeHint': 'ปัดซ้ายหรือขวาเพื่อพุ่งหลบ!',
+  'hud.dash': 'พุ่งขึ้น',
+  'hud.swipeHint': 'ปัดซ้ายหรือขวาเพื่อหลบ!',
   'hud.tap': 'แตะ',
   'hud.paused': 'หยุดชั่วคราว',
-  'hud.dashPlus': '+1 พุ่ง',
+  'hud.dodgePlus': '+1 หลบ',
   'hud.stunned': 'สตัน',
   'hud.power': 'พลัง',
   'hud.dizzy': 'เวียนหัว',
@@ -132,8 +132,8 @@ export const th: Record<LangKey, string> = {
   // Effects (item descriptions)
   'effect.points.gain': 'เก็บ {n} แต้ม',
   'effect.points.loss': 'โดนหัก {n} แต้ม',
-  'effect.refillsDash': 'เพิ่มจำนวนครั้งที่พุ่งหลบ 1 ครั้ง',
-  'effect.dash': 'พุพุ่งขึ้นไปบนฟ้า {s} วินาที',
+  'effect.refillsDodge': 'เพิ่มจำนวนครั้งที่หลบ 1 ครั้ง',
+  'effect.dash': 'พุ่งขึ้นไปบนฟ้า {s} วินาที',
   'effect.shield': 'กันดีบัฟครั้งหน้าได้เลย',
   'effect.cleanse': 'หายสตันแล้ว ไม่เวียนหัวแล้วด้วย',
   'effect.strongFlap': 'กระพือปีกแรงขึ้น {p}% นาน {s} วินาที',

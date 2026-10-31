@@ -66,7 +66,7 @@ export const zh: Record<LangKey, string> = {
   'onboard.howTitle': '怎么玩',
   'onboard.tap': '点击屏幕左侧或右侧(或按A/D键), 一边向上飞, 一边朝对应方向移动!',
   'onboard.catch': '接住食物赚积分, 努力飞高高! 记得躲开危险道具哦!',
-  'onboard.swipe': '遇到危险? 向左或向右滑动（或按 Shift + A/D）就能冲刺闪避! 每局可以使用3次，吃下奶酪黄油面包还能恢复1次!',
+  'onboard.swipe': '遇到危险? 向左或向右滑动（或按 Shift + A/D）就能闪避! 每局可以使用3次，吃下奶酪黄油面包还能恢复1次!',
   'onboard.start': '开始下单!',
 
   // Settings
@@ -95,10 +95,10 @@ export const zh: Record<LangKey, string> = {
   // In-game HUD
   'hud.shield': '护盾',
   'hud.dash': '冲刺',
-  'hud.swipeHint': '左右滑动冲刺、闪避!',
+  'hud.swipeHint': '左右滑动闪避!',
   'hud.tap': '点击',
   'hud.paused': '已暂停',
-  'hud.dashPlus': '+1 冲刺',
+  'hud.dodgePlus': '+1 闪避',
   'hud.stunned': '眩晕',
   'hud.power': '强力',
   'hud.dizzy': '头晕',
@@ -133,7 +133,7 @@ export const zh: Record<LangKey, string> = {
   // Effects (item descriptions)
   'effect.points.gain': '获得 {n} 分',
   'effect.points.loss': '扣除 {n} 分',
-  'effect.refillsDash': '恢复1次侧向冲刺',
+  'effect.refillsDodge': '恢复1次闪避',
   'effect.dash': '{s} 秒内嗖地向上冲',
   'effect.shield': '挡住下一次减益',
   'effect.cleanse': '清除眩晕和头晕状态',

@@ -66,7 +66,7 @@ export const en = {
   'onboard.howTitle': 'How to Play',
   'onboard.tap': 'Tap the left or right side of the screen (or press A/D) to flap up and scoot that way!',
   'onboard.catch': 'Catch tasty food for points, fly as high as you can, and dodge the dangerous stuff!',
-  'onboard.swipe': 'In trouble? Swipe left or right (or press Shift + A/D) to side dash and dodge! You get 3 dashes per run! Cheese Butter Bread restores 1!',
+  'onboard.swipe': 'In trouble? Swipe left or right (or press Shift + A/D) to dodge! You get 3 dodges per run! Cheese Butter Bread restores 1!',
   'onboard.start': 'Start My Order',
 
   // Settings
@@ -95,10 +95,10 @@ export const en = {
   // In-game HUD
   'hud.shield': 'SHIELD',
   'hud.dash': 'DASH',
-  'hud.swipeHint': 'Swipe left or right to dash & dodge!',
+  'hud.swipeHint': 'Swipe left or right to dodge!',
   'hud.tap': 'Tap',
   'hud.paused': 'Paused',
-  'hud.dashPlus': '+1 Dash',
+  'hud.dodgePlus': '+1 Dodge',
   'hud.stunned': 'STUNNED',
   'hud.power': 'POWER',
   'hud.dizzy': 'DIZZY',
@@ -133,7 +133,7 @@ export const en = {
   // Effects (item descriptions)
   'effect.points.gain': '+{n} points',
   'effect.points.loss': '-{n} points',
-  'effect.refillsDash': 'Restores 1 side dash',
+  'effect.refillsDodge': 'Restores 1 dodge',
   'effect.dash': 'Dash upward for {s}s',
   'effect.shield': 'Blocks the next debuff',
   'effect.cleanse': 'Clears stun and dizziness',

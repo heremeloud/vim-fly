@@ -65,7 +65,7 @@ export const ja: Record<LangKey, string> = {
   'onboard.howTitle': 'あそびかた',
   'onboard.tap': '画面の左側か右側をタップ(またはA/Dキー)して、上に飛びながらその方向に移動しよう!',
   'onboard.catch': '食べ物をキャッチしてスコアをゲット! 危険なアイテムをよけながら、どこまで高く飛べるかな?',
-  'onboard.swipe': 'ピンチのときは左右にスワイプ（またはShift＋A/D）で横ダッシュしてよけよう! 1プレイにつき3回まで使えるよ! チーズバターパンで1回分回復!',
+  'onboard.swipe': 'ピンチのときは左右にスワイプ（またはShift＋A/D）でよけよう! 1プレイにつき3回まで使えるよ! チーズバターパンで1回分回復!',
   'onboard.start': '注文スタート!',
 
   // Settings
@@ -94,10 +94,10 @@ export const ja: Record<LangKey, string> = {
   // In-game HUD
   'hud.shield': 'シールド',
   'hud.dash': 'ダッシュ',
-  'hud.swipeHint': '左右にスワイプでダッシュ&よけよう!',
+  'hud.swipeHint': '左右にスワイプでよけよう!',
   'hud.tap': 'タップ',
   'hud.paused': '一時停止中',
-  'hud.dashPlus': '+1 ダッシュ',
+  'hud.dodgePlus': '+1 よけ',
   'hud.stunned': 'スタン',
   'hud.power': 'パワー',
   'hud.dizzy': 'めまい',
@@ -132,7 +132,7 @@ export const ja: Record<LangKey, string> = {
   // Effects (item descriptions)
   'effect.points.gain': '{n}ポイントゲット',
   'effect.points.loss': '{n}ポイントダウン',
-  'effect.refillsDash': '横ダッシュが1回分回復',
+  'effect.refillsDodge': '横よけが1回分回復',
   'effect.dash': '{s}秒間、ぐーんと上へダッシュ',
   'effect.shield': '次のデバフをガード',
   'effect.cleanse': 'スタンとめまいがスッキリ',
