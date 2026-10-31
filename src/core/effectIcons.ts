@@ -13,7 +13,7 @@ export const REACTION_ICON: Readonly<Record<string, string>> = {
   helicopter: '❗',
   planner: '💢',
   gavelHammer: '💫',
-  cilantroBread: '💦',
+  cilantroBread: '🤢',
   fishSauceBread: '💦',
   carCrash: '💥',
   dogEars: '😳',
