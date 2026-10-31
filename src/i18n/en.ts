@@ -36,7 +36,7 @@ export const en = {
   'kind.debuff': 'Debuffs',
 
   // Orders tab
-  'orders.subtitle': 'World Leaderboard',
+  'orders.subtitle': 'Leaderboard',
   'orders.tab.mine': 'My Orders',
   'orders.tab.top': 'Top Customers',
   'orders.orderNo': 'Order #{n}',

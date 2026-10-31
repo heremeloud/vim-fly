@@ -21,7 +21,7 @@ export const ja: Record<LangKey, string> = {
   // Home and countdown
   'home.orderNow': '今すぐ注文',
   'home.open': '営業中',
-  'home.watchPilot': 'Pilotを観る',
+  'home.watchPilot': 'パイロット版を観る',
   'countdown.soon': '第1話 · もうすぐだよ',
   'countdown.now': 'ただいま配信中!',
   'countdown.days': '第1話まであと{d}日{h}時間',
@@ -35,7 +35,7 @@ export const ja: Record<LangKey, string> = {
   'kind.debuff': 'デバフ',
 
   // Orders tab
-  'orders.subtitle': '世界ランキング',
+  'orders.subtitle': 'ランキング',
   'orders.tab.mine': 'マイ注文',
   'orders.tab.top': 'お得意さまたち',
   'orders.orderNo': '注文 #{n}',
@@ -49,14 +49,14 @@ export const ja: Record<LangKey, string> = {
   'receipt.height': '高さ',
   'receipt.reached': '到達点',
   'receipt.total': '合計',
-  'receipt.orderAgain': 'もう一度注文する',
+  'receipt.orderAgain': '再注文',
   'receipt.backToStore': 'お店に戻る',
   'receipt.newBest': 'ベスト更新!',
   'receipt.thanks': 'まいど!',
   'receipt.follow': '公式アカウント',
   'receipt.shareText': 'Vimmy Flyで{score}ポイントゲット! 私のスコアを超えられるかな?🐶🐝\nパン屋さんがもうすぐオープン!🍞🧀🧈\nドラマ Bake Love Feeling をお楽しみに! NoeyCheese役のViewMimもぜひ応援してね!💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
   'receipt.sending': 'スコアを送信中… ちょっと待ってね',
-  'receipt.sendFailed': 'ランキングにつながらなかったよ。スコアはこの端末に保存したから安心してね。',
+  'receipt.sendFailed': 'ランキングに接続できなかったけど、スコアはこの端末に保存したから安心してね',
 
   // Onboarding and how to play
   'onboard.title': 'いらっしゃいませ!',
@@ -78,7 +78,7 @@ export const ja: Record<LangKey, string> = {
   'settings.off': 'オフ',
 
   // Promos and video
-  'promos.pilot.title': 'Pilotを観る',
+  'promos.pilot.title': 'パイロット版を観る',
   'promos.copied': 'コピーしたよ!',
   'promos.official': '公式アカウント',
   'promos.leads': '主演',
@@ -89,7 +89,7 @@ export const ja: Record<LangKey, string> = {
   'video.close': '閉じる',
   'video.title': '動画',
   'video.openYoutube': 'YouTubeで開く',
-  'video.loading': 'Pilotを読み込み中… ちょっと待ってね',
+  'video.loading': 'パイロット版映像を読み込み中… ちょっと待ってね',
 
   // In-game HUD
   'hud.shield': 'シールド',

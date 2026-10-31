@@ -21,7 +21,7 @@ export const th: Record<LangKey, string> = {
   // Home and countdown
   'home.orderNow': 'สั่งเลย',
   'home.open': 'เปิดแล้วนะ',
-  'home.watchPilot': 'ดูตอนนำร่องเลย!',
+  'home.watchPilot': 'ดู Pilot ไปด้วยกันนะ!',
   'countdown.soon': 'ตอนที่ 1 · เร็ว ๆ นี้',
   'countdown.now': 'ตอนที่ 1 มาแล้ว!',
   'countdown.days': 'อีก {d} วัน {h} ชม. เจอกันตอนแรก!',
@@ -39,9 +39,9 @@ export const th: Record<LangKey, string> = {
   'orders.tab.mine': 'ออเดอร์',
   'orders.tab.top': 'Top Spender',
   'orders.orderNo': 'ออเดอร์ #{n}',
-  'orders.bestBadge': 'ดสถิติสูงสุด',
-  'orders.empty': 'ยังไม่มีออเดอร์เลย ลองสั่งออเดอร์แรกกัน!',
-  'orders.offline': 'เชื่อมต่อกับตารางอันดับโลกไม่ได้ เลยแสดงสถิติที่ดีที่สุดในเครื่องนี้แทนนะ',
+  'orders.bestBadge': 'สถิติสูงสุด',
+  'orders.empty': 'ยังไม่มีออเดอร์เลย ลองสั่งกันดูนะ!',
+  'orders.offline': 'เชื่อมต่อกับอันดับโลกไม่ได้ ตอนนี้เลยแสดงคะแนนสูงสุดในเครื่องนี้แทนนะ',
   'orders.loading': 'กำลังโหลด… รอสักครู่นะ',
 
   // Receipt
@@ -49,14 +49,14 @@ export const th: Record<LangKey, string> = {
   'receipt.height': 'ความสูง',
   'receipt.reached': 'ไปถึง',
   'receipt.total': 'รวม',
-  'receipt.orderAgain': 'สั่งอีกครั้ง',
-  'receipt.backToStore': 'กลับไปที่ร้าน',
-  'receipt.newBest': 'ทำสถิติใหม่แล้ว!',
+  'receipt.orderAgain': 'สั่งเพิ่ม',
+  'receipt.backToStore': 'กลับหน้าหลัก',
+  'receipt.newBest': 'สถิติใหม่!',
   'receipt.thanks': 'ขอบคุณนะ!',
   'receipt.follow': 'Official Account',
   'receipt.shareText': 'เล่น Vimmy Fly ได้ {score} แต้มแล้ว! มีใครทำได้เยอะกว่าเราบ้าง? 🐶🐝\nร้านขนมปังใกล้เปิดแล้ว! 🍞🧀🧈\nฝากติดตามซีรีส์ Bake Love Feeling และเป็นกำลังใจให้ ViewMim ในบทเนยชีสด้วยนะ! 💕\n🎮: {url}\n\n#BakeLoveFeeling #ViewMim #วิวมิ้ม',
   'receipt.sending': 'กำลังส่งแต้ม… รอสักครู่นะ',
-  'receipt.sendFailed': 'เชื่อมต่อกับตารางคะแนนไม่ได้ แต่บันทึกแต้มไว้ในเครื่องให้แล้วนะ',
+  'receipt.sendFailed': 'เชื่อมต่อกับอันดับโลกไม่ได้ แต่บันทึกคะแนนไว้ในเครื่องนี้ให้แล้วนะ',
 
   // Onboarding and how to play
   'onboard.title': 'ยินดีต้อนรับ คุณลูกค้า!',
@@ -78,8 +78,8 @@ export const th: Record<LangKey, string> = {
   'settings.off': 'ปิด',
 
   // Promos and video
-  'promos.pilot.title': 'ดูตอนนำร่อง',
-  'promos.copied': 'คัดลอกให้แล้ว!',
+  'promos.pilot.title': 'Official Pilot',
+  'promos.copied': 'คัดลอกแล้ว!',
   'promos.official': 'บัญชีทางการ',
   'promos.leads': 'นักแสดงนำ',
   'promos.role.cheese': 'รับบทชีส เจ้าของร้านขนมปัง',
