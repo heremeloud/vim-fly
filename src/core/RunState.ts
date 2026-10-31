@@ -123,6 +123,7 @@ export class RunState {
       case 'slow':
         this.slowMs = e.durationMs;
         this.slowFactor = e.factor;
+        this.strongFlapMs = 0; // the latest of power fly and slow replaces the other
         break;
       case 'cleanse':
         this.stunMs = 0;
@@ -131,7 +132,7 @@ export class RunState {
       case 'strongFlap':
         this.strongFlapMs = e.durationMs;
         this.strongFlapFactor = e.factor;
-        this.slowMs = 0; // a speed-up overrides any slowdown
+        this.slowMs = 0; // the latest of power fly and slow replaces the other
         break;
       case 'swerve':
         this.pendingSwerve = e.speed;
