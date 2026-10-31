@@ -947,7 +947,7 @@ export class GameScene extends Phaser.Scene {
     // The screen stays full through the first four stages. No cap on the extra snacks: after each one, another follows with the same chance, so a beat can bring none, one or several (less and less so as the climb goes on).
     if (h < untilMeters) {
       const more = extraChance * (1 - h / untilMeters);
-      for (let extra = 0; Math.random() < more; extra++) this.spawnOne(h, 2 + extra, 'points', pickCheapFood().id); // small snacks keep the early stages full
+      for (let extra = 0; Math.random() < more; extra++) this.spawnOne(h, 2 + extra, 'points', pickCheapFood(h).id); // small snacks keep the early stages full
     }
   }
 

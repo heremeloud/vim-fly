@@ -2,6 +2,7 @@ import { ITEM_RULES } from '../core/constants';
 import { difficulty, ramp } from '../core/difficulty';
 import { finaleAt } from '../core/finales';
 import { zoneAt, type ZoneId } from '../core/zones';
+import { ZONE_THEMES } from '../core/zoneThemes';
 import { itemName, t } from '../i18n';
 import { baht } from '../core/format';
 
@@ -92,9 +93,10 @@ export function pickItem(heightMeters: number, rand: () => number = Math.random,
     debuff: ramp(ITEM_RULES.debuffWeightScale, d),
   };
   const finale = finaleAt(heightMeters);
-  const weightOf = (i: ItemDef) => i.weight * scale[i.kind] * ramp([1, i.heightWeightScale ?? 1], d) * (finale?.items[i.id] ?? 1);
-  const stage = zoneAt(heightMeters).stage;
   const zoneId = zoneAt(heightMeters).id;
+  const theme = ZONE_THEMES[zoneId];
+  const weightOf = (i: ItemDef) => i.weight * scale[i.kind] * ramp([1, i.heightWeightScale ?? 1], d) * (theme[i.id] ?? 1) * (finale?.items[i.id] ?? 1);
+  const stage = zoneAt(heightMeters).stage;
   const pool = ITEMS.filter((i) => (stage >= (i.minStage ?? 1) || (finale?.items[i.id] ?? 1) > 1) && (!i.onlyInZone || i.onlyInZone === zoneId) && (!onlyKind || i.kind === onlyKind));
   const total = pool.reduce((sum, i) => sum + weightOf(i), 0);
   let roll = rand() * total;
@@ -107,12 +109,14 @@ export function pickItem(heightMeters: number, rand: () => number = Math.random,
 
 /** The cheap snacks (worth CHEAP_FOOD_MAX points or less), for filling the opening stretch with small, easy food. Picked by weight. */
 export const CHEAP_FOOD_MAX = 50;
-export function pickCheapFood(rand: () => number = Math.random): ItemDef {
+export function pickCheapFood(heightMeters = 0, rand: () => number = Math.random): ItemDef {
+  const theme = ZONE_THEMES[zoneAt(heightMeters).id];
+  const weightOf = (i: ItemDef) => i.weight * (theme[i.id] ?? 1); // the location's own snacks come up more
   const pool = ITEMS.filter((i) => i.effect.type === 'points' && i.effect.amount > 0 && i.effect.amount <= CHEAP_FOOD_MAX && !i.onlyInZone && (i.minStage ?? 1) <= 1);
-  const total = pool.reduce((sum, i) => sum + i.weight, 0);
+  const total = pool.reduce((sum, i) => sum + weightOf(i), 0);
   let roll = rand() * total;
   for (const item of pool) {
-    roll -= item.weight;
+    roll -= weightOf(item);
     if (roll < 0) return item;
   }
   return pool[0];

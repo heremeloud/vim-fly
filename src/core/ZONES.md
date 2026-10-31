@@ -30,6 +30,10 @@ Difficulty is separate: it reaches full strength at `DIFFICULTY.fullAtMeters` (1
 
 The banner shows the stage number and the location (for example "Stage 5 / CC Law Office"). Every stage is a single location, so stages have no names of their own. The receipt lists the last location reached.
 
+## Themed drops all through a location
+
+Outside the rush too, each location makes its own items fall more often (`ZONE_THEMES` in [zoneThemes.ts](zoneThemes.ts), mild multipliers of x1.5 to x3): the Bakery favours breads, the Cafe coffee and sandwiches, the Mall popcorn, the Law Office planners, lunch boxes and suits, the Gym rolling pins, the Courtroom gavels and suits, Noey's Apartment wine, pasta and tom yum, the Aquarium oysters, and so on. The rush boosts below stack on top of these.
+
 ## Location rushes (the last 100 m)
 
 Every location except the last (Bake Love Bakery, which never ends) finishes with a short themed stretch, `FINALE_METERS` (100 m) long, defined in [finales.ts](finales.ts). A banner and pulsing frame announce it. Spawn beats run at 90% of their normal interval (about 11% more often), with another 15% chance of a double drop, and items that fit the place receive strong weight boosts. These are meant to feel like brief events, so tune them by hand if a later rush becomes unfair.

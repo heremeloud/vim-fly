@@ -61,7 +61,7 @@ One number drives it all: `difficulty(height)` in `difficulty.ts` goes from 0 at
 
 | What | At 0 m | At full difficulty |
 | --- | --- | --- |
-| Time between item spawns | 600 ms | 280 ms |
+| Time between item spawns | 520 ms | 280 ms |
 | Chance of a second item per spawn | 0% | 30% |
 | Item fall speed | 140 px/s | 370 px/s |
 | Debuffs swerve side to side | 0 px | 110 px |
@@ -69,7 +69,9 @@ One number drives it all: `difficulty(height)` in `difficulty.ts` goes from 0 at
 | Share of debuffs among drops | about 27% | about 51% |
 | Share of points items / buffs | 51% / 22% | 36% / 13% |
 
-The first four stages (up to the end of the Shopping Mall, 1400 m) also get extra drops on every beat, with no limit on how many (each one is followed by another with a chance that fades out as you climb; `startFood` in `constants.ts`). They are always the cheap snacks (shiopan, pandan custard bread, sandwich, ice cream: 50 points or less, `pickCheapFood`), so the early screen is full without getting harder.
+The first four stages (up to the end of the Shopping Mall, 1400 m) also get extra drops on every beat, with no limit on how many (each one is followed by another with a chance that fades out as you climb; `startFood` in `constants.ts`). They are always the cheap snacks (shiopan, pandan custard bread, sandwich, ice cream: 50 points or less, `pickCheapFood`), so the early screen is full without getting harder. The cheap-snack pick is weighted by the location's theme too.
+
+Every location also favours its own items all the way through, not just in its closing rush: `ZONE_THEMES` in `zoneThemes.ts` holds a weight multiplier per item id (for example coffee x3 in the Cafe, wine, pasta and tom yum x2.5 in Noey's Apartment). The rush boosts in `finales.ts` multiply on top. Themed items still wait for their own `minStage`.
 
 Food and power-ups get rarer and debuffs more common as you climb (`pointsWeightScale`, `buffWeightScale`, `debuffWeightScale`).
 
