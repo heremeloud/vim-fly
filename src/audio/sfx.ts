@@ -7,7 +7,7 @@ import { SCENES } from '../core/constants';
 
 /** Public key lists also power the local `?sfx` soundboard, so every new effect appears there automatically. */
 export const SFX_KEYS = [
-  'flap', 'point', 'buff', 'yips', 'debuff', 'disappointed', 'shy', 'hammer', 'crash', 'dash',
+  'flap', 'point', 'buff', 'yip', 'yips', 'debuff', 'disappointed', 'shy', 'hammer', 'crash', 'dash',
   'munch', 'sip', 'slurp', 'jackpot', 'bark', 'shield', 'block', 'sparkle', 'power',
   'spool', 'warble', 'sag', 'thud', 'sniff', 'meow',
 ] as const;
@@ -115,6 +115,11 @@ const BUILDERS: Record<Sfx | SfxLoop, (ctx: BaseAudioContext) => AudioBuffer> = 
     const tone = oscillator((t) => notes[Math.min(3, Math.floor(t / 0.09))], triangle);
     return render(ctx, 0.5, (t) => tone(t) * decay(t % 0.09, 0.2, 1) * decay(t, 0.55, 0.6) * 0.5);
   },
+  // One happy little yip, for a tasty bite.
+  yip: (ctx) => {
+    const a = yip(0, 680);
+    return render(ctx, 0.2, (t) => a(t) * 0.9);
+  },
   // Three happy yips, each a little higher.
   yips: (ctx) => {
     const a = yip(0, 620);
@@ -127,13 +132,19 @@ const BUILDERS: Record<Sfx | SfxLoop, (ctx: BaseAudioContext) => AudioBuffer> = 
     const tone = oscillator((t) => 330 - 190 * t, square);
     return render(ctx, 0.4, (t) => tone(t) * decay(t, 0.4, 1.2) * 0.28);
   },
-  // Gavel: a sharp wooden knock, struck twice.
+  // Gavel: a hard wooden strike, knocked twice. A bright click on impact, a few inharmonic wood resonances that ring
+  // out quickly, and a low thump for the weight of the mallet.
   hammer: (ctx) => {
-    const knock = oscillator((t) => 260 - 120 * Math.min(1, (t % 0.2) / 0.1), sine);
-    const click = noise(() => 0.6);
-    return render(ctx, 0.4, (t) => {
-      const local = t % 0.2;
-      return (knock(t) * 0.9 + click(t) * 0.8) * decay(local, 0.09, 2.5) * (t < 0.4 ? 1 : 0) * 0.45;
+    const click = noise(() => 0.85);
+    const modes: [number, number, number][] = [[420, 0.07, 1], [980, 0.045, 0.7], [1730, 0.03, 0.5], [2650, 0.018, 0.35]]; // Hz, ring time, level
+    return render(ctx, 0.5, (t) => {
+      const hit = (local: number, power: number): number => {
+        if (local < 0 || local > 0.1) return 0;
+        const wood = modes.reduce((sum, [f, ring, level]) => sum + sine(TAU * f * local) * decay(local, ring, 2) * level, 0);
+        const thump = sine(TAU * (95 - 30 * Math.min(1, local / 0.05)) * local) * decay(local, 0.06, 2) * 0.9;
+        return (click(t) * decay(local, 0.006, 1.5) * 1.2 + wood * 0.55 + thump) * power;
+      };
+      return (hit(t, 1) + hit(t - 0.24, 0.8)) * 0.45;
     });
   },
   // Car crash: tyre screech, then a crunching impact.
@@ -305,8 +316,8 @@ const BUILDERS: Record<Sfx | SfxLoop, (ctx: BaseAudioContext) => AudioBuffer> = 
   buzz: (ctx) =>
     render(ctx, 0.5, (t) => {
       const wobble = 1 + 0.04 * sine(TAU * 6 * t);
-      const body = saw(TAU * 190 * wobble * t) * 0.6 + sine(TAU * 380 * t) * 0.3;
-      return body * (0.65 + 0.35 * sine(TAU * 30 * t)) * 0.5;
+      const body = saw(TAU * 240 * wobble * t) * 0.6 + sine(TAU * 480 * t) * 0.3;
+      return body * (0.65 + 0.35 * sine(TAU * 30 * t)) * 0.7;
     }),
   // Helicopter rotor chop, also an exact loop.
   copter: (ctx) => {

@@ -63,6 +63,7 @@ const START_Y = GAME_HEIGHT - 200;
 /** The tap-left / tap-right guides stay over the first 50 m, fading out over the last 8 of them, at this height on screen. */
 const TAP_GUIDE_METERS = 50;
 const TAP_GUIDE_FADE_METERS = 8;
+const YIP_CHANCE = 0.45; // how often an ordinary tasty bite gets a happy yip
 const TAP_GUIDE_Y = GAME_HEIGHT - 190;
 const SWIPE_HINT_MIN_W = 380;
 /** The score panel (score, then metres, then the progress bar) runs from y 8 to HUD_BOTTOM; the right-hand stack of dash breads and buttons ends at the same line. */
@@ -229,7 +230,7 @@ export class GameScene extends Phaser.Scene {
     this.startY = START_Y;
     this.isFlipping = false;
     this.reactionTimer = undefined;
-    this.buzz = loopSfx(this, 'buzz', 0.05);
+    this.buzz = loopSfx(this, 'buzz', 0.15);
     this.copter = null;
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => this.stopLoops());
     // Dev only: open http://localhost:5173/?zone=courtroom to start the run inside a zone.
@@ -1018,6 +1019,9 @@ export class GameScene extends Phaser.Scene {
         if (it.def.kind === 'points' && gained > 0) {
           playSfx(this, itemSfx(it.def.id, 'points', gained), 0.7, 0.06);
           if (itemSfx(it.def.id, 'points', gained) !== 'point') playSfx(this, 'point', 0.4, 0.1);
+          // Vimmy enjoys eating: a happy yip after some bites, and the three-yip cheer for the big treats.
+          if (itemSfx(it.def.id, 'points', gained) === 'jackpot') this.time.delayedCall(120, () => playSfx(this, 'yips', 0.5, 0.06));
+          else if (Math.random() < YIP_CHANCE) this.time.delayedCall(90, () => playSfx(this, 'yip', 0.45, 0.14));
         }
         if (it.def.kind !== 'points' && it.def.bonusPoints && gained > 0) {
           // The golden retriever and the dog ears carry points as well: they pop up just after the item's own text.

@@ -98,7 +98,7 @@ export class SfxScene extends Phaser.Scene {
       this.loops.delete(loopKey);
       return;
     }
-    const sound = loopSfx(this, loopKey, loopKey === 'buzz' ? 0.08 : 0.45);
+    const sound = loopSfx(this, loopKey, loopKey === 'buzz' ? 0.15 : 0.45);
     if (sound) this.loops.set(loopKey, sound);
   }
 
