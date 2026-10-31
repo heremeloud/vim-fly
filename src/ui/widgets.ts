@@ -40,6 +40,8 @@ export function label(
   text: string,
   { size = 18, color = COLORS.text, bold = false, wrap, maxWidth, align, display = false }: TextOpts = {},
 ): Phaser.GameObjects.Text {
+  // Dense kanji (such as 履歴) clog under the outline made for Latin letters, so it is a little thinner for them.
+  const thin = display && getLocale() !== 'en' && getLocale() !== 'th';
   const obj = scene.add.text(x, y, text, {
     fontFamily: display ? FONT.display : FONT.family,
     letterSpacing: display ? 1 : 0, // a little air so the outline never closes up the counters (the "e")
@@ -47,7 +49,7 @@ export function label(
     fontStyle: bold && !display ? 'bold' : 'normal', // the display font is already heavy; faking bold on it would be too fat
     color: hex(color),
     stroke: display ? hex(color) : undefined, // a thin outline in the text color: Sniglet Regular is too light, ExtraBold too fat
-    strokeThickness: display ? 2.6 : 0,
+    strokeThickness: display ? (thin ? 2 : 2.6) : 0,
     wordWrap: wrap ? { width: wrap, useAdvancedWrap: true } : undefined, // advanced wrap also breaks long unspaced text (Japanese, Chinese, Thai)
     align,
     padding: { top: 3, bottom: 3 }, // room for tall Thai and CJK glyphs
